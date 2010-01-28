@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+
+use Cwd qw(abs_path);
+# 无图片参数时，使用缺省的桌面文件（链接）●
+my $desk=abs_path($ARGV[0]?$ARGV[0]:"$ENV{HOME}/.desktop-pic");
+
+$picpath='/home/exp/媒体/';	#图片的目录●
+chdir $picpath;
+$num=int 4+rand(5);	#随机取得4-9张照片。png格式。
+print "total\t-> $num\n";
+my @files = glob "*.png *.jpg";
+unlink glob "/tmp/d-*.png";
+my @do;
+
+for(1..$num){
+$in=$files[int rand(@files)];
+$out="/tmp/d-$in.png";
+if(grep /$in/,@do){redo;}	# 确保不重复使用文件
+push @do,$in;
+
+my $size=int 100+rand(80);	# 缩放100-180之间
+`convert \"$in\" -scale \"$size>\" \"$out\"`;
+
+my $mess=rand(10);		# 不同效果处理
+if($mess < 5){
+print "mess\t-> $in\n";
+`convert \"$out\" \\( +clone -threshold -1 -virtual-pixel black -spread 30 -blur 0x3 -threshold 40% -spread 2 -blur 10x.7 \\) +matte -compose Copy_Opacity -composite \"$out\"`;
+} else {
+print "frame\t-> $in\n";
+`convert \"$out\" -bordercolor "#C2C2C2" -border 5 -bordercolor "#323232" -border 1 \"$out\"`;
+}
+
+`convert \"$out\" -background  black \\( +clone -shadow 60x4+4+4 \\) +swap -background none -flatten \"$out\"`;	# 阴影
+
+my $rot=int rand(90)-45;		# 旋转选择正负45度
+`convert \"$out\" -background none -rotate $rot \"$out\"`;
+}
+
+chdir '/tmp/';
+my @files = glob "d-*.png";
+my $cmd="habak ".$desk;
+foreach(@files){
+my $x=int 300+rand(1280-500);		# 屏幕位置范围
+my $y=int rand(800-200);
+$cmd=$cmd." -mp $x,$y $_";
+}
+use POSIX qw(strftime);
+my $d=strftime("%Y-%m-%d %A",localtime(time));
+$cmd=$cmd." -mf \"/usr/share/fonts/truetype/arphic/ukai.ttf\" -mc 255,255,255,100 -mh 24 -mp 20,700 -ht \"$d\"";
+#$cmd=$cmd." -mf \"/home/exp/安装/备份/字体/中文字体/经典繁勘亭.ttf\" -mc 255,255,255,100 -mh 24 -mp 20,700 -ht \"$d\"";
+print "cmd\t-> $cmd\n";
+`$cmd`;
