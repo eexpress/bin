@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 
 use Cwd qw(abs_path);
+use Getopt::Long;
+
+GetOptions('o' => \$old_pic);
+goto PASTE if $old_pic;
 # 无图片参数时，使用缺省的桌面文件（链接）●
 my $desk=abs_path($ARGV[0]?$ARGV[0]:"$ENV{HOME}/bin/default.pic");
 
@@ -36,22 +40,29 @@ my $rot=int rand(90)-45;		# 旋转选择正负45度
 `convert \"$out\" -background none -rotate $rot \"$out\"`;
 }
 
+#修改时间没超过一天的，不重复执行。
+#if(-M '/tmp/weather.png'>1){
+chdir '/tmp/';
+#if(! -e '/tmp/weather.png'){
+`$ENV{HOME}/bin/cal.pl` if ! -e "cal.png";
+`$ENV{HOME}/bin/weather.pl -p` if ! -e "weather.png";
+`$ENV{HOME}/bin/opera/todo.pl` if ! -e "todo.png";
+#}
+
+PASTE:
 chdir '/tmp/';
 my @files = glob "d-*.png";
+#my @files = glob "d-*.png todo.png weather.png";
 my $cmd="habak ".$desk;
 foreach(@files){
 my $x=int 300+rand(1280-500);		# 屏幕位置范围
-my $y=int rand(800-300);
+my $y=int 100+rand(800-400);
 $cmd=$cmd." -mp $x,$y $_";
 }
-#use POSIX qw(strftime);
-#my $d=strftime("%A",localtime(time));
-#my $d=strftime("%A %Y年 %m月 %d日",localtime(time));
-#$ttf='/home/exp/安装/备份/字体/中文字体/华康娃娃体-WaWaW5.ttf';
-#$ttf='/home/exp/安装/备份/字体/中文字体/方正粗宋简体.ttf';
 #$ttf='/usr/share/fonts/truetype/arphic/ukai.ttf';
 #$cmd=$cmd." -mf \"$ttf\" -mc 255,255,255,100 -mh 48 -mp 20,600 -ht \"$d\"";
-`$ENV{HOME}/bin/cal.pl`;
-$cmd.=" -mp 30,540 /tmp/pango.png";
+$cmd.=" -mp 30,540 /tmp/cal.png" if -e "/tmp/cal.png";
+$cmd.=" -mp 300,40 /tmp/todo.png" if -e "/tmp/todo.png";
+$cmd.=" -mp 700,40 /tmp/weather.png" if -e "/tmp/weather.png";
 print "cmd\t-> $cmd\n";
 `$cmd`;
