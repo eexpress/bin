@@ -4,9 +4,9 @@ use Cwd qw(abs_path);
 use Getopt::Long;
 
 GetOptions('o' => \$old_pic);
-goto PASTE if $old_pic;
 # 无图片参数时，使用缺省的桌面文件（链接）●
 my $desk=abs_path($ARGV[0]?$ARGV[0]:"$ENV{HOME}/bin/default.pic");
+goto PASTE if $old_pic;
 
 $picpath='/home/exp/媒体/';	#图片的目录●
 chdir $picpath;
