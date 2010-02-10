@@ -29,7 +29,7 @@ $wan1++; $wan1%=7;
 $_=$pango;
 s:-(.*?) :<span color='#E1A738'>$1</span> :g;	#休息
 s:~(.*?) :<span color='#4746D8' size='larger'>$1</span> :g;	#节日
-s:\+(.*?) :<span color='#C82A2A' font='45'><i>$1<span color='#44BD4A'><sub>$wan</sub></span></i></span> :g;	#今天
+s:\+(.*?) :<span color='#C82A2A' font='45'><i>$1<span color='#44BD4A' font='25'><sub>$wan</sub></span></i></span> :g;	#今天
 s:(\d+)_:<u>$1</u>:g;
 $pango=$_;
 
