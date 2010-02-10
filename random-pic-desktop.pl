@@ -51,10 +51,13 @@ my %excute=(
 );
 my ($sec,$min,$hour,$day,$mon,$year,$wan)=localtime(time);
 $today="$year-$mon-$day";
+print "today time:$today\n";
 foreach (keys %excute){
 my ($sec,$min,$hour,$day,$mon,$year,$wan)=localtime((stat "$_.png")[9]);
 $fileday="$year-$mon-$day";
-`$ENV{HOME}/bin/$_.pl` if($fileday ne $today);
+print "$_:time:$fileday\n";
+print "$ENV{HOME}/bin/$excute{$_}$_.pl\n";
+`$ENV{HOME}/bin/$excute{$_}$_.pl` if($fileday ne $today);
 }
 
 PASTE:
