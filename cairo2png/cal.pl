@@ -1,12 +1,5 @@
 #!/usr/bin/perl
 
-use utf8;
-use Getopt::Long;
-use Encode;
-
-# 参数：单行输出选择。屏幕提示输出选择。
-GetOptions('n' => \$notify);
-
 ($sec,$min,$hour,$day,$mon,$year,$wan)=localtime(time);
 $year+=1900; $mon+=1; $wan1=($wan+7-($day-1)%7)%7;	# 1号是星期几
 $wan%=7;
@@ -15,7 +8,6 @@ $wan%=7;
 if ((($year % 4 == 0) && ($year % 100 != 0)) || ($year % 400 == 0)) {$monarr[2] = "29";}		# 闰年的2月
 
 my $calendar=`calendar -A 15`;
-$calendar=decode "utf-8",$calendar;
 @d=$calendar=~/月 (\d+)/g;
 
 foreach $i (1..$monarr[$mon]){
@@ -36,15 +28,11 @@ $pango=$_;
 #添加日期，日历，缺省颜色
 @Wanday=("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
 my $d="$Wanday[$wan] $year 年 $mon 月 $day 日";
-$pango="<span font='FZCuSong\-B09S 40'>$d</span>\n".$pango;
+$pango="<span font='FZCuSong\-B09S 35'>$d</span>\n".$pango;
 
 $calendar=~s:\d+月 \d+:<u>$&</u>:g;
-#$calendar=~s:.*月 \d+:<span color='#4746D8'>$&</span>:g;
 $pango.="\n<span font='FZCuSong\-B09S 16'>$calendar</span>";
 $pango="<span color='#957966'>".$pango."</span>";
+
 print $pango;
 
-if($notify){`gnome-osd-client "$pango"`;}
-else{`$ENV{HOME}/bin/pango2png.pl "$pango" -f cal`;}
-
-#http://library.gnome.org/devel/pango/stable/PangoMarkupFormat.html

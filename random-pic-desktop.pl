@@ -6,7 +6,7 @@ $workpath="$ENV{HOME}/bin/desktop.pic/";
 
 GetOptions('o' => \$old_pic);
 # 无图片参数时，使用缺省的桌面文件（链接）●
-my $desk=abs_path($ARGV[0]?$ARGV[0]:"$ENV{HOME}/bin/default.pic");
+my $desk=abs_path($ARGV[0]?$ARGV[0]:"$ENV{HOME}/bin/cairo2png/cairo2png.png");
 goto PASTE if $old_pic;
 
 $picpath="$ENV{HOME}/媒体/";	#图片的目录●
@@ -41,39 +41,14 @@ my $rot=int rand(90)-45;		# 旋转选择正负45度
 `convert \"$out\" -background none -rotate $rot \"$out\"`;
 }
 
-#修改时间是当天的，不重复执行。
-chdir $workpath;
-#`$ENV{HOME}/bin/cal.pl` if (! -e "cal.png"|-M "cal.png">1);
-#`$ENV{HOME}/bin/weather.pl -p` if (! -e "weather.png"|-M "cal.png">1);
-#`$ENV{HOME}/bin/opera/todo.pl` if (! -e "todo.png"|-M "cal.png">1);
-my %excute=(
-	"cal"=>"","weather"=>"","todo"=>"opera/",
-);
-my ($sec,$min,$hour,$day,$mon,$year,$wan)=localtime(time);
-$today="$year-$mon-$day";
-print "today time:$today\n";
-foreach (keys %excute){
-my ($sec,$min,$hour,$day,$mon,$year,$wan)=localtime((stat "$_.png")[9]);
-$fileday="$year-$mon-$day";
-print "$_:time:$fileday\n";
-print "$ENV{HOME}/bin/$excute{$_}$_.pl\n";
-`$ENV{HOME}/bin/$excute{$_}$_.pl` if($fileday ne $today);
-}
-
 PASTE:
 chdir $workpath;
 my @files = glob "d-*.png";
-#my @files = glob "d-*.png todo.png weather.png";
 my $cmd="habak ".$desk;
 foreach(@files){
 my $x=int 300+rand(1280-500);		# 屏幕位置范围
 my $y=int 100+rand(800-400);
 $cmd=$cmd." -mp $x,$y $_";
 }
-#$ttf='/usr/share/fonts/truetype/arphic/ukai.ttf';
-#$cmd=$cmd." -mf \"$ttf\" -mc 255,255,255,100 -mh 48 -mp 20,600 -ht \"$d\"";
-$cmd.=" -mp 30,540 cal.png" if -e "cal.png";
-$cmd.=" -mp 300,40 todo.png" if -e "todo.png";
-$cmd.=" -mp 700,40 weather.png" if -e "weather.png";
 print "cmd\t-> $cmd\n";
 `$cmd`;
