@@ -1,15 +1,18 @@
 #!/usr/bin/perl
 
-use utf8;
+#use utf8;
 use Getopt::Long;
 use Gtk2;
 use Encode;
 use File::Basename qw/basename dirname/;
-chdir dirname $0;
+#chdir dirname $0;
+chdir dirname (-l $0?readlink $0:$0);
+#chdir dirname readlink $0 if -l $0;
 
 $input="cairo2png.rc";
 $output="cairo2png.png";
-GetOptions('input=s'=>\$input,'output=i'=>\$output,'help'=>\$help);
+GetOptions('input=s'=>\$input,'output=i'=>\$output,
+	'help'=>\$help,'desktop'=>\$desktop);
 
 sub help{
 print "
@@ -26,7 +29,7 @@ print "
 
 => \e[31mpango\e[0m 尺寸坐标 [脚本和文本文件名]
 此行到下一个命令间的，直接解析为pango语法的内容。
-\e[32m如果指定了脚本或文本文件，脚本输出或者文件内容，将附加在其后，一并解析。
+\e[32m如果指定了脚本或文本文件，脚本输出或者文件内容，将附加在其后，一并解析。支持相对路径的写法。
 尺寸坐标的格式为：WxH+X+Y\e[0m
 
 => \e[31mfont\e[0m 字体名[ 尺寸]
@@ -37,7 +40,7 @@ print "
 \e[36malias fsong=font='FZCuSong\-B09S 16'
 alias cred=color='#957966'
 \e[1mpango语法，可参考 http://library.gnome.org/devel/pango/stable/PangoMarkupFormat.html。
-cairo的说明，可参考 http://www.cairographics.org/manual/。\e[0m
+cairo的说明，可参考 http://www.cairographics.org/manual/ http://cairographics.org/documentation。man Cairo 其实更好。\e[0m
 ";
 }
 
@@ -52,7 +55,7 @@ open (IN, $input) || die ("配置文件无效。");
 #预先处理背景图片设置行
 @bg=map /=>\s*background\s+(.*)/,@line;
 #print "~~~~bg : @bg\n";	# print 的输入，如果包括中文，则$_会乱码。
-print map "==$_\n",@bg;
+print map "------find background set----\n$_\n",@bg;
 @bg=map {split /\s+/} @bg;
 #目录判断后，不能再push非匹配的其他文件。
 @bg1=map {-d && glob "$_/*.png"} @bg;
@@ -60,10 +63,10 @@ print map "==$_\n",@bg;
 @bg=(@bg,@bg1);
 @bg=grep {-f && /\.png$/} @bg;
 
-print "\n----------\n";
+print "\n-----expand all background files-----\n";
 print map "$_\n",@bg;
 $_=$bg[int rand(@bg)];
-print "select:$_\n";
+print "\n===> select:$_\n";
 die "指定的背景图片不存在。" if ! -f;
 
 @line=grep !/background/,@line;
@@ -74,18 +77,23 @@ foreach (@line){
 	#shift;
 	if(/^=>/){
 		draw_pango();
-		if(/\s*pango\s*/){
+	if(/\s*pango\s*/){
 		@pango=""; @append="";
 		($c,$s)=split / /,$';	#坐标，脚本或文本
 		chomp $c; ($x,$y)=split /,/,$c;
-		chomp $s; print "script or text: $s.\n";
+		chomp $s;
+		if($s!~m"^/"){$s="./".$s;}	#非全路径，使用相对路径
+		print "\n===> excute script or text: $s.\n";
 		if(-x $s){@append=`$s  2>/dev/null`;}
-#                else{@append=`cat $s`;}
+		else{
+		#文本文件，去掉空行。最宽输出100字符，最多输出8行。
+			if(-T $s)
+			{@append=grep !/^\s*$/,`cat $s`;
+			@append=map /^(.{1,100})/s,@append;
+			splice(@append,7);}
 		}
-		if(/\s*font\s*/){
-			$font=$'; chomp $font;
-		
 		}
+	if(/\s*font\s*/){$font=$'; chomp $font;}
 	}
 	else{	#pango内容
 		push @pango,$_;
@@ -93,12 +101,13 @@ foreach (@line){
 }
 draw_pango();
 $surface->write_to_png ($output);
-
+if($desktop){print "\n===>random desktop\n";`/home/exp/bin/random-pic-desktop.pl -o`;}
+#if($desktop){`habak $output`;}
 #----------------------------------------------------
 sub draw_pango{
-if(@pango||@append){
+if(!($x&&(@pango||@append))){return;}
 @pango=(@pango,@append);
-print "\n-------draw pango at $x,$y--------\n";
+print "-------draw pango at $x,$y--------\n";
 print @pango;
 
 my $cr = Cairo::Context->create ($surface); 
@@ -115,10 +124,17 @@ $pango_layout->set_markup (decode("utf-8", "@pango"));
 $cr->arc($x,$y,$r,0,90*$PI);$cr->set_source_rgba(1,0,0,0.2); $cr->fill;
 $cr->arc($x+$r,$y+$r,$r,180*$PI,270*$PI);$cr->set_source_rgba(0,1,0,0.2); $cr->fill;
 
+#use Gtk2::GDK::Cairo;
+#use Gtk2::GDK::Cairo::Context;
+#$img=Gtk2::Gdk::Pixbuf->new_from_file("/home/exp/媒体/eexpress.png");
+#$cr->Gtk2::GDK::Cairo::Context->set_source_pixbuf($img, 175, 150);
+#$cr->paint();
+#Can't locate object method "set_source_pixbuf" via package "Cairo::Context" at ./cairo2png.pl line 121.
+
 $cr->set_source_rgba(1,1,1,0.3);	#缺省白色字体
 $cr->move_to($x,$y);
 Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout); 
-$cr->show_page ();}
+$cr->show_page ();
 @pango=""; @append="";
 }
 

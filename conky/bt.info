@@ -1,0 +1,5 @@
+#!/bin/bash
+
+transmission-remote -l|sed 's/\ \{2,\}/_/g'|sed 's/\[[A-Za-z ]*\]//g'|awk -F '_' '/^_/ {print $3"\t▼"$7"K\t"$10}'
+
+#▲

@@ -2,7 +2,7 @@
 
 use Cwd qw(abs_path);
 use Getopt::Long;
-$workpath="$ENV{HOME}/bin/desktop.pic/";
+$workpath="/tmp/";
 
 GetOptions('o' => \$old_pic);
 # 无图片参数时，使用缺省的桌面文件（链接）●
