@@ -54,17 +54,11 @@ open (IN, $input) || die ("配置文件无效。");
 
 #预先处理背景图片设置行
 @bg=map /=>\s*background\s+(.*)/,@line;
-#print "~~~~bg : @bg\n";	# print 的输入，如果包括中文，则$_会乱码。
-print map "------find background set----\n$_\n",@bg;
-@bg=map {split /\s+/} @bg;
-#目录判断后，不能再push非匹配的其他文件。
-@bg1=map {-d && glob "$_/*.png"} @bg;
-#@bg1=map {-d && glob "$_/*.png" || print} @bg;
-@bg=(@bg,@bg1);
-@bg=grep {-f && /\.png$/} @bg;
-
-print "\n-----expand all background files-----\n";
-print map "$_\n",@bg;
+print "\n===> find background lines\n"; print map "$_\n",@bg;
+@bg=map {split /\s+/} @bg;		# 拆分多文件的行
+@bg=map {-d $_?glob "$_/*.png":$_} @bg;	# 扩展目录成可用图片文件
+@bg=grep {-f && /\.png$/} @bg;		# 选择有效的png文件
+print "\n===> expand all background files\n"; print map "$_\n",@bg;
 $_=$bg[int rand(@bg)];
 print "\n===> select:$_\n";
 die "指定的背景图片不存在。" if ! -f;
