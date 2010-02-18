@@ -1,13 +1,10 @@
 #!/usr/bin/perl
 
-#use utf8;
 use Getopt::Long;
 use Gtk2;
 use Encode;
 use File::Basename qw/basename dirname/;
-#chdir dirname $0;
 chdir dirname (-l $0?readlink $0:$0);
-#chdir dirname readlink $0 if -l $0;
 
 $input="cairo2png.rc";
 $output="cairo2png.png";
@@ -49,8 +46,7 @@ if($help){help;exit;}
 print "$input => $output\n";
 open (IN, $input) || die ("配置文件无效。");
 @line=<IN>; close IN;
-@line=grep !m"^//",@line;
-#@line=grep /^[^#]/,@line;
+@line=grep !m"^//",@line;		# 去掉注释的行
 
 #预先处理背景图片设置行
 @bg=map /=>\s*background\s+(.*)/,@line;
@@ -63,13 +59,12 @@ $_=$bg[int rand(@bg)];
 print "\n===> select:$_\n";
 die "指定的背景图片不存在。" if ! -f;
 
-@line=grep !/background/,@line;
+@line=grep !/background/,@line;		# 去掉背景设置的行
 use Cairo; 
 $surface = Cairo::ImageSurface->create_from_png ("$_"); 
 $PI=3.1415926/180; $r=100;
 foreach (@line){
-	#shift;
-	if(/^=>/){
+	if(/^=>/){	# 遇到命令行，先画完前一个。
 		draw_pango();
 	if(/\s*pango\s*/){
 		@pango=""; @append="";
@@ -83,20 +78,20 @@ foreach (@line){
 		#文本文件，去掉空行。最宽输出100字符，最多输出8行。
 			if(-T $s)
 			{@append=grep !/^\s*$/,`cat $s`;
-			@append=map /^(.{1,100})/s,@append;
-			splice(@append,7);}
+			@append=map /^(.{1,60})/s,@append;
+			splice(@append,7);}	# 截断到最长7行
 		}
 		}
 	if(/\s*font\s*/){$font=$'; chomp $font;}
 	}
-	else{	#pango内容
+	else{	# 非命令行，为pango内容
 		push @pango,$_;
 	}
 }
 draw_pango();
 $surface->write_to_png ($output);
 if($desktop){print "\n===>random desktop\n";`/home/exp/bin/random-pic-desktop.pl -o`;}
-#if($desktop){`habak $output`;}
+
 #----------------------------------------------------
 sub draw_pango{
 if(!($x&&(@pango||@append))){return;}
@@ -106,24 +101,14 @@ print @pango;
 
 my $cr = Cairo::Context->create ($surface); 
 my $pango_layout = Gtk2::Pango::Cairo::create_layout ($cr); 
-if($font){
+if($font){		# 如果设置了字体
 my $font_desc = Gtk2::Pango::FontDescription->from_string("$font"); 
 $pango_layout->set_font_description($font_desc); 
 }
 $pango_layout->set_markup (decode("utf-8", "@pango"));
 
-#my ($w, $h) = $pango_layout->get_size;	#巨大的数据？246784 x 188416
-#print "====> $w x $h";
-#$cr->rectangle($x,$y,300,30);$cr->set_source_rgba(0,0,0,0.2); $cr->fill;
 $cr->arc($x,$y,$r,0,90*$PI);$cr->set_source_rgba(1,0,0,0.2); $cr->fill;
 $cr->arc($x+$r,$y+$r,$r,180*$PI,270*$PI);$cr->set_source_rgba(0,1,0,0.2); $cr->fill;
-
-#use Gtk2::GDK::Cairo;
-#use Gtk2::GDK::Cairo::Context;
-#$img=Gtk2::Gdk::Pixbuf->new_from_file("/home/exp/媒体/eexpress.png");
-#$cr->Gtk2::GDK::Cairo::Context->set_source_pixbuf($img, 175, 150);
-#$cr->paint();
-#Can't locate object method "set_source_pixbuf" via package "Cairo::Context" at ./cairo2png.pl line 121.
 
 $cr->set_source_rgba(1,1,1,0.3);	#缺省白色字体
 $cr->move_to($x,$y);
