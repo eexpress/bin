@@ -8,7 +8,7 @@ chdir dirname (-l $0?readlink $0:$0);
 
 $input="cairo2png.rc";
 $output="cairo2png.png";
-GetOptions('input=s'=>\$input,'output=i'=>\$output,
+GetOptions('input=s'=>\$input,'output=s'=>\$output,
 	'help'=>\$help,'desktop'=>\$desktop);
 
 sub help{
@@ -43,6 +43,8 @@ cairo的说明，可参考 http://www.cairographics.org/manual/ http://cairograp
 
 #----------------------------------------------------
 if($help){help;exit;}
+$prefix="\e[32m===>\e[0m";
+
 print "$input => $output\n";
 open (IN, $input) || die ("配置文件无效。");
 @line=<IN>; close IN;
@@ -50,13 +52,13 @@ open (IN, $input) || die ("配置文件无效。");
 
 #预先处理背景图片设置行
 @bg=map /=>\s*background\s+(.*)/,@line;
-print "\n===> find background lines\n"; print map "$_\n",@bg;
+print "\n$prefix find background lines\n"; print map "$_\n",@bg;
 @bg=map {split /\s+/} @bg;		# 拆分多文件的行
 @bg=map {-d $_?glob "$_/*.png":$_} @bg;	# 扩展目录成可用图片文件
 @bg=grep {-f && /\.png$/} @bg;		# 选择有效的png文件
-print "\n===> expand all background files\n"; print map "$_\n",@bg;
+print "\n$prefix expand all background files\n"; print map "$_\n",@bg;
 $_=$bg[int rand(@bg)];
-print "\n===> select:$_\n";
+print "\n$prefix select:$_\n";
 die "指定的背景图片不存在。" if ! -f;
 
 @line=grep !/background/,@line;		# 去掉背景设置的行
@@ -72,14 +74,14 @@ foreach (@line){
 		chomp $c; ($x,$y)=split /,/,$c;
 		chomp $s;
 		if($s!~m"^/"){$s="./".$s;}	#非全路径，使用相对路径
-		print "\n===> excute script or text: $s.\n";
+		print "\n$prefix excute script or text: $s.\n";
 		if(-x $s){@append=`$s  2>/dev/null`;}
 		else{
-		#文本文件，去掉空行。最宽输出100字符，最多输出8行。
+#文本文件，去掉空行和带●的时间行。最宽输出80字符，最多输出8行。
 			if(-T $s)
-			{@append=grep !/^\s*$/,`cat $s`;
-			@append=map /^(.{1,60})/s,@append;
-			splice(@append,7);}	# 截断到最长7行
+			{@append=grep !/(^\s*$|^●)/,`cat $s`;
+@append=map {/^(.{1,80})/;$1=~/(^.*\b)/s;chomp $1;$1."...\n"} @append;
+			splice(@append,8);}
 		}
 		}
 	if(/\s*font\s*/){$font=$'; chomp $font;}
@@ -90,7 +92,7 @@ foreach (@line){
 }
 draw_pango();
 $surface->write_to_png ($output);
-if($desktop){print "\n===>random desktop\n";`/home/exp/bin/random-pic-desktop.pl -o`;}
+if($desktop){print "\n$prefix random desktop\n";`/home/exp/bin/random-pic-desktop.pl -o`;}
 
 #----------------------------------------------------
 sub draw_pango{

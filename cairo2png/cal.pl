@@ -1,11 +1,23 @@
 #!/usr/bin/perl
 
+@t=localtime(time);
+$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
+@t=localtime((stat "c")[9]);
+$fileday=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
+if($fileday eq $today){
+open(REC,"c");print <REC>;close REC;
+exit;
+}
+
 ($sec,$min,$hour,$day,$mon,$year,$wan)=localtime(time);
 $year+=1900; $mon+=1; $wan1=($wan+7-($day-1)%7)%7;	# 1号是星期几
 $wan%=7;
 
 @monarr=(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 if ((($year % 4 == 0) && ($year % 100 != 0)) || ($year % 400 == 0)) {$monarr[2] = "29";}		# 闰年的2月
+
+my $lunar=`calendar -A 0 -f ~/.calendar/calendar.2010.lunar`;
+$lunar=~/\t(.*)$/;$lunar=$1;
 
 my $calendar=`calendar -A 15`;
 @d=$calendar=~/月 (\d+)/g;
@@ -21,7 +33,7 @@ $wan1++; $wan1%=7;
 $_=$pango;
 s:-(.*?) :<span color='#E1A738'>$1</span> :g;	#休息
 s:~(.*?) :<span color='#4746D8' size='larger'>$1</span> :g;	#节日
-s:\+(.*?) :<span color='#C82A2A' font='40'><i>$1<span color='#44BD4A'><sub>$wan</sub></span></i></span> :g;	#今天
+s:\+(.*?) :<span color='#C82A2A' font='40'><i>$1<span color='#44BD4A'><sub>$wan</sub></span></i></span><sup> $lunar</sup> :g;	#今天
 s:(\d+)_:<u>$1</u>:g;
 $pango=$_;
 
@@ -35,4 +47,4 @@ $pango.="\n<span font='FZCuSong\-B09S 16'>$calendar</span>";
 $pango="<span color='#957966'>".$pango."</span>";
 
 print $pango;
-
+open(REC,">c");print REC $pango;close REC;

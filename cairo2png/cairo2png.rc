@@ -6,7 +6,7 @@
 <span color='#4746D8'>待办事宜</span>
 => pango 750,40 weather.pl
 <span color='#4746D8'> 天气预报</span>
-=> pango 300,240 /home/exp/摘录
+=> pango 300,300 /home/exp/摘录
 <span color='#4746D8'> 摘录</span>
 ///home/exp/媒体/飞屋环球.png
 //=> background /home/exp/媒体/飞屋环球.png /home/exp/媒体/xm.png /home/exp/媒体/xm.jpg /home/exp/媒体/飞屋环球1.png

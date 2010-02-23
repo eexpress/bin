@@ -69,7 +69,7 @@ my @files = glob "d-*.png";
 my $cmd="habak ".$desk;
 foreach(@files){
 my $x=int 300+rand(1280-500);		# 屏幕位置范围
-my $y=int 100+rand(800-400);
+my $y=int 100+rand(800-300);
 $cmd=$cmd." -mp $x,$y $_";
 }
 print "cmd\t-> $cmd\n";
