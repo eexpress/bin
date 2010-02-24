@@ -9,7 +9,7 @@ chdir dirname (-l $0?readlink $0:$0);
 $input="cairo2png.rc";
 $output="cairo2png.png";
 GetOptions('input=s'=>\$input,'output=s'=>\$output,
-	'help'=>\$help,'desktop'=>\$desktop);
+	'help'=>\$help,'force'=>\$force,'desktop'=>\$desktop);
 
 sub help{
 print "
@@ -75,7 +75,8 @@ foreach (@line){
 		chomp $s;
 		if($s!~m"^/"){$s="./".$s;}	#非全路径，使用相对路径
 		print "\n$prefix excute script or text: $s.\n";
-		if(-x $s){@append=`$s  2>/dev/null`;}
+		if(-x $s){$s="$s ".($force?"-f":""); print "$prefix $s.\n";
+			@append=`$s  2>/dev/null`;}
 		else{
 #文本文件，去掉空行和带●的时间行。最宽输出80字符，最多输出8行。
 			if(-T $s)

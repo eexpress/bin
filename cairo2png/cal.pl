@@ -1,10 +1,7 @@
 #!/usr/bin/perl
 
-@t=localtime(time);
-$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
-@t=localtime((stat "c")[9]);
-$fileday=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
-if($fileday eq $today){
+$_=`./fileistoday.pl c`;
+if($ARGV[0] eq "-f"||$_ ne "yes"){
 open(REC,"c");print <REC>;close REC;
 exit;
 }
