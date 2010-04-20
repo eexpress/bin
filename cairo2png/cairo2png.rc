@@ -1,13 +1,14 @@
 => background /home/exp/媒体/壁纸●/1280x800及以上/木纹桌面-鸣学.png
-=> font Billo Dream 22
+=> font Billo Dream 20
 => pango 20,540 cal.pl
-=> font WenQuanYi Micro Hei 14
-=> pango 300,40 todo.pl
+//=> font WenQuanYi Micro Hei 14
+=> font 经典繁颜体 16
+=> pango 280,40 devtodo.bash
 <span color='#4746D8'>待办事宜</span>
-=> pango 750,40 weather.pl
+=> pango 780,40 weather.pl
 <span color='#4746D8'> 天气预报</span>
-=> pango 300,300 /home/exp/摘录
-<span color='#4746D8'> 摘录</span>
+//=> pango 300,300 /home/exp/摘录
+//<span color='#4746D8'> 摘录</span>
 ///home/exp/媒体/飞屋环球.png
 //=> background /home/exp/媒体/飞屋环球.png /home/exp/媒体/xm.png /home/exp/媒体/xm.jpg /home/exp/媒体/飞屋环球1.png
 //=> background /home/exp/媒体/

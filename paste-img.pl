@@ -10,6 +10,7 @@ my $bus = Net::DBus->session->get_service('org.freedesktop.Notifications')
 my $mech = WWW::Mechanize->new();
 #my $web_select="ubuntu";	#选择贴图网站的缩写短语，会在列表中自动匹配的
 my $web_select="imagebin";	#选择贴图网站的缩写短语，会在列表中自动匹配的
+#my $web_select="kimag";	#选择贴图网站的缩写短语，会在列表中自动匹配的
 my $add;
 #======================
 my %web=(	"http://www.cjb.net/"=>{"image"=>$ARGV[0]},

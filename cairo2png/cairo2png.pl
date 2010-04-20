@@ -81,7 +81,10 @@ foreach (@line){
 #文本文件，去掉空行和带●的时间行。最宽输出80字符，最多输出8行。
 			if(-T $s)
 			{@append=grep !/(^\s*$|^●)/,`cat $s`;
-@append=map {/^(.{1,80})/;$1=~/(^.*\b)/s;chomp $1;$1."...\n"} @append;
+@append=map {	# length 按照字符计算。
+	if(length>80){/^(.{1,80})/;$1=~/^.*\b/s;$&."...\n"}
+	else{$_;}
+	} @append;
 			splice(@append,8);}
 		}
 		}

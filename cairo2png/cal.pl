@@ -1,7 +1,10 @@
 #!/usr/bin/perl
 
-$_=`./fileistoday.pl c`;
-if($ARGV[0] eq "-f"||$_ ne "yes"){
+use File::Basename qw/basename dirname/;
+chdir dirname (-l $0?readlink $0:$0);
+
+$_=`./istoday.pl c`;
+if($ARGV[0] ne "-f" && $_ eq "yes"){
 open(REC,"c");print <REC>;close REC;
 exit;
 }
@@ -16,7 +19,8 @@ if ((($year % 4 == 0) && ($year % 100 != 0)) || ($year % 400 == 0)) {$monarr[2] 
 my $lunar=`calendar -A 0 -f ~/.calendar/calendar.2010.lunar`;
 $lunar=~/\t(.*)$/;$lunar=$1;
 
-my $calendar=`calendar -A 15`;
+#my $calendar=`calendar -A 15`;
+my $calendar=join "",grep /$year/,`calendar -A 15`;
 @d=$calendar=~/月 (\d+)/g;
 
 foreach $i (1..$monarr[$mon]){
@@ -37,10 +41,10 @@ $pango=$_;
 #添加日期，日历，缺省颜色
 @Wanday=("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
 my $d="$Wanday[$wan] $year 年 $mon 月 $day 日";
-$pango="<span font='FZCuSong\-B09S 35'>$d</span>\n".$pango;
+$pango="<span font='FZCuSong\-B09S 32'>$d</span>\n".$pango;
 
 $calendar=~s:\d+月 \d+:<u>$&</u>:g;
-$pango.="\n<span font='FZCuSong\-B09S 16'>$calendar</span>";
+$pango.="\n<span font='FZCuSong\-B09S 14'>$calendar</span>";
 $pango="<span color='#957966'>".$pango."</span>";
 
 print $pango;

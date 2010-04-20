@@ -16,7 +16,7 @@ else{$out="$r --> ";last;}
 while($l=<SDCV>){
 if($l=~/相关|^$/){
 close(SDCV);
-if($notify){`notify-send -u critical -i '/home/exp/媒体/128软件png/pidgin.png' 'sdcv翻译' "$out"`;}
+if($notify){`notify-send -u critical -i '/home/exp/媒体/图标●/128软件png/pidgin.png' 'sdcv翻译' "$out"`;}
 else{print $out;}
 exit;
 }
