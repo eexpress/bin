@@ -4,8 +4,11 @@ $_=`xsel -o`;
 print "$_\n";
 if(/http:\/\/rapidshare\.com\/files\//){
 	print "add to queue file.\n";
-	`echo $_ >>~/.slimrat/queue`;
-	`$ENV{HOME}/bin/slimrat.bat`;
+
+	`$ENV{HOME}/bin/msg elvis.png  "保存并启动slimrat" "ok"`;
+	`xsel -o >>~/.slimrat/queue`; `echo '\n' >>~/.slimrat/queue`;
+#        `echo $_ >>~/.slimrat/queue`;
+#        `$ENV{HOME}/bin/slimrat.bat`;
 	exit;
 }
 if(/http:\/\/[^\s]*/){

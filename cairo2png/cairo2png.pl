@@ -45,6 +45,7 @@ cairo的说明，可参考 http://www.cairographics.org/manual/ http://cairograp
 if($help){help;exit;}
 $prefix="\e[32m===>\e[0m";
 
+print `pwd`;
 print "$input => $output\n";
 open (IN, $input) || die ("配置文件无效。");
 @line=<IN>; close IN;
@@ -70,12 +71,13 @@ foreach (@line){
 		draw_pango();
 	if(/\s*pango\s*/){
 		@pango=""; @append="";
-		($c,$s)=split / /,$';	#坐标，脚本或文本
+		($c,$s,@p)=split / /,$';	#坐标，脚本或文本
 		chomp $c; ($x,$y)=split /,/,$c;
 		chomp $s;
+		chomp @p;
 		if($s!~m"^/"){$s="./".$s;}	#非全路径，使用相对路径
 		print "\n$prefix excute script or text: $s.\n";
-		if(-x $s){$s="$s ".($force?"-f":""); print "$prefix $s.\n";
+		if(-x $s){$s="$s @p ".($force?"-f":""); print "$prefix $s.\n";
 			@append=`$s  2>/dev/null`;}
 		else{
 #文本文件，去掉空行和带●的时间行。最宽输出80字符，最多输出8行。

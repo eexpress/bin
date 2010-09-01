@@ -17,6 +17,10 @@ sub pr {
 print "\e[1m\e[33m\e[41m $_[0] \e[0m\n";
 }
 #----------------------------------------------	
+use File::Basename qw/basename dirname/;
+
+chdir dirname (-l $0?readlink $0:$0);
+#----------------------------------------------	
 # =============
 # MAIN BOT CODE
 # =============
@@ -109,7 +113,7 @@ sub on_public {
 #        if(!fork()){
 		my @cmd=split ',',$cc[0];
 		pc "cmd:\t <$cmd[1] $w>\n";
-		my @send=`$cmd[1] 2>/dev/null $w`;
+		my @send=`./$cmd[1] 2>/dev/null $w`;
 
 		if($cmd[2]==1){$w=$nick;} else {$w=$cfg_room;}	#私聊?
 		my $total=0;

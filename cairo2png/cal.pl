@@ -41,7 +41,7 @@ $pango=$_;
 #添加日期，日历，缺省颜色
 @Wanday=("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
 my $d="$Wanday[$wan] $year 年 $mon 月 $day 日";
-$pango="<span font='FZCuSong\-B09S 32'>$d</span>\n".$pango;
+$pango="<span font='FZCuSong\-B09S 32'>\t\t\t\t\t\t$d</span>\n".$pango;
 
 $calendar=~s:\d+月 \d+:<u>$&</u>:g;
 $pango.="\n<span font='FZCuSong\-B09S 14'>$calendar</span>";

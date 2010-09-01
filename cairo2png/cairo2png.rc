@@ -1,11 +1,11 @@
 => background /home/exp/媒体/壁纸●/1280x800及以上/木纹桌面-鸣学.png
 => font Billo Dream 20
-=> pango 20,540 cal.pl
+=> pango 20,580 cal.pl
 //=> font WenQuanYi Micro Hei 14
 => font 经典繁颜体 16
 => pango 280,40 devtodo.bash
 <span color='#4746D8'>待办事宜</span>
-=> pango 780,40 weather.pl
+=> pango 780,40 weather.pl -i
 <span color='#4746D8'> 天气预报</span>
 //=> pango 300,300 /home/exp/摘录
 //<span color='#4746D8'> 摘录</span>
