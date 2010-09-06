@@ -19,6 +19,18 @@ last if ($is>$max);
 chomp;
 ($sign,$date,$weather,$temp,$wind)=split "\t",$_;
 ($y,$m,$d)=split "-",$date;
+
+$_=sprintf("/usr/bin/calendar -A 0 -t %04d%02d%02d",$y,$m,$d);
+#@lunar=eval {sprintf("/usr/bin/calendar -A 0 -t %04d%02d%02d",$y,$m,$d)};
+@lunar=`$_`;
+#print @lunar;
+#@lunar=split " +",$lunar[0];
+$_=$lunar[0];chomp;s/^.*\d\s*//;$lunar[0]=$_;
+#for(@lunar){print "$_\n";}
+#print "==$lunar[3]==\n";
+#print "==$_==\n";
+#exit;
+
 if($year==""){$year=$y;}elsif($year==$y){$y="";}else{$year=$y;}
 if($month==""){$month=$m;}elsif($month==$m){$m="";}else{$month=$m;}
 $y.="年" if($y);
@@ -33,7 +45,7 @@ $color=$indexcolor{$sign};
 #if($sign eq ">"){$color="200,200,50,200";}elsif($sign eq "-"){$color="200,200,200,200";}else{$color="50,160,50,200";}
 $y1=$y0;
 $x2=$x0+2; $y2=$y1+2; $cmd.="-mc 20,20,20,200 -mp $x2,$y2 -ht $m$d ";
-$cmd.="-mc $color -mp $x0,$y1 -ht $m$d ";
+$cmd.="-mc $color -mp $x0,$y1 -ht \"$m$d - $lunar[0]\" ";
 $y1+=$h0;
 $_=$weather; $x2=$x0+30; $y2=$y1+50;
 #@arr=(

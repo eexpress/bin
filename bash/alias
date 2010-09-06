@@ -1,3 +1,4 @@
+alias calendar='calendar -A 7'
 alias fc-zh='fc-list :lang=zh-cn'
 alias arp.显示='cat /proc/net/arp'
 
