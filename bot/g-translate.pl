@@ -12,6 +12,8 @@ if($in=~/%/){$str="zh-CN%7Cen";}else{$str="en%7Czh-CN";}
 $out="curl -e http://www.my-ajax-site.com 'http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=$in&langpair=$str' 2>/dev/null";
 $out=`$out`;
 $out=~/translatedText":"(.*?)"/;
-if($notify){`notify-send -i '/home/exp/媒体/图标●/googletranslate.png' 'google翻译' "$1"`;}
+if($notify){`notify-send -i '/home/exp/.icons/Mashup/apps/config-language.png' 'google翻译' "$1"`;}
+#if($notify){`notify-send -i '/home/exp/config-language.png' 'google翻译' "$1"`;}
+#if($notify){`notify-send -i '/home/exp/媒体/图标●/googletranslate.png' 'google翻译' "$1"`;}
 else{print $1;}
 

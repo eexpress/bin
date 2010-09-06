@@ -1,0 +1,72 @@
+#!/bin/bash
+
+#-------LESS TERMCAP-------------------------------
+export LESS_TERMCAP_mb=$'\033[01;31m' 
+export LESS_TERMCAP_md=$'\033[01;31m' 
+export LESS_TERMCAP_me=$'\033[0m' 
+export LESS_TERMCAP_se=$'\033[0m' 
+export LESS_TERMCAP_so=$'\033[01;44m' 
+export LESS_TERMCAP_ue=$'\033[0m' 
+export LESS_TERMCAP_us=$'\033[01;32m'
+
+#-------ENVIROMENT SET-----------------------------
+export PATH=/home/exp/bin:$PATH
+export CDPATH=:~:/home/media
+
+export TERM=xterm-color
+export EDITOR=vim
+
+#export GTK_IM_MODULE=ibus
+#export XMODIFIERS=@im=ibus
+#export QT_IM_MODULE=ibus
+
+set -o vi
+#PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n● '
+#PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n☎ '
+PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n☛ '
+
+#-------FUNCTION-----------------------------------
+# make and change to a directory
+md () { mkdir -p "$1" && cd "$1"; }
+
+#-------PINYIN COMPLETION--------------------------
+#. $HOME/bin/chs_completion
+
+#--------TAB COMPLETION ADD------------------------
+_show_installed()
+{
+        local cur
+        COMPREPLY=()
+        cur=`_get_cword`
+        COMPREPLY=( $( _comp_dpkg_installed_packages $cur ) )
+        return 0
+}
+_show_all()
+{
+        local cur
+        COMPREPLY=()
+        cur=`_get_cword`
+        COMPREPLY=( $( apt-cache pkgnames $cur 2> /dev/null ) )
+        return 0
+}
+complete -F _show_all $default aw ai as
+complete -F _show_installed $default ap ar
+#complete -F _show_installed $default ar
+
+#-------HISTORY------------------------------------
+# eexp 2007-8-7
+shopt -s histappend
+PROMPT_COMMAND='history -a'
+
+PS4='+{$LINENO:${FUNCNAME[0]}} '
+HISTFILESIZE=2000
+HISTSIZE=2000
+HISTTIMEFORMAT='%F %T '
+HISTCONTROL=erasedups
+HISTIGNORE="pwd:ls:cd:"
+
+#-------LS COLORS----------------------------------
+#LS_COLORS='no=00:fi=00:di=01;34:ln=01;35:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;33:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.flac=01;35:*.mp3=38;5;161:*.mpc=01;35:*.ogg=01;35:*.wav=01;35:';
+#export LS_COLORS
+eval `dircolors ~/bin/bash/ls_color`
+
