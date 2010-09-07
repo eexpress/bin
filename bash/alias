@@ -64,3 +64,4 @@ alias t.u='tar uPvf '
 alias t.x='tar xmPvf '
 alias v='vim'
 alias x='echo "● `xsel -o`" >>'
+# find-opera-1M 已被别名为“find ~/.opera/cache*/ -cmin -60 -size +1500k -printf "------\t%p\t► %Ac\t► %kK\v\r" -exec file -b {} \;”
