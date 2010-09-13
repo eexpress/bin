@@ -1,17 +1,17 @@
 #!/usr/bin/perl
 
 `$ENV{HOME}/bin/weather.pl`;
-$logf="/tmp/weather";
+$logf="$ENV{HOME}/.weather";
 $icondir="$ENV{HOME}/媒体/分类主题图片▲/天气/";
 chdir $icondir;
 open REC,$logf; @_=<REC>; close REC;
 $font="~/.fonts/字体/中文字体/YuanTi/VeraSansYuanTi-Bold.ttf";
 $cmd="habak ~/.fvwm/desktop.jpg -mf $font -mh 16 ";
 $year="";$month="";
-$x0=500;$y0=50;$w0=200;$h0=35;
+$x0=500;$y0=50;$w0=240;$h0=35;
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 #@_=grep /$today/,@_;
-$is=0; $max=4;	#从今天算起，最多显示几天。
+$is=0; $max=3;	#从今天算起，最多显示几天。
 for (@_){
 next if ! /$today/ && ! $is;
 $is++;
@@ -21,14 +21,10 @@ chomp;
 ($y,$m,$d)=split "-",$date;
 
 $_=sprintf("/usr/bin/calendar -A 0 -t %04d%02d%02d",$y,$m,$d);
-#@lunar=eval {sprintf("/usr/bin/calendar -A 0 -t %04d%02d%02d",$y,$m,$d)};
 @lunar=`$_`;
-#print @lunar;
-#@lunar=split " +",$lunar[0];
-$_=$lunar[0];chomp;s/^.*\d\s*//;$lunar[0]=$_;
-#for(@lunar){print "$_\n";}
-#print "==$lunar[3]==\n";
-#print "==$_==\n";
+$_=$lunar[0]; $_=$lunar[1] if(/\d{4}/ && ! /$y/);
+chomp;s/^.*\t//;$lunar[0]=$_;
+print "==$_==\n";
 #exit;
 
 if($year==""){$year=$y;}elsif($year==$y){$y="";}else{$year=$y;}
@@ -37,8 +33,8 @@ $y.="年" if($y);
 $m.="月" if($m);
 $d.="日";
 %indexcolor=(
-	">"=>"200,200,50,180",
-	" "=>"200,200,200,100",
+	">"=>"220,210,80,150",
+	" "=>"200,200,200,150",
 	"-"=>"50,160,50,150",
 );
 $color=$indexcolor{$sign};
@@ -47,7 +43,7 @@ $y1=$y0;
 $x2=$x0+2; $y2=$y1+2; $cmd.="-mc 20,20,20,200 -mp $x2,$y2 -ht $m$d ";
 $cmd.="-mc $color -mp $x0,$y1 -ht \"$m$d - $lunar[0]\" ";
 $y1+=$h0;
-$_=$weather; $x2=$x0+30; $y2=$y1+50;
+$_=$weather; $x2=$x0+60; $y2=$y1+40;
 #@arr=(
 #["小到",""],["小雨","10.png"],["中雨","11.png"],["大雨","12.png"],
 #["多云","26.png"],["晴","32.png"],["阴","31.png"],

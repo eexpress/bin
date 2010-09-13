@@ -7,9 +7,10 @@ alias ai='sudo aptitude install'
 alias ap='sudo aptitude purge'
 alias ar='sudo aptitude remove'
 alias as='aptitude search'
-alias au='sudo aptitude update'
+alias au='sudo aptitude update && msg 列表已经刷新 aptitude || msg 刷新失败'
 alias aw='aptitude show'
 
+alias xo='xdg-open'
 alias cal='cal -3'
 alias cdn.proxy='dtach -n /tmp/dtach-cdnproxy ~/bin/cdnproxy-论坛'
 alias ce='crontab -e'
@@ -65,3 +66,6 @@ alias t.x='tar xmPvf '
 alias v='vim'
 alias x='echo "● `xsel -o`" >>'
 # find-opera-1M 已被别名为“find ~/.opera/cache*/ -cmin -60 -size +1500k -printf "------\t%p\t► %Ac\t► %kK\v\r" -exec file -b {} \;”
+osd0(){
+gnome-osd-client -f "<message id='oss' osd_vposition='center' osd_halignment='center'><span font='ZhunYuan 180'  foreground='red'>`xsel -o`</span></message>"
+}
