@@ -2,7 +2,7 @@
 
 `$ENV{HOME}/bin/weather.pl`;
 $logf="$ENV{HOME}/.weather";
-$icondir="$ENV{HOME}/媒体/分类主题图片▲/天气/";
+$icondir="$ENV{HOME}/bin/weather-icon";
 chdir $icondir;
 open REC,$logf; @_=<REC>; close REC;
 $font="~/.fonts/字体/中文字体/YuanTi/VeraSansYuanTi-Bold.ttf";
