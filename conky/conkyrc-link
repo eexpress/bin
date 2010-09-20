@@ -1,1 +1,217 @@
-/home/exp/.conkyrc
+# Conky sample configuration
+#
+# the list of variables has been removed from this file in favour
+# of keeping the documentation more maintainable.
+# Check http://conky.sf.net for an up-to-date-list.
+
+# set to yes if you want Conky to be forked in the background
+background no
+
+# X font when Xft is disabled, you can pick one with program xfontsel
+#font 5x7
+#font 6x10
+#font 7x13
+#font 8x13
+#font 9x15
+#font *mintsmild.se*
+#font -*-*-*-*-*-*-34-*-*-*-*-*-*-*
+
+
+# Use Xft?
+use_xft yes
+
+# Xft font when Xft is enabled
+xftfont Vera Sans YuanTi:size=9
+#xftfont 文泉驛微米黑:size=9
+#xftfont YaHei Consolas Hybrid:size=9
+#xftfont AR PL ZenKai Uni:size=9
+#xftfont Courier 10 Pitch:size=9
+
+# Text alpha when using Xft
+#xftalpha 0.1
+
+# Print everything to stdout?
+# out_to_console no
+
+# MPD host/port
+# mpd_host localhost
+# mpd_port 6600
+# mpd_password tinker_bell
+
+# Print everything to console?
+# out_to_console no
+
+# mail spool
+# mail_spool $MAIL
+
+text_buffer_size 512
+# Update interval in seconds
+update_interval 1.0
+
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+total_run_times 0
+
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+
+# If own_window is yes, you may use type normal, desktop or override
+own_window_type desktop
+
+# Use pseudo transparency with own_window?
+own_window_transparent yes
+
+# If own_window_transparent is set to no, you can set the background colour here
+# own_window_colour hotpink
+
+# If own_window is yes, these window manager hints may be used
+#own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# Minimum size of text area
+#minimum_size 60 90
+maximum_width 240
+# Draw shades?
+draw_shades no
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders no
+
+# Draw borders around graphs
+draw_graph_borders no
+
+# Stippled borders?
+# stippled_borders 9
+
+# border margins
+#border_margin 10
+
+# border width
+border_width 0
+
+# Text alignment, other possible values are commented
+alignment top_left
+#alignment top_right
+#alignment bottom_left
+# alignment bottom_right
+# alignment none
+
+# Gap between borders of screen and text
+# same thing as passing -x at command line
+gap_x 20
+gap_y 20
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+# number of net samples to average
+# set to 1 to disable averaging
+net_avg_samples 2
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+
+
+# Add spaces to keep things from moving about?  This only affects certain objects. left, right, or none.
+#use_spacer no
+
+#   mldonkey_hostname     Hostname for mldonkey stuff, defaults to localhost
+#   mldonkey_port         Mldonkey port, 4001 default
+#   mldonkey_login        Mldonkey login, default none
+#   mldonkey_password     Mldonkey password, default none
+
+# boinc (seti) dir
+# seti_dir /opt/seti
+
+# Allow for the creation of at least this number of port monitors (if 0 or not set, default is 16) 
+#min_port_monitors 16
+
+# Allow each port monitor to track at least this many connections (if 0 or not set, default is 256)
+#min_port_monitor_connections 256
+
+# none, xmms, bmp, audacious, infopipe (default is none)
+#xmms_player none
+# variable is given either in format $variable or in ${variable}. Latter
+# allows characters right after the variable and must be used in network
+# stuff because of an argument
+# Default colors and also border colors
+default_color 75A029
+#default_shade_color white
+#default_outline_color white
+
+#按照ansi的前7种颜色
+#black,red,green,yellow,blue,magenta,cyan,white
+color0 000000
+color1 B64040
+color2 5DBE63
+color3 E1A738
+color4 7372D7
+color5 CA4AB3
+color6 5DBCBE
+color7 FFFFFF
+# stuff after 'TEXT' will be formatted on screen
+#lua_load '/home/exp/A_New_Start___June_2010_by_alecive.zip.FILES/A New Start/Conky/rings.lua'
+#lua_draw_hook_pre ring_stats
+template0 \1 ${alignr}${fs_free \2}/${fs_size \2} ${fs_free_perc \2}%
+
+TEXT
+$hr
+${execi 500 date "+%Y年 %m月 %d日"} ${color1}${execi 500 date "+%A"}
+${font 方正流行体简体:bold:size=15}${color3}${time %p} ${color1}${font YellowSubmarine:bold:size=24}${time %I:%M}${color}${font}${image ~/bin/conky/eexp.png -p 180,16 -s 40x40}
+$hr
+开机  ${uptime}${alignr}温度  ${acpitemp}℃
+硬盘  ${hddtemp}℃${alignr}显卡  ${exec nvidia-settings -q gpucoretemp -t}℃
+音量  Master: ${color3}${exec amixer get Master|grep -o -m 1 '[0-9]*%.*o.*]'|sed 's/\].*\]\ //'}${alignr}${color}PCM: ${color1}${exec amixer get PCM|grep -o -m 1 '[0-9]*%'}${color}
+#音量  Master: ${color3}${exec amixer get Master|grep -o -m 1 '[0-9]*%'}${alignr}${color}PCM: ${color1}${exec amixer get PCM|grep -o -m 1 '[0-9]*%'}${color}
+电池  ${battery}-${battery_time}
+#${ibm_volume}
+$hr
+${tab 80}${cpugraph cpu1 20,80 ff0000 00ff00}${cpugraph cpu2 20,80 ff0000 00ff00}
+${voffset -30}${color3}芯片${color} ${top name 1}${alignr}${top cpu 1}% ①
+${tab 30}${top name 2}${alignr}${top cpu 2}% ②
+#${tab 80}${downspeedgraph wlan0 20,80 000000 00ff00}${upspeedgraph wlan0 20,80 000000 ff0000}
+#${voffset -30}${color3}网络${color} ▼${downspeedf wlan0}K${tab 80}▲${upspeedf wlan0}K
+#${tab 30}●${addr wlan0}${tab 80}◢${wireless_link_qual_perc wlan0}%
+${execp ~/bin/conky/net.pl}
+${tab 100}${memgraph 20,100 0000ff 00ff00}
+${voffset -30}${color3}内存${color} ${mem}/${memmax}${tab 80}${color3}交换${color}${alignr}${swap}
+${tab 30}${top_mem name 1} ${alignr}${top_mem mem 1}% ①
+${tab 30}${top_mem name 2} ${alignr}${top_mem mem 2}% ②
+$hr
+${color3}分区${alignr}剩余${color}
+${template0 系统 /}
+#系统 ${alignr}${fs_free /}/${fs_size /} ${fs_free_perc /}%
+${template0 个人 /home}
+${template0 媒体 /home/media}
+$hr
+${color3}天气${color}
+#${execpi 500 cat ~/t}
+#${execpi 500 ~/bin/weather.pl|~/bin/ansi2conky.pl}
+${execp cat ~/bin/conky/weather.txt|head -n 4}${color}
+#${execpi 500 ~/bin/cairo2png/weather.pl -c}
+$hr
+${color3}待办${color}
+${execp cat ~/bin/conky/devtodo.txt}${color}
+$hr
+${color3}后台${color}
+${if_running mocp}${color3}moc${alignr}${color1}${exec ~/bin/conky/mocp-lrc.pl}${color}${endif}
+${if_running transmission}${color3}transmission${color}
+${exec ~/bin/conky/bt.info}${endif}
+${if_running mlnet}${color3}mlnet${color}
+${exec ~/bin/mlinfo.pl -s}${endif}
+#${exec ~/bin/conky/ml.info}${endif}
+${if_existing /tmp/dtach-slimrat}dtach-slimrat  ${endif}${if_existing /tmp/dtach-cdnproxy}dtach-cdnproxy  ${else}${if_running cdnproxy-论坛}cdnproxy${endif}${endif}
+$hr
+
