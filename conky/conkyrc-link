@@ -165,6 +165,8 @@ color7 FFFFFF
 #lua_load '/home/exp/A_New_Start___June_2010_by_alecive.zip.FILES/A New Start/Conky/rings.lua'
 #lua_draw_hook_pre ring_stats
 template0 \1 ${alignr}${fs_free \2}/${fs_size \2} ${fs_free_perc \2}%
+template1 ${if_running \1}${color3}\1${alignr}${color1}${exec \2 \3}${color}${endif}
+template2 ${if_existing /tmp/\1}\1${endif}
 
 TEXT
 $hr
@@ -206,12 +208,17 @@ ${color3}待办${color}
 ${execp cat ~/bin/conky/devtodo.txt}${color}
 $hr
 ${color3}后台${color}
-${if_running mocp}${color3}moc${alignr}${color1}${exec ~/bin/conky/mocp-lrc.pl}${color}${endif}
-${if_running transmission}${color3}transmission${color}
-${exec ~/bin/conky/bt.info}${endif}
-${if_running mlnet}${color3}mlnet${color}
-${exec ~/bin/mlinfo.pl -s}${endif}
+${template1 mocp ~/bin/conky/mocp-lrc.pl}
+${template1 transmission ~/bin/conky/bt.info}
+${template1 mlnet ~/bin/mlinfo.pl -s}
+${template2 dtach-slimrat}
+${template2 dtach-cdnproxy}
+#${if_running mocp}${color3}moc${alignr}${color1}${exec ~/bin/conky/mocp-lrc.pl}${color}${endif}
+#${if_running transmission}${color3}transmission${color}
+#${exec ~/bin/conky/bt.info}${endif}
+#${if_running mlnet}${color3}mlnet${color}
+#${exec ~/bin/mlinfo.pl -s}${endif}
 #${exec ~/bin/conky/ml.info}${endif}
-${if_existing /tmp/dtach-slimrat}dtach-slimrat  ${endif}${if_existing /tmp/dtach-cdnproxy}dtach-cdnproxy  ${else}${if_running cdnproxy-论坛}cdnproxy${endif}${endif}
+#${if_existing /tmp/dtach-slimrat}dtach-slimrat  ${endif}${if_existing /tmp/dtach-cdnproxy}dtach-cdnproxy  ${else}${if_running cdnproxy-论坛}cdnproxy${endif}${endif}
 $hr
 

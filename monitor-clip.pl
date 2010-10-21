@@ -2,7 +2,7 @@
 
 $_=`xsel -o`;
 print "$_\n";
-if(/http:\/\/rapidshare\.com\/files\//){
+if(/http:\/\/rapidshare\.com\/files\// || /hotfile\.com/ || /\.share-online\.biz/){
 	print "add to queue file.\n";
 
 	`$ENV{HOME}/bin/msg elvis.png  "保存并启动slimrat" "ok"`;

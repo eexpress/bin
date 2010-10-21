@@ -21,9 +21,9 @@ export EDITOR=vim
 #export QT_IM_MODULE=ibus
 
 set -o vi
-#PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n● '
+PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n● '
 #PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n☎ '
-PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n☛ '
+#PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n☛ '
 
 #-------FUNCTION-----------------------------------
 # make and change to a directory
