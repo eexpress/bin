@@ -1,1 +1,0 @@
-/home/exp/应用/paste_img/pi.pl
