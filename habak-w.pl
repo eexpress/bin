@@ -3,7 +3,7 @@
 use Encode qw(_utf8_on _utf8_off encode);
 
 $logf="$ENV{HOME}/bin/resources/weather.log";
-$x0=420;$y0=80;			# 屏幕起始坐标
+#$x0=420;$y0=80;			# 屏幕起始坐标
 $icondir="$ENV{HOME}/bin/resources/weather-icon-64";
 $font="$ENV{HOME}/bin/resources/VeraSansYuanTi-Bold.ttf";
 $bgfile="$ENV{HOME}/bin/resources/desktop.jpg";
@@ -40,7 +40,9 @@ if($_){	#取得了网页。解析。
 #---------------------------------
 -f $logf || die "can not fetch log file.\n";
 chdir $icondir;
+-f "00.png" || die "can not fetch picture file.\n";
 my $size=`identify -format "%w" 00.png`;  # 以00.png的宽度定基本尺寸
+chomp $size;
 my $bgs=($size*2)."x".($size*4);
 `convert -size $bgs xc:\'#ffffff20\' bg-w.png` if (! -f "bg-w.png");
 `convert -size $bgs xc:\'#ffffff30\' bg.png` if (! -f "bg.png");
@@ -50,6 +52,10 @@ $cmd="habak $bgfile -mf $font ";
 $year="";$month=""; $is=0;
 $w0=$size*2;$h0=$size/2;	# 单位方框尺寸
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
+#---------------------------------
+my @xx=`xrandr`; @xx=grep /\*/,@xx; $_=$xx[0]; /[\dx]+/; my($sx,$sy)=split "x",$&;
+$x0=$sx-$w0*$max; $y0=$size;
+print "$x0=$sx-$w0*$max; $y0=$size;\n";
 #---------------------------------
 for (@_){
 next if ! /$today/ && ! $is;
