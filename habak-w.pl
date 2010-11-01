@@ -2,11 +2,11 @@
 
 use Encode qw(_utf8_on _utf8_off encode);
 
-$logf="$ENV{HOME}/bin/resources/weather.log";
+$logf="$ENV{RES}/weather.log";
 #$x0=420;$y0=80;			# 屏幕起始坐标
-$icondir="$ENV{HOME}/bin/resources/weather-icon-64";
-$font="$ENV{HOME}/bin/resources/VeraSansYuanTi-Bold.ttf";
-$bgfile="$ENV{HOME}/bin/resources/desktop.jpg";
+$icondir="$ENV{RES}/weather-icon-64";
+$font="$ENV{RES}/VeraSansYuanTi-Bold.ttf";
+$bgfile="$ENV{RES}/desktop.jpg";
 $max=7;	#从今天算起，最多显示几天。
 %indexcolor=(
 	">"=>"200,200,200,250",	# 今天

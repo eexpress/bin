@@ -16,6 +16,7 @@ export CDPATH=:~:/home/media
 export TERM=xterm-color
 export EDITOR=vim
 
+export RES=/home/exp/bin/resources
 #export GTK_IM_MODULE=ibus
 #export XMODIFIERS=@im=ibus
 #export QT_IM_MODULE=ibus
