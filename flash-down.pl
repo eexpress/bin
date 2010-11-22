@@ -46,9 +46,18 @@ if ($mech->success()) {
 		print "\e]2;$name 下载进度 $proc\a";
 		$cnt++;
 	}
+#---------------------	
+	if($ENV{flv2avi}){
+	`play "$ENV{HOME}/bin/resources/sound/skill_up.wav"`;
+	$name=~s/ /-/g;
+	print "\e]2;$name 使用mencoder压缩中。。。\a";
+	$bus->Notify("flash", 0, "sunny", "flash 视频转换成 avi", "$dir/$name.avi", [], { }, -1);
+	`/usr/bin/mencoder -profile c430 *.flv -o $dir/$name.avi 2>&1`;
+	}
+#---------------------	
 	chdir '..';
 	`echo "$ARGV[0]\t《$_》\t结果：$proc">>flash-down.log`;
-	`aplay '/home/exp/媒体/事件声音-et/I-need-ammo.wav'`;
+	`play "$ENV{HOME}/bin/resources/sound/I-need-ammo.wav"`;
 	} else {
 	/提示：.*/; $_=$&; s/<br\/>.*$//; 
 	$bus->Notify("flash", 0, "error", "flash 解析失败", "$_\n:(", [], { }, -1);

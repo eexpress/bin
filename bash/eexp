@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export flv2avi=0
 #-------LESS TERMCAP-------------------------------
 export LESS_TERMCAP_mb=$'\033[01;31m' 
 export LESS_TERMCAP_md=$'\033[01;31m' 

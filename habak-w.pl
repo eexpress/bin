@@ -19,7 +19,7 @@ $max=7;	#从今天算起，最多显示几天。
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 #---------------------------------
 if($today ne $fday){	#不是当天的数据
-until($_[0]=~/^Server:/){@_=`nslookup -timeout=1 -retry=1 www.163.com`;}
+until($_[0]=~/^Server:/){@_=`nslookup -timeout=2 -retry=1 www.163.com`;}
 use LWP::Simple; $_=get("http://qq.ip138.com/weather/hunan/ChangSha.wml");
 if($_){	#取得了网页。解析。
 	$_=encode("utf8",$_);
