@@ -1,7 +1,14 @@
 #!/usr/bin/perl
 
 $_=`xsel -o`;
+s/\s*$//;
+chomp;
 print "$_\n";
+if(/^\//){
+	if(-f){`xdg-open $_`;}
+	if(-d){`rox $_`;}
+	exit;
+}
 if(/http:\/\/rapidshare\.com\/files\// || /hotfile\.com/ || /\.share-online\.biz/){
 	print "add to queue file.\n";
 
