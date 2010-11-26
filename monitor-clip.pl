@@ -4,7 +4,8 @@ $_=`xsel -o`;
 s/\s*$//;
 chomp;
 print "$_\n";
-if(/^\//){
+if(/^\// || /^~\//){
+	s/^~/$ENV{HOME}/;
 	if(-f){`xdg-open $_`;}
 	if(-d){`rox $_`;}
 	exit;
