@@ -5,7 +5,7 @@ use strict;
 use WWW::Mechanize;
 use Net::DBus;
 
-my $dir="$ENV{HOME}/下载/视频下载";
+my $dir="$ENV{HOME}/视频/";
 -d $dir && chdir $dir;
 
 $_=$ARGV[0];
@@ -20,7 +20,9 @@ $mech -> get($_);
 if ($mech->success()) {
 	$_=$mech->content();
 	if(/当前解析视频.*/){
-	$_=$&; s/^.*?strong>//; s/<strong.*//; s/<font.*>//g;
+	$_=$&; 
+#        s/^.*?strong>//; s/<strong.*//; s/<font.*>//g;
+	s/^.*解析视频：//;s/（.*//;s/<.*?>//g;
 	print "\e[31m\e[1m".$_."\e[0m==================\n";
 #        s/ .*//; 
 	mkdir "$_"; chdir "$_";

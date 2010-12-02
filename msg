@@ -15,6 +15,6 @@ case $# in
 	t="格式错误"; w="参数应该介于1－3个。";;
 esac
 w=`echo $w|ascii2uni -a J`
-export DISPLAY=:0.0 && notify-send -i $icon  $t $w
+export DISPLAY=:0.0 && notify-send -i $icon  "$t" "$w"
 play '/home/exp/bin/resources/sound/skill_up.wav'  2>/dev/null
 
