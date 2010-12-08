@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in "$@"; do
+file-roller --extract-to="""$i-zz""" --force """$i"""
+zenity --question --title=删除 --text="是否删除压缩文件 $i"
+[ $? -eq 0 ] && rm """$i"""
+done
