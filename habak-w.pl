@@ -103,3 +103,4 @@ $x0+=$w0;
 print $cmd;
 `$cmd`;
 #---------------------------------
+`$ENV{HOME}/bin/conky/weather-log2txt.pl`;

@@ -18,9 +18,11 @@ export TERM=xterm-color
 export EDITOR=vim
 
 export RES=/home/exp/bin/resources
-#export GTK_IM_MODULE=ibus
-#export XMODIFIERS=@im=ibus
-#export QT_IM_MODULE=ibus
+
+export XMODIFIERS=@im=fcitx
+export GTK_IM_MODULE=xim
+export QT_IM_MODULE=xim
+export XIM=fcitx XIM_PROGRAM=fcitx
 
 set -o vi
 PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n● '
