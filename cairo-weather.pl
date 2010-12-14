@@ -1,20 +1,23 @@
 #!/usr/bin/perl
 
-use Encode qw(_utf8_on _utf8_off encode);
+use Encode qw(_utf8_on _utf8_off encode decode);
+use Cairo;
+use Gtk2;
 
 $logf="$ENV{RES}/weather.log";
-#$x0=420;$y0=80;			# 屏幕起始坐标
 $icondir="$ENV{RES}/weather-icon-64";
-$font="$ENV{RES}/VeraSansYuanTi-Bold.ttf";
+$font="Vera Sans YuanTi";
+$outputfile="$ENV{HOME}/weather.png";
+#$font="$ENV{RES}/VeraSansYuanTi-Bold.ttf";
 $bgfile="$ENV{RES}/desktop.jpg";
 $max=7;	#从今天算起，最多显示几天。
+$align=9;
 %indexcolor=(
 	">"=>"200,200,200,250",	# 今天
 	"-"=>"200,200,200,250",	# 周日
 	" "=>"200,200,200,150",	# 其他
 );
 # ------以上为可自定义的部分------
-#`$ENV{HOME}/bin/weather.pl`;
 @t=localtime((stat($logf))[9]);$fday=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 #---------------------------------
@@ -48,14 +51,12 @@ my $bgs=($size*2)."x".($size*4);
 `convert -size $bgs xc:\'#ffffff30\' bg.png` if (! -f "bg.png");
 #---------------------------------
 open REC,$logf; @_=<REC>; close REC;
-$cmd="habak $bgfile -mf $font ";
+$surface = Cairo::ImageSurface->create ('argb32',($size*2)*$max+20,$size*4); 
 $year="";$month=""; $is=0;
 $w0=$size*2;$h0=$size/2;	# 单位方框尺寸
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 #---------------------------------
-my @xx=`xrandr`; @xx=grep /\*/,@xx; $_=$xx[0]; /[\dx]+/; my($sx,$sy)=split "x",$&;
-$x0=$sx-$w0*$max; $y0=$size;
-print "$x0=$sx-$w0*$max; $y0=$size;\n";
+$x0=$align; $y0=$align;
 #---------------------------------
 for (@_){
 next if ! /$today/ && ! $is;
@@ -77,30 +78,58 @@ $m.="月" if($m);
 $d.="日";
 #---------------------------------
 $color=$indexcolor{$sign};
-if($sign eq ">"){my $ybg=$y0-$size/4*1.4; my $xbg=$x0-$size/4+2;$cmd.="-mp $xbg,$ybg -hi bg.png ";}
-if($sign eq "-"){my $ybg=$y0-$size/4*1.4; my $xbg=$x0-$size/4+2;$cmd.="-mp $xbg,$ybg -hi bg-w.png ";}
+if($sign eq ">"){drawpng("bg.png",$x0-$align,$y0-$align);}
+if($sign eq "-"){drawpng("bg-w.png",$x0-$align,$y0-$align);}
 #---------------------------------
-$y1=$y0;
+$y1=$y0+10;
 $fsize=$size/8*1.3;
-$x2=$x0+2; $y2=$y1+2; $cmd.="-mh $fsize -mc 20,20,20,200 -mp $x2,$y2 -ht $m$d ";
-$cmd.="-mc $color -mp $x0,$y1 -ht \"$m$d - $lunar[0]\" ";
+drawtxt("$m$d",$x0+1,$y1+1,"20,20,20,200");
+drawtxt("$m$d - $lunar[0]",$x0,$y1,$color);
 $y1+=$h0;
 $_=$weather; $x2=$x0+$size/2; $y2=$y1+$size/2;
 s/小到//;s/中到//;s/小雨/10.png/g; s/中雨/11.png/g; s/大雨/12.png/g;s/雨夹雪/07.png/g; s/小雪/13.png/g; s/中雪/14.png/g; s/大雪/15.png/g;
-s/多云/26.png/;s/晴/32.png/;s/阴/31.png/;s/转/ -mp $x2,$y2 -hi /;s/雷阵雨/17.png/;s/阵雨/09.png/;
-$cmd.="-mp $x0,$y1 -hi $_ ";
+s/多云/26.png/;s/晴/32.png/;s/阴/31.png/;s/转/-/;s/雷阵雨/17.png/;s/阵雨/09.png/;
+if(/-/){
+my ($img1,$img2)=split "-";
+drawpng("$img1",$x0,$y1);
+drawpng("$img2",$x0+$size/2,$y1+$size/2);
+}else{
+drawpng("$_",$x0,$y1);
+}
 $y1+=3*$h0; 
-$cmd.="-mp $x0,$y1 -ht $weather ";
+drawtxt("$weather",$x0,$y1,$color);
 $y1+=$h0; $_=$temp; s/°C/℃/g;
-$x2=$x0+2; $y2=$y1+2; $cmd.="-mc 20,20,20,200 -mp $x2,$y2 -ht $_ ";
-$cmd.="-mc $color -mp $x0,$y1 -ht $_ ";
+drawtxt("$_",$x0+1,$y1+1,"20,20,20,200");
+drawtxt("$_",$x0,$y1,$color);
 $y1+=$h0;
 $fsize=$size/8;
 _utf8_on($wind);$wind=~s/.{10}/$&\n\n/g;_utf8_off($wind);
-$cmd.="-mp $x0,$y1 -mh $fsize -ht \"$wind\" ";
+drawtxt("$wind",$x0,$y1,$color);
 $x0+=$w0;
 }
-print $cmd;
-`$cmd`;
+$surface->write_to_png ("$outputfile");
 #---------------------------------
-`$ENV{HOME}/bin/conky/weather-log2txt.pl`;
+#`$ENV{HOME}/bin/conky/weather-log2txt.pl`;
+`habak $bgfile -mp 360,60 -hi $outputfile`;
+#---------------------------------
+
+sub drawpng(){
+my $img = Cairo::ImageSurface->create_from_png ("$_[0]"); 
+my $cr = Cairo::Context->create ($surface);
+$cr->set_source_surface($img,$_[1],$_[2]);
+$cr->paint;
+}
+
+sub drawtxt(){
+my $cr = Cairo::Context->create ($surface);
+my $pango_layout = Gtk2::Pango::Cairo::create_layout ($cr); 
+my $font_desc = Gtk2::Pango::FontDescription->from_string("$font $fsize"); 
+$pango_layout->set_font_description($font_desc); 
+$pango_layout->set_markup (decode("utf-8", "$_[0]"));
+my ($r,$g,$b,$a)=split ',',$_[3];
+$cr->set_source_rgba($r/256,$g/256,$b/256,$a/256);	#缺省白色字体
+$cr->move_to($_[1],$_[2]);
+Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout); 
+$cr->show_page();
+}
+

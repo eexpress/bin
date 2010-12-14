@@ -17,5 +17,5 @@ case $# in
 	t="格式错误"; w="参数应该介于1－4个。依此为：sound icon title text。";;
 esac
 w=`echo $w|ascii2uni -a J -q`
-export DISPLAY=:0.0 && notify-send -i "$res_path/icon/$icon"  "$t" "$w"
-play "$res_path/sound/$sound"  2>/dev/null
+export DISPLAY=:0.0 && notify-send -h "string:sound-file:$res_path/sound/$sound" -h "int:x:550" -h "int:y:80" -i "$res_path/icon/$icon"  "$t" "$w"
+#play "$res_path/sound/$sound"  2>/dev/null
