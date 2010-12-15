@@ -2,14 +2,14 @@
 
 use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
-use Gtk2;
+#use Gtk2;
 
 $icondir="$ENV{RES}/weather-icon-64";
 $font="Vera Sans YuanTi Bold";
 $outputfile="$ENV{RES}/weather.png";
 $bgfile="$ENV{RES}/desktop.jpg";
 $max=7;	#从今天算起，最多显示几天。
-$align=9;
+$align=10;
 %indexcolor=(
 	">"=>"200,200,200,250",	# 今天
 	"-"=>"200,200,200,250",	# 周日
@@ -43,7 +43,7 @@ chdir $icondir;
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
 $size=$surface->get_width();
 $w0=$size*2;$h0=$size/2-5;	# 单位方框尺寸
-$x0=$align; $y0=$align;
+$x0=$align; $y0=$align+20;
 $surface = Cairo::ImageSurface->create ('argb32',($size*2)*$max+20,$size*4); 
 $year="";$month=""; $is=0;
 #---------------------------------
@@ -75,7 +75,7 @@ $fsize=$size/8*1.3;
 drawtxt("$m$d - $lunar[0]",$x0,$y1);
 $y1+=$h0;
 $_=$weather; $x2=$x0+$size/2; $y2=$y1+$size/2;
-s/小到//;s/中到//;s/小雨/05.png/g; s/中雨/11.png/g; s/大雨/12.png/g;s/雨夹雪/07.png/g; s/小雪/13.png/g; s/中雪/14.png/g; s/大雪/15.png/g;
+s/小到//;s/中到//;s/小雨/10.png/g; s/中雨/11.png/g; s/大雨/12.png/g;s/雨夹雪/07.png/g; s/小雪/13.png/g; s/中雪/14.png/g; s/大雪/15.png/g;
 s/多云/26.png/;s/晴/32.png/;s/阴/31.png/;s/转/-/;s/雷阵雨/17.png/;s/阵雨/09.png/;
 if(/-/){
 my ($img1,$img2)=split "-";
@@ -85,12 +85,13 @@ drawpng("$img2",$x0+$size/2+10,$y1+$size/3);
 drawpng("$_",$x0+10,$y1+10);
 }
 $y1+=3*$h0+10; 
+#drawpangotxt("<span color='blue'>$weather</span>",$x0,$y1);
 drawtxt("$weather",$x0,$y1);
 $y1+=$h0; $_=$temp; s/°C/℃/g;
 drawtxt("$_",$x0,$y1);
 $y1+=$h0;
 $fsize=$size/8;
-_utf8_on($wind);$wind=~s/.{10}/$&\n\n/g;_utf8_off($wind);
+#_utf8_on($wind);$wind=~s/.{10}/$&\\n\\n/g;_utf8_off($wind);
 drawtxt("$wind",$x0,$y1);
 $x0+=$w0;
 }
@@ -106,21 +107,34 @@ $cr->set_source_surface($img,$_[1],$_[2]);
 $cr->paint;
 }
 
+#sub drawpangotxt(){
+#my $cr = Cairo::Context->create ($surface);
+#my $pango_layout = Gtk2::Pango::Cairo::create_layout ($cr); 
+#my $font_desc = Gtk2::Pango::FontDescription->from_string("$font $fsize"); 
+#$pango_layout->set_font_description($font_desc); 
+#$pango_layout->set_markup (decode("utf-8", "$_[0]"));
+#my ($R,$G,$B,$A)=split ',',$color;
+#$cr->set_source_rgba(0,0,0,1);	#缺省黑色阴影
+#$cr->move_to($_[1]+1,$_[2]+1);
+#Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout); 
+#$cr->show_page();
+#$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256);	#缺省白色字体
+#$cr->move_to($_[1],$_[2]);
+#Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout); 
+#$cr->show_page();
+#}
+
 sub drawtxt(){
 my $cr = Cairo::Context->create ($surface);
-my $pango_layout = Gtk2::Pango::Cairo::create_layout ($cr); 
-my $font_desc = Gtk2::Pango::FontDescription->from_string("$font $fsize"); 
-$pango_layout->set_font_description($font_desc); 
-$pango_layout->set_markup (decode("utf-8", "$_[0]"));
-my ($R,$G,$B,$A)=split ',',$color;
+$cr->select_font_face("$font",'normal','bold');
+$cr->set_font_size($fsize*1.3);
 $cr->set_source_rgba(0,0,0,1);	#缺省黑色阴影
 $cr->move_to($_[1]+1,$_[2]+1);
-Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout); 
-$cr->show_page();
+$cr->show_text("$_[0]");
+my ($R,$G,$B,$A)=split ',',$color;
 $cr->set_source_rgba($R/256,$G/256,$B/256,$A/256);	#缺省白色字体
 $cr->move_to($_[1],$_[2]);
-Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout); 
-$cr->show_page();
+$cr->show_text("$_[0]");
 }
 
 sub drawframe(){

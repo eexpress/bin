@@ -197,11 +197,11 @@ ${template0 系统 /}
 #系统 ${alignr}${fs_free /}/${fs_size /} ${fs_free_perc /}%
 ${template0 个人 /home}
 ${template0 媒体 /home/media}
-$hr
-${color3}天气${color}
+#$hr
+#${color3}天气${color}
 #${execpi 500 cat ~/t}
 #${execpi 500 ~/bin/weather.pl|~/bin/ansi2conky.pl}
-${execp cat ~/bin/conky/weather.txt|head -n 4}${color}
+#${execp cat ~/bin/conky/weather.txt|head -n 4}${color}
 #${execpi 500 ~/bin/cairo2png/weather.pl -c}
 $hr
 ${color3}待办${color}
