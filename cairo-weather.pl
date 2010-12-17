@@ -14,8 +14,8 @@ $align=10;
 	">"=>"200,200,200,250",	# 今天
 	"-"=>"200,200,200,250",	# 周日
 	" "=>"200,200,200,150",	# 其他
-	"0"=>"20,20,20,120",	# 今天背景
-	"1"=>"20,20,20,50",	# 周日背景
+	"0"=>"200,200,200,60",	# 今天背景
+	"1"=>"20,20,20,180",	# 周日背景
 );
 $url="http://qq.ip138.com/weather/hunan/ChangSha.wml";
 # ------以上为可自定义的部分------
@@ -79,10 +79,10 @@ s/小到//;s/中到//;s/小雨/10.png/g; s/中雨/11.png/g; s/大雨/12.png/g;s/
 s/多云/26.png/;s/晴/32.png/;s/阴/31.png/;s/转/-/;s/雷阵雨/17.png/;s/阵雨/09.png/;
 if(/-/){
 my ($img1,$img2)=split "-";
-drawpng("$img1",$x0,$y1);
-drawpng("$img2",$x0+$size/2+10,$y1+$size/3);
+drawpng("$img1",$x0,$y1-$size/4);
+drawpng("$img2",$x0+$size/2+10,$y1+$size/4);
 }else{
-drawpng("$_",$x0+10,$y1+10);
+drawpng("$_",$x0+10,$y1);
 }
 $y1+=3*$h0+10; 
 #drawpangotxt("<span color='blue'>$weather</span>",$x0,$y1);
@@ -154,4 +154,5 @@ $cr->rel_curve_to(0,0,-$r,0,-$r,-$r);
 $cr->rel_line_to(0,-($h-2*$r));
 $cr->rel_curve_to(0,0,0,-$r,$r,-$r);
 $cr->set_source_rgba($R/256,$G/256,$B/256,$A/256); $cr->fill;
+#$cr->set_line_width(8);$cr->stroke;
 }
