@@ -2,8 +2,11 @@
 
 use strict;
 
-my $file = $ARGV[0];
-if(!$file){die "没有选择附件文件。\n"}
+if($#ARGV <0){die "没有选择附件文件。\n"}
+my $file=join ",",@ARGV;
+#my $file=join ",",map("\'$_\'",@ARGV);
+print "$#ARGV\n$file\n";
+
 use Mail::Sender;   
 my $sender = new Mail::Sender; 
 
