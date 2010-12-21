@@ -5,7 +5,7 @@ use strict;
 if($#ARGV <0){die "没有选择附件文件。\n"}
 my $file=join ",",@ARGV;
 #my $file=join ",",map("\'$_\'",@ARGV);
-print "$#ARGV\n$file\n";
+#print "$#ARGV\n$file\n";
 
 use Mail::Sender;   
 my $sender = new Mail::Sender; 
@@ -40,7 +40,8 @@ if ($sender->MailFile({
 	auth => 'LOGIN',	#LOGIN, PLAIN, CRAM-MD5 and NTLM
 	authid => 'eexpress',
 	authpwd => '01220539',
-	file => "$file",
+	file => \@ARGV,
+#        file => "$file",
 })<0){$info="文件 $file 发送到 $to 失败\n$Mail::Sender::Error\n";}
 else {$info="文件 $file 已经发送到 $to\n";}
 print "$info"; `$ENV{HOME}/bin/msg mail.png "mailto-附件" "$info"`;
