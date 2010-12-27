@@ -15,12 +15,13 @@ $align=10;
 	"-"=>"200,200,200,250",	# 周日
 	" "=>"200,200,200,150",	# 其他
 	"0"=>"200,200,200,60",	# 今天背景
-	"1"=>"20,20,20,180",	# 周日背景
+	"1"=>"20,20,20,120",	# 周日背景
 );
 $url="http://qq.ip138.com/weather/hunan/ChangSha.wml";
 # ------以上为可自定义的部分------
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 #---------------------------------
+until($_[0]=~/^Server:/){@_=`nslookup -timeout=2 -retry=1 www.163.com`;}
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。
 	$_=encode("utf8",$_);
@@ -92,7 +93,9 @@ drawtxt("$_",$x0,$y1);
 $y1+=$h0;
 $fsize=$size/8;
 #_utf8_on($wind);$wind=~s/.{10}/$&\\n\\n/g;_utf8_off($wind);
+($wind,$tmp)=split /\//,$wind;
 drawtxt("$wind",$x0,$y1);
+drawtxt("$tmp",$x0,$y1+16) if($tmp);
 $x0+=$w0;
 }
 $surface->write_to_png ("$outputfile");

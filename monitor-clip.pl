@@ -10,6 +10,11 @@ if(/^\// || /^~\//){
 	if(-d){`rox $_`;}
 	exit;
 }
+if(m"http://u.115.com/file/\w+"){
+	`$ENV{HOME}/bin/msg elvis.png  "下载115资源" "$&"`;
+	`~/bin/xterm4.pl -e ~/bin/115_down -l \'eexp,115eexp00\' $&`;
+	exit;
+}
 if(/http:\/\/rapidshare\.com\/files\// || /hotfile\.com/ || /\.share-online\.biz/){
 	print "add to queue file.\n";
 
@@ -19,7 +24,7 @@ if(/http:\/\/rapidshare\.com\/files\// || /hotfile\.com/ || /\.share-online\.biz
 #        `$ENV{HOME}/bin/slimrat.bat`;
 	exit;
 }
-if(/http:\/\/[^\s]*/){
+if(m"http://[^\s]*"){
 	print "url=$&\n";
 	`opera \"$&\"`;
 	exit;

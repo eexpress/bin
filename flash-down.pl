@@ -19,13 +19,11 @@ my $mech = WWW::Mechanize->new(agent=>'Opera/9.80 (X11; Linux i686; U; en) Prest
 $mech -> get($_);
 if ($mech->success()) {
 	$_=$mech->content();
-	if(/当前解析视频.*?<strong>/s){
+	if(/当前解析视频.*?<font/s){
 	$_=$&; 
-#        s/^.*?strong>//; s/<strong.*//; s/<font.*>//g;
-	s/^.*解析视频：//;s/（.*//;s/<.*?>//g;s/\r//g;s/\n//g;s/^\s*//g;s/\s*$//g;
+	s/^.*?>//;s/<.*$//;s/\s*//g;
+#        print; exit;
 	print "\e[31m\e[1m".$_."\e[0m==================\n";
-#        exit;
-#        s/ .*//; 
 	mkdir "$_"; chdir "$_";
 	my $name="$_";
 	my @link=$mech->find_all_links(text_regex => qr/http:\/\/.*[0-9a-fA-F]*/,);
