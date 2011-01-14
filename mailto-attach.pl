@@ -35,7 +35,7 @@ if ($sender->MailFile({
 	to =>$to,
 	charset=>'utf-8',
 	subject => '发送附件',
-	debug=>$0.'.log',
+#        debug=>$0.'.log',
 	msg => "请查看附件。",
 	auth => 'LOGIN',	#LOGIN, PLAIN, CRAM-MD5 and NTLM
 	authid => 'eexpress',

@@ -233,6 +233,7 @@ switch ($c){
 	case "op" {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops Oooops");}
 	case "deop" {
 	my $pl="PRIVMSG ChanServ :DEOP ".$cfg_room." ".$self->nick;
+#        /msg ChanServ op #ubuntu-cn xxxx
 	pc $pl;
 	$self->sl_real($pl);
 	}
