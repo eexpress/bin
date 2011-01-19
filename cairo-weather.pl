@@ -4,24 +4,27 @@ use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
 #use Gtk2;
 
+until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
+print "online\n";
+#---------------------------------
 $icondir="$ENV{RES}/weather-icon-64";
-$font="Vera Sans YuanTi Bold";
+#$icondir="$ENV{RES}/weather-icon";
+$font="Vera Sans YuanTi";
 $outputfile="$ENV{RES}/weather.png";
 $bgfile="$ENV{RES}/desktop.jpg";
 $max=7;	#从今天算起，最多显示几天。
-$align=10;
+$ratio=1.0;	#以图片宽度为尺寸基准，整体的缩放比率
+#$ratio=0.8;
 %indexcolor=(
 	">"=>"200,200,200,250",	# 今天
 	"-"=>"200,200,200,250",	# 周日
 	" "=>"200,200,200,150",	# 其他
-	"0"=>"200,200,200,60",	# 今天背景
-	"1"=>"20,20,20,120",	# 周日背景
+	"0"=>"20,20,20,120",	# 今天背景
+	"1"=>"20,20,20,50",	# 周日背景
 );
 $url="http://qq.ip138.com/weather/hunan/ChangSha.wml";
 # ------以上为可自定义的部分------
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
-#---------------------------------
-until($_[0]=~/^Server:/){@_=`nslookup -timeout=2 -retry=1 www.163.com`;}
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。
 	$_=encode("utf8",$_);
@@ -43,8 +46,9 @@ chdir $icondir;
 -f "00.png" || die "can not fetch picture file.\n";
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
 $size=$surface->get_width();
-$w0=$size*2;$h0=$size/2-5;	# 单位方框尺寸
-$x0=$align; $y0=$align+20;
+$size=$size*$ratio;
+$w0=$size*2;$h0=$size/3;	# 单位方框尺寸
+$x0=$size/6; $y0=$size/2;
 $surface = Cairo::ImageSurface->create ('argb32',($size*2)*$max+20,$size*4); 
 $year="";$month=""; $is=0;
 #---------------------------------
@@ -68,30 +72,30 @@ $m.="月" if($m);
 $d.="日";
 #---------------------------------
 $color=$indexcolor{$sign};
-if($sign eq ">"){drawframe($x0-$align,20,$indexcolor{"0"});}
-if($sign eq "-"){drawframe($x0-$align,20,$indexcolor{"1"});}
+if($sign eq ">"){drawframe($x0-$size/6,20,$indexcolor{"0"});}
+if($sign eq "-"){drawframe($x0-$size/6,20,$indexcolor{"1"});}
 #---------------------------------
-$y1=$y0+10;
-$fsize=$size/8*1.3;
+$y1=$y0;
+$fsize=$size/5;
 drawtxt("$m$d - $lunar[0]",$x0,$y1);
 $y1+=$h0;
 $_=$weather; $x2=$x0+$size/2; $y2=$y1+$size/2;
-s/小到//;s/中到//;s/小雨/10.png/g; s/中雨/11.png/g; s/大雨/12.png/g;s/雨夹雪/07.png/g; s/小雪/13.png/g; s/中雪/14.png/g; s/大雪/15.png/g;
-s/多云/26.png/;s/晴/32.png/;s/阴/31.png/;s/转/-/;s/雷阵雨/17.png/;s/阵雨/09.png/;
+s/小到//;s/中到//;s/大到//;s/小雨/10.png/g; s/中雨/11.png/g; s/大雨/12.png/g;s/雨夹雪/07.png/g; s/小雪/13.png/g; s/中雪/14.png/g; s/大雪/15.png/g;
+s/暴雪/16.png/g;s/多云/26.png/;s/晴/32.png/;s/阴/31.png/;s/转/-/;s/雷阵雨/17.png/;s/阵雨/09.png/;
 if(/-/){
 my ($img1,$img2)=split "-";
-drawpng("$img1",$x0,$y1-$size/4);
-drawpng("$img2",$x0+$size/2+10,$y1+$size/4);
+drawpng("$img1",$x0,$y1-$size/8);
+drawpng("$img2",$x0+$size/2,$y1+$size/4);
 }else{
-drawpng("$_",$x0+10,$y1);
+drawpng("$_",$x0,$y1);
 }
-$y1+=3*$h0+10; 
+$y1+=1.8*$size; 
 #drawpangotxt("<span color='blue'>$weather</span>",$x0,$y1);
 drawtxt("$weather",$x0,$y1);
 $y1+=$h0; $_=$temp; s/°C/℃/g;
 drawtxt("$_",$x0,$y1);
 $y1+=$h0;
-$fsize=$size/8;
+$fsize=$size/6;
 #_utf8_on($wind);$wind=~s/.{10}/$&\\n\\n/g;_utf8_off($wind);
 ($wind,$tmp)=split /\//,$wind;
 drawtxt("$wind",$x0,$y1);
@@ -100,7 +104,7 @@ $x0+=$w0;
 }
 $surface->write_to_png ("$outputfile");
 #---------------------------------
-`habak $bgfile -mp 360,60 -hi $outputfile`;
+`habak $bgfile -mp 400,80 -hi $outputfile`;
 #---------------------------------
 
 sub drawpng(){
@@ -130,7 +134,7 @@ $cr->paint;
 sub drawtxt(){
 my $cr = Cairo::Context->create ($surface);
 $cr->select_font_face("$font",'normal','bold');
-$cr->set_font_size($fsize*1.3);
+$cr->set_font_size($fsize);
 $cr->set_source_rgba(0,0,0,1);	#缺省黑色阴影
 $cr->move_to($_[1]+1,$_[2]+1);
 $cr->show_text("$_[0]");
@@ -144,7 +148,7 @@ sub drawframe(){
 my ($x,$r,$c)=@_;
 my ($R,$G,$B,$A)=split ',',$c;
 my $w=$w0;
-my $h=9*$h0;
+my $h=3.7*$size;
 my $cr = Cairo::Context->create ($surface);
 $PI=3.1415926/180;
 $cr->move_to($x+$r,0);
@@ -157,5 +161,4 @@ $cr->rel_curve_to(0,0,-$r,0,-$r,-$r);
 $cr->rel_line_to(0,-($h-2*$r));
 $cr->rel_curve_to(0,0,0,-$r,$r,-$r);
 $cr->set_source_rgba($R/256,$G/256,$B/256,$A/256); $cr->fill;
-#$cr->set_line_width(8);$cr->stroke;
 }
