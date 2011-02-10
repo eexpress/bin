@@ -104,7 +104,7 @@ $x0+=$w0;
 }
 $surface->write_to_png ("$outputfile");
 #---------------------------------
-`habak $bgfile -mp 400,80 -hi $outputfile`;
+`habak $bgfile -mp 360,80 -hi $outputfile`;
 #---------------------------------
 
 sub drawpng(){

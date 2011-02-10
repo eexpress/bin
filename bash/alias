@@ -28,7 +28,7 @@ alias free='free -m'
 alias g='grep --color -in'
 
 alias proxy.gap='dtach -n /tmp/dtach-gappproxy python /home/exp/bin/gappproxy/gappproxy-1.2.0beta/localproxy/proxy.py'
-alias proxy.cdn='dtach -n /tmp/dtach-cdnproxy ~/bin/cdnproxy-论坛'
+alias proxy.cdn='dtach -n /tmp/dtach-cdnproxy ~/bin/cdnproxy'
 alias dtach.slimrat='dtach -n /tmp/dtach-slimrat ~/bin/slimrat -l ~/.slimrat/queue'
 
 alias grep='grep --color=auto'

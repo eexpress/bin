@@ -75,3 +75,5 @@ HISTIGNORE="pwd:ls:cd:"
 #export LS_COLORS
 eval `dircolors ~/bin/bash/ls_color`
 
+googl () { curl -s -d "url=${1}" http://goo.gl/api/url | sed -n "s/.*:\"\([^\"]*\).*/\1\n/p" | xsel -i; echo `xsel -o`;}
+
