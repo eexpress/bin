@@ -21,7 +21,7 @@ if ($mech->success()) {
 	$_=$mech->content();
 	if(/当前解析视频.*?<font/s){
 	$_=$&; 
-	s/^.*?>//;s/<.*$//;s/\s*//g;
+	s/^.*?>//;s/<.*$//s;s/\s*//g;
 #        print; exit;
 	print "\e[31m\e[1m".$_."\e[0m==================\n";
 	mkdir "$_"; chdir "$_";

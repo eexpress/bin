@@ -7,6 +7,7 @@ use Cairo;
 until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 print "online\n";
 #---------------------------------
+$hpos=400;	#屏幕横位移
 $icondir="$ENV{RES}/weather-icon-64";
 #$icondir="$ENV{RES}/weather-icon";
 $font="Vera Sans YuanTi";
@@ -14,7 +15,7 @@ $outputfile="$ENV{RES}/weather.png";
 $bgfile="$ENV{RES}/desktop.jpg";
 $max=7;	#从今天算起，最多显示几天。
 $ratio=1.0;	#以图片宽度为尺寸基准，整体的缩放比率
-#$ratio=0.8;
+#$ratio=1.2;
 %indexcolor=(
 	">"=>"200,200,200,250",	# 今天
 	"-"=>"200,200,200,250",	# 周日
@@ -104,7 +105,7 @@ $x0+=$w0;
 }
 $surface->write_to_png ("$outputfile");
 #---------------------------------
-`habak $bgfile -mp 360,80 -hi $outputfile`;
+`habak $bgfile -mp $hpos,80 -hi $outputfile`;
 #---------------------------------
 
 sub drawpng(){
