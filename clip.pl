@@ -160,6 +160,8 @@ Gtk2 -> main;
 exit 0;
 #----------------------------------
 sub tray{
+my ($check, $event) = @_;
+if($event->button eq 2){exit;}
 $enable=$enable?0:1;
 $status_icon->set_from_pixbuf($enable?$pixbuf0:$pixbuf1);
 $_=$enable?"监视剪贴板内容，自动下载资源":"剪贴板监视已关闭";

@@ -56,6 +56,7 @@ if ($mech->success()) {
 	`/usr/bin/mencoder -profile c430 *.flv -o $dir/$name.avi 2>&1`;
 	}
 #---------------------	
+	$bus->Notify("flash", 0, "sunny", "$name 已经完成下载", "$dir/$name.avi", [], { }, -1);
 	chdir '..';
 	`echo "$ARGV[0]\t《$_》\t结果：$proc">>flash-down.log`;
 	`play "$ENV{HOME}/bin/resources/sound/I-need-ammo.wav"`;
