@@ -42,9 +42,10 @@ if ($mech->success()) {
 		`wget -c --tries=5 --user-agent='Opera/9.80 (X11; Linux i686; U; en) Presto/2.6.30 Version/10.60' "$add" -O $file`;
 #                `wget -c --user-agent='Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.3) Gecko/2008092416 Firefox/3.0.3' $add -O $file 2>/dev/null`;
 		$_=$?==0?"■":"□";$proc=~s/▭/$_/; 
-#                $bus->Notify("flash", 0, ($?==0?"sunny":"error"), "$name", "已经完成下载 $cnt / $size ，wget返回：$? 。\n进度：$proc", [], { }, -1);
+		$bus->Notify("flash", 0, ($?==0?"sunny":"error"), "$name", "已经完成下载 $cnt / $size ，wget返回：$? 。\n进度：$proc", [], { }, -1);
 		print "\e[31m\e[1m$name 已经完成下载 $cnt / $size\e[0m ，wget返回：$? 。进度：\e[31m\e[1m$proc\e[0m\n";
-		print "\e]2;$name 下载进度 $proc\a";
+		print "\e]2;$name $proc\a";
+#                print "\e]2;$name 下载进度 $proc\a";
 		$cnt++;
 	}
 #---------------------	
