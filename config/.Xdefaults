@@ -1,0 +1,59 @@
+!==============================================================================
+Xft.dpi: 96
+Xft.hinting:	1
+Xft.hintstyle:	hintfull
+Xft.lcdfilter:	lcddefault
+Xft.rgba:	rgb
+Xft.antialias:	1
+
+! ---| X11 settings  |--- {{{
+!Xcursor.theme: Harmony
+Xcursor.theme: Qetzal
+!Xcursor.theme: redglass
+!Xcursor.size: 36
+Xcursor.size: 64
+!}}}
+
+!
+! ---| XTERM |--- {{{
+XTerm*preeditType: Root
+
+!只有DejaVu才显示提示符的电话
+xterm*faceName:DejaVu Sans Mono-9:charwidth=9
+
+XTerm*faceNameDoublesize:Vera Sans YuanTi Mono-9
+
+!XTerm*scrollBar: false
+!XTerm*rightScrollBar: false
+!XTerm*cjkWidth:true
+!XTerm*locale: true
+!XTerm*inputMethoe:scim
+XTerm*cursorColor: OliveDrab1 
+XTerm*background: black 
+XTerm*foreground: AntiqueWhite1
+XTerm*geometry: 80x36+0+0
+!80x24-1+1
+XTerm*highlightColor: grey20
+XTerm*utf8:true
+XTerm*utf8Title: true
+!XTerm.VT100*color255: on
+!*customization: -color
+XTerm*termName:  xterm-256color
+XTerm*titleModes: 2
+
+XTerm*VT100.Translations: #override \
+!Ctrl <KeyPress> V: insert-selection(CLIPBOARD) \n\
+!<Btn1Up>: select-end(PRIMARY) \n\
+Ctrl <KeyPress> P: print() \n
+!鼠标复制，只影响PRIMARY，xsel -o -p缺省；鼠标中键粘贴。
+!Ctrl-C，只影响CLIPBOARD，xsel -o -b；Ctrl-V粘贴。
+
+!xterm*printerCommand: /home/exp/bin/xterm-screenshot/xterm2html.bash
+xterm*printAttributes: 2
+xterm*printerExtent: true
+xterm*printerCommand: cat > ~/xtermdump
+
+!xterm.cursorBlink: true
+xterm*cursorBlink: true
+!!}}}
+

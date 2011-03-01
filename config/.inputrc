@@ -1,0 +1,14 @@
+set show-all-if-ambiguous on
+set completion-ignore-case on
+
+	"\e[A": history-search-backward
+	"\e[B": history-search-forward
+$if mode=emacs
+	"\C-z": undo
+	# "\C-\e[C": forward-word
+	# "\C-\e[D": backward-word
+	"\C-w": backward-kill-word
+	"\C-u": kill-word
+	"\C-f": forward-word
+	"\C-b": backward-word
+$endif
