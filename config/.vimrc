@@ -24,7 +24,7 @@ set showcmd
 " 打开当前目录文件列表
 map <F3> :tabnew .<CR>
 " 函数和变量列表
-map <F4> :Tlist<CR>
+map <F4> :TlistToggle<CR>
 " Tlist的内部变量。函数列表。
 let Tlist_Use_Right_Window=1
 let Tlist_File_Fold_Auto_Close=1
@@ -61,8 +61,8 @@ set statusline+=\ %5.l/%L行\ %10.p%%\ %10.y
 func CompileRun() 
 exec "w" 
 if &filetype == 'c' 
-exec "!gcc `pkg-config --cflags --libs gtk+-2.0` % -g -o %<.bin" 
-exec "!./%<.bin" 
+exec "!gcc `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` % -g -o %<.run" 
+exec "!./%<.run" 
 elseif &filetype == 'cpp' 
 exec "!gcc % -g -o %<.exe" 
 exec "!%<.exe" 
