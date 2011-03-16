@@ -7,12 +7,14 @@ use Cairo;
 until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 print "online\n";
 #---------------------------------
-$hpos=400;	#屏幕横位移
+$ENV{RES}="$ENV{HOME}/bin/resources" if ! $ENV{RES};
+$hpos=350;	#屏幕横位移
 $icondir="$ENV{RES}/weather-icon-64";
+#$bgfile="$ENV{RES}/desktop.jpg";
 #$icondir="$ENV{RES}/weather-icon";
 $font="Vera Sans YuanTi";
 $outputfile="$ENV{RES}/weather.png";
-$bgfile="$ENV{RES}/desktop.jpg";
+# $bgfile="$ENV{RES}/desktop.jpg";
 $max=7;	#从今天算起，最多显示几天。
 $ratio=1.0;	#以图片宽度为尺寸基准，整体的缩放比率
 #$ratio=1.2;
@@ -85,6 +87,7 @@ s/小到//;s/中到//;s/大到//;s/小雨/10.png/g; s/中雨/11.png/g; s/大雨/
 s/暴雪/16.png/g;s/多云/26.png/;s/晴/32.png/;s/阴/31.png/;s/转/-/;s/雷阵雨/17.png/;s/阵雨/09.png/;
 if(/-/){
 my ($img1,$img2)=split "-";
+$currentpng="$img1" if ! $currentpng;
 drawpng("$img1",$x0,$y1-$size/8);
 drawpng("$img2",$x0+$size/2,$y1+$size/4);
 }else{
@@ -105,7 +108,22 @@ $x0+=$w0;
 }
 $surface->write_to_png ("$outputfile");
 #---------------------------------
+if (! $bgfile){
+#● gconftool-2 -g /desktop/gnome/background/picture_filename
+	open GCONF,"<$ENV{HOME}/.gconf/desktop/gnome/background/%gconf.xml";
+	while(<GCONF>){
+		next if ! /picture_filename/;
+		$_=<GCONF>;
+		s/^.*?>//g;s/<.*$//g;chomp;
+		last;
+	}
+	close GCONF;
+	$bgfile=$_;
+	print "BG\t=>\t$_\n";
+}
+#---------------------------------
 `habak $bgfile -mp $hpos,80 -hi $outputfile`;
+`notify-send -i "$icondir/$currentpng" "Draw Desktop Weather with Cairo" "habak $bgfile -mp $hpos,80 -hi $outputfile"`;
 #---------------------------------
 
 sub drawpng(){

@@ -28,7 +28,7 @@ alias fgrep='fgrep --color=auto'
 alias free='free -m'
 alias g='grep --color -in'
 
-alias proxy.gap='dtach -n /tmp/dtach-gappproxy python /home/exp/bin/gappproxy/gappproxy-1.2.0beta/localproxy/proxy.py'
+alias proxy.gap='dtach -n /tmp/dtach-gappproxy python ~/bin/gappproxy/gappproxy-1.2.0beta/localproxy/proxy.py'
 alias proxy.cdn='dtach -n /tmp/dtach-cdnproxy ~/bin/cdnproxy'
 alias dtach.slimrat='dtach -n /tmp/dtach-slimrat ~/bin/slimrat -l ~/.slimrat/queue'
 
@@ -44,12 +44,16 @@ alias la='ls -AF --color'
 alias ld='ls -ld */'
 alias less='/usr/share/vim/vim72/macros/less.sh'
 alias ll='ls -lFht --color'
+alias lla='ls -AlFht --color'
 alias ls='ls --color=auto'
 alias m-2-图片合并2列='montage -tile 2 -geometry +0+0 -background none'
 alias m-h-横排图片合并='montage -geometry +0+0 -background none'
 alias m-v-竖排图片合并='montage -tile 1 -geometry +0+0 -background none'
 alias mencoder='/usr/bin/mencoder -profile mpeg4'
+alias mencoder-c430='/usr/bin/mencoder -profile c430'
+
 alias ml.kill='echo kill | nc -q 1 localhost 4000|sed 1,6d|sed /command-line/,+2d'
+# alias ml.info='echo vd | nc -q 1 localhost 4000'
 alias ml.speed-toggle='echo bw_toggle | nc -q 1 localhost 4000|sed 1,6d|sed /command-line/,+2d'
 alias net='echo eexp|sudo -S netstat -tulpn'
 alias ntop.启动='sudo ntop -i wlan0'
@@ -70,7 +74,7 @@ alias t.u='tar uPvf '
 alias t.x='tar xmPvf '
 alias v='vim'
 alias x='echo "● `xsel -o`" >>'
-# find-opera-1M 已被别名为“find ~/.opera/cache*/ -cmin -60 -size +1500k -printf "------\t%p\t► %Ac\t► %kK\v\r" -exec file -b {} \;”
+alias find-opera-1M='find ~/.opera/cache*/ -cmin -60 -size +1000k -printf "------\t%p\t► %Ac\t► %kK\v\r" -exec file -b {} \;'
 osd0(){
 gnome-osd-client -f "<message id='oss' osd_vposition='center' osd_halignment='center'><span font='ZhunYuan 180'  foreground='red'>`xsel -o`</span></message>"
 }

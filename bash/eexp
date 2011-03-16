@@ -12,13 +12,13 @@ export LESS_TERMCAP_ue=$'\033[0m'
 export LESS_TERMCAP_us=$'\033[01;32m'
 
 #-------ENVIROMENT SET-----------------------------
-export PATH=/home/exp/bin:$PATH
+export PATH=$HOME/bin:$PATH
 export CDPATH=:~:/home/media
 
 export TERM=xterm-color
 export EDITOR=vim
 
-export RES=/home/exp/bin/resources
+export RES=$HOME/bin/resources
 
 export XMODIFIERS=@im=fcitx
 export GTK_IM_MODULE=xim
@@ -76,4 +76,8 @@ HISTIGNORE="pwd:ls:cd:"
 eval `dircolors ~/bin/bash/ls_color`
 
 googl () { curl -s -d "url=${1}" http://goo.gl/api/url | sed -n "s/.*:\"\([^\"]*\).*/\1\n/p" | xsel -i; echo `xsel -o`;}
+function atmm()
+{
+echo msg "$2"|at "now + $1 minutes"
+}
 
