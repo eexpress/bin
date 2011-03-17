@@ -92,6 +92,7 @@ drawpng("$img1",$x0,$y1-$size/8);
 drawpng("$img2",$x0+$size/2,$y1+$size/4);
 }else{
 drawpng("$_",$x0,$y1);
+$currentpng="$_" if ! $currentpng;
 }
 $y1+=1.8*$size; 
 #drawpangotxt("<span color='blue'>$weather</span>",$x0,$y1);
