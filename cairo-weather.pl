@@ -4,6 +4,8 @@ use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
 #use Gtk2;
 
+`gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
+
 until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 print "online\n";
 #---------------------------------
