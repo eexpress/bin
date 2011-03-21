@@ -1,6 +1,6 @@
 #!/bin/bash
 
-f='/home/exp/下载/ed2k列表'
+f="~/下载/ed2k列表"
 pgrep mlnet
 if [ $? -eq 0 ]; then
 	echo """$1""" | nc -q 1 localhost 4000

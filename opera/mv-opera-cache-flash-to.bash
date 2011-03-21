@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #$1是最终目录和文件名。$2有，就是同时选换成avi。
-d="/home/exp/下载/$1"
+d="~/下载/$1"
 mkdir $d
 find ~/.opera/cache*/ -size +1500k -exec mv {} $d/ \;
 cd $d
