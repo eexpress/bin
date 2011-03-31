@@ -40,7 +40,7 @@ use Net::DBus;
 $bus = Net::DBus->session->get_service('org.freedesktop.Notifications')
 ->get_object('/org/freedesktop/Notifications','org.freedesktop.Notifications');
 if(! -f $ARGV[0] && ! $list){
-$bus->Notify("paste-img", 0, "error", '文件无效', ':(', [], { }, -1);exit;
+$bus->Notify("paste-img", 0, "error", "文件无效 .$ARGV[0].", ':(', [], { }, -1);exit;
 }
 #----------------------------------
 %web=(
