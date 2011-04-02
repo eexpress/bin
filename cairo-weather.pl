@@ -8,9 +8,12 @@ use Cairo;
 
 until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 print "online\n";
+$_=`xwininfo -root`;
+/Width:\s*\K\d+/; $scrennw=$&;
+#/Height:\s*\K\d+/; $screenh=$&;
 #---------------------------------
 $ENV{RES}="$ENV{HOME}/bin/resources" if ! $ENV{RES};
-$hpos=350;	#屏幕横位移
+$hpos=$scrennw*0.25;	#屏幕横位移
 $icondir="$ENV{RES}/weather-icon-64";
 #$bgfile="$ENV{RES}/desktop.jpg";
 #$icondir="$ENV{RES}/weather-icon";
@@ -18,8 +21,6 @@ $font="Vera Sans YuanTi";
 $outputfile="$ENV{RES}/weather.png";
 # $bgfile="$ENV{RES}/desktop.jpg";
 $max=7;	#从今天算起，最多显示几天。
-$ratio=1.0;	#以图片宽度为尺寸基准，整体的缩放比率
-#$ratio=1.2;
 %indexcolor=(
 	">"=>"200,200,200,250",	# 今天
 	"-"=>"200,200,200,250",	# 周日
@@ -51,7 +52,7 @@ chdir $icondir;
 -f "00.png" || die "can not fetch picture file.\n";
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
 $size=$surface->get_width();
-$size=$size*$ratio;
+$size=$size*$scrennw/1280;
 $w0=$size*2;$h0=$size/3;	# 单位方框尺寸
 $x0=$size/6; $y0=$size/2;
 $surface = Cairo::ImageSurface->create ('argb32',($size*2)*$max+20,$size*4); 
