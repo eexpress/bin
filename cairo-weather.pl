@@ -13,7 +13,7 @@ $_=`xwininfo -root`;
 #/Height:\s*\K\d+/; $screenh=$&;
 #---------------------------------
 $ENV{RES}="$ENV{HOME}/bin/resources" if ! $ENV{RES};
-$hpos=$scrennw*0.25;	#屏幕横位移
+$hpos=$scrennw*0.3;	#屏幕横位移
 $icondir="$ENV{RES}/weather-icon-64";
 #$bgfile="$ENV{RES}/desktop.jpg";
 #$icondir="$ENV{RES}/weather-icon";
@@ -22,8 +22,8 @@ $outputfile="$ENV{RES}/weather.png";
 # $bgfile="$ENV{RES}/desktop.jpg";
 $max=7;	#从今天算起，最多显示几天。
 %indexcolor=(
-	">"=>"200,200,200,250",	# 今天
-	"-"=>"200,200,200,250",	# 周日
+	">"=>"229,94,35,250",	# 今天
+	"-"=>"100,134,244,250",	# 周日
 	" "=>"200,200,200,220",	# 其他
 	"0"=>"20,20,20,120",	# 今天背景
 	"1"=>"20,20,20,50",	# 周日背景
@@ -31,6 +31,8 @@ $max=7;	#从今天算起，最多显示几天。
 $url="http://qq.ip138.com/weather/hunan/ChangSha.wml";
 # ------以上为可自定义的部分------
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
+$tweek=$t[6];
+@alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。
 	$_=encode("utf8",$_);
@@ -53,7 +55,7 @@ chdir $icondir;
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
 $size=$surface->get_width();
 $size=$size*$scrennw/1280;
-$w0=$size*2;$h0=$size/3;	# 单位方框尺寸
+$w0=$size*1.8;$h0=$size/3;	# 单位方框尺寸
 $x0=$size/6; $y0=$size/2;
 $surface = Cairo::ImageSurface->create ('argb32',($size*2)*$max+20,$size*4); 
 $year="";$month=""; $is=0;
@@ -66,9 +68,11 @@ chomp;
 ($sign,$date,$weather,$temp,$wind)=split "\t",$_;
 ($y,$m,$d)=split "-",$date;
 #---------------------------------
-$_=sprintf("/usr/bin/calendar -A 0 -t %04d%02d%02d",$y,$m,$d);
-@lunar=`$_`;
-$_=$lunar[0]; $_=$lunar[1] if(/\d{4}/ && ! /$y/);
+#$_=sprintf("/usr/bin/calendar -A 0 -t %04d%02d%02d",$y,$m,$d);
+#@lunar=`$_`;
+#$_=$lunar[0]; $_=$lunar[1] if(/\d{4}/ && ! /$y/);
+@lunar=grep /$m月.*$d \t/,@alllunar;
+$_=$lunar[0];
 chomp;s/^.*\t//;s/\ (.*)//;$lunar[0]=$_;
 #---------------------------------
 if($year==""){$year=$y;}elsif($year==$y){$y="";}else{$year=$y;}
@@ -91,13 +95,14 @@ s/暴雪/16.png/g;s/多云/26.png/;s/晴/32.png/;s/阴/31.png/;s/转/-/;s/雷阵
 if(/-/){
 my ($img1,$img2)=split "-";
 $currentpng="$img1" if ! $currentpng;
-drawpng("$img1",$x0,$y1-$size/8);
+#drawpng("$img1",$x0,$y1-$size/8);
+drawpng("$img1",$x0,$y1);
 drawpng("$img2",$x0+$size/2,$y1+$size/4);
 }else{
 drawpng("$_",$x0,$y1);
 $currentpng="$_" if ! $currentpng;
 }
-$y1+=1.8*$size; 
+$y1+=1.2*$size; 
 #drawpangotxt("<span color='blue'>$weather</span>",$x0,$y1);
 drawtxt("$weather",$x0,$y1);
 $y1+=$h0; $_=$temp; s/°C/℃/g;
@@ -110,6 +115,9 @@ drawtxt("$wind",$x0,$y1);
 drawtxt("$tmp",$x0,$y1+16) if($tmp);
 $x0+=$w0;
 }
+@week=('㊐','㊀','㊁','㊂','㊃','㊄','㊅');
+$color=$indexcolor{">"};
+drawstamp($week[$tweek],$size*1.2,$size*2.2);
 $surface->write_to_png ("$outputfile");
 #---------------------------------
 if (! $bgfile){
@@ -154,6 +162,19 @@ $cr->paint;
 #$cr->show_page();
 #}
 
+sub drawstamp()
+{
+my $cr = Cairo::Context->create ($surface);
+$cr->select_font_face("WenQuanYi Zen Hei",'normal','bold');
+#$cr->select_font_face("$font",'normal','bold');
+$cr->set_font_size($fsize*3);
+my ($R,$G,$B,$A)=split ',',$color;
+$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256);	#缺省白色字体
+$cr->move_to($_[1],$_[2]);
+$cr->rotate(-0.4);
+$cr->show_text("$_[0]");
+}
+
 sub drawtxt(){
 my $cr = Cairo::Context->create ($surface);
 $cr->select_font_face("$font",'normal','bold');
@@ -171,7 +192,7 @@ sub drawframe(){
 my ($x,$r,$c)=@_;
 my ($R,$G,$B,$A)=split ',',$c;
 my $w=$w0;
-my $h=3.7*$size;
+my $h=3.2*$size;
 my $cr = Cairo::Context->create ($surface);
 $PI=3.1415926/180;
 $cr->move_to($x+$r,0);
