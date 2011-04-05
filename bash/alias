@@ -35,8 +35,8 @@ alias dtach.slimrat='dtach -n /tmp/dtach-slimrat ~/bin/slimrat -l ~/.slimrat/que
 alias grep='grep --color=auto'
 alias gv='/usr/bin/gvim --remote-silent-tab'
 alias hexdump='hexdump -C'
-alias iftop.启动='sudo iftop -i wlan0'
-alias iptraf.启动='sudo iptraf -i wlan0'
+alias iftop.启动='sudo iftop -i `netname`'
+alias iptraf.启动='sudo iptraf -i `netname`'
 alias irc='irssi -c irc.freenode.net'
 alias k9='killall -9'
 alias l='ls -CF --color'
@@ -77,4 +77,7 @@ alias x='echo "● `xsel -o`" >>'
 alias find-opera-1M='find ~/.opera/cache*/ -cmin -60 -size +1000k -printf "------\t%p\t► %Ac\t► %kK\v\r" -exec file -b {} \;'
 osd0(){
 gnome-osd-client -f "<message id='oss' osd_vposition='center' osd_halignment='center'><span font='ZhunYuan 180'  foreground='red'>`xsel -o`</span></message>"
+}
+netname(){
+routel|sed -n "2p"|awk '{print $6}'
 }
