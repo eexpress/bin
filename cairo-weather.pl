@@ -167,12 +167,20 @@ sub drawstamp()
 my $cr = Cairo::Context->create ($surface);
 $cr->select_font_face("WenQuanYi Zen Hei",'normal','bold');
 #$cr->select_font_face("$font",'normal','bold');
-$cr->set_font_size($fsize*3);
+$cr->set_font_size($fsize*4);
 my ($R,$G,$B,$A)=split ',',$color;
-$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256);	#缺省白色字体
+$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256/2);	#缺省白色字体
 $cr->move_to($_[1],$_[2]);
 $cr->rotate(-0.4);
-$cr->show_text("$_[0]");
+#$cr->show_text("$_[0]");
+$cr->text_path("$_[0]");
+$cr->fill_preserve();
+$cr->set_line_width(2);
+$cr->set_line_join(miter);
+#$cr->set_line_join(round);
+#miter, round, bevel
+$cr->set_dash((15,5,5,5),4,15);
+$cr->stroke();
 }
 
 sub drawtxt(){
