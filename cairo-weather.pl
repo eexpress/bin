@@ -7,30 +7,28 @@ use Cairo;
 `gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
 
 until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
-print "online\n";
-$_=`xwininfo -root`;
-/Width:\s*\K\d+/; $scrennw=$&;
-#/Height:\s*\K\d+/; $screenh=$&;
-#---------------------------------
-$ENV{RES}="$ENV{HOME}/bin/resources" if ! $ENV{RES};
-$hpos=$scrennw*0.3;	#屏幕横位移
-$icondir="$ENV{RES}/weather-icon-64";
-#$bgfile="$ENV{RES}/desktop.jpg";
-#$icondir="$ENV{RES}/weather-icon";
-$font="Vera Sans YuanTi";
-$outputfile="$ENV{RES}/weather.png";
-# $bgfile="$ENV{RES}/desktop.jpg";
+#print "online\n";
+#$_=`xwininfo -root`;
+#/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
+
+# ------以下为可自定义的部分------
+$pos="-80,80";		#屏幕偏移坐标，可以负坐标对齐
+$icondir="$ENV{HOME}/bin/resources/weather-icon-64";
+#$icondir="$ENV{HOME}/bin/resources/weather-icon";
+$font="Vera Sans YuanTi";	#fc-list :lang=zh-cn 中的中文字体
+$font="方正少儿_GBK";
 $max=7;	#从今天算起，最多显示几天。
-%indexcolor=(
-	">"=>"229,94,35,250",	# 今天
+%indexcolor=(			# RGBA
+	">"=>"229,94,35,220",	# 今天
 	"-"=>"229,94,35,150",	# 周日
-#        "-"=>"100,134,244,250",	# 周日
 	" "=>"200,200,200,220",	# 其他
 	"0"=>"20,20,20,120",	# 今天背景
 	"1"=>"20,20,20,50",	# 周日背景
 );
 $url="http://qq.ip138.com/weather/hunan/ChangSha.wml";
 # ------以上为可自定义的部分------
+
+$outputfile="/tmp/weather.png";
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 $tweek=$t[6];
 @alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
@@ -55,10 +53,10 @@ chdir $icondir;
 -f "00.png" || die "can not fetch picture file.\n";
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
 $size=$surface->get_width();
-$size=$size*$scrennw/1280;
+#$size=$size*$screennw/1280;
 $w0=$size*1.8;$h0=$size/3;	# 单位方框尺寸
 $x0=$size/6; $y0=$size/2;
-$surface = Cairo::ImageSurface->create ('argb32',($size*2)*$max+20,$size*4); 
+$surface = Cairo::ImageSurface->create ('argb32',$w0*$max,$size*4); 
 $year="";$month=""; $is=0;
 #---------------------------------
 for (@_){
@@ -103,7 +101,7 @@ drawpng("$img2",$x0+$size/2,$y1+$size/4);
 drawpng("$_",$x0,$y1);
 $currentpng="$_" if ! $currentpng;
 }
-$y1+=1.2*$size; 
+$y1+=1.5*$size; 
 #drawpangotxt("<span color='blue'>$weather</span>",$x0,$y1);
 drawtxt("$weather",$x0,$y1);
 $y1+=$h0; $_=$temp; s/°C/℃/g;
@@ -113,12 +111,12 @@ $fsize=$size/6;
 #_utf8_on($wind);$wind=~s/.{10}/$&\\n\\n/g;_utf8_off($wind);
 ($wind,$tmp)=split /\//,$wind;
 drawtxt("$wind",$x0,$y1);
-drawtxt("$tmp",$x0,$y1+16) if($tmp);
+drawtxt("$tmp",$x0,$y1+$h0) if($tmp);
 $x0+=$w0;
 }
 @week=('㊐','㊀','㊁','㊂','㊃','㊄','㊅');
 $color=$indexcolor{">"};
-drawstamp($week[$tweek],$size*1.2,$size*2.2);
+drawstamp($week[$tweek],$size,$size*2.5);
 $surface->write_to_png ("$outputfile");
 #---------------------------------
 if (! $bgfile){
@@ -135,8 +133,8 @@ if (! $bgfile){
 	print "BG\t=>\t$_\n";
 }
 #---------------------------------
-`habak $bgfile -mp $hpos,80 -hi $outputfile`;
-`notify-send -i "$icondir/$currentpng" "Draw Desktop Weather with Cairo" "habak $bgfile -mp $hpos,80 -hi $outputfile"`;
+`habak $bgfile -mp $pos -hi $outputfile`;
+`notify-send -i "$icondir/$currentpng" "Draw Desktop Weather with Cairo" "habak $bgfile -mp $pos -hi $outputfile"`;
 #---------------------------------
 
 sub drawpng(){
@@ -168,7 +166,7 @@ sub drawstamp()
 my $cr = Cairo::Context->create ($surface);
 $cr->select_font_face("WenQuanYi Zen Hei",'normal','bold');
 #$cr->select_font_face("$font",'normal','bold');
-$cr->set_font_size($fsize*4);
+$cr->set_font_size($fsize*5);
 my ($R,$G,$B,$A)=split ',',$color;
 $cr->set_source_rgba($R/256,$G/256,$B/256,$A/256/2);	#缺省白色字体
 $cr->set_operator("dest-out");
@@ -202,7 +200,7 @@ sub drawframe(){
 my ($x,$r,$c)=@_;
 my ($R,$G,$B,$A)=split ',',$c;
 my $w=$w0;
-my $h=3.2*$size;
+my $h=3.5*$size;
 my $cr = Cairo::Context->create ($surface);
 $PI=3.1415926/180;
 $cr->move_to($x+$r,0);

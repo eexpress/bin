@@ -5,6 +5,7 @@ use Gtk2 -init;
 use Gtk2::GladeXML;
 use File::Basename qw/basename dirname/;
 
+#fc-list : file family 可以取得字体路径
 # 取得执行文件同名的界面文件
 #$path=$0;
 #$path=readlink $0 if -l $0;
