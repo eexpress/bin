@@ -1,0 +1,174 @@
+# vim: filetype=fvwm
+SetEnv fvwm		$[HOME]/.fvwm/
+SetEnv script		$[HOME]/bin/
+SetEnv RegularFont "StringEncoding=utf8:xft:Vera Sans YuanTi:size=9:encoding=iso10646-1"
+#SetEnv HeiFont "StringEncoding=utf8:xft:STHeiti:size=10:encoding=iso10646-1"
+
+DesktopSize 2x2				#每个桌面分成2x2个页面
+DesktopName 0 Main			#设置了1个桌面
+
+Module FvwmCommandS
+#CursorStyle DEFAULT right_ptr
+####################################################
+BorderStyle Active TiledPixmap $[fvwm]/active.png -- Flat
+BorderStyle InActive TiledPixmap $[fvwm]/inactive.png -- Flat
+Style * !Title, HandleWidth 10
+
+#BorderStyle InActive -- Flat
+#Style * !Title, !Handles, BorderWidth 5
+
+Style * SloppyFocus		#移开窗口到root时，不丢失焦点
+Style * MouseFocusClickRaises		#点击窗体上升
+########################
+# Super，用于热键组合。位于Mod4。xmodmap -pm查看
+Key r A 4 JumpExec rox
+Key f A 4 JumpExec pcmanfm
+Key o A 4 JumpExec opera
+Key q A 4 JumpExec geeqie
+Key n A 4 JumpExec zim
+Key b A 4 JumpExec transmission
+#Key c A 4 JumpExec chromium-browser
+
+Key t A 4 Exec exec $[script]xterm_color_corner.pl
+Key m A 4 Exec exec xterm -e mocp
+Key e A 4 Exec exec xterm -e $[script]ea.pl
+Key z A 4 All (xterm) shadex
+Key a A 4 All (xterm) WindowShade off
+Key x A 4 Exec exec xlock -font "-*-courier 10 pitch-*-*-*-*-*-*-*-*-*-*-*-*"
+
+Key p A 4 Exec exec $[script]截图或贴图.bash 1
+Key i A 4 Exec exec $[script]截图或贴图.bash
+#Key d A 4 Exec exec $[script]/bot/sdcv.pl -n
+#Key a A 4 Exec exec $[script]/ip-查询/ip-ip纯真库.pl -n
+#Key g A 4 Exec exec $[script]/bot/g-translate.pl -n
+#Key w A 4 Exec exec $[script]/bot/weather.pl -n
+Key Menu A A Exec exec $[script]monitor-clip.pl
+Key y A 4 Exec exec $[script]y ~/摘录
+#Key c A 4 Exec exec $[script]cal.pl -n
+Key r A CM restart
+Key s A CM Exec gksu pm-suspend
+Key h A CM Exec gksu pm-suspend-hybrid
+Key x A CM Exec exec bash -c 'echo eexp|sudo -S kill `cat /tmp/.X0-lock`'
+#Key x A CM Exec exec bash -c 'echo eexp|sudo -S service gdm restart'
+#Key x A CM Exec exec bash -c 'echo eexp|sudo -S pkill X'
+########################
+# 媒体按键
+# Fn-[F10...F12]
+Key XF86AudioMute		A A Exec exec amixer set Master toggle
+Key XF86AudioLowerVolume	A A Exec exec amixer set Master 10%-
+Key XF86AudioRaiseVolume	A A Exec exec amixer set Master 10%+
+Key F10	A 4 Exec exec amixer set PCM toggle
+Key F11	A 4 Exec exec amixer set PCM 5%-
+Key F12	A 4 Exec exec amixer set PCM 5%+
+# Fn加上下光标，
+Key XF86AudioPlay	A A Exec exec ~/bin/mocp-S-P.pl
+Key XF86AudioStop	A A Exec exec mocp -G
+# Fn加左右光标，定义于~/.xmodmaprc
+Key XF86AudioPrev	A A Exec exec mocp -r
+Key XF86AudioNext	A A Exec exec mocp -f
+########################
+# 菜单样式
+DestroyMenu MenuFvwmRoot
+MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
+#MenuStyle WindowList Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
+Read $[fvwm]/menu-mini
+#● ./fvwm-xdg-menu.py -f -m Root /etc/xdg/menus/applications.menu > menu
+#-------------Root窗口操作---------------
+Mouse 3 R A WindowList SortByClass,NoHotkeys,NoGeometry,NoCurrentDeskTitle
+Mouse 2 R A Menu Root
+#Mouse 2 R A Exec apwal
+Mouse 1 R A
+#Mouse 1 R 4 Exec kupfer
+#-------------Super+ 窗口操作---------------
+Mouse 1 W 4 Move
+Mouse 1 TS A Move
+
+Mouse 2 W 4 Close
+Mouse 2 TS A Close
+Mouse 2 TS 4 All (CurrentPage,Iconifiable,HasHandles) Close
+Mouse 3 I A Close	# 图标，右键直接关闭
+Mouse 3 I 4 All (CurrentPage,Iconifiable,HasHandles) Close
+
+#Mouse 2 W 4 Stick	# +中键，总是可见
+Key S W 4 Stick
+
+Mouse 3 W 4 Resize	# +右击，缩放
+Mouse 3 TS A Resize
+
+Mouse 4 W 4 Maximize	# +上滚轮，最大化
+Mouse 4 TS A Maximize
+
+Mouse 5 W 4 Iconify	# +下滚轮，最小化
+Mouse 5 TS A Iconify
+Mouse 5 TS 4 All (CurrentPage,Iconifiable,HasHandles) Iconify On
+
+Mouse 1 I A WindowListFunc	# 恢复窗口
+Mouse 1 I 4 All (CurrentPage) WindowListFunc	# 恢复窗口
+
+#+方向键，对齐到屏幕边缘
+Key Up		W 4 Move w 0
+Key Down	W 4 Move w -0
+Key Left	W 4 Move 0 w
+Key Right	W 4 Move -0 w
+# Super加[1 2 3 4]移动当前窗口到4个桌面。
+Key 1 W 4 PointerWindow MoveToPage 0 0
+Key 2 W 4 PointerWindow MoveToPage 1 0
+Key 3 W 4 PointerWindow MoveToPage 0 1
+Key 4 W 4 PointerWindow MoveToPage 1 1
+
+#-------------IconBox 设置
+Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64
+Style * !IconTitle, IconTitleRelief 0, IndexedIconName, IconBackgroundPadding 0, IconBackgroundRelief 0
+########################
+# 修正系统函数：恢复窗口时，鼠标居中
+AddToFunc WindowListFunc
++ I WarpToWindow 50 50
+########################
+# Jump & Exec 函数
+DestroyFunc JumpExec
+AddToFunc JumpExec
++ I All ($0) WindowListFunc
++ I TestRc (NoMatch) Exec exec $0 &
+########################
+# 切换xterm卷帘的函数
+DestroyFunc shadex
+AddToFunc shadex
++ I ThisWindow PipeRead '[ $[w.y] -gt 200 ] && echo WindowShade S || echo WindowShade N'
+
+########################
+# 样式设置
+#设置开启窗口，自动定位到指定桌面
+Style rox	StartsOnPage 0 0, PositionPlacement Center
+Style pcmanfm	UseStyle rox
+Style zim	UseStyle rox
+Style gimp	StartsOnPage 1 1
+Style geeqie	StartsOnPage 1 1
+Style glade StartsOnPage 0 1
+Style filezilla StartsOnPage 0 1
+Style opera	!Title, !Handles, StartsOnPage 1 0, SkipMapping	#后台启动
+Style chromium-browser	StartsOnPage 0 0, SkipMapping	#后台启动
+Style transmission StartsOnPage 0 1
+
+Style xterm	!Title, !Borders, !Iconifiable, Sticky, StaysOnTop, WindowListSkip
+
+Style dock	!Title, !Borders, !Iconifiable, Sticky, StaysOnBottom
+Style tint2	UseStyle dock
+Style *panel	UseStyle dock
+Style *dock	UseStyle dock
+Style *tray	UseStyle dock
+Style *clock	UseStyle dock
+
+Exec exec "$[fvwm]autostart.pl"
+
+########################
+# 开关鼠标穿越
+SetEnv scroll 1
+DestroyFunc toggle-scroll
+AddToFunc toggle-scroll
++ I Test (EnvMatch scroll 0) SetEnv scroll 1
++ I TestRc (NoMatch) SetEnv scroll 0
+#+ I TestRc (Match) Exec exec bash -c "export DISPLAY=:0 && notify-send -u critical -t 1000 -i /home/exp/媒体/●图标/png/Cubic\ Jaguar.png  桌面漫游 开启"
++ I EdgeThickness $[scroll]
+
+Key e A 4 toggle-scroll
+

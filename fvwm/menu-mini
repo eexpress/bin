@@ -1,0 +1,15 @@
+DestroyMenu "Root"
+AddToMenu "Root" "常用软件" Title
++ "Gtk-ChTheme%/usr/share/pixmaps/gtk-chtheme.xpm%" Exec exec /usr/bin/gtk-chtheme
++ "Transmission%/usr/share/icons/hicolor/24x24/apps/transmission.png%" Exec exec transmission 
++ "Shutter%/home/exp/.fvwm/menuicon/shutter.png%" Exec exec shutter 
++ "Zim 桌面维基%/usr/share/icons/hicolor/24x24/apps/zim.png%" Exec exec zim
++ "Pidgin Internet Messenger%/usr/share/icons/hicolor/24x24/apps/pidgin.png%" Exec exec pidgin
++ "Opera%/usr/share/icons/hicolor/24x24/apps/opera-browser.png%" Exec exec /usr/bin/opera 
++ "mlnet%/home/exp/.fvwm/menuicon/mlnet.png%" Exec exec /usr/bin/mlnet
++ "rox%/home/exp/.fvwm/menuicon/rox.png%" Exec exec /usr/bin/rox
++ "xterm%/home/exp/.fvwm/menuicon/term.png%" Exec exec /usr/bin/xterm
++ "VirtualBox OSE%/home/exp/.fvwm/menuicon/virtualbox.png%" Exec exec virtualbox
++ "xkill%/home/exp/.icons/nuoveXT-1.6/24x24/apps/xkill.png%" Exec exec /usr/bin/xkill
++ "Control Center%/home/exp/.fvwm/menuicon/gnome-control-center.png%" Exec exec gnome-control-center
+

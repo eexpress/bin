@@ -38,7 +38,8 @@ if(/\@(.*\.(com|net|org))/){
 	}
 if(/\d+\.\d+\.\d+\.\d+/){
 	print "ip=$&\n";
-	`$ENV{HOME}/bin/ip-查询/ip-ip纯真库.pl -n $&`;
+#        `$ENV{HOME}/bin/ip-查询/ip-ip纯真库.pl -n $&`;
+	`$ENV{HOME}/bin/ip-138查询ip属地.bash $&`;
 	exit;
 	}
 if(/pps:\/\/[^\s]*/){
