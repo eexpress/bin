@@ -1,0 +1,14 @@
+resources/*
+adb
+cdnproxy
+chs/*
+gappproxy/*
+slimrat*
+*.png
+*.jpg
+chsdir
+*fonts
+*icons
+*ssh
+*vim
+*xmodmaprc
