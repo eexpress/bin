@@ -16,7 +16,7 @@ $pos="-80,80";		#屏幕偏移坐标，可以负坐标对齐
 $icondir="$ENV{HOME}/bin/resources/weather-icon-64";
 #$icondir="$ENV{HOME}/bin/resources/weather-icon";
 $font="Vera Sans YuanTi";	#fc-list :lang=zh-cn 中的中文字体
-$font="方正少儿_GBK";
+#$font="方正少儿_GBK";
 $max=7;	#从今天算起，最多显示几天。
 %indexcolor=(			# RGBA
 	">"=>"229,94,35,220",	# 今天
