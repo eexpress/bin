@@ -29,7 +29,7 @@ Key n A 4 JumpExec zim
 Key b A 4 JumpExec transmission
 #Key c A 4 JumpExec chromium-browser
 
-Key t A 4 Exec exec $[script]xterm_color_corner.pl
+Key t A 4 Exec exec $[fvwm]xterm_color_corner.pl
 Key m A 4 Exec exec xterm -e mocp
 Key e A 4 Exec exec xterm -e $[script]ea.pl
 Key z A 4 All (xterm) shadex
