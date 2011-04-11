@@ -133,7 +133,7 @@ if (! $bgfile){
 	print "BG\t=>\t$_\n";
 }
 #---------------------------------
-`habak $bgfile -mp $pos -hi $outputfile`;
+`habak -ms \"$bgfile\" -mp $pos -hi $outputfile`;
 `notify-send -i "$icondir/$currentpng" "Draw Desktop Weather with Cairo" "habak $bgfile -mp $pos -hi $outputfile"`;
 #---------------------------------
 
