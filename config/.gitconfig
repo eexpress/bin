@@ -5,8 +5,8 @@
 	df = diff
 	ls = !sh -c 'git ls-files|ascii2uni -a K'
 	lc = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-#	● git diff|sed -e 's/^-.*/\x1b\[32m&\x1b\[0m/g' -e 's/^+.*/\x1b\[31m&\x1b\[0m/g' 
-
+[color]
+	diff = always
 [user]
 	name = eexpress
 	email = eexpress@163.com
