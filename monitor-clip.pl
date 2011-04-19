@@ -15,13 +15,11 @@ if(m"http://u.115.com/file/\w+"){
 	`~/bin/xterm4.pl -e ~/bin/115_down -l \'eexp,115eexp00\' $&`;
 	exit;
 }
-if(/http:\/\/rapidshare\.com\/files\// || /hotfile\.com/ || /\.share-online\.biz/){
+if(/http:\/\/rapidshare\.com\/files\// || /hotfile\.com/ || /\.share-online\.biz/ || /megaupload.com/ || /www.fileserve.com/){
 	print "add to queue file.\n";
 
 	`$ENV{HOME}/bin/msg elvis.png  "保存并启动slimrat" "ok"`;
-	`xsel -o >>~/.slimrat/queue`; `echo '\n' >>~/.slimrat/queue`;
-#        `echo $_ >>~/.slimrat/queue`;
-#        `$ENV{HOME}/bin/slimrat.bat`;
+	`xsel -o >>~/.slimrat/url`; `echo '\n' >>~/.slimrat/url`;
 	exit;
 }
 if(m"http://[^\s]*"){

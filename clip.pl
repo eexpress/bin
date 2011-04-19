@@ -129,8 +129,8 @@ my @clip1=(
 "I.I.I.I.I.P.K.P.K.K.P.K.K.P.K.P.K.P.P.I.I.I.I.I."
 );
 
+use utf8;
 use Gtk2 "-init"; 
-use Encode;
 $SIG{CHLD} = 'IGNORE';
 $last="";
 $enable=0;
@@ -153,20 +153,21 @@ $status_icon->signal_connect('button-press-event',\&tray);
 #$status_icon->set_from_file("clip0.png");
 #$status_icon->set_from_pixbuf($pixbuf0);
 #$status_icon->set_tooltip(decode("utf8","监视剪贴板内容，自动下载资源"));
-tray();
 $status_icon->set_visible(1);
+$enable=1;
+$status_icon->set_from_pixbuf($enable?$pixbuf0:$pixbuf1);
+$status_icon->set_tooltip($enable?"监视剪贴板内容，自动下载资源":"剪贴板监视已关闭");
+#tray();
 
 Gtk2 -> main;
 exit 0;
 #----------------------------------
 sub tray{
-my ($check, $event) = @_;
+my ($widget, $event) = @_;
 if($event->button eq 2){exit;}
 $enable=$enable?0:1;
 $status_icon->set_from_pixbuf($enable?$pixbuf0:$pixbuf1);
-$_=$enable?"监视剪贴板内容，自动下载资源":"剪贴板监视已关闭";
-$status_icon->set_tooltip(decode("utf8",$_));
-#$status_icon->set_from_file($enable?$base."0.png":$base."1.png");
+$status_icon->set_tooltip($enable?"监视剪贴板内容，自动下载资源":"剪贴板监视已关闭");
 }
 
 #----------------------------------
