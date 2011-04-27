@@ -1,6 +1,6 @@
 [alias]
         ci = commit
-	st = !sh -c 'git status|grep -B 100 "Untracked"'
+	st = !sh -c 'git status|grep -B 100 -E \"Untracked|^no\"'
 	co = checkout
 	df = diff
 	ls = !sh -c 'git ls-files|ascii2uni -a K'

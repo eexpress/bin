@@ -4,30 +4,56 @@ use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
 #use Gtk2;
 
+$rc="$ENV{HOME}/.config/cairo-weather/config";
+open RC,"<$rc"; @rc=grep ! /^\s*#/ && ! /^\s*$/,<RC>; close RC;
+#print @rc;
+%hrc=map{split /\s*=/} @rc;
+chomp %hrc;
+while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}
+#exit;
+
 `gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
 
 until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
-#print "online\n";
 #$_=`xwininfo -root`;
 #/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
-
 # ------以下为可自定义的部分------
-$pos="-80,80";		#屏幕偏移坐标，可以负坐标对齐
+#屏幕偏移坐标，可以负坐标对齐
+$pos=$hrc{pos}?$hrc{pos}:"-80,80";
+#fc-list :lang=zh-cn 中的中文字体
+$font=$hrc{font}?$hrc{font}:"Vera Sans YuanTi";
+# 壁纸文件。
+$gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
+chomp $gnomebg;
+$bgfile=$hrc{bgfile}?$hrc{bgfile}:$gnomebg;
+$bgfile=~s/['"]//g;
+# 城市天气信息地址
+$url=$hrc{url}?$hrc{url}:"http://qq.ip138.com/weather/hunan/ChangSha.wml";
+
 $icondir="$ENV{HOME}/bin/resources/weather-icon-64";
 #$icondir="$ENV{HOME}/bin/resources/weather-icon";
-$font="Vera Sans YuanTi";	#fc-list :lang=zh-cn 中的中文字体
-#$font="方正少儿_GBK";
 $max=7;	#从今天算起，最多显示几天。
+#%indexcolor=(			# RGBA
+#        ">"=>"229,94,35,220",	# 今天
+#        "-"=>"229,94,35,150",	# 周日
+#        " "=>"200,200,200,220",	# 其他
+#        "0"=>"20,20,20,120",	# 今天背景
+#        "1"=>"20,20,20,50",	# 周日背景
+#);
 %indexcolor=(			# RGBA
-	">"=>"229,94,35,220",	# 今天
-	"-"=>"229,94,35,150",	# 周日
-	" "=>"200,200,200,220",	# 其他
-	"0"=>"20,20,20,120",	# 今天背景
-	"1"=>"20,20,20,50",	# 周日背景
+	">"=>"#E55E23F0",	# 今天
+	"-"=>"#E55E2390",	# 周日
+	" "=>"#C8C8C8F0",	# 其他
+	"0"=>"#14141490",	# 今天背景
+	"1"=>"#14141432",	# 周日背景
 );
-$url="http://qq.ip138.com/weather/hunan/ChangSha.wml";
-# ------以上为可自定义的部分------
+$indexcolor{">"}=$hrc{"ctoday"} if $hrc{"ctoday"};
+$indexcolor{"-"}=$hrc{"cweek"} if $hrc{"cweek"};
+$indexcolor{" "}=$hrc{"cother"} if $hrc{"cother"};
+$indexcolor{"0"}=$hrc{"btoday"} if $hrc{"btoday"};
+$indexcolor{"1"}=$hrc{"bweek"} if $hrc{"bweek"};
 
+# ------以上为可自定义的部分------
 $outputfile="/tmp/weather.png";
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 $tweek=$t[6];
@@ -56,7 +82,7 @@ $size=$surface->get_width();
 #$size=$size*$screennw/1280;
 $w0=$size*1.8;$h0=$size/3;	# 单位方框尺寸
 $x0=$size/6; $y0=$size/2;
-$surface = Cairo::ImageSurface->create ('argb32',$w0*$max,$size*4); 
+$surface = Cairo::ImageSurface->create ('argb32',$w0*$max,$size*4);
 $year="";$month=""; $is=0;
 #---------------------------------
 for (@_){
@@ -101,7 +127,7 @@ drawpng("$img2",$x0+$size/2,$y1+$size/4);
 drawpng("$_",$x0,$y1);
 $currentpng="$_" if ! $currentpng;
 }
-$y1+=1.5*$size; 
+$y1+=1.5*$size;
 #drawpangotxt("<span color='blue'>$weather</span>",$x0,$y1);
 drawtxt("$weather",$x0,$y1);
 $y1+=$h0; $_=$temp; s/°C/℃/g;
@@ -114,31 +140,34 @@ drawtxt("$wind",$x0,$y1);
 drawtxt("$tmp",$x0,$y1+$h0) if($tmp);
 $x0+=$w0;
 }
-@week=('㊐','㊀','㊁','㊂','㊃','㊄','㊅');
+#@week=('㊐','㊀','㊁','㊂','㊃','㊄','㊅');
+@week=('日','壹','貳','叁','肆','伍','陸');
 $color=$indexcolor{">"};
 drawstamp($week[$tweek],$size,$size*2.5);
 $surface->write_to_png ("$outputfile");
 #---------------------------------
-if (! $bgfile){
+#if (! $bgfile){
 #● gconftool-2 -g /desktop/gnome/background/picture_filename
-	open GCONF,"<$ENV{HOME}/.gconf/desktop/gnome/background/%gconf.xml";
-	while(<GCONF>){
-		next if ! /picture_filename/;
-		$_=<GCONF>;
-		s/^.*?>//g;s/<.*$//g;chomp;
-		last;
-	}
-	close GCONF;
-	$bgfile=$_;
-	print "BG\t=>\t$_\n";
-}
+#        open GCONF,"<$ENV{HOME}/.gconf/desktop/gnome/background/%gconf.xml";
+#        while(<GCONF>){
+#                next if ! /picture_filename/;
+#                $_=<GCONF>;
+#                s/^.*?>//g;s/<.*$//g;chomp;
+#                last;
+#        }
+#        close GCONF;
+#        $bgfile=$_;
+#        print "BG\t=>\t$_\n";
+#}
 #---------------------------------
-`habak -ms \"$bgfile\" -mp $pos -hi $outputfile`;
-`notify-send -i "$icondir/$currentpng" "Draw Desktop Weather with Cairo" "habak $bgfile -mp $pos -hi $outputfile"`;
+$cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
+print "\e[1;37;41m$cmd\e[0m\n";
+`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"`;
+`$cmd`;
 #---------------------------------
 
 sub drawpng(){
-my $img = Cairo::ImageSurface->create_from_png ("$_[0]"); 
+my $img = Cairo::ImageSurface->create_from_png ("$_[0]");
 my $cr = Cairo::Context->create ($surface);
 $cr->set_source_surface($img,$_[1],$_[2]);
 $cr->paint;
@@ -146,29 +175,31 @@ $cr->paint;
 
 #sub drawpangotxt(){
 #my $cr = Cairo::Context->create ($surface);
-#my $pango_layout = Gtk2::Pango::Cairo::create_layout ($cr); 
-#my $font_desc = Gtk2::Pango::FontDescription->from_string("$font $fsize"); 
-#$pango_layout->set_font_description($font_desc); 
+#my $pango_layout = Gtk2::Pango::Cairo::create_layout ($cr);
+#my $font_desc = Gtk2::Pango::FontDescription->from_string("$font $fsize");
+#$pango_layout->set_font_description($font_desc);
 #$pango_layout->set_markup (decode("utf-8", "$_[0]"));
 #my ($R,$G,$B,$A)=split ',',$color;
 #$cr->set_source_rgba(0,0,0,1);	#缺省黑色阴影
 #$cr->move_to($_[1]+1,$_[2]+1);
-#Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout); 
+#Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout);
 #$cr->show_page();
 #$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256);	#缺省白色字体
 #$cr->move_to($_[1],$_[2]);
-#Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout); 
+#Gtk2::Pango::Cairo::show_layout ($cr, $pango_layout);
 #$cr->show_page();
 #}
 
 sub drawstamp()
 {
 my $cr = Cairo::Context->create ($surface);
-$cr->select_font_face("WenQuanYi Zen Hei",'normal','bold');
-#$cr->select_font_face("$font",'normal','bold');
+#$cr->select_font_face("WenQuanYi Zen Hei",'normal','bold');
+$cr->select_font_face("$font",'normal','bold');
 $cr->set_font_size($fsize*5);
-my ($R,$G,$B,$A)=split ',',$color;
-$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256/2);	#缺省白色字体
+#my ($R,$G,$B,$A)=split ',',$color;
+#$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256/2);	#缺省白色字体
+$color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
+$cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
 $cr->set_operator("dest-out");
 #clear, source, over, in, out, atop, dest, dest-over, dest-in, dest-out, dest-atop, xor, add, saturate
 $cr->move_to($_[1],$_[2]);
@@ -190,15 +221,17 @@ $cr->set_font_size($fsize);
 $cr->set_source_rgba(0,0,0,1);	#缺省黑色阴影
 $cr->move_to($_[1]+1,$_[2]+1);
 $cr->show_text("$_[0]");
-my ($R,$G,$B,$A)=split ',',$color;
-$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256);	#缺省白色字体
+#my ($R,$G,$B,$A)=split ',',$color;
+#$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256);	#缺省白色字体
+$color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
+$cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
 $cr->move_to($_[1],$_[2]);
 $cr->show_text("$_[0]");
 }
 
 sub drawframe(){
 my ($x,$r,$c)=@_;
-my ($R,$G,$B,$A)=split ',',$c;
+#my ($R,$G,$B,$A)=split ',',$c;
 my $w=$w0;
 my $h=3.5*$size;
 my $cr = Cairo::Context->create ($surface);
@@ -212,5 +245,8 @@ $cr->rel_line_to(-($w-2*$r),0);
 $cr->rel_curve_to(0,0,-$r,0,-$r,-$r);
 $cr->rel_line_to(0,-($h-2*$r));
 $cr->rel_curve_to(0,0,0,-$r,$r,-$r);
-$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256); $cr->fill;
+$c=~s/#//; my @C=map {$_/256} map {hex} $c=~/.{2}/g;
+$cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
+$cr->fill;
+#$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256); $cr->fill;
 }
