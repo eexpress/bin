@@ -3,6 +3,7 @@
 	st = !sh -c 'git status|grep -B 100 -E \"Untracked|^no\"'
 	co = checkout
 	df = diff
+	df1 = diff HEAD^^
 	ls = !sh -c 'git ls-files|ascii2uni -a K'
 	lc = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 [color]
