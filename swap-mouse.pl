@@ -141,6 +141,7 @@ if($r eq "left"){
 	print "set => right hand\n";
 	if($ENV{GDMSESSION} eq "gnome"){
 	`gconftool-2 -s /desktop/gnome/peripherals/mouse/left_handed false -t bool`;
+	`gconftool-2 -s /apps/metacity/general/button_layout :minimize,maximize,close -t string`;
 	} else {
 	`xmodmap -e "pointer = 1 2 3"`;
 	`synclient TapButton1=1`;
@@ -153,6 +154,7 @@ else{
 	print "set => left hand\n";
 	if($ENV{GDMSESSION} eq "gnome"){
 	`gconftool-2 -s /desktop/gnome/peripherals/mouse/left_handed true -t bool`;
+	`gconftool-2 -s /apps/metacity/general/button_layout close,maximize,minimize: -t string`;
 	} else {
 	`xmodmap -e "pointer = 3 2 1"`;
 	`synclient TapButton1=3`;
