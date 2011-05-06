@@ -19,16 +19,17 @@ until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 #/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
 # ------以下为可自定义的部分------
 #屏幕偏移坐标，可以负坐标对齐
-$pos=$hrc{pos}?$hrc{pos}:"-80,80";
+#$pos=$hrc{pos}?$hrc{pos}:"-80,80";
+$pos=$hrc{pos}//"-80,80";
 #fc-list :lang=zh-cn 中的中文字体
-$font=$hrc{font}?$hrc{font}:"Vera Sans YuanTi";
+$font=$hrc{font}//"Vera Sans YuanTi";
 # 壁纸文件。
 $gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
 chomp $gnomebg;
-$bgfile=$hrc{bgfile}?$hrc{bgfile}:$gnomebg;
+$bgfile=$hrc{bgfile}//$gnomebg;
 $bgfile=~s/['"]//g;
 # 城市天气信息地址
-$url=$hrc{url}?$hrc{url}:"http://qq.ip138.com/weather/hunan/ChangSha.wml";
+$url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
 
 $icondir="$ENV{HOME}/bin/resources/weather-icon-64";
 #$icondir="$ENV{HOME}/bin/resources/weather-icon";
