@@ -130,7 +130,7 @@ my @clip1=(
 );
 
 use utf8;
-use Gtk2 "-init"; 
+use Gtk2 "-init";
 $SIG{CHLD} = 'IGNORE';
 $last="";
 $enable=0;
@@ -167,18 +167,23 @@ my ($widget, $event) = @_;
 if($event->button eq 2){exit;}
 $enable=$enable?0:1;
 $status_icon->set_from_pixbuf($enable?$pixbuf0:$pixbuf1);
-$status_icon->set_tooltip($enable?"监视剪贴板内容，自动下载资源":"剪贴板监视已关闭");
+$status_icon->set_tooltip($enable?"正在监视剪贴板内容":"剪贴板监视已关闭");
 }
 
 #----------------------------------
 sub deal{
 return 0 if ! $enable;
 $_= $clip -> wait_for_text,"primary";
-#@url=m"http://[^\s]*"g;
+my $t;
+
+if(/^\// || /^~\//){s/^~/$ENV{HOME}/;if(-e){`xdg-open $_`;} return 0;}
+if(/\d+\.\d+\.\d+\.\d+/){if(fork()==0){`$ENV{HOME}/bin/ip-138查询ip属地.bash $&`;exit;} return 0;}
+if(/^\w+$/){if(fork()==0){`$ENV{HOME}/bin/bot/sdcv.pl -n`; exit;} return 0;}
+if(! /:\/\//){if(fork()==0){`$ENV{HOME}/bin/bot/g-translate.pl -n \"$&\"`; exit;} return 0;}
+
 @url=m"(?:http|mms|rtsp)://[^\s]*"g;
 if($#url<0){print "none url\n";return 1;}
 foreach(@url){
-my $t;
 s/\W+$//;
 next if $last eq $_;
 $last=$_;
@@ -187,25 +192,31 @@ $last=$_;
 if(/v.youku.com/ || /tudou.com\/playlist/ || /v.ku6.com/ || /6.cn\/watch/ || /tv.sohu.com/){
    $t="下载flash资源";
    if(fork()==0){`$TERM ~/bin/flash-down.pl $_`;exit;}
+   next;
 }
 if(m"http://u.115.com/file/\w+"){
    $t="下载115资源";
    if(fork()==0){`$TERM ~/bin/115_client $&`;exit;}
+   next;
 }
-if(/rapidshare.com/ || /hotfile.com.*html/){
+if(/\.rapidshare.com/ || /www\.hotfile\.com/ || /\.filesonic\.com/){
    $t="保存slimrat资源";
-   if(fork()==0){`$TERM ~/bin/slimrat $_`;exit;}
+   if(fork()==0){`$TERM /usr/bin/slimrat $_`;exit;}
+   next;
 }
 if(/^mms/ || /^rtsp/ || /\.asx$/){
    $t="播放网络流媒体";
    if(fork()==0){`$TERM mplayer $_`;exit;}
+   next;
 }
+`xdg-open $_`;
 #----------------------------------
 if($t){
 print "$t ===> $_\n";
 $t=decode("utf8",$t);
 `$ENV{HOME}/bin/msg elvis.png  $t $_`;
-} else {print "unrecognized url\n"; return 1;}
+} else {print "unrecognized url\t$_\n"; return 1;}
+#----------------------------------
 }
 }
 

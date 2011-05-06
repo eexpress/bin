@@ -15,7 +15,7 @@ if(m"http://u.115.com/file/\w+"){
 	`~/bin/xterm4.pl -e ~/bin/115_down -l \'eexp,115eexp00\' $&`;
 	exit;
 }
-if(/http:\/\/rapidshare\.com\/files\// || /hotfile\.com/ || /\.share-online\.biz/ || /megaupload.com/ || /www.fileserve.com/){
+if(/http:\/\/rapidshare\.com\/files\// || /hotfile\.com/ || /\.share-online\.biz/ || /megaupload\.com/ || /www\.fileserve\.com/ || /www\.filesonic\.com/){
 	print "add to queue file.\n";
 
 	`$ENV{HOME}/bin/msg elvis.png  "保存并启动slimrat" "ok"`;
