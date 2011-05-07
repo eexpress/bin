@@ -26,7 +26,7 @@ $font=$hrc{font}//"Vera Sans YuanTi";
 # 壁纸文件。
 $gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
 chomp $gnomebg;
-$bgfile=$hrc{bgfile}//$gnomebg;
+$bgfile=$hrc{bgfile}//$gnomebg; $bgfile=$gnomebg if ! -e $bgfile;
 $bgfile=~s/['"]//g;
 # 城市天气信息地址
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
