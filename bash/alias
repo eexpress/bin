@@ -49,6 +49,10 @@ alias ls='ls --color=auto'
 alias m-2-图片合并2列='montage -tile 2 -geometry +0+0 -background none'
 alias m-h-横排图片合并='montage -geometry +0+0 -background none'
 alias m-v-竖排图片合并='montage -tile 1 -geometry +0+0 -background none'
+m-array-pic(){
+montage $* null: -thumbnail 260x220 -bordercolor Lavender -background black +polaroid -background LightGray -geometry -26-20 -tile x4 ~/montage-array.jpg
+}
+
 alias mencoder='/usr/bin/mencoder -profile mpeg4'
 alias mencoder-c430='/usr/bin/mencoder -profile c430'
 
