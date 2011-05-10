@@ -30,9 +30,9 @@ $bgfile=$hrc{bgfile}//$gnomebg; $bgfile=$gnomebg if ! -e $bgfile;
 $bgfile=~s/['"]//g;
 # 城市天气信息地址
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
-
-$icondir="$ENV{HOME}/bin/resources/weather-icon-64";
-#$icondir="$ENV{HOME}/bin/resources/weather-icon";
+$scale=$hrc{scale}//1;
+$icondir=$hrc{icondir}//"$ENV{HOME}/bin/resources/weather-icon-64";
+$icondir=~s/"//g;
 $max=7;	#从今天算起，最多显示几天。
 #%indexcolor=(			# RGBA
 #        ">"=>"229,94,35,220",	# 今天
@@ -79,7 +79,7 @@ use Date::Parse qw/str2time/;
 chdir $icondir;
 -f "00.png" || die "can not fetch picture file.\n";
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
-$size=$surface->get_width();
+$size=$surface->get_width()*$scale;
 #$size=$size*$screennw/1280;
 $w0=$size*1.8;$h0=$size/3;	# 单位方框尺寸
 $x0=$size/6; $y0=$size/2;
@@ -170,8 +170,17 @@ print "\e[1;37;41m$cmd\e[0m\n";
 sub drawpng(){
 my $img = Cairo::ImageSurface->create_from_png ("$_[0]");
 my $cr = Cairo::Context->create ($surface);
-$cr->set_source_surface($img,$_[1],$_[2]);
+#my $m;
+#$m=$cr->get_matrix();
+#$cr->save();
+$cr->scale($scale,$scale);
+#$cr->set_matrix($m);
+$cr->set_source_surface($img,$_[1]/$scale,$_[2]/$scale);
+#$cr->identity_matrix();
 $cr->paint;
+#$cr->restore();
+#$cr->scale(1,1);
+#$img->destroy();
 }
 
 #sub drawpangotxt(){

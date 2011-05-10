@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/下载
-play "~/bin/resources/sound/kongas.ogg"
+#play "~/bin/resources/sound/kongas.ogg"
 #f=`date '+%Y-%m-%d-%H:%M:%S'`.jpg
 f=`date '+%Y-%m-%d-%H:%M:%S'`.png
 
