@@ -6,11 +6,10 @@ use Cairo;
 
 $rc="$ENV{HOME}/.config/cairo-weather/config";
 open RC,"<$rc"; @rc=grep ! /^\s*#/ && ! /^\s*$/,<RC>; close RC;
-#print @rc;
 %hrc=map{split /\s*=/} @rc;
 chomp %hrc;
+foreach (keys %hrc){$hrc{$_}=~s/['"]//g;}
 while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}
-#exit;
 
 `gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
 
@@ -19,28 +18,17 @@ until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 #/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
 # ------以下为可自定义的部分------
 #屏幕偏移坐标，可以负坐标对齐
-#$pos=$hrc{pos}?$hrc{pos}:"-80,80";
 $pos=$hrc{pos}//"-80,80";
-#fc-list :lang=zh-cn 中的中文字体
 $font=$hrc{font}//"Vera Sans YuanTi";
 # 壁纸文件。
 $gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
 chomp $gnomebg;
-$bgfile=$hrc{bgfile}//$gnomebg; $bgfile=$gnomebg if ! -e $bgfile;
-$bgfile=~s/['"]//g;
+$bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
 # 城市天气信息地址
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
 $scale=$hrc{scale}//1;
-$icondir=$hrc{icondir}//"$ENV{HOME}/bin/resources/weather-icon-64";
-$icondir=~s/"//g;
+$icondir=-e $hrc{icondir}?$hrc{icondir}:"$ENV{HOME}/bin/resources/weather-icon-64";
 $max=7;	#从今天算起，最多显示几天。
-#%indexcolor=(			# RGBA
-#        ">"=>"229,94,35,220",	# 今天
-#        "-"=>"229,94,35,150",	# 周日
-#        " "=>"200,200,200,220",	# 其他
-#        "0"=>"20,20,20,120",	# 今天背景
-#        "1"=>"20,20,20,50",	# 周日背景
-#);
 %indexcolor=(			# RGBA
 	">"=>"#E55E23F0",	# 今天
 	"-"=>"#E55E2390",	# 周日

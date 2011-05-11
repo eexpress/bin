@@ -1,6 +1,7 @@
 [alias]
         ci = commit
-	st = !sh -c 'git status|grep -B 100 -E \"Untracked|^no\"'
+#	st = !sh -c 'git status|grep -B 100 -E \"Untracked|^no\"'
+	st = !sh -c 'git status|grep -B 100 -E \"Untracked files:\"'
 	co = checkout
 	df = diff
 	df1 = diff HEAD^
