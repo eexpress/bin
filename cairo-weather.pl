@@ -14,8 +14,6 @@ while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}
 `gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
 
 until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
-#$_=`xwininfo -root`;
-#/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
 # ------以下为可自定义的部分------
 #屏幕偏移坐标，可以负坐标对齐
 $pos=$hrc{pos}//"-80,80";
@@ -148,6 +146,23 @@ $surface->write_to_png ("$outputfile");
 #        $bgfile=$_;
 #        print "BG\t=>\t$_\n";
 #}
+#---------------------------------
+#$deskpic="/tmp/weather-all.png";
+#$surface = Cairo::ImageSurface->create_from_png ("/home/eexp/图片/木纹.png");
+#$img = Cairo::ImageSurface->create_from_png ("$outputfile");
+#$cr = Cairo::Context->create ($surface);
+#($posw,$posh)=split ',',$pos; 
+#print "$pos:$posw, $posh\n";
+#if($posw<0){$posw=$surface->get_width()-$img->get_width()+$posw;}
+#if($posh<0){$posh=$surface->get_height()-$img->get_height()+$posh;}
+#$cr->set_source_surface($img,$posw,$posh);
+#$cr->paint;
+#$surface->write_to_png ("$deskpic");
+#print "$posw, $powh. write to png. $bgfile + $outputfile = $deskpic\n";
+#`gconftool-2 -s /desktop/gnome/background/picture_filename $deskpic -t string`;
+#exit;
+#$_=`xwininfo -root`;
+#/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
 #---------------------------------
 $cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
 print "\e[1;37;41m$cmd\e[0m\n";
