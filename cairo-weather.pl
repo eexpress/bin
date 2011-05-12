@@ -173,17 +173,11 @@ print "\e[1;37;41m$cmd\e[0m\n";
 sub drawpng(){
 my $img = Cairo::ImageSurface->create_from_png ("$_[0]");
 my $cr = Cairo::Context->create ($surface);
-#my $m;
-#$m=$cr->get_matrix();
-#$cr->save();
+$cr->translate($_[1],$_[2]);
 $cr->scale($scale,$scale);
-#$cr->set_matrix($m);
-$cr->set_source_surface($img,$_[1]/$scale,$_[2]/$scale);
-#$cr->identity_matrix();
+$cr->set_source_surface($img,0,0);
+#$cr->set_source_surface($img,$_[1]/$scale,$_[2]/$scale);
 $cr->paint;
-#$cr->restore();
-#$cr->scale(1,1);
-#$img->destroy();
 }
 
 #sub drawpangotxt(){
