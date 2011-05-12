@@ -30,6 +30,5 @@ $a="\'".join("\' \'",@ARGV)."\'";
 `rm /tmp/4in1*; convert -scale $s $a /tmp/4in1`;
 
 $tile=int(sqrt(@ARGV)+$p);
-`montage -tile $tile -geometry +0+0 -background none /tmp/4in1* p-$f.jpg`;
-
+`montage -tile $tile -geometry +0+0 -background none /tmp/4in1* ~/p-$f.jpg`;
 `rm $a`;
