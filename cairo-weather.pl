@@ -270,5 +270,15 @@ $cr->rel_curve_to(0,0,0,-$r,$r,-$r);
 $c=~s/#//; my @C=map {$_/256} map {hex} $c=~/.{2}/g;
 $cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
 $cr->fill;
-#$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256); $cr->fill;
+
+return if $sign eq "-";
+$cr->set_line_cap(butt);	# butt, round, square
+$cr->set_operator("clear");
+my $l=$size/10;
+$cr->set_line_width($l/2);
+for ($i=0; $i<$l*2; $i++){
+	$cr->move_to($x,$size+$i*$l);
+	$cr->rel_curve_to($w/3,$l*2,$w*2/3,-$l*2,$w,0);
+	$cr->stroke;
+	}
 }
