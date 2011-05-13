@@ -154,7 +154,7 @@ $status_icon->signal_connect('button-press-event',\&tray);
 #$status_icon->set_from_pixbuf($pixbuf0);
 #$status_icon->set_tooltip(decode("utf8","监视剪贴板内容，自动下载资源"));
 $status_icon->set_visible(1);
-$enable=1;
+$enable=0;
 $status_icon->set_from_pixbuf($enable?$pixbuf0:$pixbuf1);
 $status_icon->set_tooltip($enable?"监视剪贴板内容，自动下载资源":"剪贴板监视已关闭");
 #tray();
