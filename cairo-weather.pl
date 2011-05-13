@@ -42,12 +42,14 @@ $indexcolor{"1"}=$hrc{"bweek"} if $hrc{"bweek"};
 
 # ------以上为可自定义的部分------
 $outputfile="/tmp/weather.png";
+my $city;
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 $tweek=$t[6];
 @alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。
 	$_=encode("utf8",$_);
+	/title="(.*?)天气预报"/; $city=$1; print "~~~\t$1\n";
 	s/.*?(?=\d{4}-\d)//s;s/\n.*//s;	#去掉头尾无用信息。
 	s/<br\/><br\/><b>/\n/g; s/<br\/>/\t/g; s/<\/b>//g; s/<b>//g;
 	s/℃/°C/g; s/～/-/g; s/\x0d/\n/g;
@@ -75,7 +77,7 @@ $year="";$month=""; $is=0;
 for (@_){
 next if ! /$today/ && ! $is;
 $is++;
-$size*=0.8,$scale*=0.8,$w0*=0.8,$h0*=0.8 if $is==2;
+#$size*=0.8,$scale*=0.8,$w0*=0.8,$h0*=0.8 if $is==2;
 last if ($is>$max);
 chomp;
 ($sign,$date,$weather,$temp,$wind)=split "\t",$_;
@@ -131,7 +133,9 @@ $x0+=$w0;
 #@week=('㊐','㊀','㊁','㊂','㊃','㊄','㊅');
 @week=('日','壹','貳','叁','肆','伍','陸');
 $color=$indexcolor{">"};
-drawstamp($week[$tweek],$size,$size*2.5);
+drawstamp($week[$tweek],$size,$size*2.5,5);
+#$fsize/=3;
+drawstamp($city, $size*$max, $size*3.5,3,-0.2);
 $surface->write_to_png ("$outputfile");
 #---------------------------------
 #if (! $bgfile){
@@ -200,9 +204,10 @@ $cr->paint;
 
 sub drawstamp()
 {
+my $rotate=$_[4]//-0.4;
 my $cr = Cairo::Context->create ($surface);
 $cr->select_font_face("$font",'normal','bold');
-$cr->set_font_size($fsize*5);
+$cr->set_font_size($fsize*$_[3]);
 #my ($R,$G,$B,$A)=split ',',$color;
 #$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256/2);	#缺省白色字体
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
@@ -210,7 +215,7 @@ $cr->set_source_rgba($C[0]-0.3,$C[1]-0.3,$C[2]-0.3,$C[3]/1.1);
 $cr->set_operator("dest-over");	#被背景覆盖
 #clear, source, over, in, out, atop, dest, dest-over, dest-in, dest-out, dest-atop, xor, add, saturate
 $cr->move_to($_[1],$_[2]);
-$cr->rotate(-0.4);
+$cr->rotate($rotate);
 #$cr->show_text("$_[0]");
 $cr->text_path("$_[0]");
 	$cr->set_line_width(2);
@@ -219,13 +224,12 @@ $cr->text_path("$_[0]");
 $cr->fill_preserve();
 $cr->stroke();
 
-my $i=0;
-while($i<5){
+for $i (1..$_[3]){
 $i++;
 $cr->set_source_rgba($C[0]-$i/10-0.5,$C[1]-$i/10-0.5,$C[2]-$i/10-0.5,$C[3]/1.1);
-$cr->rotate(0.4);
+$cr->rotate(-$rotate);
 $cr->move_to($_[1]-$i,$_[2]+$i);
-$cr->rotate(-0.4);
+$cr->rotate($rotate);
 $cr->text_path("$_[0]");
 $cr->fill_preserve();
 $cr->stroke();
