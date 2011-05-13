@@ -75,6 +75,7 @@ $year="";$month=""; $is=0;
 for (@_){
 next if ! /$today/ && ! $is;
 $is++;
+$size*=0.8,$scale*=0.8,$w0*=0.8,$h0*=0.8 if $is==2;
 last if ($is>$max);
 chomp;
 ($sign,$date,$weather,$temp,$wind)=split "\t",$_;
@@ -200,17 +201,12 @@ $cr->paint;
 sub drawstamp()
 {
 my $cr = Cairo::Context->create ($surface);
-#$cr->select_font_face("WenQuanYi Zen Hei",'normal','bold');
 $cr->select_font_face("$font",'normal','bold');
 $cr->set_font_size($fsize*5);
 #my ($R,$G,$B,$A)=split ',',$color;
 #$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256/2);	#缺省白色字体
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
 $cr->set_source_rgba($C[0]-0.3,$C[1]-0.3,$C[2]-0.3,$C[3]/1.1);
-#$cr->set_operator("dest-out");
-#$cr->set_operator("xor");
-#$cr->set_operator("atop");
-#$cr->set_operator("dest-in");
 $cr->set_operator("dest-over");	#被背景覆盖
 #clear, source, over, in, out, atop, dest, dest-over, dest-in, dest-out, dest-atop, xor, add, saturate
 $cr->move_to($_[1],$_[2]);
@@ -253,7 +249,6 @@ $cr->show_text("$_[0]");
 
 sub drawframe(){
 my ($x,$r,$c)=@_;
-#my ($R,$G,$B,$A)=split ',',$c;
 my $w=$w0;
 my $h=3.5*$size;
 my $cr = Cairo::Context->create ($surface);
@@ -276,7 +271,7 @@ $cr->set_line_cap(butt);	# butt, round, square
 $cr->set_operator("clear");
 my $l=$size/10;
 $cr->set_line_width($l/2);
-for ($i=0; $i<$l*2; $i++){
+for $i (0..$l*2){
 	$cr->move_to($x,$size+$i*$l);
 	$cr->rel_curve_to($w/3,$l*2,$w*2/3,-$l*2,$w,0);
 	$cr->stroke;
