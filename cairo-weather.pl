@@ -135,7 +135,7 @@ $x0+=$w0;
 $color=$indexcolor{">"};
 drawstamp($week[$tweek],$size,$size*2.5,5);
 #$fsize/=3;
-drawstamp($city, $size*$max, $size*3.5,3,-0.2);
+drawstamp($city, $w0*($max-1.5), $size*3.5,3,-0.2);
 $surface->write_to_png ("$outputfile");
 #---------------------------------
 #if (! $bgfile){
