@@ -51,6 +51,7 @@ imap [ []<ESC>i
 autocmd BufNewFile *.bash	0put='#!/bin/bash'|setf bash
 autocmd BufNewFile *.perl	0put='#!/usr/bin/perl'|setf perl
 autocmd BufNewFile *.pl		0put='#!/usr/bin/perl'|setf perl
+au BufNewFile,BufRead *.c so ~/.vim/echofunc.vim
 "状态栏
 set laststatus=2
 set statusline=
