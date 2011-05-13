@@ -135,7 +135,7 @@ $x0+=$w0;
 $color=$indexcolor{">"};
 drawstamp($week[$tweek],$size,$size*2.5,5);
 #$fsize/=3;
-drawstamp($city, $w0*($max-1.5), $size*3.5,3,-0.2);
+drawstamp($city, $w0*($max-2), $size*3.5,2.8,-0.2);
 $surface->write_to_png ("$outputfile");
 #---------------------------------
 #if (! $bgfile){
@@ -211,16 +211,18 @@ $cr->set_font_size($fsize*$_[3]);
 #my ($R,$G,$B,$A)=split ',',$color;
 #$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256/2);	#缺省白色字体
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
-$cr->set_source_rgba($C[0]-0.3,$C[1]-0.3,$C[2]-0.3,$C[3]/1.1);
+my $ebb=1.5;
+$cr->set_source_rgba($C[0]/$ebb,$C[1]/$ebb,$C[2]/$ebb,$C[3]/$ebb);
+#$cr->set_source_rgba($C[0]-0.3,$C[1]-0.3,$C[2]-0.3,$C[3]/1.5);
 $cr->set_operator("dest-over");	#被背景覆盖
 #clear, source, over, in, out, atop, dest, dest-over, dest-in, dest-out, dest-atop, xor, add, saturate
 $cr->move_to($_[1],$_[2]);
 $cr->rotate($rotate);
 #$cr->show_text("$_[0]");
 $cr->text_path("$_[0]");
-	$cr->set_line_width(2);
+	$cr->set_line_width(3);
 	$cr->set_line_join(round);	#miter, round, bevel
-	$cr->set_dash((15,5,5,5),4,15);
+#        $cr->set_dash((15,5,5,5),4,15) if $_[3] gt 3;
 $cr->fill_preserve();
 $cr->stroke();
 
