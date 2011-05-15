@@ -4,7 +4,11 @@ use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
 #use Gtk2;
 
+$appdir="/usr/share/cairo-weather/";
+$rcdir="$ENV{HOME}/.config/cairo-weather/";
 $rc="$ENV{HOME}/.config/cairo-weather/config";
+$rcsys="/usr/share/cairo-weather/config";
+if (! -e $rc && -e $rcsys){`mkdir -p $rcdir; cp $rcsys $rc`;}
 open RC,"<$rc"; @rc=grep ! /^\s*#/ && ! /^\s*$/,<RC>; close RC;
 %hrc=map{split /\s*=/} @rc;
 chomp %hrc;
@@ -17,7 +21,7 @@ until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 # ------以下为可自定义的部分------
 #屏幕偏移坐标，可以负坐标对齐
 $pos=$hrc{pos}//"-80,80";
-$font=$hrc{font}//"Vera Sans YuanTi";
+$font=$hrc{font}//"Sans";
 # 壁纸文件。
 $gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
 chomp $gnomebg;
@@ -25,7 +29,7 @@ $bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
 # 城市天气信息地址
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
 $scale=$hrc{scale}//1;
-$icondir=-e $hrc{icondir}?$hrc{icondir}:"$ENV{HOME}/bin/resources/weather-icon-64";
+$icondir=-e $hrc{icondir}?$hrc{icondir}:"$appdir/weather-icon";
 $max=7;	#从今天算起，最多显示几天。
 %indexcolor=(			# RGBA
 	">"=>"#E55E23F0",	# 今天
@@ -45,6 +49,7 @@ $outputfile="/tmp/weather.png";
 my $city;
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 $tweek=$t[6];
+chdir $appdir;
 @alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。
@@ -97,8 +102,8 @@ $m.="月" if($m);
 $d.="日";
 #---------------------------------
 $color=$indexcolor{$sign};
-if($sign eq ">"){drawframe($x0-$size/6,20,$indexcolor{"0"});}
-if($sign eq "-"){drawframe($x0-$size/6,20,$indexcolor{"1"});}
+if($sign eq ">"){drawframe($x0-$size/6,$size/4,$indexcolor{"0"});}
+if($sign eq "-"){drawframe($x0-$size/6,$size/4,$indexcolor{"1"});}
 #---------------------------------
 $y1=$y0;
 $fsize=$size/5;
@@ -221,7 +226,6 @@ $cr->rotate($rotate);
 #$cr->show_text("$_[0]");
 $cr->text_path("$_[0]");
 	$cr->set_line_width(3);
-	$cr->set_line_join(round);	#miter, round, bevel
 #        $cr->set_dash((15,5,5,5),4,15) if $_[3] gt 3;
 $cr->fill_preserve();
 $cr->stroke();
@@ -272,14 +276,20 @@ $c=~s/#//; my @C=map {$_/256} map {hex} $c=~/.{2}/g;
 $cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
 $cr->fill;
 
-return if $sign eq "-";
+#return if $sign eq "-";
 $cr->set_line_cap(butt);	# butt, round, square
+$cr->set_line_join(round);	# miter, round, bevel
 $cr->set_operator("clear");
 my $l=$size/10;
 $cr->set_line_width($l/2);
-for $i (0..$l*2){
+for $i (0..$l*1.5){
 	$cr->move_to($x,$size+$i*$l);
+	if($sign eq ">"){
 	$cr->rel_curve_to($w/3,$l*2,$w*2/3,-$l*2,$w,0);
+	}else{
+#        $cr->rel_line_to($w,$h/20);
+	$cr->rel_line_to($w/2,$h/20); $cr->rel_line_to($w/2,-$h/20);
+	}
 	$cr->stroke;
 	}
 }
