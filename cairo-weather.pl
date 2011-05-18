@@ -55,7 +55,7 @@ $outputfile="/tmp/weather.png";
 my $city;
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 $tweek=$t[6];
-chdir $appdir;
+chdir "$appdir/calendar";
 @alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。
