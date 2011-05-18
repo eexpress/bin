@@ -3,7 +3,9 @@
 use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
 #use Gtk2;
+use Gnome2::GConf;
 
+my $gconf = Gnome2::GConf::Client -> get_default;
 $appdir="/usr/share/cairo-weather/";
 $rcdir="$ENV{HOME}/.config/cairo-weather/";
 $rc="$ENV{HOME}/.config/cairo-weather/config";
@@ -14,17 +16,21 @@ open RC,"<$rc"; @rc=grep ! /^\s*#/ && ! /^\s*$/,<RC>; close RC;
 chomp %hrc;
 foreach (keys %hrc){$hrc{$_}=~s/['"]//g;}
 while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}
-
-`gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
-
+#my $bg_file = $ENV{'HOME'}.'/.gnome2/backgrounds.xml';
+#while (my ($key, $value) = each(%{$xml -> {'wallpaper'}})){
+#    push @wallpapers, $key if $value -> {'deleted'} eq 'false';
+#}
+#`gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
+$gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
 until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 # ------以下为可自定义的部分------
 #屏幕偏移坐标，可以负坐标对齐
 $pos=$hrc{pos}//"-80,80";
 $font=$hrc{font}//"Sans";
 # 壁纸文件。
-$gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
-chomp $gnomebg;
+#$gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
+$gnomebg=$gconf->get("/desktop/gnome/background/picture_filename");
+#chomp $gnomebg;
 $bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
 # 城市天气信息地址
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
@@ -32,9 +38,9 @@ $scale=$hrc{scale}//1;
 $icondir=-e $hrc{icondir}?$hrc{icondir}:"$appdir/weather-icon";
 $max=7;	#从今天算起，最多显示几天。
 %indexcolor=(			# RGBA
-	">"=>"#E55E23F0",	# 今天
+	">"=>"#E55E23E0",	# 今天
 	"-"=>"#E55E2390",	# 周日
-	" "=>"#C8C8C8F0",	# 其他
+	" "=>"#C8C8C8E0",	# 其他
 	"0"=>"#14141490",	# 今天背景
 	"1"=>"#14141432",	# 周日背景
 );
@@ -54,7 +60,7 @@ chdir $appdir;
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。
 	$_=encode("utf8",$_);
-	/title="(.*?)天气预报"/; $city=$1; print "~~~\t$1\n";
+	/title="(.*?)天气预报"/; $city=$1;
 	s/.*?(?=\d{4}-\d)//s;s/\n.*//s;	#去掉头尾无用信息。
 	s/<br\/><br\/><b>/\n/g; s/<br\/>/\t/g; s/<\/b>//g; s/<b>//g;
 	s/℃/°C/g; s/～/-/g; s/\x0d/\n/g;
@@ -82,15 +88,11 @@ $year="";$month=""; $is=0;
 for (@_){
 next if ! /$today/ && ! $is;
 $is++;
-#$size*=0.8,$scale*=0.8,$w0*=0.8,$h0*=0.8 if $is==2;
 last if ($is>$max);
 chomp;
 ($sign,$date,$weather,$temp,$wind)=split "\t",$_;
 ($y,$m,$d)=split "-",$date;
 #---------------------------------
-#$_=sprintf("/usr/bin/calendar -A 0 -t %04d%02d%02d",$y,$m,$d);
-#@lunar=`$_`;
-#$_=$lunar[0]; $_=$lunar[1] if(/\d{4}/ && ! /$y/);
 @lunar=grep /$m月.*$d \t/,@alllunar;
 $_=$lunar[0];
 chomp;s/^.*\t//;s/\ (.*)//;$lunar[0]=$_;
@@ -139,8 +141,7 @@ $x0+=$w0;
 @week=('日','壹','貳','叁','肆','伍','陸');
 $color=$indexcolor{">"};
 drawstamp($week[$tweek],$size,$size*2.5,5);
-#$fsize/=3;
-drawstamp($city, $w0*($max-2), $size*3.5,2.8,-0.2);
+drawstamp($year." ".$city, $w0*$max/2, $size*3.5,1.8,-0.2);
 $surface->write_to_png ("$outputfile");
 #---------------------------------
 #if (! $bgfile){
@@ -176,7 +177,7 @@ $surface->write_to_png ("$outputfile");
 #---------------------------------
 $cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
 print "\e[1;37;41m$cmd\e[0m\n";
-`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"`;
+`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
 `$cmd`;
 #---------------------------------
 
@@ -213,26 +214,21 @@ my $rotate=$_[4]//-0.4;
 my $cr = Cairo::Context->create ($surface);
 $cr->select_font_face("$font",'normal','bold');
 $cr->set_font_size($fsize*$_[3]);
-#my ($R,$G,$B,$A)=split ',',$color;
-#$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256/2);	#缺省白色字体
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
 my $ebb=1.5;
 $cr->set_source_rgba($C[0]/$ebb,$C[1]/$ebb,$C[2]/$ebb,$C[3]/$ebb);
-#$cr->set_source_rgba($C[0]-0.3,$C[1]-0.3,$C[2]-0.3,$C[3]/1.5);
 $cr->set_operator("dest-over");	#被背景覆盖
 #clear, source, over, in, out, atop, dest, dest-over, dest-in, dest-out, dest-atop, xor, add, saturate
 $cr->move_to($_[1],$_[2]);
 $cr->rotate($rotate);
-#$cr->show_text("$_[0]");
 $cr->text_path("$_[0]");
-	$cr->set_line_width(3);
-#        $cr->set_dash((15,5,5,5),4,15) if $_[3] gt 3;
+$cr->set_line_width(3);
 $cr->fill_preserve();
 $cr->stroke();
 
 for $i (1..$_[3]){
 $i++;
-$cr->set_source_rgba($C[0]-$i/10-0.5,$C[1]-$i/10-0.5,$C[2]-$i/10-0.5,$C[3]/1.1);
+$cr->set_source_rgba($C[0]-$i/3,$C[1]-$i/3,$C[2]-$i/3,$C[3]/1.2);
 $cr->rotate(-$rotate);
 $cr->move_to($_[1]-$i,$_[2]+$i);
 $cr->rotate($rotate);
@@ -249,8 +245,6 @@ $cr->set_font_size($fsize);
 $cr->set_source_rgba(0,0,0,1);	#缺省黑色阴影
 $cr->move_to($_[1]+1,$_[2]+1);
 $cr->show_text("$_[0]");
-#my ($R,$G,$B,$A)=split ',',$color;
-#$cr->set_source_rgba($R/256,$G/256,$B/256,$A/256);	#缺省白色字体
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
 $cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
 $cr->move_to($_[1],$_[2]);
@@ -287,8 +281,7 @@ for $i (0..$l*1.5){
 	if($sign eq ">"){
 	$cr->rel_curve_to($w/3,$l*2,$w*2/3,-$l*2,$w,0);
 	}else{
-#        $cr->rel_line_to($w,$h/20);
-	$cr->rel_line_to($w/2,$h/20); $cr->rel_line_to($w/2,-$h/20);
+	for $d (1,-1,1,-1){$cr->rel_line_to($w/4,$d*$h/20);}
 	}
 	$cr->stroke;
 	}

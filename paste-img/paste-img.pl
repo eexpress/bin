@@ -12,14 +12,14 @@ use Encode;
 $user=`id -un`; chomp $user;
 #----------------------------------
 chdir dirname (-l $0?readlink $0:$0);
-$app="paste_img"; $cli="pasteimg.pl";
-my $gui = Gtk2::GladeXML->new("$app.glade");
+$app="paste-img"; $cli="pasteimg.pl";
+my $gui = Gtk2::GladeXML->new("/usr/share/paste-img/$app.glade");
 $gui->signal_autoconnect_from_package('main');
 #----------------------------------
 $box2 = $gui->get_widget('vbox2');
 $button = Gtk2::RadioButton->new(undef, "null");
 @group = $button->get_group;
-@web=`./$cli -l`;
+@web=`$cli -l`;
 foreach (@web){
 chomp;
 s/\s.*$//,$select=$_ if /\*/;
@@ -36,7 +36,8 @@ $ff->add_mime_type("image/png");
 $ff->add_mime_type("image/jpeg");
 #$ff->add_pattern("*.png");
 $gui->get_widget('filechooserbutton2')->add_filter($ff);
-$gui->get_widget('filechooserbutton2')->set_filename("$app.png");
+my $infile=-f $ARGV[0]?$ARGV[0]:"/usr/share/pixmaps/$app.png";
+$gui->get_widget('filechooserbutton2')->set_filename($infile);
 #----------------------------------
 $gui->get_widget('preview')->drag_dest_set('all', ["link","ask"], {target=>'STRING', flags=>['other-app','other-widget'], info=>0});
 Gtk2->main;
@@ -68,8 +69,8 @@ $gui->get_widget('preview')->set_from_file($gui->get_widget('filechooserbutton2'
 #----------------------------------
 sub on_bpaste_clicked{
 my $pic=$gui->get_widget('filechooserbutton2')->get_filename();
-print "./$cli -s $select -n $user $pic\n";
-my @re=`./$cli -s $select -n $user $pic`;
+print "$cli -s $select -n $user $pic\n";
+my @re=`$cli -s $select -n $user $pic`;
 @re=grep /Paste URL/,@re;
 $re[0]=~m|http://.*(?=\e)|;
 #@tmp=`echo -n "$&"|hexdump -C`; print @tmp;
