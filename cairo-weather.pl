@@ -33,6 +33,7 @@ $gnomebg=$gconf->get("/desktop/gnome/background/picture_filename");
 #chomp $gnomebg;
 $bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
 # 城市天气信息地址
+$app_setbg=$hrc{app_setbg}//"habak";
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
 $scale=$hrc{scale}//1;
 $icondir=-e $hrc{icondir}?$hrc{icondir}:"$appdir/weather-icon";
@@ -143,20 +144,6 @@ $color=$indexcolor{">"};
 drawstamp($week[$tweek],$size,$size*2.5,5);
 drawstamp($year." ".$city, $w0*$max/2, $size*3.5,1.8,-0.2);
 $surface->write_to_png ("$outputfile");
-#---------------------------------
-#if (! $bgfile){
-#● gconftool-2 -g /desktop/gnome/background/picture_filename
-#        open GCONF,"<$ENV{HOME}/.gconf/desktop/gnome/background/%gconf.xml";
-#        while(<GCONF>){
-#                next if ! /picture_filename/;
-#                $_=<GCONF>;
-#                s/^.*?>//g;s/<.*$//g;chomp;
-#                last;
-#        }
-#        close GCONF;
-#        $bgfile=$_;
-#        print "BG\t=>\t$_\n";
-#}
 #---------------------------------
 #$deskpic="/tmp/weather-all.png";
 #$surface = Cairo::ImageSurface->create_from_png ("/home/eexp/图片/木纹.png");
