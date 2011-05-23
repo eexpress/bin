@@ -6,7 +6,7 @@ use File::Basename qw/basename dirname/;
 chdir dirname $ARGV[0];
 
 $_=`exif -m -t 0x9003 \'$ARGV[0]\'`; chomp;
-if($? || /0000/){
+if($? || ! /^20/){
 use POSIX qw(strftime);
 $f=strftime "noexif_%Y-%m-%d_%H:%M:%S", localtime;
 }
