@@ -34,6 +34,7 @@
 GtkWidget* pWindow = NULL;
 gint g_iCurrentWidth = WIN_WIDTH;
 gint g_iCurrentHeight = WIN_HEIGHT;
+char buf[255];
 
 void update_input_shape (GtkWidget* pWindow, int iWidth, int iHeight);
 void on_alpha_screen_changed (GtkWidget* pWidget, GdkScreen* pOldScreen, GtkWidget* pLabel);
@@ -75,7 +76,7 @@ void render (cairo_t* pCairoContext, gint iWidth, gint iHeight)
 /*        cairo_stroke (pCairoContext);*/
 
 	cairo_surface_t *image;
-	image = cairo_image_surface_create_from_png ("/tmp/weather.png");
+	image = cairo_image_surface_create_from_png (buf);
 	gtk_widget_set_size_request (pWindow, cairo_image_surface_get_width (image), cairo_image_surface_get_height (image));
 	cairo_set_source_surface (pCairoContext, image, 0, 0);
 	cairo_paint (pCairoContext);
@@ -211,6 +212,14 @@ int main (int argc, char** argv)
 
 	gtk_init (&argc, &argv);
 
+	if(g_file_test(argv[1],G_FILE_TEST_IS_REGULAR))
+		g_strlcpy(buf,argv[1],255);
+	else {
+		g_strlcpy(buf,"/tmp/weather.png",255);
+		if(!g_file_test(buf,G_FILE_TEST_IS_REGULAR))
+			{g_printf("not a file: %s.\n", buf); return 1;}
+	}
+	
 	pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	on_alpha_screen_changed (pWindow, NULL, NULL);
 	gtk_widget_set_app_paintable (pWindow, TRUE);

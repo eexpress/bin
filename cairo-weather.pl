@@ -33,7 +33,7 @@ $gnomebg=$gconf->get("/desktop/gnome/background/picture_filename");
 #chomp $gnomebg;
 $bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
 # 城市天气信息地址
-$app_setbg=$hrc{app_setbg}//"habak";
+#$app_setbg=$hrc{app_setbg}//"show_png.run";
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
 $scale=$hrc{scale}//1;
 $icondir=-e $hrc{icondir}?$hrc{icondir}:"$appdir/weather-icon";
@@ -162,7 +162,10 @@ $surface->write_to_png ("$outputfile");
 #$_=`xwininfo -root`;
 #/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
 #---------------------------------
+# 如果安装有habak，则设置成壁纸。否则使用内建的show_png.run 显示。
+if (-e '/usr/bin/habak'){
 $cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
+} else {$cmd="$appdir/show_png.run";}
 print "\e[1;37;41m$cmd\e[0m\n";
 `notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
 `$cmd`;

@@ -10,7 +10,7 @@ my $file=join ",",@ARGV;
 #● echo youremailpassword|gpg -aer eexp01>~/bin/resources/gpg-163-password
 my $pw=`gpg -d $ENV{HOME}/bin/resources/gpg-163-password`;
 chomp $pw;
-my $contact="$ENV{HOME}/文档/个人文件/通讯录/contacts.vcf";
+my $contact="$ENV{HOME}/文档/个人/contacts.vcf";
 #my $contact="$ENV{HOME}/.opera/contacts.adr";
 open(IN,"<$contact") or die "指定通讯录文件无效。\n";
 my $con=""; 
