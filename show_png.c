@@ -35,6 +35,7 @@ GtkWidget* pWindow = NULL;
 gint g_iCurrentWidth = WIN_WIDTH;
 gint g_iCurrentHeight = WIN_HEIGHT;
 char buf[255];
+gint rootx=0,rooty=0;
 
 void update_input_shape (GtkWidget* pWindow, int iWidth, int iHeight);
 void on_alpha_screen_changed (GtkWidget* pWidget, GdkScreen* pOldScreen, GtkWidget* pLabel);
@@ -80,6 +81,14 @@ void render (cairo_t* pCairoContext, gint iWidth, gint iHeight)
 	gtk_widget_set_size_request (pWindow, cairo_image_surface_get_width (image), cairo_image_surface_get_height (image));
 	cairo_set_source_surface (pCairoContext, image, 0, 0);
 	cairo_paint (pCairoContext);
+
+	if(rootx!=0){
+	GdkScreen* pScreen = gtk_widget_get_screen (pWindow);
+	if(rootx<0) rootx= gdk_screen_get_width(pScreen)-cairo_image_surface_get_width (image)+rootx;
+	if(rooty<0) rooty= gdk_screen_get_height(pScreen)-cairo_image_surface_get_height (image)+rooty;
+	gtk_window_move(GTK_WINDOW (pWindow), rootx, rooty);
+	g_printf("%d %d\n",rootx, rooty);
+	}
 }
 
 gboolean on_expose (GtkWidget* pWidget, GdkEventExpose* pExpose)
@@ -229,6 +238,8 @@ int main (int argc, char** argv)
 	gtk_widget_set_size_request (pWindow, g_iCurrentWidth, g_iCurrentHeight);
 	gtk_widget_add_events (pWindow, GDK_BUTTON_PRESS_MASK);
 	gtk_widget_show (pWindow);
+	if(argv[2]!=NULL && argv[3]!=NULL)
+	{rootx=atoi(argv[2]); rooty=atoi(argv[3]);}
 
 	g_signal_connect (G_OBJECT (pWindow),
 					  "destroy",
