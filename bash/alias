@@ -32,6 +32,7 @@ alias proxy.gap='dtach -n /tmp/dtach-gappproxy python ~/bin/gappproxy/localproxy
 alias proxy.cdn='dtach -n /tmp/dtach-cdnproxy ~/bin/cdnproxy'
 alias dtach.slimrat='dtach -n /tmp/dtach-slimrat ~/bin/slimrat -l ~/.slimrat/queue'
 
+alias myip='curl ifconfig.me/ip'
 alias grep='grep --color=auto'
 alias gv='/usr/bin/gvim --remote-silent-tab'
 alias hexdump='hexdump -C'
