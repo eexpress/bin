@@ -89,3 +89,5 @@ gnome-osd-client -f "<message id='oss' osd_vposition='center' osd_halignment='ce
 netname(){
 routel|sed -n "2p"|awk '{print $6}'
 }
+alias mp3info='mutagen-inspect'
+alias mp3enca='mid3iconv --remove-v1 -d -e GBK'
