@@ -169,6 +169,7 @@ $cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
 print "\e[1;37;41m$cmd\e[0m\n";
 `notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
 `$cmd`;
+if($cmd=~/habak/){`$appdir/show_png.run`;}
 #---------------------------------
 
 sub drawpng(){
