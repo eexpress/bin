@@ -1,0 +1,17 @@
+[alias]
+        ci = commit
+	st = !sh -c 'git status|grep -B 100 -E \"Untracked\"'
+	#st = !sh -c 'git status|grep -B 100 -E \"^no|Untracked\"'
+	co = checkout
+	df = diff
+	df1 = diff HEAD^
+	df2 = diff HEAD^^
+	ls = !sh -c 'git ls-files|ascii2uni -a K'
+	lc = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'
+	lg = !sh -c 'git log -10 --pretty=format:\"%Cgreen%h%Creset - %ar : %Cred%s\"|sed \"s/\\ days\\ ago/天前/g\"|sed \"s/\\ weeks\\ ago/周前/g\"'
+
+[color]
+	diff = always
+[user]
+	name = eexpress
+	email = eexpress@163.com
