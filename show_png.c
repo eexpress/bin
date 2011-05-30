@@ -64,6 +64,7 @@ void on_alpha_screen_changed (GtkWidget* pWidget,
 
 void render (cairo_t* pCairoContext, gint iWidth, gint iHeight)
 {
+gint w,h;
 /*        cairo_scale (pCairoContext, (double) iWidth, (double) iHeight);*/
 	cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 0.0f);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
@@ -75,13 +76,16 @@ void render (cairo_t* pCairoContext, gint iWidth, gint iHeight)
 /*        cairo_move_to (pCairoContext, 0.85f, 0.15f);*/
 /*        cairo_line_to (pCairoContext, 0.15f, 0.85f);*/
 /*        cairo_stroke (pCairoContext);*/
-
 	cairo_surface_t *image;
 	image = cairo_image_surface_create_from_png (buf);
-	gtk_widget_set_size_request (pWindow, cairo_image_surface_get_width (image), cairo_image_surface_get_height (image));
+	w=cairo_image_surface_get_width (image);
+	h=cairo_image_surface_get_height (image);
+	gtk_widget_set_size_request (pWindow, w, h);
+/*        gtk_widget_set_size_request (pWindow, cairo_image_surface_get_width (image), cairo_image_surface_get_height (image));*/
 	cairo_set_source_surface (pCairoContext, image, 0, 0);
 	cairo_paint (pCairoContext);
 
+	gtk_window_resize((GtkWindow *)pWindow,w,h);
 	if(rootx!=0){
 	GdkScreen* pScreen = gtk_widget_get_screen (pWindow);
 	if(rootx<0) rootx= gdk_screen_get_width(pScreen)-cairo_image_surface_get_width (image)+rootx;
@@ -238,6 +242,9 @@ int main (int argc, char** argv)
 	gtk_widget_set_size_request (pWindow, g_iCurrentWidth, g_iCurrentHeight);
 	gtk_widget_add_events (pWindow, GDK_BUTTON_PRESS_MASK);
 	gtk_widget_show (pWindow);
+	gtk_window_set_keep_above(GTK_WINDOW(pWindow),TRUE);
+/*        gtk_window_set_type_hint(GTK_WINDOW(pWindow),GDK_WINDOW_TYPE_HINT_DOCK);*/
+/*        gtk_window_set_type_hint((GtkWindow *)pWindow,GDK_WINDOW_TYPE_HINT_DOCK);*/
 	if(argv[2]!=NULL && argv[3]!=NULL)
 	{rootx=atoi(argv[2]); rooty=atoi(argv[3]);}
 
