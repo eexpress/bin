@@ -5,8 +5,15 @@ use Cairo;
 #use Gtk2;
 use Gnome2::GConf;
 
-my $gconf = Gnome2::GConf::Client -> get_default;
 $appdir="/usr/share/cairo-weather/";
+$outputfile="/tmp/weather.png";
+if ((localtime((stat($outputfile))[9]))[7] eq (localtime)[7]){
+#文件是今天的
+`$appdir/show_png.run`;
+exit;
+}
+
+my $gconf = Gnome2::GConf::Client -> get_default;
 $rcdir="$ENV{HOME}/.config/cairo-weather/";
 $rc="$ENV{HOME}/.config/cairo-weather/config";
 $rcsys="/usr/share/cairo-weather/config";
@@ -52,7 +59,6 @@ $indexcolor{"0"}=$hrc{"btoday"} if $hrc{"btoday"};
 $indexcolor{"1"}=$hrc{"bweek"} if $hrc{"bweek"};
 
 # ------以上为可自定义的部分------
-$outputfile="/tmp/weather.png";
 my $city;
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 $tweek=$t[6];
@@ -169,7 +175,7 @@ $cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
 print "\e[1;37;41m$cmd\e[0m\n";
 `notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
 `$cmd`;
-if($cmd=~/habak/){`$appdir/show_png.run`;}
+#if($cmd=~/habak/){`$appdir/show_png.run`;}
 #---------------------------------
 
 sub drawpng(){
