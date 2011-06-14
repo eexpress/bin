@@ -57,6 +57,8 @@ $bus->Notify("paste-img", 0, "error", "文件无效 .$ARGV[0].", ':(', [], { }, 
 #        <input size="20" id="link_1_1"  value="http://img0.52tietu.com/?MF8wXzBfMjAxMDEwMDUyMjU0NTkzMw.png" ondblclick="copyText('link_1_1')"> <a href="javascript:void(0);" onclick="javascript:copyText('link_1_1');">点击复制</a>
 	);
 #----------------------------------
+#print Data::Dumper->Dump([[%web]]);exit;
+#----------------------------------
 if($list){
 foreach (keys %web){s'http://'';s'/.*'';$_.="\t\e[30;42m*\e[0m" if /$select/;
 print "$_\n";}
