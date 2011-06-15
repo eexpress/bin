@@ -4,8 +4,12 @@ use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
 #use Gtk2;
 use Gnome2::GConf;
+use File::Basename qw/basename dirname/;
 
 $appdir="/usr/share/cairo-weather/";
+if(! -e $appdir){
+$appdir=dirname (-l $0?readlink $0:$0);
+}
 $outputfile="/tmp/weather.png";
 if ((localtime((stat($outputfile))[9]))[7] eq (localtime)[7]){
 #文件是今天的
@@ -33,7 +37,7 @@ until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 # ------以下为可自定义的部分------
 #屏幕偏移坐标，可以负坐标对齐
 $pos=$hrc{pos}//"-80,80";
-$font=$hrc{font}//"Sans";
+$font=$hrc{font}//"Vera Sans YuanTi";
 # 壁纸文件。
 #$gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
 $gnomebg=$gconf->get("/desktop/gnome/background/picture_filename");
@@ -42,7 +46,7 @@ $bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
 # 城市天气信息地址
 #$app_setbg=$hrc{app_setbg}//"show_png.run";
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
-$scale=$hrc{scale}//1;
+$scale=$hrc{scale}//0.6;
 $icondir=-e $hrc{icondir}?$hrc{icondir}:"$appdir/weather-icon";
 $max=7;	#从今天算起，最多显示几天。
 %indexcolor=(			# RGBA
