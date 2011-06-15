@@ -4,6 +4,7 @@ use utf8;
 use strict;
 use WWW::Mechanize;
 use Net::DBus;
+binmode STDOUT, ':utf8';
 
 my $dir="$ENV{HOME}/视频/";
 -d $dir && chdir $dir;
