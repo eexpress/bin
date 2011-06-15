@@ -162,7 +162,7 @@ color5 CA4AB3
 color6 5DBCBE
 color7 FFFFFF
 # stuff after 'TEXT' will be formatted on screen
-#lua_load '/home/exp/A_New_Start___June_2010_by_alecive.zip.FILES/A New Start/Conky/rings.lua'
+#lua_load '/home/eexp/A_New_Start___June_2010_by_alecive.zip.FILES/A New Start/Conky/rings.lua'
 #lua_draw_hook_pre ring_stats
 template0 \1 ${alignr}${fs_free \2}/${fs_size \2} ${fs_free_perc \2}%
 template1 ${if_running \1}${color3}\1${alignr}${color1}\n${exec \2 \3}${color}${endif}
@@ -195,7 +195,7 @@ $hr
 ${color3}分区${alignr}剩余${color}
 ${template0 系统 /}
 #系统 ${alignr}${fs_free /}/${fs_size /} ${fs_free_perc /}%
-${template0 个人 /home/exp}
+${template0 个人 /home/eexp}
 ${template0 媒体 /home/media}
 #$hr
 #${color3}天气${color}
