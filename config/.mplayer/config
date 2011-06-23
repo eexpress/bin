@@ -1,0 +1,5 @@
+[default]
+# Write your default config options here!
+subcp=utf8
+vf=screenshot
+# 此vf设置，有可以支持s热键实时截图
