@@ -1,5 +1,7 @@
-[default]
+#[default]
 # Write your default config options here!
-subcp=utf8
-vf=screenshot
+#subcp=utf8
+subcp=enca:zh:utf-8
 # 此vf设置，有可以支持s热键实时截图
+vf=screenshot
+font="Vera Sans YuanTi Mono"
