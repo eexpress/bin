@@ -44,6 +44,7 @@ $bus->Notify("paste-img", 0, "error", "文件无效 .$ARGV[0].", ':(', [], { }, 
 }
 #----------------------------------
 %web=(
+	"http://imm.io/"=>{"image"=>$ARGV[0]},
 	"http://www.cjb.net/"=>{"image"=>$ARGV[0]},
 	"http://kimag.es/"=>{"userfile1"=>$ARGV[0]},
 	"http://imagebin.org/index.php?page=add"=>{"nickname"=>$name,"image"=>$ARGV[0],"disclaimer_agree"=>"Y"},
