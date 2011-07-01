@@ -8,12 +8,17 @@ use Gtk2 -init;
 use Gtk2::GladeXML;
 use File::Basename qw/basename dirname/;
 use Encode;
+use Cwd qw(abs_path getcwd);
 #$user="eexp";
 $user=`id -un`; chomp $user;
-#----------------------------------
-chdir dirname (-l $0?readlink $0:$0);
 $app="paste-img"; $cli="pasteimg.pl";
-my $gui = Gtk2::GladeXML->new("/usr/share/paste-img/$app.glade");
+my $infile=abs_path($ARGV[0]);
+if(! -f $infile){$infile="$app.png"};
+#-f $infile || $infile="$app.png";
+#----------------------------------
+chdir dirname $0;
+chdir dirname (-l $0?readlink $0:$0);
+my $gui = Gtk2::GladeXML->new("$app.glade");
 $gui->signal_autoconnect_from_package('main');
 #----------------------------------
 $box2 = $gui->get_widget('vbox2');
@@ -36,7 +41,6 @@ $ff->add_mime_type("image/png");
 $ff->add_mime_type("image/jpeg");
 #$ff->add_pattern("*.png");
 $gui->get_widget('filechooserbutton2')->add_filter($ff);
-my $infile=-f $ARGV[0]?$ARGV[0]:"/usr/share/pixmaps/$app.png";
 $gui->get_widget('filechooserbutton2')->set_filename($infile);
 #----------------------------------
 $gui->get_widget('preview')->drag_dest_set('all', ["link","ask"], {target=>'STRING', flags=>['other-app','other-widget'], info=>0});
