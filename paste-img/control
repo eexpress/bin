@@ -1,0 +1,8 @@
+Package: paste-img
+Version: 0.53
+Description: paste image file to serveral web hosts.  
+Section: graphic
+Priority: 
+Maintainer: eexpress@163.com
+Architecture: all
+Depends: perl, libnet-dbus-perl, libwww-mechanize-perl, xsel
