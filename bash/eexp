@@ -13,7 +13,7 @@ export LESS_TERMCAP_us=$'\033[01;32m'
 
 #-------ENVIROMENT SET-----------------------------
 export PATH=$HOME/bin:$PATH
-export CDPATH=:~:/home/media
+export CDPATH=:~:~/bin
 
 export TERM=xterm-color
 export EDITOR=vim
