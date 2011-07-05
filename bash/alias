@@ -31,7 +31,6 @@ alias g='grep --color -in'
 alias proxy.gap='dtach -n /tmp/dtach-gappproxy python ~/bin/gappproxy/localproxy/proxy.py'
 alias proxy.cdn='dtach -n /tmp/dtach-cdnproxy ~/bin/cdnproxy'
 alias dtach.slimrat='dtach -n /tmp/dtach-slimrat ~/bin/slimrat -l ~/.slimrat/queue'
-alias ssh.socks='ssh -v -CNgD 7070 guest@173.212.222.198'
 
 alias myip='curl http://members.3322.org/dyndns/getip'
 alias myip1='curl ifconfig.me/ip'
