@@ -1,0 +1,31 @@
+#You may copy this file to ~/.config/cairo-weather/config
+
+# 壁纸文件。缺省使用gnome的系统壁纸
+#bgfile='/home/eexp/图片/壁纸●/t.png'
+
+# 屏幕显示位置。habak支持的格式。缺省-80,80
+pos=-80,80
+
+# 天气图标路径。47个天气图标。
+icondir=
+
+# 缺省圆体。“fc-list :lang=zh-cn|sed s/:.*//” 的中文字体结果。
+#font=汉仪萝卜体简
+#font=Vera Sans YuanTi
+
+scale=1.2
+# 只支持此网站的天气格式。缺省长沙。
+#url="http://qq.ip138.com/weather/hunan/ChangSha.wml"
+
+#颜色
+#        ">"=>"#E55E23F0",	# 今天
+#        "-"=>"#E55E2390",	# 周日
+#        " "=>"#C8C8C8F0",	# 其他
+#        "0"=>"#14141490",	# 今天背景
+#        "1"=>"#14141432",	# 周日背景
+#ctoday=#E55E2390
+#cweek=#52B66EF0
+#cother=
+#btoday=#DE782E50
+#bweek=#FFFF0040
+
