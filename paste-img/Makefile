@@ -10,14 +10,14 @@ link: clean
 		mv paste-img.pl paste-img
 
 clean:
-	rm -rf bin
+	rm -rf deb
 
 install: link
 	-mkdir -p ${DESTDIR}/${PREFIX}
 	cp -r share ${DESTDIR}/${PREFIX}
 	cp -r bin ${DESTDIR}/${PREFIX}
 
-deb:	
+deb:	clean
 	-mkdir -p deb/DEBIAN
 	cp -u control deb/DEBIAN
 	-mkdir -p deb/usr/bin
@@ -25,8 +25,10 @@ deb:
 	-mkdir -p deb/usr/share/paste-img
 	-mkdir -p deb/usr/share/pixmaps
 	cp -u *.desktop deb/usr/share/applications
-	cp -u *.pl *.glade deb/usr/share/paste-img
-	cp -u *.png deb/usr/share/pixmaps
+	cp -u *.pl *.glade *.png deb/usr/share/paste-img
+	cd deb/usr/share/pixmaps; \
+	ln -sf ../share/paste-img/*.png . ;\
+	cd ../../../..
 	cd deb/usr/bin; \
 	ln -sf ../share/paste-img/*.pl . ;\
 	cd ../../..
