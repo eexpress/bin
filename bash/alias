@@ -55,7 +55,7 @@ m-array-pic(){
 montage $* null: -thumbnail 260x220 -bordercolor Lavender -background black +polaroid -background LightGray -geometry -26-20 -tile x4 ~/montage-array.jpg
 }
 
-alias mencoder='/usr/bin/mencoder -profile mpeg4'
+# alias mencoder='/usr/bin/mencoder -profile mpeg4'
 alias mencoder-c430='/usr/bin/mencoder -profile c430'
 
 alias ml.kill='echo kill | nc -q 1 localhost 4000|sed 1,6d|sed /command-line/,+2d'
