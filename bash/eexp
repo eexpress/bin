@@ -39,6 +39,7 @@ md () { mkdir -p "$1" && cd "$1"; }
 
 #-------PINYIN COMPLETION--------------------------
 #. $HOME/bin/chs_completion
+. /usr/share/autojump/autojump.sh
 
 #--------TAB COMPLETION ADD------------------------
 _show_installed()
