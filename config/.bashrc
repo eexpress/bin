@@ -109,4 +109,5 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 . $HOME/bin/chs/chs_completion
+. /usr/share/autojump/autojump.sh
 
