@@ -1,6 +1,10 @@
 #!/usr/bin/perl
-use Getopt::Long;
 
+# 使用脚本目录的图标
+use Cwd qw(abs_path);
+$0=~s/\/.*?$//; $icon=abs_path $0."/stardict.png";
+
+use Getopt::Long;
 # 参数：单行输出选择。屏幕提示输出选择。
 GetOptions('1' => \$oneline, 'n'=>\$notify);
 
@@ -16,7 +20,7 @@ $out.=" ► $_";
 }
 }
 close(SDCV);
-if($notify){`notify-send -u critical -i "$ENV{HOME}/图片/图标●/128软件png/pidgin.png" 'sdcv翻译：$in' "$out"`;} else{print $out;}
+if($notify){`notify-send -u critical -i $icon 'sdcv翻译：$in' "$out"`;} else{print $out;}
 
 #while($l=<SDCV>){
 #if($l!~/^$/){$r=$l;chomp($r);$r=~s/-->//;}
