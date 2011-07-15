@@ -36,11 +36,21 @@ INFO
 exit;
 }
 #----------------------------------
+if(! $list){
+if(! $ARGV[0]){
+my $fp='/tmp/pi.png';
+	print "after cursor changed, use mouse to take screenshot...\n";
+	unlink $fp;
+	if(-f '/usr/bin/scrot'){`/usr/bin/scrot -sb $fp`;}
+	elsif(-f '/usr/bin/import'){`/usr/bin/import -frame $fp`;}
+	$ARGV[0]=$fp; 
+}
 use Net::DBus; 
 $bus = Net::DBus->session->get_service('org.freedesktop.Notifications')
 ->get_object('/org/freedesktop/Notifications','org.freedesktop.Notifications');
-if(! -f $ARGV[0] && ! $list){
+if(! -f $ARGV[0]){
 $bus->Notify("paste-img", 0, "error", "文件无效 .$ARGV[0].", ':(', [], { }, -1);exit;
+}
 }
 #----------------------------------
 %web=(
