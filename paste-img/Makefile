@@ -27,7 +27,7 @@ deb:	clean
 	cp -u *.desktop deb/usr/share/applications
 	cp -u *.pl *.glade *.png deb/usr/share/paste-img
 	cd deb/usr/share/pixmaps; \
-	ln -sf ../share/paste-img/*.png . ;\
+	ln -sf ../paste-img/*.png . ;\
 	cd ../../../..
 	cd deb/usr/bin; \
 	ln -sf ../share/paste-img/*.pl . ;\
