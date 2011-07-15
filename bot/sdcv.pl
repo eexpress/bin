@@ -10,13 +10,13 @@ $in=$ARGV[0]; if(!$in){$in=`xsel -o`;} if(!$in){exit;}
 open(SDCV,"sdcv -n $in|");
 #my $r;
 while(<SDCV>){
-if (! ((1 .. /^$/) || (/相关/ .. eof))){
+if (! ((1 .. /^$/) || (/相关/||/^$/ .. eof))){
 chomp if($oneline);
 $out.=" ► $_";
 }
 }
 close(SDCV);
-if($notify){`notify-send -u critical -i '/home/exp/媒体/图标●/128软件png/pidgin.png' 'sdcv翻译：$in' "$out"`;} else{print $out;}
+if($notify){`notify-send -u critical -i "$ENV{HOME}/图片/图标●/128软件png/pidgin.png" 'sdcv翻译：$in' "$out"`;} else{print $out;}
 
 #while($l=<SDCV>){
 #if($l!~/^$/){$r=$l;chomp($r);$r=~s/-->//;}

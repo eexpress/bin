@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$icon="/home/exp/媒体/图标●/国旗/cn-en-128.png";
+$icon="$ENV{HOME}/图片/图标●/国旗/cn-en-128.png";
 #$icon="/home/exp/.icons/Mashup/apps/config-language.png";
 use Getopt::Long;
 GetOptions('n'=>\$notify);
