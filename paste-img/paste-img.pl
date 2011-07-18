@@ -74,7 +74,7 @@ $gui->get_widget('preview')->set_from_file($gui->get_widget('filechooserbutton2'
 sub on_bpaste_clicked{
 my $pic=$gui->get_widget('filechooserbutton2')->get_filename();
 print "$cli -s $select -n $user $pic\n";
-my @re=`$cli -s $select -n $user $pic`;
+my @re=`$cli -s $select -n $user \'$pic\'`;
 @re=grep /Paste URL/,@re;
 $re[0]=~m|http://.*(?=\e)|;
 #@tmp=`echo -n "$&"|hexdump -C`; print @tmp;
