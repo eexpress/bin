@@ -22,7 +22,7 @@ OPTION
 		Select web host name. Can use short name as key word, such as "kimag" could refer to "kimag.es". All avoid host names can be list by using "-l".
 
 	-l, --list
-		List all hosts name avoid.
+		List all hosts name available.
 
 	-h, --help
 		This help.
