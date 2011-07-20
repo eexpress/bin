@@ -9,30 +9,30 @@ $select="imagebin";	# 缺省的网站
 GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$name);
 #----------------------------------
 if($help){
-print << 'INFO';
-NAME
-       paste-img - Paste image to serval web hosts
-
-SYNOPSIS
+$nc="\e[0m"; $rb="\e[1;31m"; $gb="\e[1;32m";
+print qq{$rb
+NAME$nc
+       $rb paste-img$nc - Paste image to serval web hosts, URL return in clipboard(PRIMARY).
+$rb
+SYNOPSIS$nc
        paste-img [OPTION]... [IMAGE_FILE]...
+$rb
+OPTION$nc
+	$gb -s, --select$nc
+		Select web host name. Can use short name as key word, such as "kimag" could refer to "kimag.es". All available host names can be list by using "-l".
 
-OPTION
-
-	-s, --select
-		Select web host name. Can use short name as key word, such as "kimag" could refer to "kimag.es". All avoid host names can be list by using "-l".
-
-	-l, --list
+	$gb -l, --list$nc
 		List all hosts name available.
 
-	-h, --help
+	$gb -h, --help$nc
 		This help.
 
-	-n, --name
+	$gb -n, --name$nc
 		Nick name send to web host if support. default name is your login id name.
-		
-AUTHOR
-	Written by eexpress (eexpress@163.com).
-INFO
+$rb
+AUTHOR$nc
+	Written by eexpress (eexpress\@163.com).
+};
 exit;
 }
 #----------------------------------
