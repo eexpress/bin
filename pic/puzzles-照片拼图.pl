@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#输入带路径的*.jpg，自动输出当前目录的p-带日期的拼图文件。
+#输入带路径的*.jpg，自动输出家目录的p-带日期的拼图文件。
 #在rox里面选择图片，在xterm粘贴。按照次序调整粘贴，可改变结果的排列。
 use File::Basename qw/basename dirname/;
 chdir dirname $ARGV[0];
