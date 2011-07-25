@@ -1,10 +1,10 @@
 Package: cairo-weather
-Version: 0.68
+Version: 0.69
 Architecture: all
 Maintainer: eexpress
 Installed-Size: 12k
-Depends: perl, libcairo-perl, gconf2, habak, bsdmainutils, dnsutils
-Suggests: libnotify-bin
+Depends: perl, libcairo-perl, gconf2, bsdmainutils, dnsutils, libgnome2-gconf-perl
+Suggests: libnotify-bin, habak
 Section: utils
 Description: draw weather on desktop using cairo
  Draw weather on desktop. mainly support Chinese city.

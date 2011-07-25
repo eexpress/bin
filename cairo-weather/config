@@ -3,17 +3,23 @@
 # 壁纸文件。缺省使用gnome的系统壁纸
 #bgfile='/home/eexp/图片/壁纸●/t.png'
 
+# 强制每次刷新数据，否则，已有数据时，将使用osd显示。
+#refresh=1
+
+# 没有habak的时候，指定显示图片的软件。缺省使用软件自带的osd显示。
+#show_app=/usr/bin/eog
+
 # 屏幕显示位置。habak支持的格式。缺省-80,80
-pos=-80,80
+#pos=-80,80
 
 # 天气图标路径。47个天气图标。
-icondir=
+#icondir=
 
 # 缺省圆体。“fc-list :lang=zh-cn|sed s/:.*//” 的中文字体结果。
 #font=汉仪萝卜体简
 #font=Vera Sans YuanTi
 
-scale=1.2
+#scale=0.6
 # 只支持此网站的天气格式。缺省长沙。
 #url="http://qq.ip138.com/weather/hunan/ChangSha.wml"
 

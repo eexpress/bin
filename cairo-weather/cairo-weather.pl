@@ -11,11 +11,6 @@ if(! -e $appdir){
 $appdir=dirname (-l $0?readlink $0:$0);
 }
 $outputfile="/tmp/weather.png";
-if ((localtime((stat($outputfile))[9]))[7] eq (localtime)[7]){
-#文件是今天的
-`$appdir/show_png.run`;
-exit;
-}
 
 my $gconf = Gnome2::GConf::Client -> get_default;
 $rcdir="$ENV{HOME}/.config/cairo-weather/";
@@ -32,8 +27,6 @@ while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}
 #    push @wallpapers, $key if $value -> {'deleted'} eq 'false';
 #}
 #`gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
-$gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
-until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 # ------以下为可自定义的部分------
 #屏幕偏移坐标，可以负坐标对齐
 $pos=$hrc{pos}//"-80,80";
@@ -62,6 +55,15 @@ $indexcolor{" "}=$hrc{"cother"} if $hrc{"cother"};
 $indexcolor{"0"}=$hrc{"btoday"} if $hrc{"btoday"};
 $indexcolor{"1"}=$hrc{"bweek"} if $hrc{"bweek"};
 
+$show_app=$hrc{show_app}//"$appdir/show_png.run";
+$refresh=$hrc{refresh}//"0";
+if(! $refresh){
+if ((localtime((stat($outputfile))[9]))[7] eq (localtime)[7]){
+#文件是今天的
+show();
+exit;
+}}
+until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 # ------以上为可自定义的部分------
 my $city;
 @t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
@@ -156,6 +158,7 @@ $color=$indexcolor{">"};
 drawstamp($week[$tweek],$size,$size*2.5,5);
 drawstamp($year." ".$city, $w0*$max/2, $size*3.5,1.8,-0.2);
 $surface->write_to_png ("$outputfile");
+show();
 #---------------------------------
 #$deskpic="/tmp/weather-all.png";
 #$surface = Cairo::ImageSurface->create_from_png ("/home/eexp/图片/木纹.png");
@@ -174,14 +177,16 @@ $surface->write_to_png ("$outputfile");
 #$_=`xwininfo -root`;
 #/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
 #---------------------------------
+sub show(){
 # 如果安装有habak，则设置成壁纸。否则使用内建的show_png.run 显示。
 if (-e '/usr/bin/habak'){
+$gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
 $cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
-} else {$cmd="$appdir/show_png.run";}
+} else {$cmd="$show_app $outputfile";}
 print "\e[1;37;41m$cmd\e[0m\n";
 `notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
 `$cmd`;
-#if($cmd=~/habak/){`$appdir/show_png.run`;}
+}
 #---------------------------------
 
 sub drawpng(){
