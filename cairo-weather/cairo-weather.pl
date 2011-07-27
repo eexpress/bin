@@ -5,6 +5,7 @@ use Cairo;
 #use Gtk2;
 use Gnome2::GConf;
 use File::Basename qw/basename dirname/;
+#use POSIX qw(strftime);
 
 $appdir="/usr/share/cairo-weather/";
 if(! -e $appdir){
@@ -41,17 +42,16 @@ $bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
 $scale=$hrc{scale}//0.6;
 $icondir=-e $hrc{icondir}?$hrc{icondir}:"$appdir/weather-icon";
-$max=7;	#从今天算起，最多显示几天。
 %indexcolor=(			# RGBA
-	">"=>"#E55E23E0",	# 今天
-	"-"=>"#E55E2390",	# 周日
-	" "=>"#C8C8C8E0",	# 其他
+	"t"=>"#E55E23E0",	# 今天
+	"w"=>"#E55E2390",	# 周日
+	"o"=>"#C8C8C8E0",	# 其他
 	"0"=>"#14141490",	# 今天背景
 	"1"=>"#14141432",	# 周日背景
 );
-$indexcolor{">"}=$hrc{"ctoday"} if $hrc{"ctoday"};
-$indexcolor{"-"}=$hrc{"cweek"} if $hrc{"cweek"};
-$indexcolor{" "}=$hrc{"cother"} if $hrc{"cother"};
+$indexcolor{"t"}=$hrc{"ctoday"} if $hrc{"ctoday"};
+$indexcolor{"w"}=$hrc{"cweek"} if $hrc{"cweek"};
+$indexcolor{"o"}=$hrc{"cother"} if $hrc{"cother"};
 $indexcolor{"0"}=$hrc{"btoday"} if $hrc{"btoday"};
 $indexcolor{"1"}=$hrc{"bweek"} if $hrc{"bweek"};
 
@@ -63,31 +63,53 @@ if ((localtime((stat($outputfile))[9]))[7] eq (localtime)[7]){
 show();
 exit;
 }}
-until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
+#until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 # ------以上为可自定义的部分------
 my $city;
-@t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
-$tweek=$t[6];
+#@t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 chdir "$appdir/calendar";
-@alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。
 	$_=encode("utf8",$_);
+if($url=~/ip138/){
 	/title="(.*?)天气预报"/; $city=$1;
 	s/.*?(?=\d{4}-\d)//s;s/\n.*//s;	#去掉头尾无用信息。
 	s/<br\/><br\/><b>/\n/g; s/<br\/>/\t/g; s/<\/b>//g; s/<b>//g;
 	s/℃/°C/g; s/～/-/g; s/\x0d/\n/g;
+	s/2\d\d\d.*?\t//g;s/C\t.*?\n/C\n/g;	#只留天气和温度
 	@_=split "\n",$_;
-use Date::Parse qw/str2time/;
-	for (@_){
-	if (/$today/){$_=">\t$_";}
-	else{	($day,@t)=split "\t";
-		@t=localtime str2time($day);	# 检查下星期
-		if(($t[6]==0)||($t[6]==6)){$_="-\t$_";}	#周六周日
-		else {$_=" \t$_";}}
-	$_.="\n";}
+	}
+if($url=~/wap\.weather\.gov\.cn/){
+	@_=/【\d.*?<img/sg;
+	for(@_){
+	s/^.*nbsp;(\d)/\1/sg;
+	s/[\n\r\ ]//g;s/&nbsp;//g;s/<img//g;
+	s/^(.*)\t+(.*)/\2\t\1/g;
+	}
+	}
+#        for (@_){print "$_\n";}; exit;
+#2011-7-27	晴	37°C-30°C	南风微风
+#2011-7-28	晴	37°C-29°C	南风微风
+#2011-7-29	晴	36°C-28°C	南风微风
+#2011-7-30	多云	37°C-28°C	南风微风
+#2011-7-31	多云	36°C-27°C	南风微风
+#2011-8-1	多云	35°C-26°C	南风微风
+#2011-8-2	阵雨	32°C	南风微风
+#use Date::Parse qw/str2time/;
+#        for (@_){
+#        if (/$today/){$_=">\t$_";}
+#        else{	($day,@t)=split "\t";
+#                @t=localtime str2time($day);	# 检查下星期
+#                if(($t[6]==0)||($t[6]==6)){$_="-\t$_";}	#周六周日
+#                else {$_=" \t$_";}}
+#        $_.="\n";}
 	} else {die "can not fetch web.\n";}
+#        for (@_){print "$_\n";}; exit;
+#        use POSIX qw(strftime);print strftime "%Y-%m-%d", localtime(time+86400*5);
+#        修改成只需要天气和温度的数据。其他都算出来
 #---------------------------------
+$max=@_;
+@alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
 chdir $icondir;
 -f "00.png" || die "can not fetch picture file.\n";
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
@@ -96,15 +118,19 @@ $size=$surface->get_width()*$scale;
 $w0=$size*1.8;$h0=$size/3;	# 单位方框尺寸
 $x0=$size/6; $y0=$size/2;
 $surface = Cairo::ImageSurface->create ('argb32',$w0*$max,$size*4);
-$year="";$month=""; $is=0;
+$year="";$month=""; $cnt=0;
 #---------------------------------
 for (@_){
-next if ! /$today/ && ! $is;
-$is++;
-last if ($is>$max);
+#next if ! /$today/ && ! $is;
+@t=localtime(time+86400*$cnt);
+$sign="o"; if($cnt==0){$sign="t";$tweek=$t[6];} else{if (($t[6]==0)||($t[6]==6)){$sign="w";}}
+$cnt++;
+#last if ($cnt+1>$max);
 chomp;
-($sign,$date,$weather,$temp,$wind)=split "\t",$_;
-($y,$m,$d)=split "-",$date;
+#($sign,$date,$weather,$temp,$wind)=split "\t",$_;
+($weather,$temp)=split "\t",$_;
+#($y,$m,$d)=split "-",$date;
+$y=$t[5]+1900;$m=$t[4]+1;$d=$t[3];
 #---------------------------------
 @lunar=grep /$m月.*$d \t/,@alllunar;
 $_=$lunar[0];
@@ -117,8 +143,8 @@ $m.="月" if($m);
 $d.="日";
 #---------------------------------
 $color=$indexcolor{$sign};
-if($sign eq ">"){drawframe($x0-$size/6,$size/4,$indexcolor{"0"});}
-if($sign eq "-"){drawframe($x0-$size/6,$size/4,$indexcolor{"1"});}
+if($sign eq "t"){drawframe($x0-$size/6,$size/4,$indexcolor{"0"});}
+if($sign eq "w"){drawframe($x0-$size/6,$size/4,$indexcolor{"1"});}
 #---------------------------------
 $y1=$y0;
 $fsize=$size/5;
@@ -144,17 +170,17 @@ $y1+=1.5*$size;
 drawtxt("$weather",$x0,$y1);
 $y1+=$h0; $_=$temp; s/°C/℃/g;
 drawtxt("$_",$x0,$y1);
-$y1+=$h0;
-$fsize=$size/6;
+#$y1+=$h0;
+#$fsize=$size/6;
 #_utf8_on($wind);$wind=~s/.{10}/$&\\n\\n/g;_utf8_off($wind);
-($wind,$tmp)=split /\//,$wind;
-drawtxt("$wind",$x0,$y1);
-drawtxt("$tmp",$x0,$y1+$h0) if($tmp);
+#($wind,$tmp)=split /\//,$wind;
+#drawtxt("$wind",$x0,$y1);
+#drawtxt("$tmp",$x0,$y1+$h0) if($tmp);
 $x0+=$w0;
 }
 #@week=('㊐','㊀','㊁','㊂','㊃','㊄','㊅');
 @week=('日','壹','貳','叁','肆','伍','陸');
-$color=$indexcolor{">"};
+$color=$indexcolor{"t"};
 drawstamp($week[$tweek],$size,$size*2.5,5);
 drawstamp($year." ".$city, $w0*$max/2, $size*3.5,1.8,-0.2);
 $surface->write_to_png ("$outputfile");
@@ -278,7 +304,7 @@ $c=~s/#//; my @C=map {$_/256} map {hex} $c=~/.{2}/g;
 $cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
 $cr->fill;
 
-#return if $sign eq "-";
+#return if $sign eq "w";
 $cr->set_line_cap(butt);	# butt, round, square
 $cr->set_line_join(round);	# miter, round, bevel
 $cr->set_operator("clear");
@@ -286,7 +312,7 @@ my $l=$size/10;
 $cr->set_line_width($l/2);
 for $i (0..$l*1.5){
 	$cr->move_to($x,$size+$i*$l);
-	if($sign eq ">"){
+	if($sign eq "t"){
 	$cr->rel_curve_to($w/3,$l*2,$w*2/3,-$l*2,$w,0);
 	}else{
 	for $d (1,-1,1,-1){$cr->rel_line_to($w/4,$d*$h/20);}
