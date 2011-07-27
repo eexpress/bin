@@ -76,10 +76,12 @@ if($url=~/ip138/){
 	s/.*?(?=\d{4}-\d)//s;s/\n.*//s;	#去掉头尾无用信息。
 	s/<br\/><br\/><b>/\n/g; s/<br\/>/\t/g; s/<\/b>//g; s/<b>//g;
 	s/℃/°C/g; s/～/-/g; s/\x0d/\n/g;
-	s/2\d\d\d.*?\t//g;s/C\t.*?\n/C\n/g;	#只留天气和温度
+	s/2\d\d\d.*?\t//g;
+#        s/C\t.*?\n/C\n/g;	#只留天气和温度
 	@_=split "\n",$_;
 	}
 if($url=~/wap\.weather\.gov\.cn/){
+	/※(.*?)\d\d/; $city=$1;
 	@_=/【\d.*?<img/sg;
 	for(@_){
 	s/^.*nbsp;(\d)/\1/sg;
@@ -128,7 +130,7 @@ $cnt++;
 #last if ($cnt+1>$max);
 chomp;
 #($sign,$date,$weather,$temp,$wind)=split "\t",$_;
-($weather,$temp)=split "\t",$_;
+($weather,$temp,$wind)=split "\t",$_;
 #($y,$m,$d)=split "-",$date;
 $y=$t[5]+1900;$m=$t[4]+1;$d=$t[3];
 #---------------------------------
@@ -170,12 +172,14 @@ $y1+=1.5*$size;
 drawtxt("$weather",$x0,$y1);
 $y1+=$h0; $_=$temp; s/°C/℃/g;
 drawtxt("$_",$x0,$y1);
-#$y1+=$h0;
-#$fsize=$size/6;
+if($wind){
+$y1+=$h0;
+$fsize=$size/6;
 #_utf8_on($wind);$wind=~s/.{10}/$&\\n\\n/g;_utf8_off($wind);
-#($wind,$tmp)=split /\//,$wind;
-#drawtxt("$wind",$x0,$y1);
-#drawtxt("$tmp",$x0,$y1+$h0) if($tmp);
+($wind,$tmp)=split /\//,$wind;
+drawtxt("$wind",$x0,$y1);
+drawtxt("$tmp",$x0,$y1+$h0) if($tmp);
+}
 $x0+=$w0;
 }
 #@week=('㊐','㊀','㊁','㊂','㊃','㊄','㊅');

@@ -4,7 +4,7 @@
 #bgfile='/home/eexp/图片/壁纸●/t.png'
 
 # 强制每次刷新数据，否则，已有数据时，将使用osd显示。
-#refresh=1
+refresh=1
 
 # 没有habak的时候，指定显示图片的软件。缺省使用软件自带的osd显示。
 #show_app=/usr/bin/eog
@@ -20,8 +20,9 @@
 #font=Vera Sans YuanTi
 
 #scale=0.6
-# 只支持此网站的天气格式。缺省长沙。
+# 支持2个网站的天气格式。缺省长沙。
 #url="http://qq.ip138.com/weather/hunan/ChangSha.wml"
+#url="http://wap.weather.gov.cn/forecast/AHN/changsha.html"
 
 #颜色
 #        ">"=>"#E55E23F0",	# 今天
