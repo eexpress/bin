@@ -20,9 +20,10 @@ refresh=1
 #font=Vera Sans YuanTi
 
 #scale=0.6
-# 支持2个网站的天气格式。缺省长沙。
+# 支持3个网站的天气格式。缺省长沙。
 #url="http://qq.ip138.com/weather/hunan/ChangSha.wml"
 #url="http://wap.weather.gov.cn/forecast/AHN/changsha.html"
+url="http://m.weather.com.cn/data/101250101.html"
 
 #颜色
 #        ">"=>"#E55E23F0",	# 今天

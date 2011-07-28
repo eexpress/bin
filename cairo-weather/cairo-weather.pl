@@ -6,6 +6,7 @@ use Cairo;
 use Gnome2::GConf;
 use File::Basename qw/basename dirname/;
 #use POSIX qw(strftime);
+#use feature qw(switch say);
 
 $appdir="/usr/share/cairo-weather/";
 if(! -e $appdir){
@@ -69,18 +70,17 @@ my $city;
 #@t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
 chdir "$appdir/calendar";
 use LWP::Simple; $_=get($url);
-if($_){	#取得了网页。解析。
+if($_){	#取得了网页。解析。只留天气和温度，风向。
 	$_=encode("utf8",$_);
-if($url=~/ip138/){
+if ($url=~/qq\.ip138\.com/){
 	/title="(.*?)天气预报"/; $city=$1;
 	s/.*?(?=\d{4}-\d)//s;s/\n.*//s;	#去掉头尾无用信息。
 	s/<br\/><br\/><b>/\n/g; s/<br\/>/\t/g; s/<\/b>//g; s/<b>//g;
 	s/℃/°C/g; s/～/-/g; s/\x0d/\n/g;
 	s/2\d\d\d.*?\t//g;
-#        s/C\t.*?\n/C\n/g;	#只留天气和温度
 	@_=split "\n",$_;
 	}
-if($url=~/wap\.weather\.gov\.cn/){
+elsif ($url=~/wap\.weather\.gov\.cn/){
 	/※(.*?)\d\d/; $city=$1;
 	@_=/【\d.*?<img/sg;
 	for(@_){
@@ -89,26 +89,18 @@ if($url=~/wap\.weather\.gov\.cn/){
 	s/^(.*)\t+(.*)/\2\t\1/g;
 	}
 	}
+elsif ($url=~/m\.weather\.com\.cn/){
+	s/[{},]/\n/g; s/"//g;
+	%h=map{split /:/} grep /city\b|weather\d|temp\d|wind\d/,split /\n/;
+	$city=$h{city};
+	for $i (1..6){
+	$_=$h{"weather".$i}."\t".$h{"temp".$i}."\t".$h{"wind".$i};
+	push @_,$_;
+	}
+	}
+else {die "no recognized url format.\n";}
+} else {die "can not fetch web.\n";}
 #        for (@_){print "$_\n";}; exit;
-#2011-7-27	晴	37°C-30°C	南风微风
-#2011-7-28	晴	37°C-29°C	南风微风
-#2011-7-29	晴	36°C-28°C	南风微风
-#2011-7-30	多云	37°C-28°C	南风微风
-#2011-7-31	多云	36°C-27°C	南风微风
-#2011-8-1	多云	35°C-26°C	南风微风
-#2011-8-2	阵雨	32°C	南风微风
-#use Date::Parse qw/str2time/;
-#        for (@_){
-#        if (/$today/){$_=">\t$_";}
-#        else{	($day,@t)=split "\t";
-#                @t=localtime str2time($day);	# 检查下星期
-#                if(($t[6]==0)||($t[6]==6)){$_="-\t$_";}	#周六周日
-#                else {$_=" \t$_";}}
-#        $_.="\n";}
-	} else {die "can not fetch web.\n";}
-#        for (@_){print "$_\n";}; exit;
-#        use POSIX qw(strftime);print strftime "%Y-%m-%d", localtime(time+86400*5);
-#        修改成只需要天气和温度的数据。其他都算出来
 #---------------------------------
 $max=@_;
 @alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
