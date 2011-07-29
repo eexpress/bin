@@ -62,6 +62,10 @@ $bus->Notify("paste-img", 0, "error", "文件无效 .$ARGV[0].", ':(', [], { }, 
 	"http://paste.ubuntu.org.cn/"=>{"poster"=>$name,"screenshot"=>$ARGV[0],"submit"=>"paste"},
 	"http://uploadpie.com/"=>{"uploadedfile"=>$ARGV[0],"result"=>'value.*?auto_select,http[^"]*'},
 # <input type="text" id="uploaded" value="http://uploadpie.com/LkkXu" onclick="auto_select();" readonly="readonly" />
+#        "http://picpaste.com/"=>{"upload"=>$ARGV[0],"rules"=>"yes","submit"=>"submit","result"=>'Picture\ URL.*/a,http[^"]*'},
+#$mech->select("rules","yes");
+#        "http://twpic.org/"=>{"attached"=>$ARGV[0],"result"=>'url.*?url,http[^\[]*'},
+#        <textarea name="textarea" cols="100" wrap="soft" rows="3">[url=http://twpic.org][img]http://twpic.org/uploads2/6ed6ac3661.png[/img][/url]</textarea 无法获取结果网页。
 #        "http://tinypic.com/"=>{"the_file"=>$ARGV[0]},	#Error GETing http://tinypic.com/ 需要图片校验 nnnnnd
 #        "http://imgur.com/"=>{'file[]'=>$ARGV[0]},	#无法提交
 #        "http://www.52tietu.com/"=>{"file1"=>$ARGV[0],"result"=>'value="http.*?ondblclick,http[^"]*'},	#假冒浏览器，都不返回。nnnnd
@@ -107,7 +111,8 @@ if ($mech->success()) {
 	if($result eq ""){$rr=$mech->uri();}
 	else{
 		$rr=$mech->content();
-		$rr=encode("utf-8",decode("gbk",$rr));
+#                $rr=encode("utf-8",decode("gbk",$rr));
+#                s/[\[\]]/ /g;
 #                print $rr;
 		@ss=split ",",$result;
 		foreach (@ss){
