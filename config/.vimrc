@@ -1,5 +1,6 @@
 " 开启语法高亮
 syntax on 
+colo eexp
 set ai
 set t_Co=256
 set nu
@@ -13,8 +14,8 @@ set guifont=Vera\ Sans\ YuanTi\ Mono
 "set guifont=Courier\ 10\ Pitch\ 11
 "colorscheme eexp
 colorscheme desert
-" 使用鼠标
-set mouse=a
+" 使用鼠标，排除普通模式，则在普通模式下选择文字，可中键粘贴出去。
+set mouse=vic
 " 设置高亮搜索
 set hlsearch
 " 输入字符串就显示匹配点
@@ -48,16 +49,15 @@ imap ( ()<ESC>i
 imap { {}<ESC>i
 imap [ []<ESC>i
 "新脚本自动加类型
-autocmd BufNewFile *.bash	0put='#!/bin/bash'|setf bash
-autocmd BufNewFile *.perl	0put='#!/usr/bin/perl'|setf perl
-autocmd BufNewFile *.pl		0put='#!/usr/bin/perl'|setf perl
+autocmd BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
+au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 au BufNewFile,BufRead *.c so ~/.vim/echofunc.vim
 "状态栏
 set laststatus=2
 set statusline=
 set statusline+=%-30.60f
 set statusline+=%10.{&encoding}
-set statusline+=\ %5.l/%L行\ %10.p%%\ %10.y
+set statusline+=\ %9.l/%L行\ %4.p%%\ %10.y
 
 func CompileRun() 
 exec "w" 
@@ -74,11 +74,17 @@ endfunc
 "set foldopen=all	" 光标进入，自动打开折叠
 "set foldclose=all	" 光标退出，自动关闭折叠
 "set foldlevel=2
-"set foldmethod=marker	" 知道使用{}作为折叠标记
-"set foldmarker={,}
-"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+set foldmethod=syntax 	" 设置语法折叠
+set foldcolumn=3 	"设置折叠区域的宽度
+set foldminlines=4
+nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zo')<CR>
                             " 用空格键来开关折叠
+set foldenable!
+" 共享剪贴板
+"set clipboard+=unnamed
 
+set list
+set listchars=tab:\|\ 
 map rj !!date<CR>
 "nm <silent> tt :!ctags -R --fields=+lS .<CR>
 
