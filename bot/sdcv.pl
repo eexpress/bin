@@ -2,7 +2,8 @@
 
 # 使用脚本目录的图标
 use Cwd qw(abs_path);
-$0=~s/\/.*?$//; $icon=abs_path $0."/stardict.png";
+$0=~s/[^\/]*?$//;
+$icon=abs_path $0."stardict.png";
 
 use Getopt::Long;
 # 参数：单行输出选择。屏幕提示输出选择。

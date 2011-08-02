@@ -2,7 +2,8 @@
 
 use feature 'say';
 use Cwd qw(abs_path);
-$0=~s/\/.*?$//; $icon=abs_path $0."/cn-en-128.png";
+$0=~s/[^\/]*?$//;
+$icon=abs_path $0."/cn-en-128.png";
 #$icon="$ENV{HOME}/图片/图标/国旗/cn-en-128.png";
 use Getopt::Long;
 GetOptions('n'=>\$notify);
