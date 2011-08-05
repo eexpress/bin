@@ -247,7 +247,8 @@ $cr->set_font_size($fsize*$_[3]);
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
 my $ebb=1.5;
 $cr->set_source_rgba($C[0]/$ebb,$C[1]/$ebb,$C[2]/$ebb,$C[3]/$ebb);
-$cr->set_operator("dest-over");	#被背景覆盖
+$cr->set_operator("saturate");
+#$cr->set_operator("dest-over");	#被背景覆盖
 #clear, source, over, in, out, atop, dest, dest-over, dest-in, dest-out, dest-atop, xor, add, saturate
 $cr->move_to($_[1],$_[2]);
 $cr->rotate($rotate);

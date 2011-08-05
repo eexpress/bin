@@ -16,6 +16,7 @@ set guifont=Vera\ Sans\ YuanTi\ Mono
 colorscheme desert
 " 使用鼠标，排除普通模式，则在普通模式下选择文字，可中键粘贴出去。
 set mouse=vic
+set mouse=a
 " 设置高亮搜索
 set hlsearch
 " 输入字符串就显示匹配点
