@@ -81,7 +81,7 @@ alias t.u='tar uPvf '
 alias t.x='tar xmPvf '
 alias v='vim'
 alias x='echo "● `xsel -o`" >>'
-alias find-opera-1M='find ~/.opera/cache*/ -cmin -60 -size +1000k -printf "------\t%p\t► %Ac\t► %kK\v\r" -exec file -b {} \;'
+alias find-opera-1M='find ~/.opera/cache*/ -iname "opr*.tmp" -cmin -60 -size +1000k -printf "------\t%p\t► %Ac\t► %kK\t►" -exec file -b {} \;'
 alias tar-opera='cd; t.u ~/opera-setting-`date '+%Y-%m-%d_%H:%M:%S'`.tar `find ~/.opera -iname "*.adr" -or -iname "*.ini" -or -iname "wand.dat" -or -iname "eexp*"`'
 osd0(){
 gnome-osd-client -f "<message id='oss' osd_vposition='center' osd_halignment='center'><span font='ZhunYuan 180'  foreground='red'>`xsel -o`</span></message>"
