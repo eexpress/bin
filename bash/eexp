@@ -79,6 +79,6 @@ HISTIGNORE="pwd:ls:cd:"
 eval `dircolors ~/bin/bash/ls_color`
 
 googl(){ curl -s -d "url=${1}" http://goo.gl/api/url|sed -n "s/.*:\"\([^\"]*\).*/\1\n/p"|xsel -i; echo `xsel -o`;}
-atmm(){ echo msg "$2"|at "now + $1 minutes";}
+atmm(){ echo msg "clock.png" "AT定时" "$2"|at "now + $1 minutes";}
 tree(){ /usr/bin/tree $*|/usr/bin/ascii2uni -a K;}
 ip138(){ msg "IP地址查询：$1" "`curl -s -d "ip=$1&action=2" http://www.ip138.com/ips.asp|grep '<li>'|sed 's/<\/li>/\\\\n/g'|sed 's/<[^>]*>/\\n/g'|sed '/^\s*$/d'|enconv`";}
