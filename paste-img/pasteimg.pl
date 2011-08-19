@@ -2,39 +2,14 @@
 
 use utf8;	# 文件路径才可以使用中文。
 use Getopt::Long;
+use Pod::Usage;
 
 #$name="eexp";	# 缺省的昵称
 $name=`id -un`; chomp $name;
 $select="imagebin";	# 缺省的网站
 GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$name);
 #----------------------------------
-if($help){
-$nc="\e[0m"; $rb="\e[1;31m"; $gb="\e[1;32m";
-print qq{$rb
-NAME$nc
-       $rb paste-img$nc - Paste image to serval web hosts, URL return in clipboard(PRIMARY).
-$rb
-SYNOPSIS$nc
-       paste-img [OPTION]... [IMAGE_FILE]...
-$rb
-OPTION$nc
-	$gb -s, --select$nc
-		Select web host name. Can use short name as key word, such as "kimag" could refer to "kimag.es". All available host names can be list by using "-l".
-
-	$gb -l, --list$nc
-		List all hosts name available.
-
-	$gb -h, --help$nc
-		This help.
-
-	$gb -n, --name$nc
-		Nick name send to web host if support. default name is your login id name.
-$rb
-AUTHOR$nc
-	Written by eexpress (eexpress\@163.com).
-};
-exit;
-}
+if($help || ! $ARGV[0]){pod2usage(-verbose => 2); exit;}
 #----------------------------------
 if(! $list){
 use Net::DBus; 
@@ -127,4 +102,36 @@ if ($mech->success()) {
 	$bus->Notify("paste-img", 0, "error", '贴图失败', ':(', [], { }, -1);
 }
 #----------------------------------
+=pod
 
+=head1 NAME
+
+B<paste-img> - Paste image to serval web hosts, URL return in clipboard(PRIMARY).
+
+=head1 SYNOPSIS
+
+B<paste-img> [OPTION]... [IMAGE_FILE]...
+
+=head1 OPTION
+
+=head2 -s, --select
+
+Select web host name. Can use short name as key word, such as "kimag" could refer to "kimag.es". All available host names can be list by using "-l".
+
+=head2 -l, --list
+
+List all hosts name available.
+
+=head2 -h, --help
+
+This help.
+
+=head2 -n, --name
+
+Nick name send to web host if support. default name is your login id name.
+
+=head1 AUTHOR
+
+Written by I<eexpress> (eexpress@163.com).
+
+=cut
