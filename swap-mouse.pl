@@ -126,6 +126,10 @@ $r=`xmodmap -pp|grep "\<3\>\s*\<1\>"`;
 $r=$r==1?"right":"left";
 }
 
+if($ARGV[0] eq "once"){
+swap(); exit;
+}
+
 $status_icon = Gtk2::StatusIcon->new;
 $status_icon->set_from_pixbuf($r eq "right"?$pix_r:$pix_l);
 $status_icon->set_tooltip("左右键切换鼠标习惯，中键退出");
@@ -136,7 +140,11 @@ Gtk2->main();
 sub swap_mouse{
 my ($widget, $event) = @_;
 if($event->button eq 2){exit;}
+swap();
+$status_icon->set_from_pixbuf(($r eq "left")?$pix_l:$pix_r);
+}
 
+sub swap{
 if($r eq "left"){
 	print "set => right hand\n";
 	if($ENV{GDMSESSION} eq "gnome"){
@@ -148,7 +156,6 @@ if($r eq "left"){
 	}
 	`xsetroot -cursor_name left_ptr`;
 	$r="right";
-	$status_icon->set_from_pixbuf($pix_r);
 }
 else{
 	print "set => left hand\n";
@@ -161,7 +168,5 @@ else{
 	}
 	`xsetroot -cursor_name right_ptr`;
 	$r="left";
-	$status_icon->set_from_pixbuf($pix_l);
 }
 }
-
