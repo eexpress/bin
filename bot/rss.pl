@@ -7,6 +7,7 @@ sub cv {
 }
 #http://forum.^ubuntu.org.cn/feed.php
 @RSS=qw(
+http://^hsyyf.me/feed/
 http://cn.^engadget.com/rss.xml
 http://cdn.^ubuntu.org.cn/ubuntuforum/feed.php
 http://^linuxtoy.org/feed/
@@ -46,7 +47,7 @@ die "列表中找不到此URL。\n";
 }
 FOUND:
 
-my $ua=new LWP::UserAgent();
+my $ua=new LWP::UserAgent(agent=>"rss.pl");
 my $re= $ua->get($url);
 die if (!$re->is_success);
 my $html= $re->content;
