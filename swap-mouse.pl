@@ -116,7 +116,7 @@ $pix_r = Gtk2::Gdk::Pixbuf->new_from_xpm_data(
 "4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4."
 );
 
-if($ENV{GDMSESSION} eq "gnome"){
+if($ENV{GDMSESSION}=~/^gnome/){
 `xmodmap -e "pointer = 1 2 3"`;
 $r=`gconftool-2 -g /desktop/gnome/peripherals/mouse/left_handed`;
 chomp $r;
@@ -147,7 +147,7 @@ $status_icon->set_from_pixbuf(($r eq "left")?$pix_l:$pix_r);
 sub swap{
 if($r eq "left"){
 	print "set => right hand\n";
-	if($ENV{GDMSESSION} eq "gnome"){
+	if($ENV{GDMSESSION}=~/^gnome/){
 	`gconftool-2 -s /desktop/gnome/peripherals/mouse/left_handed false -t bool`;
 	`gconftool-2 -s /apps/metacity/general/button_layout :minimize,maximize,close -t string`;
 	} else {
@@ -159,7 +159,7 @@ if($r eq "left"){
 }
 else{
 	print "set => left hand\n";
-	if($ENV{GDMSESSION} eq "gnome"){
+	if($ENV{GDMSESSION}=~/^gnome/){
 	`gconftool-2 -s /desktop/gnome/peripherals/mouse/left_handed true -t bool`;
 	`gconftool-2 -s /apps/metacity/general/button_layout close,maximize,minimize: -t string`;
 	} else {
