@@ -9,9 +9,34 @@ $name=`id -un`; chomp $name;
 $select="imagebin";	# 缺省的网站
 GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$name);
 #----------------------------------
-if($help || ! $ARGV[0]){pod2usage(-verbose => 2); exit;}
+%web=(
+	"http://imm.io/"=>{"image"=>'xxxx'},
+	"http://www.cjb.net/"=>{"image"=>'xxxx'},
+	"http://bkup.co/"=>{"file1"=>'xxxx'},
+	"http://kimag.es/"=>{"userfile1"=>'xxxx'},
+	"http://imagebin.org/index.php?page=add"=>{"nickname"=>$name,"image"=>'xxxx',"disclaimer_agree"=>"Y"},
+	"http://paste.ubuntu.org.cn/"=>{"poster"=>$name,"screenshot"=>'xxxx',"submit"=>"paste"},
+	"http://uploadpie.com/"=>{"uploadedfile"=>'xxxx',"result"=>'value.*?auto_select,http[^"]*'},
+# <input type="text" id="uploaded" value="http://uploadpie.com/LkkXu" onclick="auto_select();" readonly="readonly" />
+#        "http://picpaste.com/"=>{"upload"=>'xxxx',"rules"=>"yes","submit"=>"submit","result"=>'Picture\ URL.*/a,http[^"]*'},
+#$mech->select("rules","yes");
+#        "http://twpic.org/"=>{"attached"=>'xxxx',"result"=>'url.*?url,http[^\[]*'},
+#        <textarea name="textarea" cols="100" wrap="soft" rows="3">[url=http://twpic.org][img]http://twpic.org/uploads2/6ed6ac3661.png[/img][/url]</textarea 无法获取结果网页。
+#        "http://tinypic.com/"=>{"the_file"=>'xxxx'},	#Error GETing http://tinypic.com/ 需要图片校验 nnnnnd
+#        "http://imgur.com/"=>{'file[]'=>'xxxx'},	#无法提交
+#        "http://www.52tietu.com/"=>{"file1"=>'xxxx',"result"=>'value="http.*?ondblclick,http[^"]*'},	#假冒浏览器，都不返回。nnnnd
+#        原图地址<br>
+#        <input size="20" id="link_1_1"  value="http://img0.52tietu.com/?MF8wXzBfMjAxMDEwMDUyMjU0NTkzMw.png" ondblclick="copyText('link_1_1')"> <a href="javascript:void(0);" onclick="javascript:copyText('link_1_1');">点击复制</a>
+	);
 #----------------------------------
-if(! $list){
+if($help){pod2usage(-verbose => 2); exit;}
+#----------------------------------
+if($list){
+foreach (keys %web){s'http://'';s'/.*'';$_.="\t\e[30;42m*\e[0m" if /$select/;
+print "$_\n";}
+exit;
+}
+#----------------------------------
 use Net::DBus; 
 $bus = Net::DBus->session->get_service('org.freedesktop.Notifications')
 ->get_object('/org/freedesktop/Notifications','org.freedesktop.Notifications');
@@ -27,35 +52,7 @@ my $fp='/tmp/pi.png';
 if(! -f $ARGV[0]){
 $bus->Notify("paste-img", 0, "error", "文件无效 .$ARGV[0].", ':(', [], { }, -1);exit;
 }
-}
-#----------------------------------
-%web=(
-	"http://imm.io/"=>{"image"=>$ARGV[0]},
-	"http://www.cjb.net/"=>{"image"=>$ARGV[0]},
-	"http://kimag.es/"=>{"userfile1"=>$ARGV[0]},
-	"http://imagebin.org/index.php?page=add"=>{"nickname"=>$name,"image"=>$ARGV[0],"disclaimer_agree"=>"Y"},
-	"http://paste.ubuntu.org.cn/"=>{"poster"=>$name,"screenshot"=>$ARGV[0],"submit"=>"paste"},
-	"http://uploadpie.com/"=>{"uploadedfile"=>$ARGV[0],"result"=>'value.*?auto_select,http[^"]*'},
-# <input type="text" id="uploaded" value="http://uploadpie.com/LkkXu" onclick="auto_select();" readonly="readonly" />
-#        "http://picpaste.com/"=>{"upload"=>$ARGV[0],"rules"=>"yes","submit"=>"submit","result"=>'Picture\ URL.*/a,http[^"]*'},
-#$mech->select("rules","yes");
-#        "http://twpic.org/"=>{"attached"=>$ARGV[0],"result"=>'url.*?url,http[^\[]*'},
-#        <textarea name="textarea" cols="100" wrap="soft" rows="3">[url=http://twpic.org][img]http://twpic.org/uploads2/6ed6ac3661.png[/img][/url]</textarea 无法获取结果网页。
-#        "http://tinypic.com/"=>{"the_file"=>$ARGV[0]},	#Error GETing http://tinypic.com/ 需要图片校验 nnnnnd
-#        "http://imgur.com/"=>{'file[]'=>$ARGV[0]},	#无法提交
-#        "http://www.52tietu.com/"=>{"file1"=>$ARGV[0],"result"=>'value="http.*?ondblclick,http[^"]*'},	#假冒浏览器，都不返回。nnnnd
-#        原图地址<br>
-#        <input size="20" id="link_1_1"  value="http://img0.52tietu.com/?MF8wXzBfMjAxMDEwMDUyMjU0NTkzMw.png" ondblclick="copyText('link_1_1')"> <a href="javascript:void(0);" onclick="javascript:copyText('link_1_1');">点击复制</a>
-	);
-#----------------------------------
 #print Data::Dumper->Dump([[%web]]);exit;
-#----------------------------------
-if($list){
-foreach (keys %web){s'http://'';s'/.*'';$_.="\t\e[30;42m*\e[0m" if /$select/;
-print "$_\n";}
-exit;
-}
-#----------------------------------
 #print "\$name=$name.\n";
 #print "\$select=$select.\n";
 sub pc{
@@ -72,7 +69,7 @@ if(!$add){$bus->Notify("paste-img", 0, "error", '无效网站地址', ':(', [], 
 pc "select","\e[30;42m$select\e[0m";
 #----------------------------------
 %h=%{$web{$add}};
-while(my($k,$v)=each %h){pc $k,$v;}
+while(my($k,$v)=each %h){if($v eq 'xxxx'){$h{$k}=$ARGV[0];$v=$ARGV[0]}; pc $k,$v;}
 $submit="";if($h{"submit"}){$submit=$h{"submit"}; delete $h{"submit"};}
 $result="";if($h{"result"}){$result=$h{"result"}; delete $h{"result"};}
 #----------------------------------
@@ -129,6 +126,10 @@ This help.
 =head2 -n, --name
 
 Nick name send to web host if support. default name is your login id name.
+
+=head2 no argument
+
+Auto start screenshot, and then paste.
 
 =head1 AUTHOR
 
