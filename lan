@@ -1,12 +1,11 @@
 #!/bin/bash
-echo "now ip for me : `routel|sed -n '2p'|awk '{print $3}'`"
-nmap -sP `routel|sed -n '2p'|awk '{print $1$2}'`
-
-#☛ sudo nmap -sP -PI -PT 192.168.1.0/24 
-
-#Starting Nmap 5.00 ( http://nmap.org ) at 2010-10-30 22:50 CST
-#Host 192.168.1.1 is up (0.00057s latency).
-#MAC Address: D8:5D:4C:2B:71:4E (Unknown)
-#Host 192.168.1.101 is up.
-#Nmap done: 256 IP addresses (2 hosts up) scanned in 5.13 seconds
+echo "本机IP是：`routel|sed -n '2p'|awk '{print $3}'`"
+ip=`routel|sed -n '2p'|awk '{print $1$2}'`
+if [ $1 ]; then
+	# 端口，MAC地址
+	sudo nmap -sS $ip
+else
+	# 如果对方关闭了icmp，就探测不到
+	nmap -sP $ip
+fi
 
