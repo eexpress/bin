@@ -3,9 +3,9 @@ echo "本机IP是：`routel|sed -n '2p'|awk '{print $3}'`"
 ip=`routel|sed -n '2p'|awk '{print $1$2}'`
 if [ $1 ]; then
 	# 端口，MAC地址
-	sudo nmap -sS $ip
+	sudo /usr/bin/nmap -sS $ip
 else
 	# 如果对方关闭了icmp，就探测不到
-	nmap -sP $ip
+	/usr/bin/nmap -sP $ip
 fi
 
