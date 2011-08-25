@@ -51,7 +51,7 @@ if ($mech->success()) {
 	}
 #---------------------	
 	if($ENV{flv2avi}){
-	`play "$ENV{HOME}/bin/resources/sound/skill_up.wav"`;
+	`paplay "$ENV{HOME}/bin/resources/sound/skill_up.wav"`;
 	$name=~s/ /-/g;
 	print "\e]2;$name 使用mencoder压缩中。。。\a";
 	$bus->Notify("flash", 0, "sunny", "flash 视频转换成 avi", "$dir/$name.avi", [], { }, -1);
@@ -61,7 +61,7 @@ if ($mech->success()) {
 	$bus->Notify("flash", 0, "sunny", "$name 已经完成下载", "$dir/$name.avi", [], { }, -1);
 	chdir '..';
 	`echo "$ARGV[0]\t《$_》\t结果：$proc">>flash-down.log`;
-	`play "$ENV{HOME}/bin/resources/sound/I-need-ammo.wav"`;
+	`paplay "$ENV{HOME}/bin/resources/sound/I-need-ammo.wav"`;
 	} else {
 	/提示：.*/; $_=$&; s/<br\/>.*$//; 
 	$bus->Notify("flash", 0, "error", "flash 解析失败", "$_\n:(", [], { }, -1);
