@@ -8,6 +8,7 @@
 	df2 = diff HEAD^^
 	df3 = diff HEAD^^^
 	df4 = diff HEAD^^^^
+	logfile = log -p
 	ls = !sh -c 'git ls-files|ascii2uni -a K'
 	lc = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'
 	lg = !sh -c 'git log -10 --pretty=format:\"%Cgreen%h%Creset - %ar : %Cred%s\"|sed \"s/\\ days\\ ago/天前/g\"|sed \"s/\\ weeks\\ ago/周前/g\"'
