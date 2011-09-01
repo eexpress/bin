@@ -82,10 +82,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -95,12 +91,6 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-if [ -f ~/bin/bash/alias ]; then
-    . ~/bin/bash/alias
-fi
-if [ -f ~/bin/bash/eexp ]; then
-    . ~/bin/bash/eexp
-fi
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -108,6 +98,9 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-. $HOME/bin/chs/chs_completion
-. /usr/share/autojump/autojump.sh
+#-----------eexp---------
+[ -f ~/bin/bash/eexp ] && . ~/bin/bash/eexp
+[ -f ~/bin/bash/alias ] && . ~/bin/bash/alias
+[ -f ~/bin/chs/chs_completion ] && . ~/bin/chs/chs_completion
+[ -f /usr/share/autojump/autojump.sh ] && . /usr/share/autojump/autojump.sh
 
