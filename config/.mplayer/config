@@ -5,3 +5,5 @@ subcp=enca:zh:utf-8
 # 此vf设置，有可以支持s热键实时截图
 vf=screenshot
 font="Vera Sans YuanTi Mono"
+# 0 是精确匹配, 1是只要包含名称, 2 是所有字幕都加载
+sub-fuzziness=2
