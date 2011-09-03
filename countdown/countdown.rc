@@ -3,6 +3,18 @@ size=30
 pos=20,350
 text=地球爆炸
 day=2011-9-15
-cday=#E55E23F0
-cend=#5389BDF0
+cday=#5389BDF0
+cend=#D4844EF0
+ctext=#4FC53E80
 
+pos=20,450
+text=网络交费
+day=2012-9-2
+
+pos=-20,450
+
+text=城运会
+day=2011-11-12
+pos=-20,350
+
+bg=/home/eexp/图片/壁纸/木纹ubuntu.jpg
