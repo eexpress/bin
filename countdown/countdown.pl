@@ -2,10 +2,11 @@
 
 use Cairo;
 use POSIX qw(mktime);
+use  Gtk2 "-init";
 
 # 每一个条目，需要一个空行结束，才会绘画。
 # 背景图片设置位置任意。
-$cmd="";
+#$cmd="";
 $count=0;
 open RC,"<$ARGV[0]"; @rc=<RC>; close RC;
 for $line(@rc){
@@ -14,9 +15,27 @@ my($k,$v)=split /\s*=\s*/,$line;
 if($k eq ""){$count++; drawpng(); next;}
 $hrc{$k}=$v;
 }
-$cmd="habak -ms \'$hrc{bg}\'".$cmd;
-print "-----\n$cmd\n";
-`$cmd`;
+#$cmd="habak -ms \'$hrc{bg}\'".$cmd;
+#print "-----\n$cmd\n";
+#`$cmd`;
+
+Gtk2->init;
+$screen=Gtk2::Gdk::Screen->get_default;
+$window=$screen->get_root_window;
+$gc = Gtk2::Gdk::GC->new ($window, undef);
+($real_drawable,$x_offset,$y_offset)=$window->get_internal_paint_info;
+for(keys %pics){
+my $file="/tmp/countdown-$_.png";
+my ($x,$y)=split ',',$pics{$_};
+my $pixbuf=Gtk2::Gdk::Pixbuf->new_from_file($file);
+my ($format,$width,$height)=$pixbuf->get_file_info($file);
+
+$pixbuf->render_to_drawable($real_drawable,$gc,0,0,$x,$y,$width,$height,'normal',0,0);
+}
+Gtk2->main_iteration;
+#Gtk2->main_iteration while Gtk2->events_pending;
+
+#------------------------------
 
 sub drawpng()
 {
@@ -56,7 +75,8 @@ $cr->move_to($w0,$rate);
 $cr->show_text("$days 天");
 
 $surface->write_to_png ("/tmp/countdown-$count.png");
-$cmd.=" -mp $hrc{pos} -hi /tmp/countdown-$count.png";
+#$cmd.=" -mp $hrc{pos} -hi /tmp/countdown-$count.png";
+$pics{$count}=$hrc{pos};
 }
 
 sub setcolor()
