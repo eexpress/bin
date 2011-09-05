@@ -68,6 +68,8 @@ exec "!./%<.run"
 elseif &filetype == 'cpp' 
 exec "!gcc % -g -o %<.exe" 
 exec "!%<.exe" 
+elseif &filetype == 'perl' 
+exec "!perl %" 
 endif 
 endfunc
 
