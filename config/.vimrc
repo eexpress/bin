@@ -63,11 +63,8 @@ set statusline+=\ %9.l/%L行\ %4.p%%\ %10.y
 func CompileRun() 
 exec "w" 
 if &filetype == 'c' 
-exec "!gcc `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` % -g -o %<.run" 
+exec "!/usr/bin/gcc `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` % -g -o %<.run" 
 exec "!./%<.run" 
-elseif &filetype == 'cpp' 
-exec "!gcc % -g -o %<.exe" 
-exec "!%<.exe" 
 elseif &filetype == 'perl' 
 exec "!perl %" 
 endif 
