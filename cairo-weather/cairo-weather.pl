@@ -39,7 +39,7 @@ $gnomebg=$gconf->get("/desktop/gnome/background/picture_filename");
 #chomp $gnomebg;
 $bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
 # 城市天气信息地址
-#$app_setbg=$hrc{app_setbg}//"show_png.run";
+#$app_setbg=$hrc{app_setbg}//"show_png.pl";
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
 $scale=$hrc{scale}//0.6;
 $icondir=-e $hrc{icondir}?$hrc{icondir}:"$appdir/weather-icon";
@@ -56,7 +56,7 @@ $indexcolor{"o"}=$hrc{"cother"} if $hrc{"cother"};
 $indexcolor{"0"}=$hrc{"btoday"} if $hrc{"btoday"};
 $indexcolor{"1"}=$hrc{"bweek"} if $hrc{"bweek"};
 
-$show_app=$hrc{show_app}//"$appdir/show_png.run";
+$show_app=$hrc{show_app}//"$appdir/show_png.pl";
 $refresh=$hrc{refresh}//"0";
 if(! $refresh){
 if ((localtime((stat($outputfile))[9]))[7] eq (localtime)[7]){
@@ -200,7 +200,7 @@ show();
 #/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
 #---------------------------------
 sub show(){
-# 如果安装有habak，则设置成壁纸。否则使用内建的show_png.run 显示。
+# 如果安装有habak，则设置成壁纸。否则使用内建的show_png.pl 显示。
 if (-e '/usr/bin/habak'){
 $gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
 $cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
