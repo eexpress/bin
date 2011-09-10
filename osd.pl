@@ -7,6 +7,7 @@ use Cairo;
 my $text=$ARGV[0]//'OSD Example';
 my $size=20;
 
+my $extent;
 my $screen=Gtk2::Gdk::Screen->get_default;
 my $window = Gtk2::Window->new();
 $window->set_decorated(0);
@@ -16,7 +17,7 @@ $window->signal_connect('expose_event', \&expose);
 $window->signal_connect('button_press_event',\&mouse);
 my $w=$screen->get_width;
 my $h=$screen->get_height;
-print "$w - $h\n";
+print "screen : $w - $h\n";
 $window->set_size_request($w,$h);
 $window->move(0,0);
 my $img=Cairo::ImageSurface->create ('argb32',1,1);
@@ -36,7 +37,8 @@ sub expose {
 	$cr->select_font_face("Vera Sans YuanTi",'normal','bold');
 	$cr->set_font_size($size);
 	$cr->set_source_rgba(0,0,70,0.9);
-	$cr->move_to(0,$h-$size);
+	$cr->move_to(0,$h-$size/2);
+	$extent=$cr->text_extents($text."..");
 	$cr->show_text($text);
 	# 奇怪的print。不写就不画上面的文字。第一次碰到这情况。
 	print "";
@@ -51,7 +53,8 @@ sub mouse{
 }
 
 sub time{
-	$size+=10;
+	$size+=20;
+	if($extent->{width}>$w){return 0;}
 	$window->queue_draw() ;
-	return $size>400?0:1;
+	return 1;
 }
