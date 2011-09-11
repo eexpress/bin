@@ -4,7 +4,7 @@ use strict;
 use Gtk2 '-init';
 use Cairo;
 
-my $text=$ARGV[0]//'OSD Example';
+my $text=$ARGV[0]//'OSD Perl';
 my $size=20;
 
 my $extent;
@@ -38,7 +38,7 @@ sub expose {
 	$cr->set_font_size($size);
 	$cr->set_source_rgba(0,0,70,0.9);
 	$cr->move_to(0,$h-$size/2);
-	$extent=$cr->text_extents($text."..");
+	$extent=$cr->text_extents($text.".");
 	$cr->show_text($text);
 	# 奇怪的print。不写就不画上面的文字。第一次碰到这情况。
 	print "";
@@ -54,6 +54,7 @@ sub mouse{
 
 sub time{
 	$size+=20;
+	if($size*1.5>$h){return 0;}
 	if($extent->{width}>$w){return 0;}
 	$window->queue_draw() ;
 	return 1;
