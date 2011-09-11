@@ -4,7 +4,7 @@ use strict;
 use Gtk2 '-init';
 use Cairo;
 
-my $text=$ARGV[0]//'OSD Perl';
+my $text=$ARGV[0]//'OSD 演示';
 my $size=20;
 
 my $extent;
@@ -36,7 +36,7 @@ sub expose {
 
 	$cr->select_font_face("Vera Sans YuanTi",'normal','bold');
 	$cr->set_font_size($size);
-	$cr->set_source_rgba(0,0,70,0.9);
+	$cr->set_source_rgba(0,0,90,2*$size/$h);
 	$cr->move_to(0,$h-$size/2);
 	$extent=$cr->text_extents($text.".");
 	$cr->show_text($text);
