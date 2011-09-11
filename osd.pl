@@ -36,7 +36,8 @@ sub expose {
 
 	$cr->select_font_face("Vera Sans YuanTi",'normal','bold');
 	$cr->set_font_size($size);
-	$cr->set_source_rgba(0,0,90,2*$size/$h);
+	my $alpha=2*$size/$h; if($alpha>0.7){$alpha=0.7;}
+	$cr->set_source_rgba(0,0,90,$alpha);
 	$cr->move_to(0,$h-$size/2);
 	$extent=$cr->text_extents($text.".");
 	$cr->show_text($text);
