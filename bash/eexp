@@ -20,11 +20,6 @@ export EDITOR=vim
 
 export RES=$HOME/bin/resources
 
-export XMODIFIERS=@im=fcitx
-export GTK_IM_MODULE=xim
-export QT_IM_MODULE=xim
-export XIM=fcitx XIM_PROGRAM=fcitx
-
 export GST_ID3_TAG_ENCODING=GBK:UTF-8:GB18030
 export GST_ID3V2_TAG_ENCODING=GBK:UTF-8:GB18030
 
