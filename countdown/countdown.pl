@@ -2,7 +2,7 @@
 
 use Cairo;
 use POSIX qw(mktime);
-use  Gtk2 "-init";
+use Gtk2 "-init";
 
 # 每一个条目，需要一个空行结束，才会绘画。
 # 背景图片设置位置任意。
@@ -20,33 +20,24 @@ $hrc{$k}=$v;
 #`$cmd`;
 
 Gtk2->init;
-$screen=Gtk2::Gdk::Screen->get_default;
-$window=$screen->get_root_window;
-#$screen->broadcast_client_message(Gtk2::Gdk::Event->new("expose"));
-#$window->signal_connect('expose_event', \&expose, $window);
-
-$gc = Gtk2::Gdk::GC->new ($window, undef);
-($real_drawable,$x_offset,$y_offset)=$window->get_internal_paint_info;
+$window=Gtk2::Gdk->get_default_root_window;
+$cr=Gtk2::Gdk::Cairo::Context->create($window);
+Glib::Timeout->add(500,\&expose);
 expose();
-my $back_pixbuf =  Gtk2::Gdk::Pixbuf->new_from_file("/home/eexp/tt.png");
-#Gtk2->main_iteration while Gtk2->events_pending;
 Gtk2->main();
-#Gtk2->main_iteration;
-
 #------------------------------
 sub expose {
-for(keys %pics){
-my $file="/tmp/countdown-$_.png";
-my ($x,$y)=split ',',$pics{$_};
-my $pixbuf=Gtk2::Gdk::Pixbuf->new_from_file($file);
-my ($format,$width,$height)=$pixbuf->get_file_info($file);
-
-$pixbuf->render_to_drawable($real_drawable,$gc,0,0,$x,$y,$width,$height,'normal',0,0);
+	for(keys %pics){
+	my $file="/tmp/countdown-$_.png";
+	my ($x,$y)=split ',',$pics{$_};
+	$img = Cairo::ImageSurface->create_from_png ($file);
+	$cr->set_source_surface($img,$x,$y);
+	$cr->paint;
+	}
+print ".";
 }
-}
 
-sub drawpng()
-{
+sub drawpng{
 while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}; print "\n";
 my ($y,$m,$d)=split '-', $hrc{day};
 $y-=1900;$m-=1; $epoch_day=mktime(0,0,0,$d,$m,$y);
@@ -87,8 +78,7 @@ $surface->write_to_png ("/tmp/countdown-$count.png");
 $pics{$count}=$hrc{pos};
 }
 
-sub setcolor()
-{
+sub setcolor{
 my $color=$_[0];
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
 $cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
