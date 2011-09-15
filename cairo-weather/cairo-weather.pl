@@ -2,7 +2,7 @@
 
 use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
-#use Gtk2;
+use Gtk2;
 use Gnome2::GConf;
 use File::Basename qw/basename dirname/;
 #use POSIX qw(strftime);
@@ -181,33 +181,26 @@ drawstamp($week[$tweek],$size,$size*2.5,5);
 drawstamp($year." ".$city, $w0*$max/2, $size*3.5,1.8,-0.2);
 $surface->write_to_png ("$outputfile");
 show();
-#---------------------------------
-#$deskpic="/tmp/weather-all.png";
-#$surface = Cairo::ImageSurface->create_from_png ("/home/eexp/图片/木纹.png");
-#$img = Cairo::ImageSurface->create_from_png ("$outputfile");
-#$cr = Cairo::Context->create ($surface);
-#($posw,$posh)=split ',',$pos; 
-#print "$pos:$posw, $posh\n";
-#if($posw<0){$posw=$surface->get_width()-$img->get_width()+$posw;}
-#if($posh<0){$posh=$surface->get_height()-$img->get_height()+$posh;}
-#$cr->set_source_surface($img,$posw,$posh);
-#$cr->paint;
-#$surface->write_to_png ("$deskpic");
-#print "$posw, $powh. write to png. $bgfile + $outputfile = $deskpic\n";
-#`gconftool-2 -s /desktop/gnome/background/picture_filename $deskpic -t string`;
-#exit;
-#$_=`xwininfo -root`;
-#/Width:\s*\K\d+/; $screennw=$&; /Height:\s*\K\d+/; $screenh=$&;
+
 #---------------------------------
 sub show(){
-# 如果安装有habak，则设置成壁纸。否则使用内建的show_png.pl 显示。
-if (-e '/usr/bin/habak'){
 $gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
-$cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
-} else {$cmd="$show_app $outputfile";}
-print "\e[1;37;41m$cmd\e[0m\n";
-`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
-`$cmd`;
+Gtk2->init;
+$window=Gtk2::Gdk->get_default_root_window;
+$pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ($bgfile);
+$pixmap = $pixbuf->render_pixmap_and_mask (1);
+$cr = Gtk2::Gdk::Cairo::Context->create ($pixmap);
+$img = Cairo::ImageSurface->create_from_png ($outputfile);
+my ($x, $y, $width, $height, $depth) = $window->get_geometry;
+($x,$y)=split ',',$pos;
+if($x<0){$x=$width+$x-$img->get_width;}
+if($y<0){$y=$height+$y-$img->get_height;}
+$cr->set_source_surface($img,$x,$y);
+$cr->paint;
+$window->set_back_pixmap($pixmap,0);
+$window->clear();
+Gtk2->main_iteration;
+`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$outputfile on $bgfile"` if -e "/usr/bin/notify-send";
 }
 #---------------------------------
 
