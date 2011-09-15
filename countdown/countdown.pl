@@ -19,15 +19,18 @@ $hrc{$k}=$v;
 #print "-----\n$cmd\n";
 #`$cmd`;
 
+savebg();
 Gtk2->init;
 $window=Gtk2::Gdk->get_default_root_window;
-$cr=Gtk2::Gdk::Cairo::Context->create($window);
-Glib::Timeout->add(500,\&expose);
-expose();
-Gtk2->main();
+$pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ('/tmp/countdown.png');
+$pixmap = $pixbuf->render_pixmap_and_mask (1);
+$window->set_back_pixmap($pixmap,0);
+$window->clear();
 #------------------------------
-sub expose {
-	for(keys %pics){
+sub savebg{
+$surface = Cairo::ImageSurface->create_from_png ($hrc{bg});
+$cr = Cairo::Context->create ($surface);
+for(keys %pics){
 	my $file="/tmp/countdown-$_.png";
 	my ($x,$y)=split ',',$pics{$_};
 	$img = Cairo::ImageSurface->create_from_png ($file);
@@ -35,8 +38,9 @@ sub expose {
 	$cr->paint;
 	}
 print ".";
+$surface->write_to_png ('/tmp/countdown.png');
 }
-
+#------------------------------
 sub drawpng{
 while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}; print "\n";
 my ($y,$m,$d)=split '-', $hrc{day};
@@ -77,7 +81,7 @@ $surface->write_to_png ("/tmp/countdown-$count.png");
 #$cmd.=" -mp $hrc{pos} -hi /tmp/countdown-$count.png";
 $pics{$count}=$hrc{pos};
 }
-
+#------------------------------
 sub setcolor{
 my $color=$_[0];
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;

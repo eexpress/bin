@@ -53,6 +53,13 @@ imap [ []<ESC>i
 autocmd BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
 au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 au BufNewFile,BufRead *.c so ~/.vim/echofunc.vim
+" Vala
+autocmd BufRead *.vala set efm=%f:%l.%c-%[%^:]%#:\ %t%[%^:]%#:\ %m
+au BufRead,BufNewFile *.vala            setfiletype vala
+let vala_comment_strings = 1
+let vala_space_errors = 1
+let vala_no_tab_space_error = 1
+
 "状态栏
 set laststatus=2
 set statusline=

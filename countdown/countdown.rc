@@ -11,10 +11,8 @@ pos=20,450
 text=网络交费
 day=2012-9-2
 
-pos=-20,550
-
 text=城运会
 day=2011-11-12
-pos=-20,250
+pos=20,250
 
-bg=/home/eexp/图片/壁纸/木纹ubuntu.jpg
+bg=/home/eexp/bg.png
