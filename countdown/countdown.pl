@@ -3,11 +3,14 @@
 use Cairo;
 use POSIX qw(mktime);
 use Gtk2 "-init";
+use Gnome2::GConf;
 
 # 每一个条目，需要一个空行结束，才会绘画。
 # 背景图片设置位置任意。
 #$cmd="";
 $count=0;
+$pic_prefix="/tmp/countdown";
+unlink $pic_prefix."*";
 open RC,"<$ARGV[0]"; @rc=<RC>; close RC;
 for $line(@rc){
 chomp $line;
@@ -15,31 +18,41 @@ my($k,$v)=split /\s*=\s*/,$line;
 if($k eq ""){$count++; drawpng(); next;}
 $hrc{$k}=$v;
 }
-#$cmd="habak -ms \'$hrc{bg}\'".$cmd;
+#$cmd="habak -ms \'$hrc{bg}\'".$cmd; `$cmd`;
 #print "-----\n$cmd\n";
-#`$cmd`;
+$gconf = Gnome2::GConf::Client -> get_default;
+$gnomebg=-e $hrc{bg}?$hrc{bg}:$gconf->get("/desktop/gnome/background/picture_filename");
+print "$gnomebg\n";
 
-savebg();
 Gtk2->init;
 $window=Gtk2::Gdk->get_default_root_window;
-$pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ('/tmp/countdown.png');
+$pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ($gnomebg);
 $pixmap = $pixbuf->render_pixmap_and_mask (1);
-$window->set_back_pixmap($pixmap,0);
-$window->clear();
-#------------------------------
-sub savebg{
-$surface = Cairo::ImageSurface->create_from_png ($hrc{bg});
-$cr = Cairo::Context->create ($surface);
+$cr = Gtk2::Gdk::Cairo::Context->create ($pixmap);
 for(keys %pics){
-	my $file="/tmp/countdown-$_.png";
+	my $file="$pic_prefix-$_.png";
 	my ($x,$y)=split ',',$pics{$_};
 	$img = Cairo::ImageSurface->create_from_png ($file);
 	$cr->set_source_surface($img,$x,$y);
 	$cr->paint;
 	}
-print ".";
-$surface->write_to_png ('/tmp/countdown.png');
-}
+$window->set_back_pixmap($pixmap,0);
+$window->clear();
+Gtk2->main_iteration;
+#------------------------------
+#sub savebg{
+#$surface = Cairo::ImageSurface->create_from_png ($gnomebg);
+#$cr = Cairo::Context->create ($surface);
+#for(keys %pics){
+#        my $file="$pic_prefix-$_.png";
+#        my ($x,$y)=split ',',$pics{$_};
+#        $img = Cairo::ImageSurface->create_from_png ($file);
+#        $cr->set_source_surface($img,$x,$y);
+#        $cr->paint;
+#        }
+#print ".";
+#$surface->write_to_png ($pic_prefix.".png");
+#}
 #------------------------------
 sub drawpng{
 while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}; print "\n";
