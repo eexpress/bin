@@ -5,7 +5,7 @@ use Cairo;
 use utf8;
 
 #$file='/home/eexp/图片/120px-Former_Ubuntu_logo.svg.png';
-$file='/home/eexp/图片/壁纸●/1920vladstudio_1019.jpg';
+$file=$ARGV[1]//'/home/eexp/图片/壁纸●/1920vladstudio_1019.jpg';
 Gtk2->init;
 $display=Gtk2::Gdk::Display->get_default;
 $screen = $display->get_default_screen;
@@ -33,14 +33,14 @@ cairo();
 #Gtk2->main();
 $window->set_back_pixmap($pixmap,0);
 $window->clear();
-$display->flush;
+#$display->flush;
 Gtk2->main_iteration;
 
 sub cairo {
 $cr->select_font_face("Amerika Sans",'normal','bold');
-$cr->set_font_size(60);
+$cr->set_font_size(160);
 $cr->set_source_rgba(0,0,70,0.5);
-$cr->move_to(100,300);
+$cr->move_to(100,200);
 $cr->show_text("Cairo on Root");
 
 #my $img = Cairo::ImageSurface->create_from_png ($file);
