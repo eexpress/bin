@@ -14,7 +14,15 @@ foreach(@_){
 $r=int rand(15);
 #print "\.$_";
 _utf8_off($_);
+if($r==0){
+$out.=sprintf "\x030,1$_\x0f";
+}elsif($r==1){
+$out.=sprintf "\x031,0$_\x0f";
+}else{
 $out.=sprintf "\x03$r$_";
 }
+}
+#ctrl序列可以用xev看
+$out="\x02$out";
 print "$out\n";
 `echo $out|xsel -i`;
