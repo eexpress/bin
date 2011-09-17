@@ -187,11 +187,13 @@ sub show(){
 $gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
 Gtk2->init;
 $window=Gtk2::Gdk->get_default_root_window;
+my ($x, $y, $width, $height, $depth) = $window->get_geometry;
+printf "0x%x : $width x $height @ $depth\n", $window->get_xid;
 $pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ($bgfile);
-$pixmap = $pixbuf->render_pixmap_and_mask (1);
+$pixbuf1=$pixbuf->scale_simple ($width, $height, "GDK_INTERP_BILINEAR");
+$pixmap = $pixbuf1->render_pixmap_and_mask (1);
 $cr = Gtk2::Gdk::Cairo::Context->create ($pixmap);
 $img = Cairo::ImageSurface->create_from_png ($outputfile);
-my ($x, $y, $width, $height, $depth) = $window->get_geometry;
 ($x,$y)=split ',',$pos;
 if($x<0){$x=$width+$x-$img->get_width;}
 if($y<0){$y=$height+$y-$img->get_height;}

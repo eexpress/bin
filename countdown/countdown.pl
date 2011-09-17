@@ -26,8 +26,10 @@ print "$gnomebg\n";
 
 Gtk2->init;
 $window=Gtk2::Gdk->get_default_root_window;
+my ($x, $y, $width, $height, $depth) = $window->get_geometry;
 $pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ($gnomebg);
-$pixmap = $pixbuf->render_pixmap_and_mask (1);
+$pixbuf1=$pixbuf->scale_simple ($width, $height, "GDK_INTERP_BILINEAR");
+$pixmap = $pixbuf1->render_pixmap_and_mask (1);
 $cr = Gtk2::Gdk::Cairo::Context->create ($pixmap);
 for(keys %pics){
 	my $file="$pic_prefix-$_.png";

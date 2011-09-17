@@ -3,7 +3,7 @@
 use Encode qw(_utf8_on _utf8_off);
 
 srand();
-if($ARGV[1]){
+if($ARGV[0]){
 $_=join ' ',@ARGV;
 }else{
 $_=`xsel -o`;
@@ -21,7 +21,7 @@ if($r==0){$out.=sprintf "\x030,1$_\x0f";
 }else{$out.=sprintf "\x03$r$_";
 }
 #2种花字
-#$out.=int rand(15)?"\xd2\x89":"\xd2\x88";
+#$out.=int rand(2)?"\xd2\x89":"\xd2\x88";
 }
 #ctrl序列可以用xev看，粗体^B
 $out="\x02$out";
