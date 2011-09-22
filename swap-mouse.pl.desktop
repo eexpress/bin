@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[zh_CN]=/home/eexp/bin/resources/icon/left.png
+Exec=/home/eexp/bin/swap-mouse.pl
+Name[zh_CN]=swap-mouse.pl
+Name=swap-mouse.pl
+Icon=/home/eexp/bin/resources/icon/left.png

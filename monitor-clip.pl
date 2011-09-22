@@ -5,6 +5,7 @@ $_=`xsel -o`;
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;if(-e){`xdg-open $_`;exit;}}
 if(/\d+\.\d+\.\d+\.\d+/){`$ENV{HOME}/bin/ip-138查询ip属地.bash $&`;exit;}
 if(/^\w+$/){`$ENV{HOME}/bin/bot/sdcv.pl -n`; exit;}
+if(/ppa:.*\/ppa/){`zenity --question --title="是否添加此PPA源" --text=$&`; `gksudo add-apt-repository $&` if ! $?; exit;}
 if(! /:\/\//){`$ENV{HOME}/bin/bot/g-translate.pl -n \"$&\"`;exit;}
 #----------------------------------
 @url=m"(?:http|mms|rtsp)://[^\s]*"g;
