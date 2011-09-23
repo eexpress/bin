@@ -99,6 +99,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 #-----------eexp---------
+set -o vi
 [ -f ~/bin/bash/eexp ] && . ~/bin/bash/eexp
 [ -f ~/bin/bash/alias ] && . ~/bin/bash/alias
 [ -f ~/bin/chs/chs_completion ] && . ~/bin/chs/chs_completion
