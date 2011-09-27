@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+use Encode qw(decode);
+
 $_=`xsel -o`;
 #----------------------------------
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;if(-e){`xdg-open $_`;exit;}}
@@ -18,15 +20,16 @@ if(/v.youku.com/ || /tudou.com\/playlist/ || /v.ku6.com/ || /6.cn\/watch/       
    $t="下载flash资源"; `$TERM ~/bin/flash-down.pl $_`;}
 elsif(m"http://u.115.com/file/\w+"){
    $t="下载115资源"; `$TERM ~/bin/115_client $&`;}  
-elsif(/\.rapidshare.com/ || /www\.hotfile\.com/ || /\.filesonic\.com/){
-   $t="保存slimrat资源"; `$TERM /usr/bin/slimrat $_`;}  
+elsif(/\<rapidshare.com/ || /hotfile\.com/ || /\<filesonic\.com/){
+   $t="保存下载序列"; `echo "$_" >>~/下载/queue`;}  
+#   $t="保存slimrat资源"; `$TERM /usr/bin/slimrat $_`;}  
 elsif(/^mms/ || /^rtsp/ || /\.asx$/){
    $t="播放网络流媒体"; `$TERM mplayer $_`;}  
 #----------------------------------
 if($t){
 	print "$t ===> $_\n"; $t=decode("utf8",$t);
 	`$ENV{HOME}/bin/msg elvis.png  $t $_`;}
-else {print "unrecognized url:\t=>$_<=\n"; return 1;}
+else {print "unrecognized url:\t=>$_<=\n";}
 }
 #----------------------------------
 
