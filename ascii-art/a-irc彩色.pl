@@ -11,7 +11,7 @@ $_=`xsel -o`;
 _utf8_on($_);
 s/[()]//g;
 #@_=split //,$_;
-@_=/.{0,4}/g;
+@_=/.{0,2}/g;
 foreach(@_){
 $r=int rand(15);
 #print "\.$_";
@@ -28,5 +28,5 @@ $out="\x02$out";
 #英文倒字
 #use utf8;
 #$out=~y/a-z/ɐqɔpǝɟƃɥᴉḷʞȷɯuodbɹsʇnʌʍxʎz/;
-#print "$out\n";
+print "$out\n";
 `echo $out|xsel -i`;
