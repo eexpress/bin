@@ -36,6 +36,7 @@ foreach (keys %web){s'http://'';s'/.*'';$_.="\t\e[30;42m*\e[0m" if /$select/;
 print "$_\n";}
 exit;
 }
+#`echo $ARGV[0]>>/tmp/pi-file`;
 #----------------------------------
 use Net::DBus; 
 $bus = Net::DBus->session->get_service('org.freedesktop.Notifications')
@@ -49,6 +50,7 @@ my $fp='/tmp/pi.png';
 	elsif(-f '/usr/bin/import'){`/usr/bin/import -frame $fp`;}
 	$ARGV[0]=$fp; 
 }
+$ARGV[0]=~s'file://'';
 if(! -f $ARGV[0]){
 $bus->Notify("paste-img", 0, "error", "文件无效 .$ARGV[0].", ':(', [], { }, -1);exit;
 }
