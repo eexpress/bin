@@ -2,16 +2,20 @@
 
 use Encode qw(_utf8_on _utf8_off);
 
+$s='=';
 srand();
 if($ARGV[0]){
 $_=join ' ',@ARGV;
 }else{
 $_=`xsel -o`;
 }
-_utf8_on($_);
+#_utf8_on($_);
 s/[()]//g;
-#@_=split //,$_;
-@_=/.{0,2}/g;
+s/(?=[\x80-\xff]+)/$s/g; s/(?=[\x00-\x7f]+)/$s/g;
+#s/(?=[\x80-\xff]+)/$s/g; s/(?=[_A-Za-z0-9]+)/$s/g;
+print "$_\n";
+@_=split /$s/,$_;
+#@_=/.{0,2}/g;
 foreach(@_){
 $r=int rand(15);
 #print "\.$_";
