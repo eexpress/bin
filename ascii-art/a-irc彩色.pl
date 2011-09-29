@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
-use Encode qw(_utf8_on _utf8_off);
+#use Encode qw(_utf8_on _utf8_off);
+use utf8;
 
 $s='=';
 srand();
@@ -9,11 +10,12 @@ $_=join ' ',@ARGV;
 }else{
 $_=`xsel -o`;
 }
-#_utf8_on($_);
 s/[()]//g;
-s/(?=[\x80-\xff]+)/$s/g; s/(?=[\x00-\x7f]+)/$s/g;
+#s/(?=[\x80-\xff]+)/$s/g; s/(?=[\x00-\x7f，。]+)/$s/g;
 #s/(?=[\x80-\xff]+)/$s/g; s/(?=[_A-Za-z0-9]+)/$s/g;
+s/[_A-Za-z0-9:,\.，。]+/$s$&$s/g; s/$s\s*$s/$s/g; s/($s.)$s/$1/g;
 print "$_\n";
+#_utf8_on($_);
 @_=split /$s/,$_;
 #@_=/.{0,2}/g;
 foreach(@_){
