@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[zh_CN]=/usr/share/pixmaps/faces/coffee.jpg
+Exec=/home/eexp/bin/ascii-art/a-irc彩色.pl -f
+Name[zh_CN]=a-forum彩色.pl
+Name=a-irc彩色.pl
+Icon=/usr/share/pixmaps/faces/coffee.jpg
