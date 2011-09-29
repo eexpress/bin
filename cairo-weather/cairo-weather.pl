@@ -184,6 +184,17 @@ show();
 
 #---------------------------------
 sub show(){
+# 如果安装有habak，则设置成壁纸。否则使用内建的show_png.pl 显示。
+if (-e '/usr/bin/habak'){
+$gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
+$cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
+} else {$cmd="$show_app $outputfile";}
+print "\e[1;37;41m$cmd\e[0m\n";
+`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
+`$cmd`;
+}
+#---------------------------------
+sub show1(){
 $gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
 Gtk2->init;
 $window=Gtk2::Gdk->get_default_root_window;
