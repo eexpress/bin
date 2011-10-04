@@ -72,6 +72,8 @@ HISTIGNORE="pwd:ls:cd:"
 #export LS_COLORS
 eval `dircolors ~/bin/bash/ls_color`
 
+cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
+#cdd(){ cd `dirname "$1"`;}
 googl(){ curl -s -d "url=${1}" http://goo.gl/api/url|sed -n "s/.*:\"\([^\"]*\).*/\1\n/p"|xsel -i; echo `xsel -o`;}
 atosd(){ echo DISPLAY=:0.0 osdanimationtxt.pl $2|at "now + $1 minutes";}
 atpng(){ echo DISPLAY=:0.0 show_png.pl $2|at "now + $1 minutes";}
