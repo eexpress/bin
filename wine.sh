@@ -4,5 +4,6 @@ d=`dirname "$1"`
 echo $d
 cd "$d"
 e=`basename "$1"`
-wine explorer /desktop=foo,$r "$e"
+#wine explorer /desktop=foo,$r "$e"
+wine explorer /desktop=foo,1024x768 "$e"
 

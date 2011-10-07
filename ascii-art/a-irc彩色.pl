@@ -47,4 +47,4 @@ if($forum){
 #ctrl序列可以用xev看，粗体^B
 if($forum){$out="\[b\]$out\[/b\]";}else{$out="\x02$out";}
 print "$out\n";
-`echo $out|xsel -i`;
+`echo "$out"|xsel -i`;
