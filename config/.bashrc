@@ -105,3 +105,6 @@ set -o vi
 [ -f ~/bin/chs/chs_completion ] && . ~/bin/chs/chs_completion
 [ -f /usr/share/autojump/autojump.sh ] && . /usr/share/autojump/autojump.sh
 
+
+# Added by autojump install.sh
+source /etc/profile.d/autojump.bash
