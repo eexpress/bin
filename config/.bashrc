@@ -100,11 +100,6 @@ fi
 
 #-----------eexp---------
 set -o vi
-[ -f ~/bin/bash/eexp ] && . ~/bin/bash/eexp
-[ -f ~/bin/bash/alias ] && . ~/bin/bash/alias
-[ -f ~/bin/chs/chs_completion ] && . ~/bin/chs/chs_completion
-[ -f /usr/share/autojump/autojump.sh ] && . /usr/share/autojump/autojump.sh
+arrays=("$HOME/bin/bash/eexp" "$HOME/bin/bash/alias" "$HOME/bin/chs/chs_completion" "/etc/profile.d/autojump.bash")
+for prg in ${arrays[@]}; do [ -f "$prg" ] && . $prg; done; unset prg;
 
-
-# Added by autojump install.sh
-source /etc/profile.d/autojump.bash
