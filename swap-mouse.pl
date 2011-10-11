@@ -154,10 +154,11 @@ if($r eq "left"){
 	`gconftool-2 -s /apps/metacity/general/button_layout :minimize,maximize,close -t string`;
 	} else {
 	`xmodmap -e "pointer = 1 2 3"`;
-	`synclient TapButton1=1`;
-	`synclient TapButton3=3`;
 	}
 	`xsetroot -cursor_name left_ptr`;
+	`synclient TapButton1=1`;
+	`synclient TapButton2=2`;
+	`synclient TapButton3=3`;
 	$r="right";
 }
 else{
@@ -167,10 +168,11 @@ else{
 	`gconftool-2 -s /apps/metacity/general/button_layout close,maximize,minimize: -t string`;
 	} else {
 	`xmodmap -e "pointer = 3 2 1"`;
-	`synclient TapButton1=3`;
-	`synclient TapButton3=1`;
 	}
 	`xsetroot -cursor_name right_ptr`;
+	`synclient TapButton1=3`;
+	`synclient TapButton2=2`;
+	`synclient TapButton3=1`;
 	$r="left";
 }
 }
