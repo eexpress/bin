@@ -147,6 +147,7 @@ $status_icon->set_from_pixbuf(($r eq "left")?$pix_l:$pix_r);
 }
 
 sub swap{
+`gconftool-2 -s /apps/gwd/mouse_wheel_action shade -t string`;
 if($r eq "left"){
 	print "set => right hand\n";
 	if($session){
