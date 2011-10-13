@@ -157,9 +157,7 @@ if($r eq "left"){
 	`xmodmap -e "pointer = 1 2 3"`;
 	}
 	`xsetroot -cursor_name left_ptr`;
-	`synclient TapButton1=1`;
-	`synclient TapButton2=2`;
-	`synclient TapButton3=3`;
+	`synclient TapButton1=1 TapButton2=2 TapButton3=3`;
 	$r="right";
 }
 else{
@@ -171,9 +169,7 @@ else{
 	`xmodmap -e "pointer = 3 2 1"`;
 	}
 	`xsetroot -cursor_name right_ptr`;
-	`synclient TapButton1=3`;
-	`synclient TapButton2=2`;
-	`synclient TapButton3=1`;
+	`synclient TapButton1=3 TapButton2=2 TapButton3=1`;
 	$r="left";
 }
 }
