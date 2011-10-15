@@ -1,6 +1,6 @@
 " 开启语法高亮
 syntax on 
-colo eexp
+colo desert
 set ai
 set t_Co=256
 set nu

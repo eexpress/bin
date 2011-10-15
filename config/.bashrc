@@ -98,8 +98,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-
 #-----------eexp---------
 set -o vi
-arrays=([0]="$HOME/bin/bash/alias" [1]="/etc/profile.d/autojump.bash" [2]="$HOME/bin/bash/../chs/chs_completion" [3]="$HOME/bin/bash/eexp")
+arrays=([0]="$HOME/bin/bash/alias" [1]="/usr/share/autojump/autojump.bash" [2]="$HOME/bin/bash/../chs/chs_completion" [3]="$HOME/bin/bash/eexp")
 for prg in ${arrays[@]}; do [ -f "$prg" ] && . $prg; done; unset prg;
