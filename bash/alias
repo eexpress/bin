@@ -1,4 +1,5 @@
 alias gcc='/usr/bin/gcc `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0`'
+alias valac='/usr/bin/valac --pkg gtk+-3.0 --pkg gmodule-2.0'
 alias calendar='calendar -A 7'
 alias fc-zh='fc-list :lang=zh-cn|sed 's/:.*//''
 alias arp.显示='cat /proc/net/arp'
