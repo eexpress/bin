@@ -45,6 +45,7 @@ chomp $to;
 if (-f $ARGV[0]){
 print "$file\t=>\t$to\n";
 #● echo youremailpassword|gpg -aer eexp01>~/bin/resources/gpg-163-password
+# pw: i8t
 my $pw=`gpg -d $ENV{HOME}/bin/resources/gpg-163-password`;
 chomp $pw;
 my $info;

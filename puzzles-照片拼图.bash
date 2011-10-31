@@ -14,9 +14,9 @@ x=`echo $s|cut -dx -f1`
 y=`echo $s|cut -dx -f2`
 echo -e "$1 ---->\t$f\t$s"
 if [ $x -gt $y ]; then
-p=0.99; s=400
+p=0.99; s=500
 else
-p=1.5; s=300
+p=1.5; s=400
 fi
 t=`echo "sqrt($#)+$p"|bc -l`
 t=`echo $t|cut -d. -f1`

@@ -1,7 +1,9 @@
 r=`xrandr|grep -o '.*\*'|cut -d' ' -f 4`
 echo $r
 #n=640x480
-n=1024x768
+n=800x600
+n=840x525
+#n=1024x768
 #n=1152x864
 d=`dirname "$1"`
 echo $d
