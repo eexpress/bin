@@ -49,6 +49,7 @@ imap <C-u>	<Esc>:update<CR>a
 imap ( ()<ESC>i
 imap { {}<ESC>i
 imap [ []<ESC>i
+imap <TAB> <C-p>
 "新脚本自动加类型
 autocmd BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
 au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go

@@ -1,13 +1,18 @@
 #!/usr/bin/perl
-
+#http://stackoverflow.com/
 use Gtk2 "-init";
 use Cairo;
 use utf8;
-use Data::Dumper;
+#use Data::Dumper;
 
+sub wininfo{
+my $w=shift;
+my ($x, $y, $width, $height, $depth) = $w->get_geometry;
+printf "%10x:\t${width}x$height+$x+$y\@$depth\ttype:%s\n", $w->get_xid, $w->get_type_hint;
+}
 #$file='/home/eexp/图片/120px-Former_Ubuntu_logo.svg.png';
 #$file=$ARGV[1]//'/home/eexp/图片/壁纸●/1920vladstudio_1019.jpg';
-$file=$ARGV[1]//'/home/eexp/图片/壁纸/1920x1080.jpg';
+#$file=$ARGV[1]//'/home/eexp/图片/壁纸/1920x1080.jpg';
 Gtk2->init;
 #$display=Gtk2::Gdk::Display->open($ENV{DISPLAY});
 #print "display:$display.$ENV{DISPLAY}\n";
@@ -19,8 +24,16 @@ Gtk2->init;
 #$window=$screen->get_root_window;
 $window=Gtk2::Gdk->get_default_root_window;
 ($drawable,$x_offset,$y_offset)=$window->get_internal_paint_info;
-my ($x, $y, $width, $height, $depth) = $window->get_geometry;
-printf "0x%x : $width x $height @ $depth\n", $window->get_xid;
+wininfo($window);
+
+@wlist = $window->get_children;
+foreach(@wlist){ wininfo($_); }
+$_=Gtk2::Gdk::Window->lookup(0x1c00072);
+wininfo($_);
+exit;
+#$window = Gtk2::Gdk::Window->lookup (0x15d);
+#$window = Gtk2::Gdk::Window->lookup (0x34011e4);
+#$window->maximize;
 
 # self.root_window = gtk.gdk.get_default_root_window()
 #    self.root_window.set_events(gtk.gdk.ALL_EVENTS_MASK)
@@ -38,25 +51,30 @@ printf "0x%x : $width x $height @ $depth\n", $window->get_xid;
 #$pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ($file);
 #$pixmap = $pixbuf->render_pixmap_and_mask (1);
 #$pixmap = Gtk2::Gdk::Pixmap->lookup_for_display ($display, $window);
-$pixmap = Gtk2::Gdk::Pixmap->lookup($drawable);
+#$pixmap = Gtk2::Gdk::Pixmap->lookup($drawable);
 #$pixmap = Gtk2::Gdk::Pixmap->lookup($window);
 #$pixmap = Gtk2::Gdk::Pixmap->foreign_new($window);
+$pixmap = Gtk2::Gdk::Pixmap->new($drawable, $width, $height, $depth);
 #$pixmap = Gtk2::Gdk::Pixmap->foreign_new_for_display($display,$window);
 #$pixmap = Gtk2::Gdk::Pixmap->foreign_new_for_screen ($screen, $window, $width, $height, $depth);
 #$pixmap = Gtk2::Gdk::Pixmap->lookup_for_display ($display, $window);
 #$pixmap = Gtk2::Gdk::Pixmap->lookup($drawable);
 #$window->set_back_pixmap($pixmap,0);
+#$cr = Gtk2::Gdk::Cairo::Context->create ($pixmap);
+#$pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ($file);
+#$pixbuf1=$pixbuf->scale_simple ($width, $height, "GDK_INTERP_BILINEAR");
+#$pixmap = $pixbuf1->render_pixmap_and_mask (1);
 $cr = Gtk2::Gdk::Cairo::Context->create ($pixmap);
-
+$event = Gtk2::Gdk::Event->get_graphics_expose ($window);
 #$cr=Gtk2::Gdk::Cairo::Context->create($window);
 #Glib::Timeout->add_seconds(1,\&cairo);
 cairo();
+#$window->signal_connect('expose_event', \&cairo);
 #Gtk2->main_iteration while Gtk2->events_pending;
-#Gtk2->main();
-$window->set_back_pixmap($pixmap,0);
-$window->clear();
-#$display->flush;
-Gtk2->main_iteration;
+Gtk2->main();
+#$window->set_back_pixmap($pixmap,0);
+#$window->clear();
+#Gtk2->main_iteration;
 
 sub cairo {
 $cr->select_font_face("Amerika Sans",'normal','bold');
