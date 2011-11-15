@@ -40,6 +40,7 @@ for(keys %pics){
 	}
 $window->set_back_pixmap($pixmap,0);
 $window->clear();
+#$pixbuf1->save('/home/eexp/w.jpg','jpeg',quality=>'100');
 Gtk2->main_iteration;
 #------------------------------
 #sub savebg{

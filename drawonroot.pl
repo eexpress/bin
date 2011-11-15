@@ -4,7 +4,6 @@ use Gtk2 "-init";
 use Cairo;
 use utf8;
 use X11::Protocol;
-#libx11-protocol-perl
 
 my $x = X11::Protocol->new();
 my $desktop;
@@ -30,12 +29,16 @@ cairo();
 Gtk2->main_iteration;
 
 sub cairo {
-$cr->select_font_face("WenQuanYi Zen Hei",'normal','bold');
-$cr->set_operator("atop");
-$cr->set_font_size(40);
-$cr->set_source_rgba(0,0,70,0.5);
-$cr->move_to(10,$height/2);
-$cr->show_text(`date`);
-print ".";
+#$cr->select_font_face("Vera Sans YuanTi",'normal','bold');
+#$cr->set_font_size(40);
+#$cr->set_source_rgba(0,0,70,0.5);
+#$cr->move_to(10,$height/2);
+#$cr->show_text(`date`);
+
+#my $img = Cairo::ImageSurface->create_from_png ('/usr/share/pixmaps/gnome-logo-large.png');
+my $img = Cairo::ImageSurface->create_from_png ('/home/eexp/图片/eexp.png');
+$cr->set_source_surface($img,($width-$img->get_width)/2,($height-$img->get_height)/2);
+$cr->paint;
+
 }
 
