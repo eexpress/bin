@@ -24,7 +24,7 @@ my ($drawable,$x_offset,$y_offset)=$desktop->get_internal_paint_info;
 
 Gtk2->init;
 $display=Gtk2::Gdk::Display->get_default;
-$file='/usr/share/pixmaps/gnome-logo-large.png';
+$file=$ARGV[0]//'/usr/share/pixmaps/gnome-logo-large.png';
 cairo();
 #gc();
 #pixmap();
