@@ -2,7 +2,7 @@
 
 new="/tmp/findnew"
 size="+1000k"
-format='Audio|MPEG|ASF'
+format='Audio|MPEG|ASF|Flash'
 
 touch $new
 read -p "开始监视缓冲。。视频传输完成后，按回车。"
