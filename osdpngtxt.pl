@@ -20,14 +20,29 @@ my $h=$img->get_height();
 my $window = Gtk2::Window->new();
 $window->set_decorated(0);
 $window->add_events("GDK_BUTTON_PRESS_MASK");
+#$window->add_events("GDK_MOTION_NOTIFY_MASK");
 $window->set_keep_above(1);
 $window->signal_connect('expose_event', \&expose);
 $window->signal_connect('button_press_event',\&mouse);
-#$window->set_size_request($img->get_width(),$img->get_height());
+$window->signal_connect('enter_notify_event',\&enter);
+$window->signal_connect('leave_notify_event',\&enter);
+my $screen= Gtk2::Gdk::Screen->get_default;
+my $sw=$screen->get_width;
+my $sh=$screen->get_height;
 $window->set_colormap($window->get_screen->get_rgba_colormap());
 $window->show_all();
 Gtk2->main;
 
+sub enter {
+	my($widget, $event) = @_;
+	my(undef, $x0,$y0,undef)=Gtk2::Gdk::Display->get_default->get_pointer;
+#        my($x,$y)=$window->get_origin;
+
+	my ($x, $y, $width, $height, $depth) = $widget->window->get_geometry;
+	$window->move($x0-$width/2,$y0-$height/2);
+#        print "$x0,$y0 $width x $height\n";
+
+}
 sub expose {
 	my($widget, $event) = @_;
 	my $cr = Gtk2::Gdk::Cairo::Context->create($widget->window);
