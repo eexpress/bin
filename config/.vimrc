@@ -39,7 +39,7 @@ inoremap <F8> <C-x><C-o>
 " 设置程序运行
 map <F9> :call CompileRun()<CR>
 " 直接运行
-map <F10> :!%<CR>
+"map <F10> :!%<CR>
 " 关闭窗口，保存文件
 map <leader>q	:q!<CR>
 imap <leader>q	<Esc>:q!<CR>
@@ -75,6 +75,8 @@ exec "!/usr/bin/gcc `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` % -g -o %<
 exec "!./%<.run" 
 elseif &filetype == 'perl' 
 exec "!perl %" 
+elseif &filetype == 'tex' 
+exec "!xelatex %" 
 endif 
 endfunc
 
