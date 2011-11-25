@@ -49,9 +49,11 @@ imap <C-u>	<Esc>:update<CR>a
 imap ( ()<ESC>i
 imap { {}<ESC>i
 imap [ []<ESC>i
-vnoremap [p <esc>`>a]<esc>`<i[<esc>evi[
-vnoremap (( <esc>`>a)<esc>`<i(<esc>evi(
-vnoremap {{ <esc>`>a}<esc>`<i{<esc>evi{
+
+vnoremap [p <esc>`>a]<esc>`<i[<esc>i
+vnoremap (( <esc>`>a)<esc>`<i(<esc>i
+vnoremap {{ <esc>`>a}<esc>`<i{<esc>i
+
 imap <TAB> <C-p>
 "新脚本自动加类型
 autocmd BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
