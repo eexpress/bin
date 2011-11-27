@@ -82,7 +82,6 @@ elseif &filetype == 'perl'
 exec "!perl %" 
 elseif &filetype == 'tex' 
 exec "!xelatex %; [ $? == 0 ] && nohup evince %:r.pdf &" 
-"exec "!evince %:r.pdf" 
 endif 
 endfunc
 
