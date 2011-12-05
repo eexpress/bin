@@ -89,7 +89,12 @@ endfunc
 "set foldopen=all	" 光标进入，自动打开折叠
 "set foldclose=all	" 光标退出，自动关闭折叠
 "set foldlevel=2
-set foldmethod=syntax 	" 设置语法折叠
+autocmd BufRead *.c set foldmethod=syntax 	" 设置语法折叠
+autocmd BufRead *.perl,*.pl set foldmethod=indent	"缩进折叠
+set tabstop=4
+set shiftwidth=4
+"手动创建折叠，zf zd 缺省标记/*{{{*/，不适合Perl
+"autocmd BufRead *.perl,*.pl set foldmethod=marker
 set foldcolumn=3 	"设置折叠区域的宽度
 set foldminlines=4
 nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zo')<CR>

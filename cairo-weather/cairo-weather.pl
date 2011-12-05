@@ -115,30 +115,30 @@ $surface = Cairo::ImageSurface->create ('argb32',$w0*$max,$size*4);
 $year="";$month=""; $cnt=0;
 #---------------------------------
 for (@_){
-#next if ! /$today/ && ! $is;
-@t=localtime(time+86400*$cnt);
-$sign="o"; if($cnt==0){$sign="t";$tweek=$t[6];} else{if (($t[6]==0)||($t[6]==6)){$sign="w";}}
-$cnt++;
-#last if ($cnt+1>$max);
-chomp;
-#($sign,$date,$weather,$temp,$wind)=split "\t",$_;
-($weather,$temp,$wind)=split "\t",$_;
-#($y,$m,$d)=split "-",$date;
-$y=$t[5]+1900;$m=$t[4]+1;$d=$t[3];
-#---------------------------------
-@lunar=grep /$m月.*$d \t/,@alllunar;
-$_=$lunar[0];
-chomp;s/^.*\t//;s/\ (.*)//;$lunar[0]=$_;
-#---------------------------------
-if($year==""){$year=$y;}elsif($year==$y){$y="";}else{$year=$y;}
-if($month==""){$month=$m;}elsif($month==$m){$m="";}else{$month=$m;}
-$y.="年" if($y);
-$m.="月" if($m);
-$d.="日";
-#---------------------------------
-$color=$indexcolor{$sign};
-if($sign eq "t"){drawframe($x0-$size/6,$size/4,$indexcolor{"0"});}
-if($sign eq "w"){drawframe($x0-$size/6,$size/4,$indexcolor{"1"});}
+	#next if ! /$today/ && ! $is;
+	@t=localtime(time+86400*$cnt);
+	$sign="o"; if($cnt==0){$sign="t";$tweek=$t[6];} else{if (($t[6]==0)||($t[6]==6)){$sign="w";}}
+	$cnt++;
+	#last if ($cnt+1>$max);
+	chomp;
+	#($sign,$date,$weather,$temp,$wind)=split "\t",$_;
+	($weather,$temp,$wind)=split "\t",$_;
+	#($y,$m,$d)=split "-",$date;
+	$y=$t[5]+1900;$m=$t[4]+1;$d=$t[3];
+	#---------------------------------
+	@lunar=grep /$m月.*$d \t/,@alllunar;
+	$_=$lunar[0];
+	chomp;s/^.*\t//;s/\ (.*)//;$lunar[0]=$_;
+	#---------------------------------
+	if($year==""){$year=$y;}elsif($year==$y){$y="";}else{$year=$y;}
+	if($month==""){$month=$m;}elsif($month==$m){$m="";}else{$month=$m;}
+	$y.="年" if($y);
+	$m.="月" if($m);
+	$d.="日";
+	#---------------------------------
+	$color=$indexcolor{$sign};
+	if($sign eq "t"){drawframe($x0-$size/6,$size/4,$indexcolor{"0"});}
+	if($sign eq "w"){drawframe($x0-$size/6,$size/4,$indexcolor{"1"});}
 #---------------------------------
 $y1=$y0;
 $fsize=$size/5;
