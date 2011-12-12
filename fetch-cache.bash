@@ -1,7 +1,7 @@
 #!/bin/bash
 
 new="/tmp/findnew"
-size="+1000k"
+size="+2000k"
 format='Audio|MPEG|ASF|Flash'
 
 touch $new
