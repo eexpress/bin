@@ -7,7 +7,7 @@ use Pod::Usage;
 #$name="eexp";	# 缺省的昵称
 $name=`id -un`; chomp $name;
 $select="imagebin";	# 缺省的网站
-GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$name);
+GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$name, "confirm"=>\$confirm);
 #----------------------------------
 %web=(
 	"http://imm.io/"=>{"image"=>'xxxx'},
@@ -74,6 +74,13 @@ pc "select","\e[30;42m$select\e[0m";
 while(my($k,$v)=each %h){if($v eq 'xxxx'){$h{$k}=$ARGV[0];$v=$ARGV[0]}; pc $k,$v;}
 $submit="";if($h{"submit"}){$submit=$h{"submit"}; delete $h{"submit"};}
 $result="";if($h{"result"}){$result=$h{"result"}; delete $h{"result"};}
+#----------------------------------
+if($confirm){
+my $file=decode("utf-8",$ARGV[0]);
+`zenity --question --title=确认贴图 --text="是否将 $file 贴图到 $select 网站？"`;
+if($?){exit;}
+#pc "zenity: $?"; exit;
+}
 #----------------------------------
 my $mech = WWW::Mechanize->new();
 #my $mech = WWW::Mechanize->new(agent=>'Opera/9.80 (X11; Linux i686; U; en) Presto/2.6.30 Version/10.60');
