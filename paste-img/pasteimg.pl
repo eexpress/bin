@@ -136,6 +136,10 @@ This help.
 
 Nick name send to web host if support. default name is your login id name.
 
+=head2 -c, --confirm
+
+confirm to upload pic. for some app need.
+
 =head2 no argument
 
 Auto start screenshot, and then paste.
