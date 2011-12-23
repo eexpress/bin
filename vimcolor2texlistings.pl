@@ -5,17 +5,19 @@ $_=$ARGV[0]//"/usr/share/vim/vim72/colors/desert.vim";
 die "not vim color file" if ! /\.vim$/;
 open F,"<$rgbfile"; @rgb=<F>; close F;
 
-print "% color schema from file: >$_<
-\\usepackage{listings}
+print "\\usepackage{listings}
 \\lstset{
-\tnumbers=left,
+\t%numbers=left,
 \tshowstringspaces=false,
-\tbreaklines,%这条命令可以让LaTeX自动将长的代码行换行排版
+\tbreaklines,%自动换行
 \ttabsize=4,
-\tframe=shadowbox,rulecolor=\\color[gray]{0.9},rulesepcolor=\\color[gray]{0.2},
+\t%frame=shadowbox,rulecolor=\\color[gray]{0.9},rulesepcolor=\\color[gray]{0.2},
 \t%样式
 \tbackgroundcolor=\\color[HTML]{333333},
-\tbasicstyle=\\ttfamily,
+\t%basicstyle=\\small\\color{white}\\setmainfont{Courier 10 Pitch}\\linespread{1},
+\tbasicstyle=\\color{white}\\setmainfont{Vera Sans YuanTi Mono}\\linespread{1},
+% below is auto created, color schema from file:
+% $_
 ";
 
 %hc=("identif"=>"identifierstyle","comment"=>"commentstyle",
@@ -38,6 +40,6 @@ else{
 	$_=join ',', split /\s+/,$_;
 	$out="=$bf\\color[RGB]{$_}, %$cn\n";
 }
-foreach (split /,/,$hc{$i}){print $_.$out;}
+foreach (split /,/,$hc{$i}){print "\t".$_.$out;}
 }
 print "}\n";
