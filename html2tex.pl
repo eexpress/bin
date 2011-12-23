@@ -5,29 +5,48 @@ die "$ARGV[0] is not an html file." if ! m"text/html";
 open RC,"<$ARGV[0]"; @_=<RC>; close RC;
 
 $_=join "", grep /<body/, @_;
-/bgcolor="#(.*?)"/; print "\\colorbox[HTML]{$1}{\\begin{minipage}{0.8\\textwidth}\n";
-/text="#(.*?)"/; $textcolor=uc($1);
+/text="#(.*?)"/; $textcolor=getcolor($1);
+/bgcolor="#(.*?)"/; 
+print "\\colorbox{".getcolor($1)."}{
+\\begin{minipage}{\\textwidth}
+\\ttfamily
+";
+
+my %hc;
+my $colorcnt=0;
 
 for (@_){
 next if /<title/;
 s/\\/\\textbackslash /g;
-s/&quot;/"/g; s/&gt;/>/g;s/&lt;/</g;
-s/&nbsp;/\\quad /g; s/&amp;/\\&/g; 
-s/[\$\%\#\_\^\{\}\~]/\\$&/g;
-#s/[\$\&\%\#\_\^\{\}\~]/\\$&/g;
-s|<font color="\\#(.*?)">(.*?)</font>|"\\color[HTML]{".uc($1)."}{$2}\\color[HTML]{$textcolor}"|eg;
+s/&quot;/"/g; s/&gt;/>/g;s/&lt;/</g; s/&amp;/\\&/g; s/&nbsp;/\\ /g; 
+s/[\#\$\%\&\~\_\{\}]/\\$&/g;
+s/\^/\\^{}/g;
+
+s|/font>(.+?)<|/font>\\color{$textcolor}$1<|g;
+s|<font color="\\#(.*?)">(.*?)</font>|"\\color{".getcolor($1)."}$2"|eg;
 s"<b>(.*?)</b>"\\textbf{$1}"g;
 s/<.*?>//g;
 next if /^$/;
+#s/\\color.mycolo.*?}\\color/\\color/g;
 s/$/\n/g;
 print;
 
 }
-print "\\end{minipage}}";
+print "\\end{minipage}}\n";
+print "
+% add below lines before document.
+%\\usepackage{xcolor}
+";
+for (keys %hc){
+print "%\\definecolor{".$hc{$_}."}{HTML}{$_}\n";
+}
 
-#sub colortorgb{
-#my $color=shift;
-#$color=~s/\\#//; my @C=map {hex} $color=~/.{2}/g;
-#return "$C[0],$C[1],$C[2]";
-#}
+sub getcolor{
+my $htmlcolor=uc(shift);
+if(! $hc{$htmlcolor}){
+$hc{$htmlcolor}="mycolor$cnt";
+$cnt++;
+}
+return $hc{$htmlcolor};
+}
 
