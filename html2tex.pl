@@ -8,7 +8,7 @@ $_=join "", grep /<body/, @_;
 /text="#(.*?)"/; $textcolor=getcolor($1);
 /bgcolor="#(.*?)"/; 
 print "\\colorbox{".getcolor($1)."}{
-\\begin{minipage}{\\textwidth}
+\\parbox{\\textwidth}{
 \\ttfamily
 ";
 
@@ -27,13 +27,12 @@ s|<font color="\\#(.*?)">(.*?)</font>|"\\color{".getcolor($1)."}$2"|eg;
 s"<b>(.*?)</b>"\\textbf{$1}"g;
 s/<.*?>//g;
 next if /^$/;
-#s/\\color.mycolo.*?}\\color/\\color/g;
+s/\\color\{mycolor\d*\}\s*\\color/\\color/g;
 s/$/\n/g;
 print;
 
 }
-print "\\end{minipage}}\n";
-print "
+print "}}
 % add below lines before document.
 %\\usepackage{xcolor}
 ";
