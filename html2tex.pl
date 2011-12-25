@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+my %hc;
+my $cnt=0;
+my $pre="mycolor";
+
 $_=`mimetype $ARGV[0]`;
 die "$ARGV[0] is not an html file." if ! m"text/html";
 open RC,"<$ARGV[0]"; @_=<RC>; close RC;
@@ -11,9 +15,6 @@ print "\\colorbox{".getcolor($1)."}{
 \\parbox{\\textwidth}{
 \\ttfamily
 ";
-
-my %hc;
-my $colorcnt=0;
 
 for (@_){
 next if /<title/;
@@ -27,7 +28,9 @@ s|<font color="\\#(.*?)">(.*?)</font>|"\\color{".getcolor($1)."}$2"|eg;
 s"<b>(.*?)</b>"\\textbf{$1}"g;
 s/<.*?>//g;
 next if /^$/;
-s/\\color\{mycolor\d*\}\s*\\color/\\color/g;
+s/\\color\{$pre\d*\}\s*\\color/\\color/g;
+s/(\\color\{$pre\d*\})([^\\]*)\1/$1$2/g;
+s/(\\color\{$pre\d*\})([^\\]*)\1/$1$2/g;
 s/$/\n/g;
 print;
 
@@ -43,7 +46,7 @@ print "%\\definecolor{".$hc{$_}."}{HTML}{$_}\n";
 sub getcolor{
 my $htmlcolor=uc(shift);
 if(! $hc{$htmlcolor}){
-$hc{$htmlcolor}="mycolor$cnt";
+$hc{$htmlcolor}="$pre$cnt";
 $cnt++;
 }
 return $hc{$htmlcolor};
