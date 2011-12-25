@@ -14,8 +14,7 @@ print "\\usepackage{listings}
 \t%frame=shadowbox,rulecolor=\\color[gray]{0.9},rulesepcolor=\\color[gray]{0.2},
 \t%样式
 \tbackgroundcolor=\\color[HTML]{333333},
-\t%basicstyle=\\small\\color{white}\\setmainfont{Courier 10 Pitch}\\linespread{1},
-\tbasicstyle=\\color{white}\\setmainfont{Vera Sans YuanTi Mono}\\linespread{1},
+\tbasicstyle=\\small\\color{white}\\setmonofont{Courier 10 Pitch}\\linespread{1}\\ttfamily,
 % below is auto created, color schema from file:
 % $_
 ";
