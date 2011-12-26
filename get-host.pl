@@ -6,11 +6,20 @@ else{
 }
 
 $server='8.8.8.8';
+#for $h (@hosts){
+#$_=`nslookup $h $server`;
+#print "# $h\n";
+#@_=$_=~/[0-9.]{7,}+/g;
+#    for (@_){
+#    print "$_\t$h\n" if ! /$server/;
+#    }
+#}
+
 for $h (@hosts){
-$_=`nslookup $h $server`;
+@_=`dig +short \@$server $h `;
 print "# $h\n";
-@_=$_=~/[0-9.]{7,}+/g;
 	for (@_){
-	print "$_\t$h\n" if ! /$server/;
+	chomp;
+	print "$_\t$h\n" if /^\d/;
 	}
 }
