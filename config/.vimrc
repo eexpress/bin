@@ -69,9 +69,9 @@ let vala_no_tab_space_error = 1
 "状态栏
 set laststatus=2
 set statusline=
-set statusline+=%-30.60f
+set statusline+=%-20f
 set statusline+=%10.{&encoding}
-set statusline+=\ %9.l/%L行\ %4.p%%\ %10.y
+set statusline+=\ \ \ \ (%3.l,%3.c)[0x%2B]/共%L行\ %4.p%%\ %10.y
 
 func CompileRun() 
 exec "w" 
