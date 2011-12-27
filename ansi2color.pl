@@ -8,12 +8,15 @@ my @c=qw /black red green yellow blue magenta cyan white/;
 my @l;
 
 while(<STDIN>){
+s/\e\[K//g; s/\e\[m/\e\[0m/g;
 if($html){
 	s/\ /&nbsp;/g;
 	s/\e\[(.*?)m/get_html_color($1)/eg;
 	s/$/<br>/g;
 }elsif($tex){
+	s/\\/\\textbackslash /g;
 	s/[\#\$\%\&\~\_\{\}]/\\$&/g;
+	s/\^/\\^{}/g;
 	s/\ /\\hspace{6pt}/g;
 	s/\e\[(.*?)m/get_tex_color($1)/eg;
 	s/$/\n/g;
