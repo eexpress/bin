@@ -7,6 +7,7 @@ my $re= $ua->get($url);
 die if (!$re->is_success);
 my $html= $re->content;
 
+#print $html;
 #得到页面中所有链接
 while($html=~m{<a .*?href=(["'])(.*?)\1.*?>(<.*?/>)*(.*?)</a>}gsi){
 #print "$2\t--->$4\n";
