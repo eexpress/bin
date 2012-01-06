@@ -12,6 +12,7 @@ alias as='aptitude search'
 alias au='sudo aptitude update && msg 列表已经刷新 aptitude || msg 刷新失败'
 alias aw='aptitude show'
 
+alias lnsf='sudo ln -sf'
 alias xo='xdg-open'
 alias cal='cal -3'
 alias ce='crontab -e'
