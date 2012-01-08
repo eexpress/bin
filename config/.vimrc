@@ -81,7 +81,7 @@ exec "!./%<.run"
 elseif &filetype == 'perl' 
 exec "!perl %" 
 elseif &filetype == 'tex' 
-exec "!xelatex %; [ $? == 0 ] && nohup evince %:r.pdf; nohup rm *.aux *.log *.snm *.nav *.out *.toc"
+exec "!xelatex %; [ $? == 0 ] && nohup evince %:r.pdf &"
 endif 
 endfunc
 
