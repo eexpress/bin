@@ -14,6 +14,7 @@ if (-f){$file.=",$_";}else{$text.="$_\n";}
 }
 $file=~s/^,//;
 $text=`xsel -o` if ! $text;
+$text=`see attach files.` if ! $text;
 #print "attach:\t$file\n--------\nmsg:\t$text\n"; exit;
 my $info="发送文件: $file 到邮箱: $to";
 #● echo password|gpg -aer eexp>~/bin/resources/gpg-163-password
