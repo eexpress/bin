@@ -85,3 +85,5 @@ atpng(){ echo DISPLAY=:0.0 show_png.pl $2|at "now + $1 minutes";}
 atmsg(){ echo msg "clock.png" "AT定时" "$2"|at "now + $1 minutes";}
 tree(){ /usr/bin/tree $*|/usr/bin/ascii2uni -a K;}
 ip138(){ msg "IP地址查询：$1" "`curl -s -d "ip=$1&action=2" http://www.ip138.com/ips.asp|grep '<li>'|sed 's/<\/li>/\\\\n/g'|sed 's/<[^>]*>/\\n/g'|sed '/^\s*$/d'|enconv`";}
+fd(){ [ $1 ] && find . -iname "*$1*" || echo "need parameter."; }
+
