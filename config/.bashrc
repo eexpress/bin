@@ -102,3 +102,4 @@ fi
 set -o vi
 arrays=([0]="$HOME/bin/bash/alias" [1]="/etc/profile.d/autojump.bash" [2]="$HOME/bin/bash/../chs/chs_completion" [3]="$HOME/bin/bash/eexp" [4]="$HOME/bin/bash/local.bashrc")
 for prg in ${arrays[@]}; do [ -f "$prg" ] && . $prg; done; unset prg;
+
