@@ -38,6 +38,7 @@ $font=$hrc{font}//"Vera Sans YuanTi";
 $gnomebg=$gconf->get("/desktop/gnome/background/picture_filename");
 #chomp $gnomebg;
 $bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
+$bgfile=~s'file://'';
 # 城市天气信息地址
 #$app_setbg=$hrc{app_setbg}//"show_png.pl";
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
