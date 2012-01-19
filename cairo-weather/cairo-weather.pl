@@ -104,7 +104,8 @@ else {die "no recognized url format.\n";}
 #        for (@_){print "$_\n";}; exit;
 #---------------------------------
 $max=@_;
-@alllunar=grep {! /\d{4}/ || /2011/} `/usr/bin/calendar -A $max`;
+`date`=~/.{4}/; $year=$&;
+@alllunar=grep {! /\d{4}/ || /$year/} `/usr/bin/calendar -A $max`;
 chdir $icondir;
 -f "00.png" || die "can not fetch picture file.\n";
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
