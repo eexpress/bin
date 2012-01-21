@@ -190,37 +190,66 @@ sub show(){
 if (-e '/usr/bin/habak'){
 $gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
 $cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
-} else {$cmd="$show_app $outputfile";}
-print "\e[1;37;41m$cmd\e[0m\n";
-`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
-`$cmd`;
+msg(); `$cmd`;
+}
+else {
+$gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'true'});
+$cmd="show_png $outputfile at $pos on desktop";
+msg(); show_png();}
 }
 #---------------------------------
-sub show1(){
-$gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
-Gtk2->init;
-$window=Gtk2::Gdk->get_default_root_window;
-my ($x, $y, $width, $height, $depth) = $window->get_geometry;
-printf "0x%x : $width x $height @ $depth\n", $window->get_xid;
-$pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ($bgfile);
-$pixbuf1=$pixbuf->scale_simple ($width, $height, "GDK_INTERP_BILINEAR");
-$pixmap = $pixbuf1->render_pixmap_and_mask (1);
-$cr = Gtk2::Gdk::Cairo::Context->create ($pixmap);
+sub msg{
+print "\e[1;37;41m$cmd\e[0m\n";
+`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$cmd"` if -e "/usr/bin/notify-send";
+}
+#---------------------------------
+my $img;
+my $window;
+
+sub show_png(){
+use Gtk2 '-init';
+
+$window = Gtk2::Window->new();
+$window->set_decorated(0);
+$window->add_events("GDK_BUTTON_PRESS_MASK");
+$window->stick;
+$window->set_keep_below(1);
+$window->signal_connect('expose_event', \&expose);
+$window->signal_connect('button_press_event',\&mouse);
 $img = Cairo::ImageSurface->create_from_png ($outputfile);
+$window->set_size_request($img->get_width(),$img->get_height());
+$window->set_colormap($window->get_screen->get_rgba_colormap());
+
+$root=Gtk2::Gdk->get_default_root_window;
+my ($x, $y, $width, $height, $depth) = $root->get_geometry;
 ($x,$y)=split ',',$pos;
 if($x<0){$x=$width+$x-$img->get_width;}
 if($y<0){$y=$height+$y-$img->get_height;}
-$cr->set_source_surface($img,$x,$y);
-$cr->paint;
-$window->set_back_pixmap($pixmap,0);
-$window->clear();
-Gtk2->main_iteration;
-`notify-send -i "$icondir/$currentpng" "Desktop Weather with Cairo" "$outputfile on $bgfile"` if -e "/usr/bin/notify-send";
+
+$window->move($x,$y);
+$window->show_all();
+Gtk2->main;
 }
 #---------------------------------
+sub expose {
+	my($widget, $event) = @_;
+	my $cr = Gtk2::Gdk::Cairo::Context->create($widget->window);
+	$cr->set_operator("source");
+	$cr->set_source_surface($img,0,0);
+	$cr->paint;
+	print "";
+}
 
+sub mouse{
+	my ($widget, $event) = @_;
+	if($event->button eq 1){
+		$window->begin_move_drag($event->button,$event->x_root,$event->y_root,$event->time);
+	}
+	else {exit;}
+}
+#---------------------------------
 sub drawpng(){
-my $img = Cairo::ImageSurface->create_from_png ("$_[0]");
+$img = Cairo::ImageSurface->create_from_png ("$_[0]");
 my $cr = Cairo::Context->create ($surface);
 $cr->translate($_[1],$_[2]);
 $cr->scale($scale,$scale);
