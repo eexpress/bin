@@ -69,7 +69,6 @@ exit;
 # ------以上为可自定义的部分------
 my $city;
 #@t=localtime(time);$today=($t[5]+1900)."-".($t[4]+1)."-".$t[3];
-chdir "$appdir/calendar";
 use LWP::Simple; $_=get($url);
 if($_){	#取得了网页。解析。只留天气和温度，风向。
 	$_=encode("utf8",$_);
@@ -104,8 +103,15 @@ else {die "no recognized url format.\n";}
 #        for (@_){print "$_\n";}; exit;
 #---------------------------------
 $max=@_;
+chdir "$appdir/calendar";
 `date`=~/.{4}/; $year=$&;
-@alllunar=grep {! /\d{4}/ || /$year/} `/usr/bin/calendar -A $max`;
+@alllunar=`/usr/bin/calendar -A $max -f *$year*`;
+if(/12月/ ~~ @alllunar && /1月/ ~~ @alllunar){
+@tmp=grep /^12/,@alllunar;
+$year++; $max=$max-scalar(@tmp);
+@alllunar=`/usr/bin/calendar -A $max -f *$year* -t 0101`;
+push @alllunar,@tmp;
+}
 chdir $icondir;
 -f "00.png" || die "can not fetch picture file.\n";
 $surface = Cairo::ImageSurface->create_from_png ("00.png");
