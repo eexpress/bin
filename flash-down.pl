@@ -25,7 +25,7 @@ my $mech = WWW::Mechanize->new(agent=>'Opera/9.80 (X11; Linux i686; U; en) Prest
 $mech -> get($_);
 if ($mech->success()) {
 	$_=$mech->content();
-	if(/当前解析视频.*?<font/s){
+	if(/当前解析视频.*?<strong/s){
 	$_=$&; 
 	s/^.*?>//;s/<.*$//s;s/\s*//g;
 	print "$red$bold".$_."$normal==================\n";
