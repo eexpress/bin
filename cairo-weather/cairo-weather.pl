@@ -220,6 +220,7 @@ $window->set_decorated(0);
 $window->add_events("GDK_BUTTON_PRESS_MASK");
 $window->stick;
 $window->set_keep_below(1);
+$window->set_skip_taskbar_hint(1);
 $window->signal_connect('expose_event', \&expose);
 $window->signal_connect('button_press_event',\&mouse);
 $img = Cairo::ImageSurface->create_from_png ($outputfile);
