@@ -1,8 +1,10 @@
 #!/bin/bash
 
 greenB='\x1b[1;32m'; end='\x1b[0m'; redB='\x1b[1;31m'; blueB='\x1b[1;34m'
-echo -e "本机IP是：$greenB`routel|sed -n '2p'|awk '{print $3}'`$end"
-ip=`routel|sed -n '2p'|awk '{print $1$2}'`
+info=`routel|grep -m 1 '\<24\>'`
+echo -e "本机IP是：$greenB`echo $info|awk '{print $3}'`$end"
+ip=`echo $info|awk '{print $1"/"$2}'`
+echo "扫描 $ip 段"
 if [ $1 ]; then
 	# 端口，MAC地址
 	sudo /usr/bin/nmap -sS $ip|sed -e "/^Interest/ s/[1-9][0-9.]\{6,14\}/${greenB}&${end}/g" -e "/open/ s/[^\ ]*$/${redB}&${end}/g" -e "/^MAC/ s/[0-9:A-F]\{17\}/${blueB}&${end}/g"
