@@ -1,7 +1,9 @@
 #!/bin/bash
 
+#for i in "$@"; do echo \"${i#file://}\" >>~/tmp; done
+#exit
 cd `dirname "$1"`
-f=`exif -m -t 0x9003 "$1"`
+f=`exif -m -t 0x9003 "${1#file://}"`
 echo $f|grep '^20'
 if [ $? -eq 1 ]; then
 f="noexif-"`date '+%Y:%m:%d-%H:%M:%S'`
@@ -28,5 +30,6 @@ convert -scale $s "$@" /tmp/4in1
 montage -tile $t -geometry +0+0 -background none /tmp/4in1* ./p-$f.jpg
 eog "./p-$f.jpg"
 zenity --question --title=删除 --text="是否 $# 个删除文件"
-[ $? -eq 0 ] && echo "删除。。。" && rm "$@"
+[ $? -eq 0 ] && echo "删除。。。" && for i in "$@"; do j=${i#file://}; echo $j>>~/tmp; rm "$j"; done
+#[ $? -eq 0 ] && echo "删除。。。" && rm "$@"
 
