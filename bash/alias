@@ -39,7 +39,6 @@ alias v='/usr/bin/gvim --remote-silent-tab'
 alias sv='sudo /usr/bin/gvim --remote-silent-tab'
 alias hexdump='hexdump -C'
 alias iftop.启动='sudo iftop -i `netname`'
-alias iptraf.启动='sudo iptraf -i `netname`'
 alias irc='irssi -c irc.freenode.net'
 alias k9='pkill -9'
 alias sk9='sudo pkill -9'
@@ -84,7 +83,8 @@ osd0(){
 gnome-osd-client -f "<message id='oss' osd_vposition='center' osd_halignment='center'><span font='ZhunYuan 180'  foreground='red'>`xsel -o`</span></message>"
 }
 netname(){
-routel|sed -n "2p"|awk '{print $6}'
+#routel|sed -n "2p"|awk '{print $4}'
+routel|grep 'default.*static'|awk '{print $NF}'
 }
 alias mp3info='mutagen-inspect'
 alias mp3enca='mid3iconv --remove-v1 -d -e GBK'
