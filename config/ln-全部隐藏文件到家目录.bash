@@ -1,8 +1,6 @@
 #!/bin/bash
 
-p=`pwd`/${0#./}
-echo $p
-cd `dirname $p`
+cd "$(dirname "$0")"
 d=`pwd`
 for i in `ls -A|grep '^\.'`; do
 l=`echo $i|sed 's/+/\//g'`
