@@ -3,12 +3,12 @@ SetEnv fvwm		$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
 SetEnv RegularFont "StringEncoding=utf8:xft:Vera Sans YuanTi:size=9:encoding=iso10646-1"
 #SetEnv HeiFont "StringEncoding=utf8:xft:STHeiti:size=10:encoding=iso10646-1"
-ImagePath $[HOME]/.fvwm/icons:/home/eexp/图片/图标/48-png/:/usr/share/pixmaps
+ImagePath $[HOME]/.fvwm/:/home/eexp/图片/图标/48-png/:/usr/share/pixmaps:/usr/share/icons/gnome/48x48/categories:/usr/share/app-install/icons/
 
 DesktopSize 2x2				#每个桌面分成2x2个页面
 DesktopName 0 Main			#设置了1个桌面
 
-Exec exec fvwm-root -r $[fvwm]desktop.png
+Exec exec fvwm-root -r desktop.png
 Exec JumpExec cairo-dock
 Exec JumpExec cairo-clock
 Exec JumpExec xcompmgr -C
@@ -17,8 +17,8 @@ Exec JumpExec nm-applet
 Module FvwmCommandS
 #CursorStyle DEFAULT right_ptr
 ####################################################
-BorderStyle Active TiledPixmap $[fvwm]active.png -- Flat
-BorderStyle InActive TiledPixmap $[fvwm]inactive.png -- Flat
+BorderStyle Active TiledPixmap active.png -- Flat
+BorderStyle InActive TiledPixmap inactive.png -- Flat
 Style * !Title, HandleWidth 10
 
 #BorderStyle InActive -- Flat
@@ -77,7 +77,7 @@ MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore
 Read $[fvwm]/menu-mini
 #● ./fvwm-xdg-menu.py -f -m Root /etc/xdg/menus/applications.menu > menu
 #快速，不分类目录的全部菜单，使用标准的应用程序目录。可以方便的剔出独立的常用软件菜单。
-#fvwm-menu-desktop --lang zh_CN --type fvwm --dir /usr/share/applications/ --name Root --enable-mini-icons --mini-icons-path /usr/share/icons/hicolor/24x24/apps/ > ~/.fvwm/menu
+#fvwm-menu-desktop --lang zh_CN --type fvwm --dir /usr/share/applications/ --name Root --enable-mini-icons --mini-icons-path /usr/share/pixmaps > ~/.fvwm/menu
 
 #-------------Root窗口操作---------------
 Mouse 3 R A WindowList SortByClass,NoHotkeys,NoGeometry,NoCurrentDeskTitle

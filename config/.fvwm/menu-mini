@@ -5,5 +5,10 @@ AddToMenu "Root" "常用软件" Title
 + "XTerm%xterm.png%" Exec exec xterm
 + "Control Center%gnome-control-center.png%" Exec exec gnome-control-center
 + "System Monitor%gnome-system-monitor.png%" Exec exec gnome-system-monitor -r
++ "Cairo Weather%cairo-weather.png%" Exec exec cairo-weather.pl
++ "Gairo Dock%cairo-dock.png%" Exec exec cairo-dock
++ "Gairo Clock%cairo-clock.png%" Exec exec cairo-clock
++ "xcompmgr" Exec exec xcompmgr
+xcompmgr
 + "xkill%/home/eexp/bin/config/.icons/nuoveXT-1.6/24x24/apps/xkill.png%" Exec exec /usr/bin/xkill
 
