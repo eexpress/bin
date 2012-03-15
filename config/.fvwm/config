@@ -3,15 +3,22 @@ SetEnv fvwm		$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
 SetEnv RegularFont "StringEncoding=utf8:xft:Vera Sans YuanTi:size=9:encoding=iso10646-1"
 #SetEnv HeiFont "StringEncoding=utf8:xft:STHeiti:size=10:encoding=iso10646-1"
+ImagePath $[HOME]/.fvwm/icons:/home/eexp/图片/图标/48-png/:/usr/share/pixmaps
 
 DesktopSize 2x2				#每个桌面分成2x2个页面
 DesktopName 0 Main			#设置了1个桌面
 
+Exec exec fvwm-root -r $[fvwm]desktop.png
+Exec JumpExec cairo-dock
+Exec JumpExec cairo-clock
+Exec JumpExec xcompmgr -C
+Exec JumpExec nm-applet
+
 Module FvwmCommandS
 #CursorStyle DEFAULT right_ptr
 ####################################################
-BorderStyle Active TiledPixmap $[fvwm]/active.png -- Flat
-BorderStyle InActive TiledPixmap $[fvwm]/inactive.png -- Flat
+BorderStyle Active TiledPixmap $[fvwm]active.png -- Flat
+BorderStyle InActive TiledPixmap $[fvwm]inactive.png -- Flat
 Style * !Title, HandleWidth 10
 
 #BorderStyle InActive -- Flat
@@ -21,30 +28,26 @@ Style * SloppyFocus		#移开窗口到root时，不丢失焦点
 Style * MouseFocusClickRaises		#点击窗体上升
 ########################
 # Super，用于热键组合。位于Mod4。xmodmap -pm查看
-Key r A 4 JumpExec rox
-Key f A 4 JumpExec pcmanfm
+#Key r A 4 JumpExec rox
+#Key f A 4 JumpExec pcmanfm
 Key o A 4 JumpExec opera
 Key q A 4 JumpExec geeqie
 Key n A 4 JumpExec zim
-Key b A 4 JumpExec transmission
+#Key b A 4 JumpExec transmission
 #Key c A 4 JumpExec chromium-browser
 
 Key t A 4 Exec exec $[fvwm]xterm_color_corner.pl
 Key m A 4 Exec exec xterm -e mocp
-Key e A 4 Exec exec xterm -e $[script]ea.pl
+#Key e A 4 Exec exec xterm -e $[script]ea.pl
 Key z A 4 All (xterm) shadex
 Key a A 4 All (xterm) WindowShade off
 Key x A 4 Exec exec xlock -font "-*-courier 10 pitch-*-*-*-*-*-*-*-*-*-*-*-*"
 
-Key p A 4 Exec exec $[script]截图或贴图.bash 1
-Key i A 4 Exec exec $[script]截图或贴图.bash
-#Key d A 4 Exec exec $[script]/bot/sdcv.pl -n
-#Key a A 4 Exec exec $[script]/ip-查询/ip-ip纯真库.pl -n
-#Key g A 4 Exec exec $[script]/bot/g-translate.pl -n
-#Key w A 4 Exec exec $[script]/bot/weather.pl -n
+Key p A 4 Exec exec pasteimg.pl
+Key w A 4 Exec exec $[script]web-translate.pl
 Key Menu A A Exec exec $[script]monitor-clip.pl
 Key y A 4 Exec exec $[script]y ~/摘录
-#Key c A 4 Exec exec $[script]cal.pl -n
+
 Key r A CM restart
 Key s A CM Exec gksu pm-suspend
 Key h A CM Exec gksu pm-suspend-hybrid
@@ -73,6 +76,9 @@ MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore
 #MenuStyle WindowList Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
 Read $[fvwm]/menu-mini
 #● ./fvwm-xdg-menu.py -f -m Root /etc/xdg/menus/applications.menu > menu
+#快速，不分类目录的全部菜单，使用标准的应用程序目录。可以方便的剔出独立的常用软件菜单。
+#fvwm-menu-desktop --lang zh_CN --type fvwm --dir /usr/share/applications/ --name Root --enable-mini-icons --mini-icons-path /usr/share/icons/hicolor/24x24/apps/ > ~/.fvwm/menu
+
 #-------------Root窗口操作---------------
 Mouse 3 R A WindowList SortByClass,NoHotkeys,NoGeometry,NoCurrentDeskTitle
 Mouse 2 R A Menu Root
@@ -157,8 +163,9 @@ Style *panel	UseStyle dock
 Style *dock	UseStyle dock
 Style *tray	UseStyle dock
 Style *clock	UseStyle dock
+Style cairo-*	UseStyle dock
 
-Exec exec "$[fvwm]autostart.pl"
+#Exec exec "$[fvwm]autostart.pl"
 
 ########################
 # 开关鼠标穿越

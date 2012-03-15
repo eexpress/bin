@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #$ps=`/bin/ps -e -o command|grep xterm`;
-$ps=`pgrep -fl sh.*geometry`;
+$ps=`pgrep -fl xterm.*geometry`;
 $geometry=join ",",$ps=~/[+-]0[+-]0/gs;
 
 @c=qw(black brown4 blue4 tan4);
