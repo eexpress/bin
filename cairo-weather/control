@@ -2,7 +2,7 @@ Package: cairo-weather
 Version: 0.81
 Architecture: all
 Maintainer: eexpress
-Installed-Size: 12k
+Installed-Size: 550k
 Depends: perl, libcairo-perl, gconf2, bsdmainutils, dnsutils, libgnome2-gconf-perl, libwww-perl
 Suggests: libnotify-bin, habak
 Section: utils
