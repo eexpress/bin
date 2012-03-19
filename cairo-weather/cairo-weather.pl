@@ -84,9 +84,9 @@ elsif ($url=~/wap\.weather\.gov\.cn/){
 	/※(.*?)\d\d/; $city=$1;
 	@_=/【\d.*?<img/sg;
 	for(@_){
-	s/^.*nbsp;(\d)/\1/sg;
+	s/^.*nbsp;(\d)/$1/sg;
 	s/[\n\r\ ]//g;s/&nbsp;//g;s/<img//g;
-	s/^(.*)\t+(.*)/\2\t\1/g;
+	s/^(.*)\t+(.*)/$2\t$1/g;
 	}
 	}
 elsif ($url=~/m\.weather\.com\.cn/){
@@ -201,6 +201,7 @@ msg(); `$cmd`;
 else {
 $gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'true'});
 $cmd="show_png $outputfile at $pos on desktop";
+Glib::Timeout->add(1000,\&time);
 msg(); show_png();}
 }
 #---------------------------------
@@ -211,6 +212,7 @@ print "\e[1;37;41m$cmd\e[0m\n";
 #---------------------------------
 my $img;
 my $window;
+my $cr;
 
 sub show_png(){
 use Gtk2 '-init';
@@ -240,10 +242,17 @@ Gtk2->main;
 #---------------------------------
 sub expose {
 	my($widget, $event) = @_;
-	my $cr = Gtk2::Gdk::Cairo::Context->create($widget->window);
+	$cr = Gtk2::Gdk::Cairo::Context->create($widget->window);
 	$cr->set_operator("source");
 	$cr->set_source_surface($img,0,0);
 	$cr->paint;
+	$cr->set_operator("over");
+	$color="#007AD0F0";
+	my ($sec,$min,$hour) = (localtime(time));
+#    $fsize=38;
+#    txt("$hour : $min",20,260);
+	my $time = sprintf "%02d : %02d",$hour,$min;
+	stamp("$time",120,290,2,-0.2);
 	print "";
 }
 
@@ -254,10 +263,15 @@ sub mouse{
 	}
 	else {exit;}
 }
+
+sub time{
+	$window->queue_draw();
+	return 1;
+}
 #---------------------------------
 sub drawpng(){
 $img = Cairo::ImageSurface->create_from_png ("$_[0]");
-my $cr = Cairo::Context->create ($surface);
+$cr = Cairo::Context->create ($surface);
 $cr->translate($_[1],$_[2]);
 $cr->scale($scale,$scale);
 $cr->set_source_surface($img,0,0);
@@ -266,7 +280,7 @@ $cr->paint;
 }
 
 #sub drawpangotxt(){
-#my $cr = Cairo::Context->create ($surface);
+#$cr = Cairo::Context->create ($surface);
 #my $pango_layout = Gtk2::Pango::Cairo::create_layout ($cr);
 #my $font_desc = Gtk2::Pango::FontDescription->from_string("$font $fsize");
 #$pango_layout->set_font_description($font_desc);
@@ -282,10 +296,13 @@ $cr->paint;
 #$cr->show_page();
 #}
 
-sub drawstamp()
-{
+sub drawstamp(){
+$cr = Cairo::Context->create ($surface);
+stamp(@_);
+}
+
+sub stamp(){
 my $rotate=$_[4]//-0.4;
-my $cr = Cairo::Context->create ($surface);
 $cr->select_font_face("$font",'normal','bold');
 $cr->set_font_size($fsize*$_[3]);
 $color=~s/#//; my @C=map {$_/256} map {hex} $color=~/.{2}/g;
@@ -314,7 +331,11 @@ $cr->stroke();
 }
 
 sub drawtxt(){
-my $cr = Cairo::Context->create ($surface);
+$cr = Cairo::Context->create ($surface);
+txt(@_);
+}
+
+sub txt(){
 $cr->select_font_face("$font",'normal','bold');
 $cr->set_font_size($fsize);
 $cr->set_source_rgba(0,0,0,1);	#缺省黑色阴影
@@ -330,7 +351,7 @@ sub drawframe(){
 my ($x,$r,$c)=@_;
 my $w=$w0;
 my $h=3.5*$size;
-my $cr = Cairo::Context->create ($surface);
+$cr = Cairo::Context->create ($surface);
 $PI=3.1415926/180;
 $cr->move_to($x+$r,0);
 $cr->rel_line_to($w-2*$r,0);
@@ -346,8 +367,8 @@ $cr->set_source_rgba($C[0],$C[1],$C[2],$C[3]);
 $cr->fill;
 
 #return if $sign eq "w";
-$cr->set_line_cap(butt);	# butt, round, square
-$cr->set_line_join(round);	# miter, round, bevel
+$cr->set_line_cap("butt");	# butt, round, square
+$cr->set_line_join("round");	# miter, round, bevel
 $cr->set_operator("clear");
 my $l=$size/10;
 $cr->set_line_width($l/2);
