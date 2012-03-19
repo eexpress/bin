@@ -251,7 +251,9 @@ sub expose {
 	my ($sec,$min,$hour) = (localtime(time));
 #    $fsize=38;
 #    txt("$hour : $min",20,260);
-	$hour-=12, my $pm="下午" if $hour > 12;
+	my @ad=qw"早上 上午 下午 晚上";
+	my $pm=$ad[$hour/6];
+	$hour-=12 if $hour > 12;
 	my $time = sprintf "%02d : %02d",$hour,$min;
 	stamp("$pm $time",120,290,2,-0.2);
 	print "";
