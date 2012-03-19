@@ -1,4 +1,4 @@
 reconnect_delay = 4
-num_connections = 8
+num_connections = 15
 connection_timeout = 35
 alternate_output = 1

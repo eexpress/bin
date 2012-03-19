@@ -88,3 +88,4 @@ routel|grep 'default.*static'|awk '{print $NF}'
 }
 alias mp3info='mutagen-inspect'
 alias mp3enca='mid3iconv --remove-v1 -d -e GBK'
+alias loc='locate -beLin 20'
