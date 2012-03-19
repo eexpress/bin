@@ -17,8 +17,10 @@ DesktopName 0 Main			#设置了1个桌面
 Module FvwmCommandS
 #CursorStyle DEFAULT right_ptr
 ####################################################
-BorderStyle Active TiledPixmap active.png -- Flat
-BorderStyle InActive TiledPixmap inactive.png -- Flat
+#BorderStyle Active TiledPixmap active.png -- Flat
+#BorderStyle InActive TiledPixmap inactive.png -- Flat
+Colorset 0 RootTransparent buffer
+BorderStyle Inactive Colorset 0 -- flat 
 Style * !Title, HandleWidth 5
 
 #BorderStyle InActive -- Flat
