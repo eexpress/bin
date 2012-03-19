@@ -247,7 +247,7 @@ sub expose {
 	$cr->set_source_surface($img,0,0);
 	$cr->paint;
 	$cr->set_operator("over");
-	$color="#007AD0F0";
+	$color="#007AD0a0";
 	my ($sec,$min,$hour) = (localtime(time));
 #    $fsize=38;
 #    txt("$hour : $min",20,260);
@@ -255,7 +255,7 @@ sub expose {
 	my $pm=$ad[$hour/6];
 	$hour-=12 if $hour > 12;
 	my $time = sprintf "%02d : %02d",$hour,$min;
-	stamp("$pm $time",120,290,2,-0.2);
+	stamp("$pm $time",140,290,4,-0.2);
 	print "";
 }
 
