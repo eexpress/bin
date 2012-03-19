@@ -8,18 +8,18 @@ ImagePath $[HOME]/.fvwm/:/home/eexp/图片/图标/48-png/:/usr/share/pixmaps:/us
 DesktopSize 2x2				#每个桌面分成2x2个页面
 DesktopName 0 Main			#设置了1个桌面
 
-Exec exec fvwm-root -r desktop.png
-Exec JumpExec cairo-dock
-Exec JumpExec cairo-clock
-Exec JumpExec xcompmgr -C
-Exec JumpExec nm-applet
+#Exec exec fvwm-root -r $[fvwm]desktop.png
+#Exec JumpExec cairo-dock
+#Exec JumpExec cairo-clock
+#Exec JumpExec xcompmgr -C
+#Exec JumpExec nm-applet
 
 Module FvwmCommandS
 #CursorStyle DEFAULT right_ptr
 ####################################################
 BorderStyle Active TiledPixmap active.png -- Flat
 BorderStyle InActive TiledPixmap inactive.png -- Flat
-Style * !Title, HandleWidth 10
+Style * !Title, HandleWidth 5
 
 #BorderStyle InActive -- Flat
 #Style * !Title, !Handles, BorderWidth 5
@@ -123,7 +123,7 @@ Key 3 W 4 PointerWindow MoveToPage 0 1
 Key 4 W 4 PointerWindow MoveToPage 1 1
 
 #-------------IconBox 设置
-Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64
+Style * IconBox 1000x100+80-80, IconGrid 20 20, IconFill right bottom, IconSize 64 64
 Style * !IconTitle, IconTitleRelief 0, IndexedIconName, IconBackgroundPadding 0, IconBackgroundRelief 0
 ########################
 # 修正系统函数：恢复窗口时，鼠标居中
@@ -165,7 +165,7 @@ Style *tray	UseStyle dock
 Style *clock	UseStyle dock
 Style cairo-*	UseStyle dock
 
-#Exec exec "$[fvwm]autostart.pl"
+Exec exec "$[fvwm]autostart.pl"
 
 ########################
 # 开关鼠标穿越
