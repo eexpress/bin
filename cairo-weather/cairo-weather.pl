@@ -247,7 +247,7 @@ sub expose {
 	$cr->set_source_surface($img,0,0);
 	$cr->paint;
 	$cr->set_operator("over");
-	$color="#007AD0a0";
+#    $color="#007AD0a0";
 	my ($sec,$min,$hour) = (localtime(time));
 #    $fsize=38;
 #    txt("$hour : $min",20,260);
