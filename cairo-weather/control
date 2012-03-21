@@ -1,5 +1,5 @@
 Package: cairo-weather
-Version: 0.81
+Version: 0.82
 Architecture: all
 Maintainer: eexpress
 Installed-Size: 550k
@@ -10,4 +10,5 @@ Description: draw weather on desktop using cairo
  Draw weather forecast on desktop. mainly support Chinese city.
  modify ~/.config/cairo-weather/config as you wish. setup something and enjoy it.
  add clock when using gtk window.
+ add scroll to control volume.
 

@@ -220,10 +220,12 @@ use Gtk2 '-init';
 $window = Gtk2::Window->new();
 $window->set_decorated(0);
 $window->add_events("GDK_BUTTON_PRESS_MASK");
+#$window->add_events("GDK_SCROLL_MASK");
 $window->stick;
 $window->set_keep_below(1);
 $window->set_skip_taskbar_hint(1);
 $window->signal_connect('expose_event', \&expose);
+$window->signal_connect('scroll_event',\&scroll);
 $window->signal_connect('button_press_event',\&mouse);
 $img = Cairo::ImageSurface->create_from_png ($outputfile);
 $window->set_size_request($img->get_width(),$img->get_height());
@@ -255,7 +257,7 @@ sub expose {
 	my $pm=$ad[$hour/6];
 	$hour-=12 if $hour > 12;
 	my $time = sprintf "%02d : %02d",$hour,$min;
-	stamp("$pm $time",140,290,4,-0.2);
+	stamp("$pm $time",140,290,3,-0.2);
 	print "";
 }
 
@@ -264,7 +266,13 @@ sub mouse{
 	if($event->button eq 1){
 		$window->begin_move_drag($event->button,$event->x_root,$event->y_root,$event->time);
 	}
-	else {exit;}
+	else {exit;} #other button
+}
+
+sub scroll{
+	my ($widget, $event) = @_;
+	if($event->direction eq 'down'){`amixer set Master 10%-`;}
+	if($event->direction eq 'up'){`amixer set Master 10%+`;}
 }
 
 sub time{

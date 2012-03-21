@@ -30,10 +30,10 @@ Style * SloppyFocus		#移开窗口到root时，不丢失焦点
 Style * MouseFocusClickRaises		#点击窗体上升
 ########################
 # Super，用于热键组合。位于Mod4。xmodmap -pm查看
-#Key r A 4 JumpExec rox
+Key r A 4 JumpExec rox
 #Key f A 4 JumpExec pcmanfm
 Key o A 4 JumpExec opera
-Key q A 4 JumpExec geeqie
+Key g A 4 JumpExec geeqie
 Key n A 4 JumpExec zim
 #Key b A 4 JumpExec transmission
 #Key c A 4 JumpExec chromium-browser
