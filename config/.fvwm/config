@@ -91,17 +91,17 @@ Mouse 1 R A
 Mouse 1 W 4 Move
 Mouse 1 TS A Move
 
-Mouse 2 W 4 Close
-Mouse 2 TS A Close
-Mouse 2 TS 4 All (CurrentPage,Iconifiable,HasHandles) Close
+Mouse 3 W 4 Close
+Mouse 3 TS A Close
+Mouse 3 TS 4 All (CurrentPage,Iconifiable,HasHandles) Close
 Mouse 3 I A Close	# 图标，右键直接关闭
 Mouse 3 I 4 All (CurrentPage,Iconifiable,HasHandles) Close
 
 #Mouse 2 W 4 Stick	# +中键，总是可见
 Key S W 4 Stick
 
-Mouse 3 W 4 Resize	# +右击，缩放
-Mouse 3 TS A Resize
+Mouse 2 W 4 Resize	# +中键，缩放
+Mouse 2 TS A Resize
 
 Mouse 4 W 4 Maximize	# +上滚轮，最大化
 Mouse 4 TS A Maximize
