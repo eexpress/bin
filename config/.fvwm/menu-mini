@@ -11,4 +11,4 @@ AddToMenu "Root" "常用软件" Title
 + "xcompmgr" Exec exec xcompmgr
 xcompmgr
 + "xkill%/home/eexp/bin/config/.icons/nuoveXT-1.6/24x24/apps/xkill.png%" Exec exec /usr/bin/xkill
-
++ "Ubuntu One%ubuntuone-installer.png%" Exec exec ubuntuone-installer
