@@ -17,7 +17,7 @@ export LESS_TERMCAP_ue=$'\033[0m'
 export LESS_TERMCAP_us=$'\033[01;32m'
 
 #-------ENVIROMENT SET-----------------------------
-export PATH=$HOME/bin:$PATH
+export PATH=/usr/local/android-sdk-linux/tools/:$HOME/bin:$PATH
 export CDPATH=:~:~/bin
 
 export TERM=xterm-color
