@@ -13,7 +13,7 @@ print @_;
 print "本地需要提交。请输入提交的注释并回车（空注释将被日期代替）：\n";
 $_=<STDIN>; chomp;
 if(! $_){$_=`date '+%F %T'`; chomp;}
-print "提交注释为 $_ 的更新。";
+print "提交注释为 $_ 的更新。\n";
 `git ci -a -m \"$_\"; git push`;
 exit;
 }
