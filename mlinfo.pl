@@ -21,4 +21,4 @@ $out.="$n\t\t$i[1]%\n";
 }
 }else{$out="server not run..."}
 print $out;
-`notify-send -u critical -i /usr/share/pixmaps/mlnet.xpm 'MlDonkey Info:' '$out'`;
+`DISPLAY=$ENV{DISPLAY} notify-send -u critical -i /usr/share/pixmaps/mlnet.xpm 'MlDonkey Info:' '$out'`;
