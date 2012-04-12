@@ -9,7 +9,7 @@ while(<>){
 print $sock $_;
 while(<$sock>){last if /^>/;}
 print $_;
-while(<$sock>){last if /command-line/; print "$_\n";};
+while(<$sock>){last if /command-line/; print $_;};
 print "--命令-->";
 }
 close $sock;  
