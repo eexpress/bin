@@ -6,6 +6,7 @@ my $sock = IO::Socket::INET->new(PeerAddr => 'localhost', PeerPort => 4000) or d
 
 print "--命令: vd bw_toggle help kill etc.-->";
 while(<>){
+last if /^quit|^exit/;
 print $sock $_;
 while(<$sock>){last if /^>/;}
 print $_;
