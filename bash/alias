@@ -77,7 +77,7 @@ alias t.d='tar --delete -f '
 alias t.l='tar tf '
 alias t.u='tar uPvf '
 alias t.x='tar xmPvf '
-alias find-opera-1M='find ~/.opera/cache*/ -iname "opr*.tmp" -cmin -60 -size +1000k -printf "------\t%p\t► %Ac\t► %kK\t►" -exec file -b {} \;'
+alias find-opera-1M='find ~/.opera/cache*/ -iname "opr*.tmp" -cmin -60 -size +1000k -printf "------\t%p\t► %Cr\t► %kK\t►" -exec file -b {} \;'
 alias tar-opera='t.u ~/opera-setting-`hostname`-`date '+%Y-%m-%d-%H-%M-%S'`.tar `find ~/.opera -iname "*.adr" -or -iname "*.ini" -or -iname "wand.dat" -or -iname "eexp*"`'
 osd0(){
 gnome-osd-client -f "<message id='oss' osd_vposition='center' osd_halignment='center'><span font='ZhunYuan 180'  foreground='red'>`xsel -o`</span></message>"
