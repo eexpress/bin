@@ -40,5 +40,6 @@ while(<$sock>){last if /command-line/;
 }
 print $prompt;
 }
+print "\e[H\e[2J"; # tput clear
 close $sock;  
 
