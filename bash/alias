@@ -27,6 +27,7 @@ alias egrep='egrep --color=auto'
 alias en='export LC_ALL=C'
 alias free='free -m'
 alias g='grep --color -in'
+alias disk='palimpsest'
 
 alias proxy.gap='dtach -n /tmp/dtach-gappproxy python ~/bin/gappproxy/localproxy/proxy.py'
 alias proxy.cdn='dtach -n /tmp/dtach-cdnproxy ~/bin/cdnproxy'
