@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-require 'colors.pl';
+my $red="\e[31m"; my $normal="\e[0m";
 
 chdir "$ENV{HOME}/bin";
 @_=`git status`;
