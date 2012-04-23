@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-my $red="\e[31m"; my $normal="\e[0m";
+my $bold="\e[1m"; my $red="\e[31m"; my $normal="\e[0m";
 
 chdir "$ENV{HOME}/bin";
 @_=`git status`;
@@ -12,7 +12,7 @@ exit;
 @_=grep /modified:|new file:/,@_;
 if(@_){
 print @_;
-print "本地需要提交。请输入提交的注释并回车（空注释将被日期代替）：\n$red";
+print "本地需要提交。请输入提交的注释并回车（空注释将被日期代替）：\n$red$bold";
 $_=<STDIN>; chomp;
 if(! $_){$_=`date '+%F %T'`; chomp;}
 print "$normal提交注释为 $_ 的更新。\n";
