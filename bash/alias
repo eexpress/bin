@@ -92,3 +92,6 @@ alias mp3info='mutagen-inspect'
 alias mp3enca='mid3iconv --remove-v1 -d -e GBK'
 alias loc='locate -beLin 20'
 alias pl='perl -e'
+loc.(){
+locate -eLin 40 -r "`pwd`/.*$1"
+}
