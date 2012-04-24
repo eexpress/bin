@@ -90,8 +90,8 @@ routel|grep 'default.*static'|awk '{print $NF}'
 }
 alias mp3info='mutagen-inspect'
 alias mp3enca='mid3iconv --remove-v1 -d -e GBK'
-alias loc='locate -beLin 20'
+alias loc='locate -beLin $(($LINES-4))'
 alias pl='perl -e'
 loc.(){
-locate -eLin 40 -r "`pwd`/.*$1"
+locate -eLin $(($LINES-4)) -r "`pwd`/.*$1"
 }
