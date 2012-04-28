@@ -33,10 +33,6 @@ let Tlist_Use_Right_Window=1
 let Tlist_File_Fold_Auto_Close=1
 " 在当前目录搜索当前词，并打开quickfix窗口
 map <F5> :call Search_Word()<CR>
-" 显示tags的当前词的定义
-noremap <F6> :call ShowDefine()<CR>
-" 全能补全
-inoremap <F8> <C-x><C-o>
 " 设置程序运行
 map <F9> :call CompileRun()<CR>
 " 直接运行
@@ -107,12 +103,13 @@ set foldenable!
 set list
 set listchars=tab:\|\ 
 map rj !!date<CR>
-"nm <silent> tt :!ctags -R --fields=+lS .<CR>
 
-"2010年 10月 16日 星期六 17:49:17 CST
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"ctags 主要用于补全。 cscope 主要用于阅读调用关系。
+nm <silent> tt :!ctags -R --fields=+lS .<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " cscope setting
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"● cscope -Rbkq
 if has("cscope")
 set csprg=/usr/bin/cscope
 set csto=1
@@ -125,14 +122,9 @@ endif
 set csverb
 endif
 
-"nmap cs :cs find s <C-R>=expand("<cword>")<CR><CR>
-"nmap cg :cs find g <C-R>=expand("<cword>")<CR><CR>
-"nmap cc :cs find c <C-R>=expand("<cword>")<CR><CR>
-"nmap ct :cs find t <C-R>=expand("<cword>")<CR><CR>
-"nmap ce :cs find e <C-R>=expand("<cword>")<CR><CR>
-"nmap cf :cs find f <C-R>=expand("<cfile>")<CR><CR>
-"nmap ci :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-"nmap cd :cs find d <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>cs :cs help find<CR>
 "s: 查找C语言符号，即查找函数名、宏、枚举值等出现的地方
 "g: 查找函数、宏、枚举等定义的位置，类似ctags所提供的功能
 "d: 查找本函数调用的函数
@@ -141,13 +133,4 @@ endif
 "e: 查找egrep模式，相当于egrep功能，但查找速度快多了
 "f: 查找并打开文件，类似vim的find功能
 "i: 查找包含本文件的文件
-
-"0 or s: Find this C symbol
-"1 or g: Find this definition
-"2 or d: Find functions called by this function
-"3 or c: Find functions calling this function
-"4 or t: Find this text string
-"6 or e: Find this egrep pattern
-"7 or f: Find this file
-"8 or i: Find files #including this file
 
