@@ -2,13 +2,16 @@
   
 use IO::Socket::INET;  
 use Number::Format qw/format_bytes/;
+my $Bred="\e[1;31m"; my $normal="\e[0m"; my $green="\e[32m";
+
 #libnumber-format-perl 
 my $sock = IO::Socket::INET->new(PeerAddr => 'localhost', PeerPort => 4000) or die "没找到mlnet的端口。\n";  
 
-$prompt="\e[32m--命令--> \e[0m";
+$prompt="$green--命令--> $Bred";
 print "命令查看 ? 。支持alias。使用 / 搜索最后的输出。\n";
 print $prompt;
 while(<>){
+print $normal;
 last if /^quit|^exit|^q$/;
 if(/^\//){ #增加搜索最后的一次输出。
 	$s=$'; chomp $s;
@@ -20,7 +23,7 @@ if(/^\//){ #增加搜索最后的一次输出。
 	$vr=/vr/?1:0;
 	$vd=/vd/?1:0;
 	while(<$sock>){last if /^>/;}
-	print $_;
+#    print $_;
 while(<$sock>){last if /command-line/;
 	if($vr){
 		s/]\ (\d)/]  $1/; @_=split /\s{2,}/;
