@@ -55,7 +55,7 @@ imap <TAB> <C-p>
 "新脚本自动加类型
 autocmd BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
 au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
-au BufNewFile,BufRead *.c so ~/.vim/echofunc.vim
+"au BufNewFile,BufRead *.c so ~/.vim/echofunc.vim
 " Vala
 autocmd BufRead *.vala set efm=%f:%l.%c-%[%^:]%#:\ %t%[%^:]%#:\ %m
 au BufRead,BufNewFile *.vala            setfiletype vala
