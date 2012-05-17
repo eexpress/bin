@@ -65,6 +65,9 @@ if ((localtime((stat($outputfile))[9]))[7] eq (localtime)[7]){
 show();
 exit;
 }}
+$_=$url;s"http://"";s"/.*"";$tmp=$_;
+#until($_[1]=~/ttl/){@_=`ping -c 1 -w 10 $tmp`;}
+do{@_=grep /ANSWER SECTION/,`dig $tmp`;}until(@_);
 #until($_[3]=~/answer/){@_=`nslookup qq.ip138.com`;};
 # ------以上为可自定义的部分------
 my $city;
