@@ -2,13 +2,12 @@
 
 open IN,"<$ARGV[0]"; @_=<IN>; close IN;
 $base=$ARGV[0];$base=~s/\..*//;
-$ext="svg";
-$sep='///';
+$ext="svg"; $sep='///'; $font='Vera Sans YuanTi'; $color="#6495ED";
 #--------------------------------
-@v=map {s'.*///'';s/^\s*//;s/\s*$//;chomp $_;$_} grep $sep,@_;
+@v=map {s".*\Q$sep\E"";s/^\s*//;s/\s*$//;chomp $_;$_} grep /$sep/,@_;
 $out="";
 for(@v){
-push @output, "$_".'[peripheries=2 shape=ellipse];'."\n" if ! $out;
+push @output, "$_".'[shape=ellipse];'."\n" if ! $out;
 $out.="$_->",next if ! /\?/;
 @t=split /[?:]/,$_;
 push @output,"$t[0]".'[shape=diamond]';
@@ -21,10 +20,10 @@ $out=~s/->$/;\n/;
 push @output,$out;
 for(@output){print $_;}
 #--------------------------------
-unshift @output,'
+unshift @output,"
 digraph G {
-node [shape=box style=filled fontname="Vera Sans YuanTi Mono"]
-';
+node [peripheries=2 color=\"$color\" shape=box style=filled fontname=$font]
+";
 push @output,'}\n';
 
 open OUT,">$base.dot"; print OUT @output;close OUT;
