@@ -15,7 +15,9 @@ exit 0;
 
 open IN,"<$ARGV[0]"; @_=<IN>; close IN;
 $base=$ARGV[0];$base=~s/\..*//;
-$ext="svg"; $sep='///'; $font='Vera Sans YuanTi'; $color="#6495ED";
+$ext="svg"; $sep='///'; $font='Vera Sans YuanTi';
+#$color="#6495ED";
+@color=qw(#6495ED #eecc80 #ccee80 #80ccee #eecc80 #80eecc); $cnt=@color; $cc=0;
 $next="_xxx_"; $end=";\n";
 $send='[shape=ellipse]'.$end;
 $dend='[shape=diamond]'.$end;
@@ -25,6 +27,7 @@ $out=""; @isdia=[];
 for $i (@v){
 	next if $i eq "";
 	if($i=~/>$/){ #入口
+	push @output, 'node [color="'.($color[$cc%$cnt]).'"]'.$end; $cc++;
 		$i=~s/>//g; push @output, "\t".$i.$send;
 		push @output,$out.$end if $out=~/->/ && $out!~/->$/;
 		$needreplace=0; $out="$i->"; next;
@@ -62,7 +65,7 @@ $out=~s/^\s*//;$out=~s/->$//g; push @output,$out.$end;
 #--------------------------------
 unshift @output,"
 digraph G {
-node [peripheries=2 color=\"$color\" shape=box style=filled fontname=$font] label=\"$ARGV[0]\"
+node [peripheries=2 shape=box style=filled fontname=$font] label=\"$ARGV[0]\"
 ";
 push @output,"}\n";
 open OUT,">$base.dot"; print OUT @output;close OUT;
