@@ -49,7 +49,7 @@ for(@output){ # 判断的入口，全部顶部
 #--------------------------------
 unshift @output,"
 digraph G {
-node [peripheries=2 color=\"$color\" shape=box style=filled fontname=$font]
+node [peripheries=2 color=\"$color\" shape=box style=filled fontname=$font] label=\"$ARGV[0]\"
 ";
 push @output,"}\n";
 open OUT,">$base.dot"; print OUT @output;close OUT;
