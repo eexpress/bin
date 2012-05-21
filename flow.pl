@@ -20,7 +20,7 @@ for $i (@v){
 		$i=~s/>//g;
 		if($needreplace){for(@output){s/\Q$next\E/$i/;}};
 		$needreplace=0; $out.="$i->";
-#print $out."--------$i---\n";
+print $out."--------$i---\n";
 		next;
 		}
 	# 条件判断
@@ -45,7 +45,7 @@ for $i (@v){
 #--------------------------------
 for(@output){ # 判断的入口，全部顶部
 	$i=$_; for(@isdia){$i=~s/->$_/->$_:n/;} $_=$i;}
-#$out=~s/^\s*//;$out=~s/->$/;\n/; push @output,$out;
+$out=~s/^\s*//;$out=~s/->$//g; push @output,$out.$end;
 #--------------------------------
 unshift @output,"
 digraph G {
