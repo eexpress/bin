@@ -3,38 +3,47 @@
 open IN,"<$ARGV[0]"; @_=<IN>; close IN;
 $base=$ARGV[0];$base=~s/\..*//;
 $ext="svg"; $sep='///'; $font='Vera Sans YuanTi'; $color="#6495ED";
-$next="_xxx_"; $ends='[shape=ellipse];'."\n";
+$next="_xxx_"; $end=";\n";
+$send='[shape=ellipse]'.$end;
+$dend='[shape=diamond]'.$end;
 $out=""; @isdia=[];
-#--------------------------------
 @v=map {s".*\Q$sep\E"";s/^\s*//;s/\s*$//;chomp $_;$_} grep /$sep/,@_;
-for $x (@v){
-	push @output, "\t$x".$ends if ! $out;
-	if ($x!~/\?/){ 
-		for(@output){s/\Q$next\E/$x/;}
-		$out.="$x->";
-		next;
+#--------------------------------
+for $i (@v){
+	if($i=~/>$/){ #入口
+		$i=~s/>//g; push @output, "\t".$i.$send;
+		push @output,$out.$end if $out=~/->/;
+		$needreplace=0; $out="$i->"; next;
+		}
+	if ($i!~/\?/){  #常规
+#        for(@output){s/\Q$next\E/$i/;} if $needreplace;
+		if($needreplace){for(@output){s/\Q$next\E/$i/;}};
+		$needreplace=0; $out.="$i->"; next;
 		}
 	# 条件判断
-	@t=[];@t=split /[?:]/,$x;
-	for(@output){s/\Q$next\E/$t[0]/;}
-	$out=~s/^\s*//,push @output,"$out$t[0];\n" if $out=~/->/;
-	push @output,"\t$t[0]".'[shape=diamond];'."\n"; push @isdia,$t[0];
+	@t=[];@t=split /[?:]/,$i;
+	if($needreplace){for(@output){s/\Q$next\E/$t[0]/;}};
+#    for(@output){s/\Q$next\E/$t[0]/;} if $needreplace;
+	push @output,$out.$t[0].$end if $out=~/->/;
+	$out="";
+	push @output,"\t".$t[0].$dend; push @isdia,$t[0];
 
 	$_=$t[1];
-	if(/^>/){s/^>//; push @output,"\t$_".$ends;} #返回，设置形状，不继续节点
+	if(/^>/){s/^>//; push @output,"\t$_".$send;} #返回，设置形状，不继续节点
 	else{if($_ ne ""){push @output,"$_->$next;\n";}else{$_=$next;}}
 	push @output,"$t[0]:s->$_".'[label="Yes"];'."\n";
 
 	$_=$t[2];
-	if(/^>/){s/^>//; push @output,"\t$_".$ends;} #返回，设置形状，不继续节点
+	if(/^>/){s/^>//; push @output,"\t$_".$send;} #返回，设置形状，不继续节点
 	else{if($_ ne ""){push @output,"$_->$next;\n";}else{$_=$next;}}
 	push @output,"$t[0]:e->$_".'[label="No" style=dotted];'."\n";
 
-	$out=" ";
+	$needreplace=1;
 	}
+#--------------------------------
 
 for(@output){ # 判断的入口，全部顶部
-	$x=$_; for(@isdia){$x=~s/->$_/->$_:n/;} $_=$x;}
+	$i=$_; for(@isdia){$i=~s/->$_/->$_:n/;} $_=$i;}
 
 $out=~s/^\s*//;$out=~s/->$/;\n/;
 push @output,$out;
