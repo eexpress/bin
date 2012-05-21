@@ -27,19 +27,18 @@ $out=""; @isdia=[];
 for $i (@v){
 	next if $i eq "";
 	if($i=~/>$/){ #入口
-	push @output, 'node [color="'.($color[$cc%$cnt]).'"]'.$end; $cc++;
+		$out=~s/->$//g; push @output,$out.$end."}\n" if $out=~/->/;
+	push @output, "\nsubgraph{\t".'node [color="'.($color[$cc%$cnt]).'"]'.$end; $cc++;
 		$i=~s/>//g; push @output, "\t".$i.$send;
-		push @output,$out.$end if $out=~/->/ && $out!~/->$/;
 		$needreplace=0; $out="$i->"; next;
 		}
-	if ($i!~/\?/){  #常规
-		$i=~s/>//g;
+	if ($i!~/\?/){  #常规，包括出口
+		if($i=~/^>/){$i=~s/^>//; push @output,"\t$i".$send;}
 		if($needreplace){for(@output){s/\Q$next\E/$i/;}};
-		$needreplace=0; $out.="$i->";
-#print $out."--------$i---\n";
-		next;
+#        $i=~s/>//g;
+		$needreplace=0; $out.="$i->"; next;
 		}
-	# 条件判断
+	# 条件判断，包括出口
 	@t=[];@t=split /[?:]/,$i;
 	if($needreplace){for(@output){s/\Q$next\E/$t[0]/;}};
 	push @output,$out.$t[0].$end if $out=~/->/;
@@ -61,13 +60,15 @@ for $i (@v){
 #--------------------------------
 for(@output){ # 判断的入口，全部顶部
 	$i=$_; for(@isdia){$i=~s/->$_/->$_:n/;} $_=$i;}
-$out=~s/^\s*//;$out=~s/->$//g; push @output,$out.$end;
+#$out=~s/^\s*//;
+$out=~s/->$//g; push @output,$out.$end if $out=~/->/;
+#push @output,"}\n";
 #--------------------------------
 unshift @output,"
 digraph G {
 node [peripheries=2 shape=box style=filled fontname=$font] label=\"$ARGV[0]\"
 ";
-push @output,"}\n";
+push @output,"}\n}\n";
 open OUT,">$base.dot"; print OUT @output;close OUT;
 `dot -T$ext "$base.dot" -o $base.$ext`;
 `eog $base.$ext`;
