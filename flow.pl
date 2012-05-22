@@ -75,6 +75,6 @@ sub jump(){
 sub setshape(){ # 名称，形状
 	my ($name, $shape)=@_;
 	my $has=grep /^\Q$name\E$/,@hasshape;
-	if($has==0){push @hasshape,$name, push @output,"\t".$name.$shape;}
+	if($has==0){push @hasshape,$name, push @output,"\t".$name.$shape.$end;}
 }
 #--------------------------------
