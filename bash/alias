@@ -37,7 +37,8 @@ alias dtach.slimrat='dtach -n /tmp/dtach-slimrat ~/bin/slimrat -l ~/.slimrat/que
 alias myip='curl http://members.3322.org/dyndns/getip'
 alias myip1='curl ifconfig.me/ip'
 alias grep='grep --color=auto'
-alias v='/usr/bin/gvim --remote-silent-tab'
+# alias v='/usr/bin/gvim -f --remote-silent-tab'
+function v () { (/usr/bin/gvim -f "$@" &) }
 alias sv='sudo /usr/bin/gvim --remote-silent-tab'
 alias hexdump='hexdump -C'
 alias iftop.启动='sudo iftop -i `netname`'
