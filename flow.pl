@@ -26,7 +26,8 @@ $out=""; @isdia=[];
 for $i (@v){
 	next if $i eq "";
 	if($i=~/>$/){ #入口
-		$out=~s/->$//g; push @output,$out.$end."}\n" if $out=~/->/;
+		$out=~s/->$//g; push @output,$out.$end if $out=~/->/;
+		push @output,"}\n" if $cc;
 	push @output, "\nsubgraph{\t".'node [color="'.($color[$cc%$cnt]).'"]'.$end; $cc++;
 		@hasshape=[];
 		$i=~s/>//g; setshape($i,$send);
