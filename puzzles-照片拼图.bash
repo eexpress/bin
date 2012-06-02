@@ -19,6 +19,7 @@ if [ $x -gt $y ]; then
 p=0.99; s=720
 else
 p=1.5; s=480
+if [ $# -lt 5 ]; then p=0; s=600; fi
 fi
 t=`echo "sqrt($#)+$p"|bc -l`
 t=`echo $t|cut -d. -f1`
