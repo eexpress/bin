@@ -8,16 +8,15 @@ $send='[shape=ellipse]'.$end; $dend='[shape=diamond]'.$end;
 if(($#ARGV==-1) || ($ARGV[0]=~/--help|-h/i) || ! -f "$ARGV[0]"){
 print <<HELP;
 AUTHOR:		eexpress
-VERSION:	1.1
+VERSION:	1.2
 USAGE:		flow.pl source_file
 DESCRIPTION:
 自动根据注释里面的///后面的内容，生成流程图。依赖graphviz。
 flow.pl 文件【各类语法的源码，只要注释不和///冲突】
 语法说明：
-	xxx> 表示函数入口。通常是函数名。
-	>xxx 表示函数出口。通常是return。
-	xxx?yyy:zzz 条件判断语句。yyy为真，zzz为假。可省略其一。如：xxx?yyy 或者 xxx?:zzz。
-	循环体，如while if等，写成条件判断的时候，:后面的假分支，如果指向return返回语句，必须也加上>的前缀。
+	xxx> 表示函数入口。通常是函数名。必须有一个。
+	>xxx 表示函数出口或者跳转。通常是return或者else/break/next/continue等强制分支。
+	xxx?yyy:zzz 条件判断语句。yyy为真，zzz为假。可省略其一。如：xxx?yyy 或者 xxx?:zzz。yyy/zzz 均认为是跳转，不需要写>前缀。
 HELP
 exit 0;
 }
@@ -30,7 +29,7 @@ $base=$ARGV[0];$base=~s/\..*//;
 for $j (0 .. $#v){
 	$i=$v[$j];
 	next if $i eq "";
-	$i=~s/[\ -]/_/g;
+	$i=~s/[\ -\.]/_/g;
 	if($i=~/>$/){ #入口
 		$out=~s/->$//g; push @output,$out.$end if $out=~/->/;
 		push @output,"}\n" if $cc;
@@ -39,8 +38,13 @@ for $j (0 .. $#v){
 		$i=~s/>//g; setshape($i,$send);
 		$out="$i->"; next;
 		}
-	if ($i!~/\?/){  #常规，包括出口
-		if($i=~/^>/){$i=~s/^>//; setshape($i,$send);}
+	if($i=~/^>/){ #出口
+		$i=~s/^>//; setshape($i,$send);
+		push @output,$out.$i.$end if $out=~/->/;
+		$out='';
+		next;
+		}
+	if ($i!~/\?/){ #常规
 		$out.="$i->"; next;
 		}
 	# 条件判断，包括出口
@@ -66,9 +70,8 @@ open OUT,">$base.dot"; print OUT @output;close OUT;
 #--------------------------------
 sub jump(){
 	my ($_, $YN)=@_;
-	if(/^>/){s/^>//; setshape($_,$send);} #返回，设置形状，不继续节点
-	else{my $x=$v[$j+1]; $x=~s/\?.*//;
-	if($_ ne ""){push @output,"$_->$x;\n";}else{$_=$x;}}
+	if($_ eq ""){$_=$v[$j+1]; s/\?.*//;} #为空，分支到下一句
+	s/^>//; #判断分支，都是返回，不管出口标志
 	if($YN eq "y"){push @output,"$t[0]:s->$_".'[label="Yes"];'."\n";}
 	else{push @output,"$t[0]:e->$_".'[label="No" style=dotted];'."\n";}
 }
