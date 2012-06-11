@@ -68,8 +68,6 @@ alias ml.speed-toggle='echo bw_toggle | nc -q 1 localhost 4000|sed 1,6d|sed /com
 alias net='echo eexp|sudo -S netstat -tulpn'
 alias ntop.启动='sudo ntop -i wlan0'
 alias osd='gnome-osd-client'
-alias p='ping -c 5 ${1:-www.163.com}'
-alias nmap='nmap ${1:-localhost}'
 alias pg='pgrep -l'
 alias pg='ps|grep'
 alias ps='/bin/ps -e -o pid,%mem,rss,command'
@@ -96,4 +94,10 @@ alias loc='locate -beLin $(($LINES-4))'
 alias pl='perl -e'
 loc.(){
 locate -eLin $(($LINES-4)) -r "`pwd`/.*$1"
+}
+nmap(){
+/usr/bin/nmap ${1:-localhost}
+}
+p(){
+ping -c 5 ${1:-www.163.com}
 }
