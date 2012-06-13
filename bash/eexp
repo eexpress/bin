@@ -1,12 +1,6 @@
 #!/bin/bash
 
-
-#-------for gpg-agent-------------------------------
-#GPG_TTY=$(tty)
-#export GPG_TTY
-
 #bind -x '"\C-l":ls -l'
-export flv2avi=0
 #-------LESS TERMCAP-------------------------------
 export LESS_TERMCAP_mb=$'\033[01;31m' 
 export LESS_TERMCAP_md=$'\033[01;31m' 
@@ -17,51 +11,13 @@ export LESS_TERMCAP_ue=$'\033[0m'
 export LESS_TERMCAP_us=$'\033[01;32m'
 
 #-------ENVIROMENT SET-----------------------------
-export PATH=/usr/local/android-sdk-linux/tools/:$HOME/bin:$PATH
+export PATH=$HOME/bin:$PATH
 export CDPATH=:~:~/bin
-
-export TERM=xterm-color
-export EDITOR=vim
-
 export RES=$HOME/bin/resources
 
-export GST_ID3_TAG_ENCODING=GBK:UTF-8:GB18030
-export GST_ID3V2_TAG_ENCODING=GBK:UTF-8:GB18030
-
 PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n● '
-#PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n☎ '
-#PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n☛ '
-
-#-------FUNCTION-----------------------------------
-# make and change to a directory
-md () { mkdir -p "$1" && cd "$1"; }
-
-#-------PINYIN COMPLETION--------------------------
-#. $HOME/bin/chs_completion
-
-#--------TAB COMPLETION ADD------------------------
-_show_installed()
-{
-        local cur
-        COMPREPLY=()
-        cur=`_get_cword`
-        COMPREPLY=( $( _comp_dpkg_installed_packages $cur ) )
-        return 0
-}
-_show_all()
-{
-        local cur
-        COMPREPLY=()
-        cur=`_get_cword`
-        COMPREPLY=( $( apt-cache pkgnames $cur 2> /dev/null ) )
-        return 0
-}
-complete -F _show_all $default aw ai as
-complete -F _show_installed $default ap ar
-#complete -F _show_installed $default ar
 
 #-------HISTORY------------------------------------
-# eexp 2007-8-7
 shopt -s histappend
 PROMPT_COMMAND='history -a'
 
@@ -72,19 +28,3 @@ HISTTIMEFORMAT='%F %T '
 HISTCONTROL=erasedups
 HISTIGNORE="pwd:ls:cd:"
 
-#-------LS COLORS----------------------------------
-#LS_COLORS='no=00:fi=00:di=01;34:ln=01;35:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;33:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.flac=01;35:*.mp3=38;5;161:*.mpc=01;35:*.ogg=01;35:*.wav=01;35:';
-#export LS_COLORS
-eval `dircolors ~/bin/bash/_ls_color`
-
-cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
-#cdd(){ cd `dirname "$1"`;}
-#googl(){ curl -s -d "url=${1}" http://goo.gl/api/url|sed -n "s/.*:\"\([^\"]*\).*/\1\n/p"|xsel -i; echo `xsel -o`;}
-atosd(){ echo DISPLAY=:0.0 osdanimationtxt.pl $2|at "now + $1 minutes";}
-atpng(){ echo DISPLAY=:0.0 show_png.pl $2|at "now + $1 minutes";}
-atmsg(){ echo msg "clock.png" "AT定时" "$2"|at "now + $1 minutes";}
-tree(){ /usr/bin/tree $*|/usr/bin/ascii2uni -a K;}
-#ip138(){ msg "IP地址查询：$1" "`curl -s -d "ip=$1&action=2" http://www.ip138.com/ips.asp|grep '<li>'|sed 's/<\/li>/\\\\n/g'|sed 's/<[^>]*>/\\n/g'|sed '/^\s*$/d'|enconv`";}
-fd(){ [ $1 ] && find . -iname "*$1*" || echo "need parameter."; }
-gitup(){ git ci -a -m "${1:-`date`}"; git push; }
-c(){ echo $1|bc; }

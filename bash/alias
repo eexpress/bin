@@ -1,3 +1,5 @@
+#!/bin/bash
+
 alias gcc='/usr/bin/gcc `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0`'
 alias valac='/usr/bin/valac --pkg gtk+-3.0 --pkg gmodule-2.0'
 alias calendar='calendar -A 7'
@@ -97,3 +99,31 @@ alias pl='perl -e'
 loc.(){
 locate -eLin $(($LINES-4)) -r "`pwd`/.*$1"
 }
+fd(){ [ $1 ] && find . -iname "*$1*" || echo "need parameter."; }
+tree(){ /usr/bin/tree $*|/usr/bin/ascii2uni -a K;}
+gitup(){ git ci -a -m "${1:-`date`}"; git push; }
+c(){ echo $1|bc; }
+cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
+md () { mkdir -p "$1" && cd "$1"; }
+#--------TAB COMPLETION ADD------------------------
+_show_installed()
+{
+        local cur
+        COMPREPLY=()
+        cur=`_get_cword`
+        COMPREPLY=( $( _comp_dpkg_installed_packages $cur ) )
+        return 0
+}
+_show_all()
+{
+        local cur
+        COMPREPLY=()
+        cur=`_get_cword`
+        COMPREPLY=( $( apt-cache pkgnames $cur 2> /dev/null ) )
+        return 0
+}
+complete -F _show_all $default aw ai as
+complete -F _show_installed $default ap ar
+#complete -F _show_installed $default ar
+
+
