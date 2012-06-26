@@ -1,0 +1,17 @@
+#!/bin/bash
+
+for i in $@; do
+ls -1 --color *$i*
+done
+echo --------------
+read -p "是否删除以上文件？[y] " yes
+if [ $yes == "y" ]; then
+echo 删除。。。。
+for i in $@; do
+echo rm *$i*
+rm *$i*
+done
+else
+echo 不删除。
+fi
+
