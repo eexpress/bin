@@ -1,29 +1,45 @@
 " 开启语法高亮
-syntax on 
+"syntax on 
 colo desert
-set ai
-set t_Co=256
+"set ai
+"set t_Co=256
 set nu
-set autochdir
-set lines=40 columns=80
+"set autochdir
+"set lines=40 columns=80
 " 搜索忽略大小写
-set ignorecase
+"set ignorecase
+set smartcase
 " 设置文字编码自动识别
 set encoding=utf-8
 set fencs=utf-8,gb18030,gbk
 set guifont=Vera\ Sans\ YuanTi\ Mono
 "set guifont=Courier\ 10\ Pitch\ 11
 "colorscheme eexp
-colorscheme desert
+"colorscheme desert
 " 使用鼠标，排除普通模式，则在普通模式下选择文字，可中键粘贴出去。
-set mouse=vic
+"set mouse=vic
 set mouse=a
+" 共享剪贴板
+"set clipboard+=unnamed
 " 设置高亮搜索
 set hlsearch
 " 输入字符串就显示匹配点
 set incsearch
 " 输入的命令显示出来，看的清楚些。
-set showcmd
+"set showcmd
+set tabstop=4
+set shiftwidth=4
+" 显示tab
+set list
+set listchars=tab:\|\ 
+"状态栏
+set laststatus=2
+set statusline=
+set statusline+=%-20f
+set statusline+=%10.{&encoding}
+set statusline+=\ \ \ \ (%3.l,%3.c)[0x%2B]/共%L行\ %4.p%%\ %10.y
+
+"============= Map ============
 " 打开当前目录文件列表
 map <F3> :tabnew .<CR>
 " 函数和变量列表
@@ -32,7 +48,7 @@ map <F4> :TlistToggle<CR>
 let Tlist_Use_Right_Window=1
 let Tlist_File_Fold_Auto_Close=1
 " 在当前目录搜索当前词，并打开quickfix窗口
-map <F5> :call Search_Word()<CR>
+au BufRead *.pl,*.perl,*.c,*.h,*.bash map <F5> :call Search_Word_In_Dir()<CR>
 " 设置程序运行
 map <F9> :call CompileRun()<CR>
 " 直接运行
@@ -52,35 +68,42 @@ vnoremap (( <esc>`>a)<esc>`<i(<esc>i
 vnoremap {{ <esc>`>a}<esc>`<i{<esc>i
 
 imap <TAB> <C-p>
+map rj !!date<CR>
+"============= Mimetype ============
 "新脚本自动加类型
-autocmd BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
+"au! QuickFixCmdPre *.[ch],*.bash,*.pl,*.perl call Search_Word_In_Dir()
+au BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
 au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 "au BufNewFile,BufRead *.c so ~/.vim/echofunc.vim
 " Vala
 autocmd BufRead *.vala set efm=%f:%l.%c-%[%^:]%#:\ %t%[%^:]%#:\ %m
-au BufRead,BufNewFile *.vala            setfiletype vala
+au BufRead,BufNewFile *.vala setfiletype vala
 let vala_comment_strings = 1
 let vala_space_errors = 1
 let vala_no_tab_space_error = 1
 
-"状态栏
-set laststatus=2
-set statusline=
-set statusline+=%-20f
-set statusline+=%10.{&encoding}
-set statusline+=\ \ \ \ (%3.l,%3.c)[0x%2B]/共%L行\ %4.p%%\ %10.y
-
+"============= Function Define ============
 func CompileRun() 
-exec "w" 
-if &filetype == 'c' 
-exec "!/usr/bin/gcc `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` % -g -o %<.run" 
-exec "!./%<.run" 
-elseif &filetype == 'perl' 
-exec "!perl %" 
-elseif &filetype == 'tex' 
-exec "!xelatex %; [ $? == 0 ] && nohup evince %:r.pdf &"
-endif 
+	exec "w" 
+	if &filetype == 'c' 
+	exec "!/usr/bin/gcc `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` % -g -o %<.run" 
+	exec "!./%<.run" 
+	elseif &filetype == 'perl' 
+	exec "!perl %" 
+	elseif &filetype == 'tex' 
+	exec "!xelatex %; [ $? == 0 ] && nohup evince %:r.pdf &"
+	endif 
 endfunc
+
+func Search_Word_In_Dir()
+	let w = expand("<cword>")      " 在当前光标位置抓词
+	let p = expand("%:p:h")      " 取得当前文件的路径
+	let e = expand("%:p:e")      " 取得当前文件的类型
+	exe "cd " p
+	exe "vimgrep " w "*.".e
+	" 打开错误窗口
+	exe "copen"
+endfun
 
 "============= Folding configuration ============
 "set foldopen=all	" 光标进入，自动打开折叠
@@ -88,8 +111,6 @@ endfunc
 "set foldlevel=2
 autocmd BufRead *.c set foldmethod=syntax 	" 设置语法折叠
 autocmd BufRead *.perl,*.pl set foldmethod=indent	"缩进折叠
-set tabstop=4
-set shiftwidth=4
 "手动创建折叠，zf zd 缺省标记/*{{{*/，不适合Perl
 "autocmd BufRead *.perl,*.pl set foldmethod=marker
 set foldcolumn=3 	"设置折叠区域的宽度
@@ -97,29 +118,21 @@ set foldminlines=4
 nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zo')<CR>
                             " 用空格键来开关折叠
 set foldenable!
-" 共享剪贴板
-"set clipboard+=unnamed
-
-set list
-set listchars=tab:\|\ 
-map rj !!date<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"============= Ctags && Cscope ============
 "ctags 主要用于补全。 cscope 主要用于阅读调用关系。
 nm <silent> tt :!ctags -R --fields=+lS .<CR>
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " cscope setting
 "● cscope -Rbkq
 if has("cscope")
-set csprg=/usr/bin/cscope
-set csto=1
-set cst
-set nocsverb
-" add any database in current directory
-if filereadable("cscope.out")
-      cs add cscope.out
-endif
-set csverb
+	set csprg=/usr/bin/cscope
+	set csto=1
+	set cst
+	set nocsverb
+	" add any database in current directory
+	if filereadable("cscope.out")
+		  cs add cscope.out
+	endif
+	set csverb
 endif
 
 nmap <leader>s :cs find s <C-R>=expand("<cword>")<CR><CR>
