@@ -4,7 +4,7 @@ colo desert
 "set ai
 "set t_Co=256
 set nu
-"set autochdir
+set autochdir
 "set lines=40 columns=80
 " 搜索忽略大小写
 "set ignorecase
@@ -91,7 +91,7 @@ func CompileRun()
 	elseif &filetype == 'perl' 
 	exec "!perl %" 
 	elseif &filetype == 'tex' 
-	exec "!xelatex %; [ $? == 0 ] && nohup evince %:r.pdf &"
+	exec "!xelatex \'%\'; [ $? == 0 ] && nohup evince %:r.pdf &"
 	endif 
 endfunc
 

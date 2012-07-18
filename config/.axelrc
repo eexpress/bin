@@ -1,2 +1,3 @@
-num_connections = 8
+num_connections = 4
 alternate_output = 1
+# http_proxy = 127.0.0.1:8087
