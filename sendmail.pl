@@ -38,8 +38,8 @@ my $info;
 if ($sender->MailFile({
 	smtp => $hrc{smtp}, from => $hrc{from}, authid => $hrc{authid}, authpwd => $hrc{authpwd},
 	to =>$to, file => \@file,
-	charset=>'utf-8', subject => '发送附件', auth => 'LOGIN',
-	msg => "附件包括：$files。请查看附件。",
+	charset=>'utf-8', subject => '请查阅附件', auth => 'LOGIN',
+	msg => "附件包括：$files。",
 })<0){$info="文件 $files 发送到 $to 失败\n$Mail::Sender::Error\n";}
 else {$info="文件 $files 已经发送到 $to\n";}
 print "$info"; `$ENV{HOME}/bin/msg mail.png "mailto-附件" "$info"`;
