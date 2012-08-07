@@ -1,5 +1,11 @@
 #!/usr/bin/perl
 
+# changelog:
+# 增加 showtime 参数
+# 去掉 show_app 参数
+# 去掉 habak 支持
+# 去掉壁纸处理
+
 use Encode qw(_utf8_on _utf8_off encode decode);
 use Cairo;
 use Gtk2;
@@ -14,7 +20,6 @@ $appdir=dirname (-l $0?readlink $0:$0);
 }
 $outputfile="/tmp/weather.png";
 
-my $gconf = Gnome2::GConf::Client -> get_default;
 $rcdir="$ENV{HOME}/.config/cairo-weather/";
 $rc="$ENV{HOME}/.config/cairo-weather/config";
 $rcsys="/usr/share/cairo-weather/config";
@@ -24,23 +29,11 @@ open RC,"<$rc"; @rc=grep ! /^\s*#/ && ! /^\s*$/,<RC>; close RC;
 chomp %hrc;
 foreach (keys %hrc){$hrc{$_}=~s/['"]//g;}
 while (my ($k,$v)=each %hrc){print "{$k}\t=> $v\n";}
-#my $bg_file = $ENV{'HOME'}.'/.gnome2/backgrounds.xml';
-#while (my ($key, $value) = each(%{$xml -> {'wallpaper'}})){
-#    push @wallpapers, $key if $value -> {'deleted'} eq 'false';
-#}
-#`gconftool-2 -s /apps/nautilus/preferences/show_desktop false -t bool`;
 # ------以下为可自定义的部分------
 #屏幕偏移坐标，可以负坐标对齐
 $pos=$hrc{pos}//"-80,80";
 $font=$hrc{font}//"Vera Sans YuanTi";
-# 壁纸文件。
-#$gnomebg=`gconftool-2 -g /desktop/gnome/background/picture_filename`;
-$gnomebg=$gconf->get("/desktop/gnome/background/picture_filename");
-#chomp $gnomebg;
-$bgfile=-e $hrc{bgfile}?$hrc{bgfile}:$gnomebg;
-$bgfile=~s'file://'';
-# 城市天气信息地址
-#$app_setbg=$hrc{app_setbg}//"show_png.pl";
+$showtime=$hrc{showtime}//"0";
 $url=$hrc{url}//"http://qq.ip138.com/weather/hunan/ChangSha.wml";
 $scale=$hrc{scale}//0.6;
 $icondir=-e $hrc{icondir}?$hrc{icondir}:"$appdir/weather-icon";
@@ -57,7 +50,7 @@ $indexcolor{"o"}=$hrc{"cother"} if $hrc{"cother"};
 $indexcolor{"0"}=$hrc{"btoday"} if $hrc{"btoday"};
 $indexcolor{"1"}=$hrc{"bweek"} if $hrc{"bweek"};
 
-$show_app=$hrc{show_app}//"$appdir/show_png.pl";
+#$show_app=$hrc{show_app}//"$appdir/show_png.pl";
 $refresh=$hrc{refresh}//"0";
 if(! $refresh){
 if ((localtime((stat($outputfile))[9]))[7] eq (localtime)[7]){
@@ -195,17 +188,10 @@ show();
 
 #---------------------------------
 sub show(){
-# 如果安装有habak，则设置成壁纸。否则使用内建的show_png.pl 显示。
-if (-e '/usr/bin/habak'){
-$gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'false'});
-$cmd="habak -ms \"$bgfile\" -mp $pos -hi $outputfile";
-msg(); `$cmd`;
-}
-else {
-$gconf->set("/apps/nautilus/preferences/show_desktop",{type=>'bool',value=>'true'});
 $cmd="show_png $outputfile at $pos on desktop";
-Glib::Timeout->add(1000,\&time);
-msg(); show_png();}
+Glib::Timeout->add(1000,\&time) if $showtime;
+#Glib::Timeout->add(1000,\&time);
+msg(); show_png();
 }
 #---------------------------------
 sub msg{
@@ -252,6 +238,7 @@ sub expose {
 	$cr->set_source_surface($img,0,0);
 	$cr->paint;
 	$cr->set_operator("over");
+return 1 if ! $showtime;
 #    $color="#007AD0a0";
 	my ($sec,$min,$hour) = (localtime(time));
 #    $fsize=38;
@@ -261,7 +248,7 @@ sub expose {
 	$hour-=12 if $hour > 12;
 	my $time = sprintf "%02d : %02d",$hour,$min;
 	stamp("$pm $time",140,290,3,-0.2);
-	print "";
+	return 1;
 }
 
 sub mouse{
