@@ -92,6 +92,8 @@ func CompileRun()
 	exec "!perl %" 
 	elseif &filetype == 'tex' 
 	exec "!xelatex \'%\'; [ $? == 0 ] && nohup evince %:r.pdf &"
+	elseif &filetype == 'markdown'
+	exec "!markdown \'%\'>\'%.html\'; [ $? == 0 ] && nohup opera \'%.html\' &"
 	endif 
 endfunc
 
