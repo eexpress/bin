@@ -177,7 +177,7 @@ $_= $clip -> wait_for_text,"primary";
 my $t;
 
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;if(-e){`xdg-open $_`;} return 0;}
-if(/\d+\.\d+\.\d+\.\d+/){if(fork()==0){`$ENV{HOME}/bin/ip-138查询ip属地.bash $&`;exit;} return 0;}
+if(/\d+\.\d+\.\d+\.\d+/){if(fork()==0){`$ENV{HOME}/bin/ip-138.bash $&`;exit;} return 0;}
 if(/^\w+$/){if(fork()==0){`$ENV{HOME}/bin/bot/sdcv.pl -n`; exit;} return 0;}
 if(! /:\/\//){if(fork()==0){`$ENV{HOME}/bin/bot/g-translate.pl -n \"$&\"`; exit;} return 0;}
 

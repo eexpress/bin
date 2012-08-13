@@ -5,8 +5,8 @@ use Encode qw(decode);
 $_=`xsel -o`;
 #----------------------------------
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;if(-e){`xdg-open $_`;exit;}}
-if(/\d+\.\d+\.\d+\.\d+/){`$ENV{HOME}/bin/ip-138查询ip或域名所在地.bash $&`;exit;}
-if(/(\w+\.){2,3}\w+/){`$ENV{HOME}/bin/ip-138查询ip或域名所在地.bash $_`;exit;}
+if(/\d+\.\d+\.\d+\.\d+/){`$ENV{HOME}/bin/ip-138.bash $&`;exit;}
+if(/(\w+\.){2,3}\w+/){`$ENV{HOME}/bin/ip-138.bash $_`;exit;}
 if(/^\w+$/){`$ENV{HOME}/bin/bot/sdcv.pl -n`; exit;}
 if(/ppa:.*\/ppa/){`zenity --question --title="是否添加此PPA源" --text=$&`; `gksudo add-apt-repository $&` if ! $?; exit;}
 if(! /:\/\//){`$ENV{HOME}/bin/bot/g-translate.pl -n \"$&\"`;exit;}
