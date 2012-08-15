@@ -1,16 +1,16 @@
 #You may copy this file to ~/.config/cairo-weather/config
 
-# 壁纸文件。缺省使用gnome的系统壁纸
-#bgfile='/home/eexp/图片/壁纸●/t.png'
-
 # 强制每次刷新数据，否则，已有数据时，将使用osd显示。
 refresh=1
 
+# 显示时钟，缺省不显示
+#showtime=1
+
 # 屏幕显示位置。habak支持的格式。缺省-80,80
-#pos=-80,80
+#pos=80,80
 
 # 天气图标路径。47个天气图标。
-#icondir=
+#icondir=/home/eexp/bin/cairo-weather/plain_weather_icons_by_MerlinTheRed/light
 
 # 缺省圆体。“fc-list :lang=zh-cn|sed s/:.*//” 的中文字体结果。
 #font=汉仪萝卜体简
@@ -20,7 +20,7 @@ refresh=1
 # 支持3个网站的天气格式。缺省长沙。
 #url="http://qq.ip138.com/weather/hunan/ChangSha.wml"
 #url="http://wap.weather.gov.cn/forecast/AHN/changsha.html"
-url="http://m.weather.com.cn/data/101250101.html"
+#url="http://m.weather.com.cn/data/101250101.html"
 
 #颜色
 #        ">"=>"#E55E23F0",	# 今天
