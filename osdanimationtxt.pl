@@ -54,7 +54,7 @@ sub mouse{
 }
 
 sub time{
-	$size+=20;
+	$size+=40;
 	if($size*1.5>$h){return 0;}
 	if($extent->{width}>$w){return 0;}
 	$window->queue_draw() ;

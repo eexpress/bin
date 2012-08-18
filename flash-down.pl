@@ -6,6 +6,19 @@ use WWW::Mechanize;
 use Net::DBus;
 binmode STDOUT, ':utf8';
 
+use Getopt::Long;
+my $view; my $decoder; my $help;
+GetOptions('view'=>\$view,'decoder'=>\$decoder,'help'=>\$help);
+
+if($help){
+print <<HELP;
+AUTHOR:         eexpress
+VERSION:        1.1
+USAGE:          flash-down.pl [--view] [--decoder] [--help] url
+HELP
+exit 0;
+}
+
 my $black="\e[30m";my $red="\e[31m";my $green="\e[32m";
 my $yellow="\e[33m";my $blue="\e[34m";my $pink="\e[35m";
 my $cyan="\e[36m";my $white="\e[37m";my $normal="\e[0m";
@@ -38,6 +51,13 @@ if ($mech->success()) {
 	print map "=> $green".$_->url()."$normal\n",@link;
 	open(LINK,">link.log"); print LINK map $_->url()."\n",@link; close LINK;
 	my $cnt=1; my $proc="▭"x$size;
+if($view){
+	foreach(@link){
+		my $add=$_->url();
+		`mplayer -quiet $add`;
+		}
+		exit;
+}
 	foreach(@link){
 		my $add=$_->url();
 		print "$red 下载$normal => $green$add$normal\n";
@@ -53,7 +73,7 @@ if ($mech->success()) {
 		$cnt++;
 	}
 #---------------------	
-	if($ENV{flv2avi}){
+	if($decoder){
 	`paplay "/usr/share/sounds/ubuntu/stereo/service-login.ogg"`;
 	$name=~s/ /-/g;
 	print "\e]2;$name 使用mencoder压缩中。。。\a";
