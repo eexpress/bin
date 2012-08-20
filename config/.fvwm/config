@@ -113,6 +113,16 @@ Mouse 5 TS 4 All (CurrentPage,Iconifiable,HasHandles) Iconify On
 Mouse 1 I A WindowListFunc	# 恢复窗口
 Mouse 1 I 4 All (CurrentPage) WindowListFunc	# 恢复窗口
 
+Key 1 W C ResizeMove 50 50 0 0
+Key 2 W C ResizeMove 100 50 0 0
+Key 3 W C ResizeMove 50 50 50 0
+Key 4 W C ResizeMove 50 100 0 0
+Key 5 W C ResizeMove 100 100 0 0
+Key 6 W C ResizeMove 50 100 50 0
+Key 7 W C ResizeMove 50 50 0 50
+Key 8 W C ResizeMove 100 50 0 50
+Key 9 W C ResizeMove 50 50 50 50
+
 #+方向键，对齐到屏幕边缘
 Key Up		W 4 Move w 0
 Key Down	W 4 Move w -0
