@@ -9,9 +9,10 @@
 'nm-applet',
 'fvwm-root -r ~/.fvwm/desktop.png',
 'xmodmap -e "pointer = 3 2 1"',
-#'xcompmgr -C',
+'xcompmgr -C',
 'cairo-weather.pl',
 'goagent.bash',
+'tilda',
 );
 
 foreach $i (@cmd){

@@ -37,6 +37,7 @@ Key XF86AudioNext	A A Exec exec mocp -f
 
 #-------------窗口操作---------------
 Mouse 0 R A WindowList SortByClass,NoHotkeys,NoGeometry,NoCurrentDeskTitle
+Key F2 A A  WindowList SortByClass,NoHotkeys,NoGeometry,NoCurrentDeskTitle
 Mouse 1 W C Move
 Mouse 3 W C Close
 
