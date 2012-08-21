@@ -9,17 +9,16 @@
 'nm-applet',
 'fvwm-root -r ~/.fvwm/desktop.png',
 'xmodmap -e "pointer = 3 2 1"',
-'xcompmgr -C',
+#'xcompmgr -C',
 'cairo-weather.pl',
+'goagent.bash',
 );
 
 foreach $i (@cmd){
 $_=$i;
-s/ .*$//;
-#print; pidof can not find scim.
-$r=$_;$r=~s/.*\///g;
-$r=`pgrep $r`;
-chomp $r;
+s/ .*$//; s/\..*//g;
+$r=`/bin/ps -e -o pid,command|grep "$_"|grep -v grep`;
+print $r;
 if($r==""){
 	print "===> $_\n";
 	system("bash -c \'$i\' &");
