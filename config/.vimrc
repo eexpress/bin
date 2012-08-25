@@ -7,7 +7,7 @@ set nu
 set autochdir
 "set lines=40 columns=80
 " 搜索忽略大小写
-"set ignorecase
+set ignorecase
 set smartcase
 " 设置文字编码自动识别
 set encoding=utf-8
