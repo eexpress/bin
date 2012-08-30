@@ -7,7 +7,7 @@ set nu
 set autochdir
 "set lines=40 columns=80
 " 搜索忽略大小写
-"set ignorecase
+set ignorecase
 set smartcase
 " 设置文字编码自动识别
 set encoding=utf-8
@@ -107,6 +107,16 @@ func Search_Word_In_Dir()
 	exe "copen"
 endfun
 
+"如果已有同名函数存在，Vim 会报错，除非在“function”后面加上一个“!”。
+function! SuperCleverTab()
+	if strpart(getline('.'), 0, col('.') - 1) =~ '^\s*$'
+		return "\<Tab>"
+	else
+		return "\<C-p>"
+	endif
+endfunction
+
+inoremap <Tab> <C-R>=SuperCleverTab()<cr>
 "============= Folding configuration ============
 "set foldopen=all	" 光标进入，自动打开折叠
 "set foldclose=all	" 光标退出，自动关闭折叠
