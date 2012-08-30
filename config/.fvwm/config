@@ -1,11 +1,10 @@
 # vim: filetype=fvwm
-SetEnv fvwm		$[HOME]/.fvwm/
+SetEnv fvwm			$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
-SetEnv RegularFont "StringEncoding=utf8:xft:Vera Sans YuanTi:size=20:encoding=iso10646-1"
+DesktopSize			2x1
+SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=12:encoding=iso10646-1"
 
-DesktopSize 2x2				#每个桌面分成2x2个页面
-####################################################
-# 热键
+######################### 热键
 Key r A 4 JumpExec rox
 Key o A 4 JumpExec opera
 Key z A 4 JumpExec zim
@@ -35,58 +34,43 @@ Key XF86AudioStop	A A Exec exec mocp -G
 Key XF86AudioPrev	A A Exec exec mocp -r
 Key XF86AudioNext	A A Exec exec mocp -f
 
-#-------------窗口操作---------------
-Mouse 0 R A WindowList SortByClass,NoHotkeys,NoGeometry,NoCurrentDeskTitle
-Key F2 A A  WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
+######################### 窗口操作
+EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
+
 Mouse 1 W C Move
 Mouse 2 W C Resize
 Mouse 3 W C Close
 
-Key 1 W C ResizeMove 50 50 0 0
-Key 2 W C ResizeMove 100 50 0 0
-Key 3 W C ResizeMove 50 50 50 0
-Key 4 W C ResizeMove 50 100 0 0
-Key 5 W C ResizeMove 100 100 0 0
-Key 6 W C ResizeMove 50 100 50 0
-Key 7 W C ResizeMove 50 50 0 50
-Key 8 W C ResizeMove 100 50 0 50
-Key 9 W C ResizeMove 50 50 50 50
+# 方向按键，排列窗口，占半屏幕
+#keyname in /usr/include/X11/keysymdef.h
+Key Up W C ResizeMove 100 50 0 0
+Key Left W C ResizeMove 50 100 0 0
+Key Right W C ResizeMove 50 100 50 0
+Key Down W C ResizeMove 100 50 0 50
+# 全屏
+Key Return W C ResizeMove 100 100 0 0
+# 缩放
 Key minus W C Resize w-10 w-10
 Key equal W C Resize w+10 w+10
-#keyname in /usr/include/X11/keysymdef.h
 
-Key 1 W 4 PointerWindow MoveToPage 0 0
-Key 2 W 4 PointerWindow MoveToPage 1 0
-Key 3 W 4 PointerWindow MoveToPage 0 1
-Key 4 W 4 PointerWindow MoveToPage 1 1
-
-########################
-# 修正系统函数：恢复窗口时，鼠标居中
+######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
 + I WarpToWindow 50 50
-########################
-# Jump & Exec 函数
+
+######################### Jump & Exec 函数
 DestroyFunc JumpExec
 AddToFunc JumpExec
 + I All ($0) WindowListFunc
 + I TestRc (NoMatch) Exec exec $0 &
 
-########################
-# 菜单样式
+######################### 菜单样式
 DestroyMenu MenuFvwmRoot
 MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
-########################
-# 样式设置
-Style *		SloppyFocus				#移开窗口到root时，不丢失焦点
-Style *		MouseFocusClickRaises	#点击窗体上升
-Style *		!Title, !Handles, !Borders, !Iconifiable
-#设置开启窗口，自动定位到指定桌面
-Style rox		StartsOnPage 0 0, PositionPlacement Center
-Style zim		UseStyle rox
-Style gimp		StartsOnPage 1 1
+
+######################### 样式设置。缺省在0页面启动，无标题/边框/缩略图标，点击窗体上升, 移开窗口到root时，不丢失焦点
+Style *		StartsOnPage 0 0, !Title, !Handles, !Borders, !Iconifiable, MouseFocusClickRaises, SloppyFocus
+Style rox		PositionPlacement Center
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
-Style transmission StartsOnPage 0 1
-#Style dock	!Title, !Borders, !Iconifiable, Sticky, StaysOnBottom
 Style dock		Sticky, StaysOnBottom
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
