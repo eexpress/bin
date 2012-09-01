@@ -1,6 +1,7 @@
 " 开启语法高亮
 "syntax on 
 colo desert
+hi PmenuSel ctermfg=7 ctermbg=4 guibg=darkgreen guifg=white
 "set ai
 "set t_Co=256
 set nu
