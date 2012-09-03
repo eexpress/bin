@@ -35,7 +35,7 @@ Key XF86AudioPrev	A A Exec exec mocp -r
 Key XF86AudioNext	A A Exec exec mocp -f
 
 ######################### 窗口操作
-EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
+EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
 Mouse 1 W C Move
 Mouse 2 W C Resize
