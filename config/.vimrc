@@ -1,6 +1,7 @@
 " 开启语法高亮
 "syntax on 
 colo desert
+hi PmenuSel ctermfg=7 ctermbg=4 guibg=darkgreen guifg=white
 "set ai
 "set t_Co=256
 set nu
@@ -107,16 +108,15 @@ func Search_Word_In_Dir()
 	exe "copen"
 endfun
 
-"如果已有同名函数存在，Vim 会报错，除非在“function”后面加上一个“!”。
-function! SuperCleverTab()
-	if strpart(getline('.'), 0, col('.') - 1) =~ '^\s*$'
-		return "\<Tab>"
-	else
-		return "\<C-p>"
+fun MyTab()
+	let str=strpart(getline("."), 0, col(".")-1)
+	if str!="" && str=~'\m\w$'
+		return "\<C-N>"
 	endif
-endfunction
+	return "\t"
+endfun
 
-inoremap <Tab> <C-R>=SuperCleverTab()<cr>
+inoremap <expr> <Tab> MyTab()
 "============= Folding configuration ============
 "set foldopen=all	" 光标进入，自动打开折叠
 "set foldclose=all	" 光标退出，自动关闭折叠
