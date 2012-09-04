@@ -45,6 +45,7 @@ set statusline+=\ \ \ \ (%3.l,%3.c)[0x%2B]/共%L行\ %4.p%%\ %10.y
 map <F3> :tabnew .<CR>
 " 函数和变量列表
 map <F4> :TlistToggle<CR>
+map <F4> :TagbarToggle<CR>
 " Tlist的内部变量。函数列表。
 let Tlist_Use_Right_Window=1
 let Tlist_File_Fold_Auto_Close=1
