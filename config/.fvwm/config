@@ -71,7 +71,7 @@ MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore
 Style *		StartsOnPage 0 0, !Title, !Handles, !Borders, !Iconifiable, MouseFocusClickRaises, SloppyFocus
 Style rox		PositionPlacement Center
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
-Style MPlayer	Sticky, StaysOnTop
+Style MPlayer	StaysOnTop
 Style dock		Sticky, StaysOnBottom
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
