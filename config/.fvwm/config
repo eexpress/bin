@@ -6,6 +6,7 @@ SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=12:encoding=is
 
 ######################### 热键
 Key r A 4 JumpExec rox
+Key f A 4 JumpExec pcmanfm
 Key o A 4 JumpExec opera
 Key z A 4 JumpExec zim
 Key x A 4 JumpExec xterm
