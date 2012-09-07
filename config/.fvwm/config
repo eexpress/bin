@@ -5,7 +5,8 @@ DesktopSize			2x1
 SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=12:encoding=iso10646-1"
 
 ######################### 热键
-Key r A 4 JumpExec rox
+#Key r A 4 JumpExec rox
+Key f A 4 JumpExec pcmanfm
 Key o A 4 JumpExec opera
 Key z A 4 JumpExec zim
 Key x A 4 JumpExec xterm
@@ -35,7 +36,7 @@ Key XF86AudioPrev	A A Exec exec mocp -r
 Key XF86AudioNext	A A Exec exec mocp -f
 
 ######################### 窗口操作
-EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
+EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
 Mouse 1 W C Move
 Mouse 2 W C Resize
@@ -69,8 +70,9 @@ MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore
 
 ######################### 样式设置。缺省在0页面启动，无标题/边框/缩略图标，点击窗体上升, 移开窗口到root时，不丢失焦点
 Style *		StartsOnPage 0 0, !Title, !Handles, !Borders, !Iconifiable, MouseFocusClickRaises, SloppyFocus
-Style rox		PositionPlacement Center
+#Style rox		PositionPlacement Center
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
+Style MPlayer	StaysOnTop
 Style dock		Sticky, StaysOnBottom
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock

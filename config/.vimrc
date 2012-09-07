@@ -99,6 +99,12 @@ func CompileRun()
 	endif 
 endfunc
 
+map <expr> <leader>r Replace_Current_Word()
+func Replace_Current_Word()
+	let w = expand("<cword>")
+	return "\<ESC>:%s/".w."/".w."/g\<Left>\<Left>"
+endfun
+
 func Search_Word_In_Dir()
 	let w = expand("<cword>")      " 在当前光标位置抓词
 	let p = expand("%:p:h")      " 取得当前文件的路径

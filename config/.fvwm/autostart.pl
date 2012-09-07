@@ -11,8 +11,10 @@
 'xmodmap -e "pointer = 3 2 1"',
 'xcompmgr -C',
 'cairo-weather.pl',
-'goagent.bash',
 'tilda',
+'yunio',
+'ubuntuone-launch',
+'~/bin/goagent.bash',
 );
 
 foreach $i (@cmd){
