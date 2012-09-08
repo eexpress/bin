@@ -101,3 +101,5 @@ fi
 #-----------eexp---------
 set -o vi
 for prg in `ls -1 $HOME/bin/bash/[^_]*`; do . `readlink -f $prg`; done;
+
+. /usr/share/autojump/autojump.bash
