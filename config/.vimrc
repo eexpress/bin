@@ -4,6 +4,7 @@ colo desert
 hi PmenuSel ctermfg=7 ctermbg=4 guibg=darkgreen guifg=white
 set number
 set autochdir
+set cindent
 set mouse=a
 set ignorecase		" 搜索忽略大小写
 set smartcase
