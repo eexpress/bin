@@ -39,7 +39,8 @@ Key XF86AudioNext	A A Exec exec mocp -f
 EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
 Mouse 1 W C Move
-Mouse 2 W C Resize
+Mouse 2 W C Lower
+#Mouse 2 W C Resize
 Mouse 3 W C Close
 
 # 方向按键，排列窗口，占半屏幕
