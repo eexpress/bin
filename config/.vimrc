@@ -25,6 +25,8 @@ set statusline=
 set statusline+=%-20f
 set statusline+=%10.{&encoding}
 set statusline+=\ \ \ \ (%3.l,%3.c)[0x%2B]/共%L行\ %4.p%%\ %10.y
+"CTRL+X CTRL+I 头文件补全
+set path=/usr/lib/avr/include
 
 "============= Map ============
 " 打开当前目录文件列表

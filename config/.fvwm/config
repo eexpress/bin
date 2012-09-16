@@ -41,6 +41,8 @@ EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 Mouse 1 W C Move
 Mouse 2 W C Resize
 Mouse 3 W C Close
+Mouse 4 W C Resize w-10 w-10
+Mouse 5 W C Resize w+10 w+10
 
 # 方向按键，排列窗口，占半屏幕
 #keyname in /usr/include/X11/keysymdef.h
