@@ -3,7 +3,7 @@
 avr-gcc -Wall -mmcu=atmega8 -g -O1 $1 -o $1.out 
 echo ====$?====
 [ $? != 0 ] && echo "compile error $?." && exit
-avr-objdump $1.out>$1.asm
+avr-objdump -dS $1.out>$1.asm
 avr-objcopy -j .text -j .data -O ihex $1.out $1.hex
 avrdude -p m8 -c usbasp -e -U flash:w:$1.hex
 #stty -F /dev/ttyUSB0 9600 cs8 -ignpar -cstopb #8N1
