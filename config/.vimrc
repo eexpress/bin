@@ -26,7 +26,7 @@ set statusline+=%-20f
 set statusline+=%10.{&encoding}
 set statusline+=\ \ \ \ (%3.l,%3.c)[0x%2B]/共%L行\ %4.p%%\ %10.y
 "CTRL+X CTRL+I 头文件补全
-set path=/usr/lib/avr/include
+"set path=/usr/lib/avr/include
 
 "============= Map ============
 " 打开当前目录文件列表
@@ -50,7 +50,8 @@ vnoremap [p <esc>`>a]<esc>`<i[<esc>i
 vnoremap (( <esc>`>a)<esc>`<i(<esc>i
 vnoremap {{ <esc>`>a}<esc>`<i{<esc>i
 
-map rj !!date<CR>
+imap <C-t> "<C-R>=strftime("%Y_%m_%d-%H:%M")<CR>"
+map <C-s> :sp<CR>
 "============= Mimetype ============
 "新脚本自动加类型
 au BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
@@ -79,21 +80,18 @@ func CompileRun()
 	endif 
 endfunc
 
-map <expr> <leader>r Replace_Current_Word()
+map <expr> rw Replace_Current_Word()
 func Replace_Current_Word()
 	let w = expand("<cword>")
 	return "\<ESC>:%s/".w."/".w."/g\<Left>\<Left>"
 endfun
 
 " 在当前目录搜索当前词，并打开quickfix窗口
-au BufRead *.pl,*.perl,*.c,*.h,*.bash map <F5> :call Search_Word_In_Dir()<CR>
+au BufRead *.pl,*.perl,*.c,*.h,*.bash map <expr> <C-f> Search_Word_In_Dir()
 func Search_Word_In_Dir()
 	let w = expand("<cword>")      " 在当前光标位置抓词
-	let p = expand("%:p:h")      " 取得当前文件的路径
 	let e = expand("%:p:e")      " 取得当前文件的类型
-	exe "cd " p
-	exe "vimgrep " w "*.".e
-	exe "copen"
+	return ":vimgrep ".w." *.".e."\<CR>:copen\<CR>"
 endfun
 
 inoremap <expr> <Tab> MyTab()
