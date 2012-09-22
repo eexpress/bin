@@ -12,6 +12,7 @@
 'xcompmgr -C',
 'cairo-weather.pl',
 'tilda',
+'kupfer',
 'yunio',
 'ubuntuone-launch',
 '~/bin/goagent.bash',

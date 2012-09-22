@@ -1,7 +1,7 @@
 # vim: filetype=fvwm
 SetEnv fvwm			$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
-DesktopSize			2x1
+DesktopSize			3x1
 SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=12:encoding=iso10646-1"
 
 ######################### 热键
@@ -72,10 +72,12 @@ DestroyMenu MenuFvwmRoot
 MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
 
 ######################### 样式设置。缺省在0页面启动，无标题/边框/缩略图标，点击窗体上升, 移开窗口到root时，不丢失焦点
-Style *		StartsOnPage 0 0, !Title, !Handles, !Borders, !Iconifiable, MouseFocusClickRaises, SloppyFocus
+Style *		StartsOnPage 1 0, !Title, !Handles, !Borders, !Iconifiable, MouseFocusClickRaises, SloppyFocus
 #Style rox		PositionPlacement Center
-Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
-Style MPlayer	StaysOnTop
+Style opera		StartsOnPage 2 0, SkipMapping	#后台启动
+Style evince	StartsOnPage 0 0
+Style pcmanfm	StartsOnPage 0 0
+Style MPlayer	StartsOnPage 0 0, StaysOnTop
 Style dock		Sticky, StaysOnBottom
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock

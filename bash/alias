@@ -99,7 +99,7 @@ locate -eLin $(($LINES-4)) -r "`pwd`/.*$1"
 }
 fd(){ [ $1 ] && find . -iname "*$1*" || echo "need parameter."; }
 tree(){ /usr/bin/tree $*|/usr/bin/ascii2uni -a K;}
-gitup(){ git ci -a -m "${1:-`date`}"; git push; }
+gitup(){ git ci -a -m "${1:-`date`}"; git remote|grep .; [ $? == 0 ] && git push; }
 c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 md () { mkdir -p "$1" && cd "$1"; }
