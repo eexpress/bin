@@ -25,9 +25,9 @@ Key x A CM Exec exec bash -c 'echo eexp|sudo -S kill `cat /tmp/.X0-lock`'
 Key XF86AudioMute		A A Exec exec amixer set Master toggle
 Key XF86AudioLowerVolume	A A Exec exec amixer set Master 10%-
 Key XF86AudioRaiseVolume	A A Exec exec amixer set Master 10%+
-Key F10	A 4 Exec exec amixer set PCM toggle
-Key F11	A 4 Exec exec amixer set PCM 5%-
-Key F12	A 4 Exec exec amixer set PCM 5%+
+Key F10	A 4 Exec exec amixer set Master toggle
+Key F11	A 4 Exec exec amixer set Master 5%-
+Key F12	A 4 Exec exec amixer set Master 5%+
 # Fn加上下光标，
 Key XF86AudioPlay	A A Exec exec ~/bin/mocp-S-P.pl
 Key XF86AudioStop	A A Exec exec mocp -G
@@ -72,12 +72,10 @@ DestroyMenu MenuFvwmRoot
 MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
 
 ######################### 样式设置。缺省在0页面启动，无标题/边框/缩略图标，点击窗体上升, 移开窗口到root时，不丢失焦点
-Style *		StartsOnPage 1 0, !Title, !Handles, !Borders, !Iconifiable, MouseFocusClickRaises, SloppyFocus
+Style *		!Title, !Handles, !Borders, !Iconifiable, MouseFocusClickRaises, SloppyFocus
 #Style rox		PositionPlacement Center
 Style opera		StartsOnPage 2 0, SkipMapping	#后台启动
-Style evince	StartsOnPage 0 0
-Style pcmanfm	StartsOnPage 0 0
-Style MPlayer	StartsOnPage 0 0, StaysOnTop
+Style MPlayer	StaysOnTop
 Style dock		Sticky, StaysOnBottom
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
