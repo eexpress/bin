@@ -43,10 +43,10 @@ Mouse 3 R 4 Exec exec amixer set Master toggle
 Mouse 4 R 4 Exec exec amixer set Master 5%+
 Mouse 5 R 4 Exec exec amixer set Master 5%-
 
-Stroke 456 R N Exec exec mocp -f
-Stroke 654 R N Exec exec mocp -r
-Stroke 258 R N Exec exec ~/bin/mocp-S-P.pl
-Stroke 852 R N Exec exec mocp -G
+Stroke 456 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --next || xterm -e mocp -f'
+Stroke 654 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --previous || xterm -e mocp -r'
+Stroke 258 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --pause || xterm -e mocp -P'
+Stroke 852 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --play || xterm -e mocp -p'
 
 # 方向按键，排列窗口，占半屏幕
 #keyname in /usr/include/X11/keysymdef.h
