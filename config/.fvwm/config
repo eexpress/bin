@@ -39,9 +39,9 @@ Mouse 3 I N Close
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
-Mouse 3 R 4 Exec exec amixer set Master toggle
-Mouse 4 R 4 Exec exec amixer set Master 5%+
-Mouse 5 R 4 Exec exec amixer set Master 5%-
+Mouse 3 R C Exec exec amixer set Master toggle
+Mouse 4 R C Exec exec amixer set Master 5%+
+Mouse 5 R C Exec exec amixer set Master 5%-
 
 Stroke 456 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --next || xterm -e mocp -f'
 Stroke 654 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --previous || xterm -e mocp -r'
