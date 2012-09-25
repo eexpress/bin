@@ -12,12 +12,13 @@ Key z A 4 JumpExec zim
 Key c A 4 JumpExec gnome-control-center
 Key x A 4 JumpExec xterm
 Key t A 4 Exec exec xterm
-Key m A 4 Exec exec bash -c 'type mocp; [ $? ] && rhythmbox || xterm -e mocp'
+Key m A 4 Exec exec bash -c 'type mocp && xterm -e mocp || rhythmbox'
 
 Key p A 4 Exec exec pasteimg.pl -c
 Key Menu A A Exec exec $[script]monitor-clip.pl
 
 Key r A CM restart
+Key g A CM Exec gksu poweroff
 Key s A CM Exec gksu pm-suspend
 Key h A CM Exec gksu pm-suspend-hybrid
 Key x A CM Exec exec bash -c 'echo eexp|sudo -S kill `cat /tmp/.X0-lock`'
@@ -43,10 +44,10 @@ Mouse 3 R C Exec exec amixer set Master toggle
 Mouse 4 R C Exec exec amixer set Master 5%+
 Mouse 5 R C Exec exec amixer set Master 5%-
 
-Stroke 456 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --next || xterm -e mocp -f'
-Stroke 654 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --previous || xterm -e mocp -r'
-Stroke 258 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --pause || xterm -e mocp -P'
-Stroke 852 3 R N Exec exec bash -c 'type mocp; [ $? ] && rhythmbox-client --play || xterm -e mocp -p'
+Stroke 456 3 R N Exec exec bash -c 'mocp -f || rhythmbox-client --next'
+Stroke 654 3 R N Exec exec bash -c 'mocp -r || rhythmbox-client --previous'
+Stroke 258 3 R N Exec exec bash -c 'mocp -P || rhythmbox-client --pause'
+Stroke 852 3 R N Exec exec bash -c 'mocp -p || rhythmbox-client --play'
 
 # 方向按键，排列窗口，占半屏幕
 #keyname in /usr/include/X11/keysymdef.h
