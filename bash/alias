@@ -109,6 +109,9 @@ nmap(){
 p(){
 ping -c 5 ${1:-www.163.com}
 }
+xargs(){
+/usr/bin/xargs -I{} $* {}
+}
 #--------TAB COMPLETION ADD------------------------
 _show_installed()
 {
