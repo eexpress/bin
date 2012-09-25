@@ -18,7 +18,7 @@ Key p A 4 Exec exec pasteimg.pl -c
 Key Menu A A Exec exec $[script]monitor-clip.pl
 
 Key r A CM restart
-Key g A CM Exec gksu poweroff
+Key p A CM Exec gksu poweroff
 Key s A CM Exec gksu pm-suspend
 Key h A CM Exec gksu pm-suspend-hybrid
 Key x A CM Exec exec bash -c 'echo eexp|sudo -S kill `cat /tmp/.X0-lock`'
