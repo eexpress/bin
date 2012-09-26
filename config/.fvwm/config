@@ -90,19 +90,16 @@ Style cairo-*	UseStyle dock
 
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
-#+ I Module FvwmIconBox
++ I Exec exec fvwm-root -r $[fvwm]/desktop.png
 + I Test (Init) Exec exec stalonetray --geometry +0-0 -t
 + I Test (Init) Exec exec nm-applet
-+ I Test (Init) Exec exec fvwm-root -r ~/.fvwm/desktop.png
 + I Test (Init) Exec exec gnome-settings-daemon
 + I Test (Init) Exec exec xcompmgr -C
-+ I Test (Init) Exec exec cairo-weather.pl
 + I Test (Init) Exec exec tilda
 + I Test (Init) Exec exec kupfer
 + I Test (Init) Exec exec yunio
 + I Test (Init) Exec exec ubuntuone-launch
-+ I Test (Init) Exec exec ~/bin/goagent.bash
++ I Test (Init) Exec exec $[script]/goagent.bash
++ I JumpExec cairo-weather.pl
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
-#Exec exec "$[fvwm]autostart.pl"
-
 
