@@ -81,6 +81,7 @@ func CompileRun()
 endfunc
 
 map avr :!./avr.sh main.c<CR>
+map dot :!~/bin/flow.pl %<CR>
 
 map <expr> rw Replace_Current_Word()
 func Replace_Current_Word()
