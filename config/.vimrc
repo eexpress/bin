@@ -77,6 +77,8 @@ func CompileRun()
 	exec "!xelatex \'%\'; [ $? == 0 ] && nohup evince %:r.pdf &"
 	elseif &filetype == 'markdown'
 	exec "!markdown \'%\'>\'%.html\'; [ $? == 0 ] && nohup opera \'%.html\' &"
+	elseif &filetype == 'dot'
+	exec "!dot -Tsvg % -o %.svg; eog %.svg"
 	endif 
 endfunc
 

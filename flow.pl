@@ -66,8 +66,8 @@ node [peripheries=2 shape=box style=filled fontname=$font] label=\"$ARGV[0]\"
 ";
 push @output,"}\n}\n";
 open OUT,">$base.dot"; print OUT @output;close OUT;
-`dot -T$ext "$base.dot" -o $base.$ext`;
-`eog $base.$ext`;
+`dot -T$ext "$base.dot" -o $base.dot.$ext`;
+`eog $base.dot.$ext`;
 #--------------------------------
 sub jump(){
 	my ($_, $YN)=@_;
