@@ -59,7 +59,8 @@ Key Down W C ResizeMove 100 50 0 50
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
 # 全屏
-Key Return W C ResizeMove 100 100 0 0
+Key Return W C ResizeMove 95 100 5 0
+#Key Return W C ResizeMove 100 100 0 0
 
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
