@@ -30,6 +30,7 @@ for $j (0 .. $#v){
 	$i=$v[$j];
 	next if $i eq "";
 	$i=~s/[\ -\.]/_/g;
+	$i=~s/;/->/g;	#增加;分割的写法
 	if($i=~/>$/){ #入口
 		$out=~s/->$//g; push @output,$out.$end if $out=~/->/;
 		push @output,"}\n" if $cc;
