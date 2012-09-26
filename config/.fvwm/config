@@ -21,7 +21,7 @@ Key r A CM restart
 Key p A CM Exec gksu poweroff
 Key s A CM Exec gksu pm-suspend
 Key h A CM Exec gksu pm-suspend-hybrid
-Key x A CM Exec exec bash -c 'echo eexp|sudo -S kill `cat /tmp/.X0-lock`'
+Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
 EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
@@ -53,7 +53,7 @@ Stroke 852 3 R N Exec exec bash -c 'mocp -p || rhythmbox-client --play'
 #keyname in /usr/include/X11/keysymdef.h
 Key Up W C ResizeMove 100 50 0 0
 Key Left W C ResizeMove 50 100 0 0
-Key Right W C ResizeMove 50 100 50 0
+Key Right W C ResizeMove 45 100 55 0
 Key Down W C ResizeMove 100 50 0 50
 
 Key Left W M MoveToPage -1p 0
@@ -97,6 +97,7 @@ AddToFunc    StartFunction
 + I Test (Init) Exec exec xcompmgr -C
 + I Test (Init) Exec exec tilda
 + I Test (Init) Exec exec kupfer
++ I Test (Init) Exec exec plank
 + I Test (Init) Exec exec yunio
 + I Test (Init) Exec exec ubuntuone-launch
 + I Test (Init) Exec exec $[script]/goagent.bash
