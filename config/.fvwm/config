@@ -24,6 +24,7 @@ Key h A CM Exec gksu pm-suspend-hybrid
 Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
+EdgeCommand Top Exec synapse
 EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
 Mouse 1 W C Move
@@ -97,7 +98,8 @@ AddToFunc    StartFunction
 + I Test (Init) Exec exec gnome-settings-daemon
 + I Test (Init) Exec exec xcompmgr -C
 + I Test (Init) Exec exec tilda
-+ I Test (Init) Exec exec kupfer
+#+ I Test (Init) Exec exec kupfer
++ I Test (Init) Exec exec synapse
 + I Test (Init) Exec exec plank
 + I Test (Init) Exec exec yunio
 + I Test (Init) Exec exec ubuntuone-launch
