@@ -42,7 +42,7 @@ Mouse 3 I N Close
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
-Mouse 3 R C Exec exec amixer set Master toggle
+Mouse 3 R C Exec exec amixer -D pulse set Master toggle
 Mouse 4 R C Exec exec amixer set Master 5%+
 Mouse 5 R C Exec exec amixer set Master 5%-
 
@@ -84,7 +84,7 @@ Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
 #Style rox		PositionPlacement Center
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
-Style dock		Sticky, StaysOnBottom
+Style dock		Sticky, StaysOnBottom, !Iconifiable
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
 Style *tray		UseStyle dock
