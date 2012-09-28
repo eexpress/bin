@@ -29,8 +29,9 @@ EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
 Mouse 1 W C Move
 Mouse 2 W C Lower
-#Mouse 2 W C Resize
 Mouse 3 W C Close
+Mouse 4 W M Resize
+Mouse 5 W M Iconify
 Mouse 4 W C Resize w-10 w-10
 Mouse 5 W C Resize w+10 w+10
 
