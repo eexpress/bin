@@ -30,21 +30,22 @@ EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 Mouse 1 W C Move
 Mouse 2 W C Lower
 Mouse 3 W C Close
-Mouse 4 W M Resize
-Mouse 5 W M Iconify
-Mouse 4 W C Resize w-10 w-10
-Mouse 5 W C Resize w+10 w+10
+Mouse 4 W C Maximize
+Mouse 5 W C Iconify
+Mouse 1 W M Resize
+Mouse 4 W M Resize w-10 w-10
+Mouse 5 W M Resize w+10 w+10
 
 Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
 #Mouse 3 W C Iconify
-Mouse 1 I N Iconify
+Mouse 0 I N Iconify
 Mouse 3 I N Close
-Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
-Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
+Mouse 4 R C All (CurrentPage,Iconifiable) Iconify off
+Mouse 5 R C All (CurrentPage,Iconifiable) Iconify on
 
-Mouse 3 R C Exec exec amixer -D pulse set Master toggle
-Mouse 4 R C Exec exec amixer set Master 5%+
-Mouse 5 R C Exec exec amixer set Master 5%-
+Mouse 3 R N Exec exec amixer -D pulse set Master toggle
+Mouse 4 R N Exec exec amixer set Master 5%+
+Mouse 5 R N Exec exec amixer set Master 5%-
 
 Stroke 456 3 R N Exec exec bash -c 'mocp -f || rhythmbox-client --next'
 Stroke 654 3 R N Exec exec bash -c 'mocp -r || rhythmbox-client --previous'
@@ -61,7 +62,7 @@ Key Down W C ResizeMove 100 50 0 50
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
 # 全屏
-Key Return W C ResizeMove 95 100 5 0
+#Key Return W C ResizeMove 95 100 5 0
 #Key Return W C ResizeMove 100 100 0 0
 
 ######################### 修正系统函数：恢复窗口时，鼠标居中
