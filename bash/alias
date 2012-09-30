@@ -6,12 +6,13 @@ alias calendar='calendar -A 7'
 alias fc-zh='fc-list :lang=zh-cn|sed 's/:.*//''
 alias arp.显示='cat /proc/net/arp'
 
-alias ag='sudo aptitude safe-upgrade'
-alias ai='sudo aptitude install'
-alias ap='sudo aptitude purge'
-alias ar='sudo aptitude remove'
+alias ai='sudo apt-get install'
+alias ap='sudo apt-get purge'
+alias ar='sudo apt-get remove'
+alias au='sudo apt-get update && msg 列表已经刷新 || msg 刷新失败'
+alias ag='sudo apt-get upgrade'
+
 alias as='aptitude search'
-alias au='sudo aptitude update && msg 列表已经刷新 aptitude || msg 刷新失败'
 alias aw='aptitude show'
 
 alias lnsf='sudo ln -sf'
