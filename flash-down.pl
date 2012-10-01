@@ -42,14 +42,14 @@ if ($mech->success()) {
 	$_=$&; 
 	s/^.*?>//;s/<.*$//s;s/\s*//g;
 	print "$red$bold".$_."$normal==================\n";
-	mkdir "$_"; chdir "$_";
+#    mkdir "$_"; chdir "$_";
 	my $name="$_";
 	my @link=$mech->find_all_links(text_regex => qr/http:\/\/.*[0-9a-fA-F]*/,);
 	my $size=@link;
 	$bus->Notify("flash", 0, "sunny", "$name", "共获取 $size 个地址。", [], { }, -1);
 	print "\e]2;flash-down.pl_下载_$name\a";
 	print map "=> $green".$_->url()."$normal\n",@link;
-	open(LINK,">link.log"); print LINK map $_->url()."\n",@link; close LINK;
+#    open(LINK,">link.log"); print LINK map $_->url()."\n",@link; close LINK;
 	my $cnt=1; my $proc="▭"x$size;
 if($view){
 	foreach(@link){
@@ -60,16 +60,18 @@ if($view){
 }
 	foreach(@link){
 		my $add=$_->url();
-		print "$red 下载$normal => $green$add$normal\n";
-		my $file=sprintf "%02d.flv",$cnt;
+#        print "$red 下载$normal => $green$add$normal\n";
+		my $file=sprintf "%s-%02d.flv",$name,$cnt;
 #                `wget -c --tries=5 --user-agent='Opera/9.80 (X11; Linux i686; U; en) Presto/2.6.30 Version/10.60' "$add" -O $file`;
 		$mech->get($add);
 		$mech->save_content($file);
 		$_=$mech->success()?"■":"□";$proc=~s/▭/$_/;
 #                $_=$?==0?"■":"□";$proc=~s/▭/$_/; 
-		$bus->Notify("flash", 0, ($?==0?"sunny":"error"), "$name", "已经完成下载 $cnt / $size ，返回：$? 。\n进度：$proc", [], { }, -1);
-		print "$red$bold$name 已经完成下载 $cnt / $size$normal ，返回：$? 。进度：$red$bold$proc$normal\n";
-		print "\e]2;$name $proc\a";
+		if($size>1){
+			$bus->Notify("flash", 0, ($?==0?"sunny":"error"), "$name", "已经完成下载 $cnt / $size ，返回：$? 。\n进度：$proc", [], { }, -1);
+			print "$red$bold$name 已经完成下载 $cnt / $size$normal ，返回：$? 。进度：$red$bold$proc$normal\n";
+			print "\e]2;$name $proc\a";
+		}
 		$cnt++;
 	}
 #---------------------	
@@ -81,7 +83,7 @@ if($view){
 	`/usr/bin/mencoder -profile c430 *.flv -o $dir/$name.avi 2>&1`;
 	}
 #---------------------	
-	$bus->Notify("flash", 0, "sunny", "$name 已经完成下载", "$dir/$name.avi", [], { }, -1);
+	$bus->Notify("flash", 0, "sunny", "$name 已经完成全部下载", "", [], { }, -1);
 	chdir '..';
 	`echo "$ARGV[0]\t《$_》\t结果：$proc">>flash-down.log`;
 	`paplay "/usr/share/sounds/ubuntu/stereo/service-login.ogg"`;

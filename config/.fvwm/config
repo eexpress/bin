@@ -111,6 +111,7 @@ AddToFunc    StartFunction
 + I Test (Init) Exec exec yunio
 + I Test (Init) Exec exec ubuntuone-launch
 + I Test (Init) Exec exec $[script]/goagent.bash
++ I Test (Restart) Exec exec $[script]/show_png.pl /home/eexp/YUNIO/fvwm-mouse.png
 + I JumpExec cairo-weather.pl
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
 
