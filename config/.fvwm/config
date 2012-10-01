@@ -97,6 +97,21 @@ Style *tray		UseStyle dock
 Style *clock	UseStyle dock
 Style cairo-*	UseStyle dock
 
+######################### 事件
+Module FvwmEvent
+DestroyFunc NewWindowFunc
+AddToFunc NewWindowFunc
++ I ThisWindow (gvim) ResizeMove 45 100 55 0
+#+ I ThisWindow (show_png.pl) Move 170 187
+
+SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
+*FvwmEvent: Cmd "Exec exec paplay"
+*FvwmEvent: add_window		NewWindowFunc
+*FvwmEvent: iconify			$[sounddir]window-slide.ogg
+*FvwmEvent: deiconify		$[sounddir]dialog-information.ogg
+*FvwmEvent: destroy_window	$[sounddir]dialog-information.ogg
+
+######################### 启动
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
 + I Exec exec fvwm-root -r $[fvwm]/desktop.png
@@ -111,7 +126,6 @@ AddToFunc    StartFunction
 + I Test (Init) Exec exec yunio
 + I Test (Init) Exec exec ubuntuone-launch
 + I Test (Init) Exec exec $[script]/goagent.bash
-+ I Test (Restart) Exec exec $[script]/show_png.pl /home/eexp/YUNIO/fvwm-mouse.png
++ I Test (Init) Exec exec $[script]/show_png.pl /home/eexp/YUNIO/fvwm-mouse.png
 + I JumpExec cairo-weather.pl
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
-
