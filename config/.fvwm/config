@@ -24,7 +24,7 @@ Key h A CM Exec gksu pm-suspend-hybrid
 Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
-#EdgeCommand Top Exec synapse
+Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
 EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
 Mouse 1 W C Move
@@ -33,29 +33,27 @@ Mouse 3 W C Close
 Mouse 4 W C Maximize
 Mouse 5 W C Iconify
 
+Mouse 0 I N Iconify
+Mouse 3 I N Close
+
 Mouse 1 W M Resize
-Mouse 2 W M FvwmRearrange -tile -u -resize -mn 2 -h -m 5 5 95 95
-Mouse 3 W M All (CurrentPage,Iconifiable) Iconify on
 Mouse 4 W M ResizeMove w-10 w-10 w+5 w+5
 Mouse 5 W M ResizeMove w+10 w+10 w-5 w-5
 
+Mouse 1 R N FvwmRearrange -tile -u -resize -mn 2 -h -m 5 5 95 95
+Mouse 3 R N Exec synapse
+Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
+Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 #Mouse 1 R N JumpExec opera
 #Mouse 2 R N JumpExec pcmanfm
-Mouse 2 R N Exec exec amixer -D pulse set Master toggle
-Mouse 4 R N Exec exec amixer set Master 5%+
-Mouse 5 R N Exec exec amixer set Master 5%-
+Mouse 1 R C Exec exec amixer -D pulse set Master toggle
+Mouse 4 R C Exec exec amixer set Master 5%+
+Mouse 5 R C Exec exec amixer set Master 5%-
 
 Stroke 456 3 R N Exec exec bash -c 'mocp -f || rhythmbox-client --next'
 Stroke 654 3 R N Exec exec bash -c 'mocp -r || rhythmbox-client --previous'
 Stroke 258 3 R N Exec exec bash -c 'mocp -P || rhythmbox-client --pause'
 Stroke 852 3 R N Exec exec bash -c 'mocp -p || rhythmbox-client --play'
-
-Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
-Mouse 0 I N Iconify
-Mouse 0 I M All (CurrentPage,Iconifiable) Iconify off
-Mouse 3 I N Close
-#Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
-#Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
 # 方向按键，排列窗口，占半屏幕
 #keyname in /usr/include/X11/keysymdef.h
@@ -66,9 +64,6 @@ Key Down W C ResizeMove 100 50 0 50
 
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
-# 全屏
-#Key Return W C ResizeMove 95 100 5 0
-#Key Return W C ResizeMove 100 100 0 0
 
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
@@ -85,17 +80,19 @@ DestroyMenu MenuFvwmRoot
 MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
 
 ######################### 样式设置。缺省在0页面启动，无标题/边框/缩略图标，点击窗体上升, 移开窗口到root时，不丢失焦点
+#Colorset 1 fg black, bg rgb:90/10/10
+#Style *		!Title, !Handles, MouseFocusClickRaises, SloppyFocus, BorderWidth 2, HilightBorderColorset 1
 Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
-#Style *		!Title, !Handles, !Borders, !Iconifiable, MouseFocusClickRaises, SloppyFocus
-#Style rox		PositionPlacement Center
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
-Style dock		Sticky, StaysOnBottom, !Iconifiable
+Style dock		!Borders, Sticky, StaysOnBottom, !Iconifiable
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
 Style *tray		UseStyle dock
 Style *clock	UseStyle dock
 Style cairo-*	UseStyle dock
+Style plank*	UseStyle dock
+Style tilda*	UseStyle dock
 
 ######################### 事件
 Module FvwmEvent
@@ -104,9 +101,9 @@ AddToFunc NewWindowFunc
 + I ThisWindow (gvim) ResizeMove 45 100 55 0
 #+ I ThisWindow (show_png.pl) Move 170 187
 
-SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
-*FvwmEvent: Cmd "Exec exec paplay"
 *FvwmEvent: add_window		NewWindowFunc
+*FvwmEvent: Cmd "Exec exec paplay"
+SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
 *FvwmEvent: iconify			$[sounddir]window-slide.ogg
 *FvwmEvent: deiconify		$[sounddir]dialog-information.ogg
 *FvwmEvent: destroy_window	$[sounddir]dialog-information.ogg
