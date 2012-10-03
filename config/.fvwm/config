@@ -6,8 +6,11 @@ SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=12:encoding=is
 
 ######################### 热键
 #Key r A 4 JumpExec rox
+Key F1 A N Quake gnome-terminal
+Key v A 4 Jump gvim
 Key f A 4 JumpExec pcmanfm
 Key o A 4 JumpExec opera
+#Key o A 4 Quake opera
 Key z A 4 JumpExec zim
 Key c A 4 JumpExec gnome-control-center
 Key x A 4 JumpExec xterm
@@ -18,6 +21,7 @@ Key p A 4 Exec exec pasteimg.pl -c
 Key Menu A A Exec exec $[script]monitor-clip.pl
 
 Key r A CM restart
+Key q A CM quit
 Key p A CM Exec gksu shutdown
 Key s A CM Exec gksu pm-suspend
 Key h A CM Exec gksu pm-suspend-hybrid
@@ -25,12 +29,13 @@ Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
 Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
-EdgeCommand Bottom WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
+EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
 Mouse 1 W C Move
 Mouse 2 W C Lower
 Mouse 3 W C Close
-Mouse 4 W C Maximize
+#Mouse 4 W C Maximize
+Mouse 4 W C ResizeMove 95 95 2 2
 Mouse 5 W C Iconify
 
 Mouse 0 I N Iconify
@@ -40,8 +45,8 @@ Mouse 1 W M Resize
 Mouse 4 W M ResizeMove w-10 w-10 w+5 w+5
 Mouse 5 W M ResizeMove w+10 w+10 w-5 w-5
 
-Mouse 1 R N FvwmRearrange -tile -u -resize -mn 2 -h -m 5 5 95 95
-Mouse 3 R N Exec synapse
+Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 5 5 95 95
+Mouse 2 R N Exec synapse
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 #Mouse 1 R N JumpExec opera
@@ -58,8 +63,8 @@ Stroke 852 3 R N Exec exec bash -c 'mocp -p || rhythmbox-client --play'
 # 方向按键，排列窗口，占半屏幕
 #keyname in /usr/include/X11/keysymdef.h
 Key Up W C ResizeMove 100 50 0 0
-Key Left W C ResizeMove 50 100 0 0
-Key Right W C ResizeMove 45 100 55 0
+Key Left W C ResizeMove 48 95 1 2
+Key Right W C ResizeMove 48 95 51 2
 Key Down W C ResizeMove 100 50 0 50
 
 Key Left W M MoveToPage -1p 0
@@ -70,10 +75,22 @@ AddToFunc WindowListFunc
 + I WarpToWindow 50 50
 
 ######################### Jump & Exec 函数
+DestroyFunc Jump
+AddToFunc Jump
++ I All ($0) WindowListFunc
+
 DestroyFunc JumpExec
 AddToFunc JumpExec
 + I All ($0) WindowListFunc
-+ I TestRc (NoMatch) Exec exec $0 &
++ I None ($0) Exec exec $0 &
+#+ I TestRc (NoMatch) Exec exec $0 &
+
+DestroyFunc Quake
+AddToFunc Quake
++ I All ($0) Style $0 Sticky
++ I All ($0) WindowListFunc
++ I Pick ($0) Iconify
++ I None ($0) Exec exec $0 &
 
 ######################### 菜单样式
 DestroyMenu MenuFvwmRoot
@@ -85,6 +102,7 @@ MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore
 Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
+#Style gnome-terminal Sticky
 Style dock		!Borders, Sticky, StaysOnBottom, !Iconifiable
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
@@ -112,17 +130,19 @@ SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
 + I Exec exec fvwm-root -r $[fvwm]/desktop.png
-+ I Test (Init) Exec exec stalonetray --geometry +0-0 -t
++ I Test (Init) Exec exec stalonetray -t
+#+ I Test (Init) Exec exec stalonetray --geometry +0-0 -t
 + I Test (Init) Exec exec nm-applet
-+ I Test (Init) Exec exec gnome-settings-daemon
+#+ I Test (Init) Exec exec gnome-settings-daemon
 + I Test (Init) Exec exec xcompmgr -C
-+ I Test (Init) Exec exec tilda
+#+ I Test (Init) Exec exec tilda
 #+ I Test (Init) Exec exec kupfer
 + I Test (Init) Exec exec synapse
-+ I Test (Init) Exec exec plank
-+ I Test (Init) Exec exec yunio
-+ I Test (Init) Exec exec ubuntuone-launch
+#+ I Test (Init) Exec exec plank
+#+ I Test (Init) Exec exec yunio
+#+ I Test (Init) Exec exec ubuntuone-launch
 + I Test (Init) Exec exec $[script]/goagent.bash
-+ I Test (Init) Exec exec $[script]/show_png.pl /home/eexp/YUNIO/fvwm-mouse.png
+#+ I Test (Init) Exec exec $[script]/show_png.pl /home/eexp/YUNIO/fvwm-mouse.png
 + I JumpExec cairo-weather.pl
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
+#+ I Module FvwmCommandS

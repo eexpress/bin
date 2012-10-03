@@ -116,21 +116,27 @@ $pix_r = Gtk2::Gdk::Pixbuf->new_from_xpm_data(
 "4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4.4."
 );
 
-$session=$ENV{GDMSESSION}=~/^gnome/;
-if($session)
-{
-`xmodmap -e "pointer = 1 2 3"`;
-$r=`gconftool-2 -g /desktop/gnome/peripherals/mouse/left_handed`;
-chomp $r;
-$r=($r eq "false"?"right":"left");
-} else {
+#$session=$ENV{DESKTOP_SESSION}=~/^Fvwm/;
+#$session=$ENV{DESKTOP_SESSION}=~/^ubuntu/;
+#if(!$session)
+#{
+#`xmodmap -e "pointer = 1 2 3"`;
+#$r=`gconftool-2 -g /desktop/gnome/peripherals/mouse/left_handed`;
+#chomp $r;
+#$r=($r eq "false"?"right":"left");
+#} else {
+#}
 $r=`xmodmap -pp|grep "\<3\>\s*\<1\>"`;
 $r=$r==1?"right":"left";
-}
 
 if($ARGV[0] eq "once"){
 swap(); exit;
 }
+
+#%gconf_button_layout_str=(
+#        "right"=>":minimize,maximize,close",
+#        "left"=>"close,maximize,minimize:",
+#        );
 
 $status_icon = Gtk2::StatusIcon->new;
 $status_icon->set_from_pixbuf($r eq "right"?$pix_r:$pix_l);
@@ -147,27 +153,19 @@ $status_icon->set_from_pixbuf(($r eq "left")?$pix_l:$pix_r);
 }
 
 sub swap{
-`gconftool-2 -s /apps/gwd/mouse_wheel_action shade -t string`;
+#`gconftool-2 -s /apps/gwd/mouse_wheel_action shade -t string`;
+#`gconftool-2 -s /desktop/gnome/peripherals/mouse/left_handed false -t bool`;
+#`gconftool-2 -s /apps/metacity/general/button_layout $gconf_button_layout_str{$r} -t string`;
 if($r eq "left"){
-	print "set => right hand\n";
-	if($session){
-	`gconftool-2 -s /desktop/gnome/peripherals/mouse/left_handed false -t bool`;
-	`gconftool-2 -s /apps/metacity/general/button_layout :minimize,maximize,close -t string`;
-	} else {
+#    print "set => right hand\n";
 	`xmodmap -e "pointer = 1 2 3"`;
-	}
 	`xsetroot -cursor_name left_ptr`;
 	`synclient TapButton1=1 TapButton2=2 TapButton3=3`;
 	$r="right";
 }
 else{
-	print "set => left hand\n";
-	if($session){
-	`gconftool-2 -s /desktop/gnome/peripherals/mouse/left_handed true -t bool`;
-	`gconftool-2 -s /apps/metacity/general/button_layout close,maximize,minimize: -t string`;
-	} else {
+#    print "set => left hand\n";
 	`xmodmap -e "pointer = 3 2 1"`;
-	}
 	`xsetroot -cursor_name right_ptr`;
 	`synclient TapButton1=3 TapButton2=2 TapButton3=1`;
 	$r="left";
