@@ -2,7 +2,7 @@
 SetEnv fvwm			$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
 DesktopSize			2x1
-SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=12:encoding=iso10646-1"
+SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=11:encoding=iso10646-1"
 
 ######################### 热键
 #Key r A 4 JumpExec rox
@@ -19,6 +19,8 @@ Key m A 4 Exec exec bash -c 'type mocp && xterm -e mocp || rhythmbox'
 
 Key p A 4 Exec exec pasteimg.pl -c
 Key Menu A A Exec exec $[script]monitor-clip.pl
+#Key Super_L A A Exec exec $[script]monitor-clip.pl
+Key F2 A A Exec exec $[script]monitor-clip.pl
 
 Key r A CM restart
 Key q A CM quit
@@ -28,8 +30,14 @@ Key h A CM Exec gksu pm-suspend-hybrid
 Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
-Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
+Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 32 32, !IconTitle
 EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
+
+Mouse 1 T N Move
+Mouse 2 T N Lower
+Mouse 3 T N Close
+Mouse 4 T N Maximize
+Mouse 5 T N Iconify
 
 Mouse 1 W C Move
 Mouse 2 W C Lower
@@ -49,12 +57,18 @@ Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 5 5 95 95
 Mouse 2 R N Exec synapse
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
+
 #Mouse 1 R N JumpExec opera
 #Mouse 2 R N JumpExec pcmanfm
-Mouse 1 R C Exec exec amixer -D pulse set Master toggle
-Mouse 4 R C Exec exec amixer set Master 5%+
-Mouse 5 R C Exec exec amixer set Master 5%-
+#Mouse 1 R C Exec exec amixer -D pulse set Master toggle
+#Mouse 4 R C Exec exec amixer set Master 5%+
+#Mouse 5 R C Exec exec amixer set Master 5%-
+Mouse 1 R C Exec exec $[script]volume.sh mute
+Mouse 4 R C Exec exec $[script]volume.sh up
+Mouse 5 R C Exec exec $[script]volume.sh down
 
+#● notify-send " " -i notification-audio-volume-medium -h int:value:33 -h string:synchronous:volume
+#● notify-send " " -i notification-display-brightness-high -h int:value:3 -h string:x-canonical-private-synchronous:brightness
 Stroke 456 3 R N Exec exec bash -c 'mocp -f || rhythmbox-client --next'
 Stroke 654 3 R N Exec exec bash -c 'mocp -r || rhythmbox-client --previous'
 Stroke 258 3 R N Exec exec bash -c 'mocp -P || rhythmbox-client --pause'
@@ -70,11 +84,13 @@ Key Down W C ResizeMove 100 50 0 50
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
 
+#Key Tab A C FvwmRearrange -tile -u -mn 2 -resize -m 5 5 95 95
+#Key Tab A M All (CurrentPage,Iconifiable) Iconify on
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
 + I WarpToWindow 50 50
 
-######################### Jump & Exec 函数
+######################### 函数
 DestroyFunc Jump
 AddToFunc Jump
 + I All ($0) WindowListFunc
@@ -92,18 +108,24 @@ AddToFunc Quake
 + I Pick ($0) Iconify
 + I None ($0) Exec exec $0 &
 
-######################### 菜单样式
-DestroyMenu MenuFvwmRoot
-MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
-
-######################### 样式设置。缺省在0页面启动，无标题/边框/缩略图标，点击窗体上升, 移开窗口到root时，不丢失焦点
+######################### 样式设置
 #Colorset 1 fg black, bg rgb:90/10/10
 #Style *		!Title, !Handles, MouseFocusClickRaises, SloppyFocus, BorderWidth 2, HilightBorderColorset 1
-Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
+#Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
+AddToDecor FlatDecor
+#                  + ButtonStyle All Active (-- flat) Inactive (-- flat)
+                  + TitleStyle  -- flat
+#                  + BorderStyle -- HiddenHandles NoInset
+
+DestroyMenu MenuFvwmRoot
+
+MenuStyle * Font "$[RegularFont]",BorderWidth 0, ActiveFore Red
+#MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
+Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, Font "$[RegularFont]", UseDecor FlatDecor
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
 #Style gnome-terminal Sticky
-Style dock		!Borders, Sticky, StaysOnBottom, !Iconifiable
+Style dock		!Title, !Borders, Sticky, StaysOnBottom, !Iconifiable
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
 Style *tray		UseStyle dock
@@ -130,19 +152,19 @@ SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
 + I Exec exec fvwm-root -r $[fvwm]/desktop.png
-+ I Test (Init) Exec exec stalonetray -t
-#+ I Test (Init) Exec exec stalonetray --geometry +0-0 -t
++ I Test (Init) Exec exec stalonetray -t -i 16
 + I Test (Init) Exec exec nm-applet
-#+ I Test (Init) Exec exec gnome-settings-daemon
 + I Test (Init) Exec exec xcompmgr -C
++ I Test (Init) Exec exec synapse
++ I Test (Init) Exec exec $[script]/goagent.bash
++ I JumpExec cairo-weather.pl
+#+ I Test (Init) Exec exec stalonetray --geometry +0-0 -t
+#+ I Test (Init) Exec exec gnome-settings-daemon
 #+ I Test (Init) Exec exec tilda
 #+ I Test (Init) Exec exec kupfer
-+ I Test (Init) Exec exec synapse
 #+ I Test (Init) Exec exec plank
 #+ I Test (Init) Exec exec yunio
 #+ I Test (Init) Exec exec ubuntuone-launch
-+ I Test (Init) Exec exec $[script]/goagent.bash
 #+ I Test (Init) Exec exec $[script]/show_png.pl /home/eexp/YUNIO/fvwm-mouse.png
-+ I JumpExec cairo-weather.pl
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
 #+ I Module FvwmCommandS
