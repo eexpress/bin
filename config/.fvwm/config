@@ -30,7 +30,7 @@ Key h A CM Exec gksu pm-suspend-hybrid
 Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
-Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 32 32, !IconTitle
+Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
 EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
 Mouse 1 T N Move
@@ -98,8 +98,14 @@ AddToFunc Jump
 DestroyFunc JumpExec
 AddToFunc JumpExec
 + I All ($0) WindowListFunc
-+ I None ($0) Exec exec $0 &
++ I None ($0) Exec exec $* &
 #+ I TestRc (NoMatch) Exec exec $0 &
+
+DestroyFunc ExecOnce
+AddToFunc ExecOnce
++ I PipeRead '/bin/ps -e -o command|grep $0 || echo Exec exec $*'
+#+ I PipeRead 'pgrep $0 || echo Exec exec $*'
+#pgrep输出短了
 
 DestroyFunc Quake
 AddToFunc Quake
@@ -113,9 +119,8 @@ AddToFunc Quake
 #Style *		!Title, !Handles, MouseFocusClickRaises, SloppyFocus, BorderWidth 2, HilightBorderColorset 1
 #Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
 AddToDecor FlatDecor
-#                  + ButtonStyle All Active (-- flat) Inactive (-- flat)
-                  + TitleStyle  -- flat
-#                  + BorderStyle -- HiddenHandles NoInset
+	  + TitleStyle  -- flat
+#      + ButtonStyle All Active (-- flat) Inactive (-- flat)
 
 DestroyMenu MenuFvwmRoot
 
@@ -133,6 +138,7 @@ Style *clock	UseStyle dock
 Style cairo-*	UseStyle dock
 Style plank*	UseStyle dock
 Style tilda*	UseStyle dock
+Style synapse	!Title
 
 ######################### 事件
 Module FvwmEvent
@@ -151,20 +157,16 @@ SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
 ######################### 启动
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
-+ I Exec exec fvwm-root -r $[fvwm]/desktop.png
-+ I Test (Init) Exec exec stalonetray -t -i 16
-+ I Test (Init) Exec exec nm-applet
-+ I Test (Init) Exec exec xcompmgr -C
-+ I Test (Init) Exec exec synapse
++ I Test (Init) Exec exec fvwm-root -r $[fvwm]/desktop.png
 + I Test (Init) Exec exec $[script]/goagent.bash
-+ I JumpExec cairo-weather.pl
-#+ I Test (Init) Exec exec stalonetray --geometry +0-0 -t
++ I Schedule 800 ExecOnce stalonetray -t -i 16
++ I ExecOnce nm-applet
++ I ExecOnce xcompmgr -C
++ I ExecOnce synapse
++ I ExecOnce cairo-weather.pl
 #+ I Test (Init) Exec exec gnome-settings-daemon
-#+ I Test (Init) Exec exec tilda
-#+ I Test (Init) Exec exec kupfer
 #+ I Test (Init) Exec exec plank
 #+ I Test (Init) Exec exec yunio
 #+ I Test (Init) Exec exec ubuntuone-launch
-#+ I Test (Init) Exec exec $[script]/show_png.pl /home/eexp/YUNIO/fvwm-mouse.png
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
 #+ I Module FvwmCommandS
