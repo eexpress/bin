@@ -5,12 +5,10 @@ DesktopSize			2x1
 SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=11:encoding=iso10646-1"
 
 ######################### 热键
-#Key r A 4 JumpExec rox
 Key F1 A N Quake gnome-terminal
 Key v A 4 Jump gvim
 Key f A 4 JumpExec pcmanfm
 Key o A 4 JumpExec opera
-#Key o A 4 Quake opera
 Key z A 4 JumpExec zim
 Key c A 4 JumpExec gnome-control-center
 Key x A 4 JumpExec xterm
@@ -31,13 +29,13 @@ Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
 Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
-EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
+#EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 
-Mouse 1 T N Move
-Mouse 2 T N Lower
-Mouse 3 T N Close
-Mouse 4 T N Maximize
-Mouse 5 T N Iconify
+#Mouse 1 T N Move
+#Mouse 2 T N Lower
+#Mouse 3 T N Close
+#Mouse 4 T N Maximize
+#Mouse 5 T N Iconify
 
 Mouse 1 W C Move
 Mouse 2 W C Lower
@@ -58,8 +56,6 @@ Mouse 2 R N Exec synapse
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
-#Mouse 1 R N JumpExec opera
-#Mouse 2 R N JumpExec pcmanfm
 #Mouse 1 R C Exec exec amixer -D pulse set Master toggle
 #Mouse 4 R C Exec exec amixer set Master 5%+
 #Mouse 5 R C Exec exec amixer set Master 5%-
@@ -67,8 +63,6 @@ Mouse 1 R C Exec exec $[script]volume.sh mute
 Mouse 4 R C Exec exec $[script]volume.sh up
 Mouse 5 R C Exec exec $[script]volume.sh down
 
-#● notify-send " " -i notification-audio-volume-medium -h int:value:33 -h string:synchronous:volume
-#● notify-send " " -i notification-display-brightness-high -h int:value:3 -h string:x-canonical-private-synchronous:brightness
 Stroke 456 3 R N Exec exec bash -c 'mocp -f || rhythmbox-client --next'
 Stroke 654 3 R N Exec exec bash -c 'mocp -r || rhythmbox-client --previous'
 Stroke 258 3 R N Exec exec bash -c 'mocp -P || rhythmbox-client --pause'
@@ -84,8 +78,6 @@ Key Down W C ResizeMove 100 50 0 50
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
 
-#Key Tab A C FvwmRearrange -tile -u -mn 2 -resize -m 5 5 95 95
-#Key Tab A M All (CurrentPage,Iconifiable) Iconify on
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
 + I WarpToWindow 50 50
@@ -99,13 +91,10 @@ DestroyFunc JumpExec
 AddToFunc JumpExec
 + I All ($0) WindowListFunc
 + I None ($0) Exec exec $* &
-#+ I TestRc (NoMatch) Exec exec $0 &
 
 DestroyFunc ExecOnce
 AddToFunc ExecOnce
-+ I PipeRead '/bin/ps -e -o command|grep $0 || echo Exec exec $*'
-#+ I PipeRead 'pgrep $0 || echo Exec exec $*'
-#pgrep输出短了
++ I PipeRead '/bin/ps -e -o command|grep $0|grep -v grep || echo Exec exec $*'
 
 DestroyFunc Quake
 AddToFunc Quake
@@ -115,21 +104,10 @@ AddToFunc Quake
 + I None ($0) Exec exec $0 &
 
 ######################### 样式设置
-#Colorset 1 fg black, bg rgb:90/10/10
-#Style *		!Title, !Handles, MouseFocusClickRaises, SloppyFocus, BorderWidth 2, HilightBorderColorset 1
-#Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
-AddToDecor FlatDecor
-	  + TitleStyle  -- flat
-#      + ButtonStyle All Active (-- flat) Inactive (-- flat)
-
-DestroyMenu MenuFvwmRoot
-
-MenuStyle * Font "$[RegularFont]",BorderWidth 0, ActiveFore Red
-#MenuStyle * Font "$[RegularFont]",BorderWidth 0,Hilight3DThickness -2,ActiveFore Red
-Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, Font "$[RegularFont]", UseDecor FlatDecor
+Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
-#Style gnome-terminal Sticky
+Style gnome-terminal WindowListSkip
 Style dock		!Title, !Borders, Sticky, StaysOnBottom, !Iconifiable
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
@@ -138,6 +116,7 @@ Style *clock	UseStyle dock
 Style cairo-*	UseStyle dock
 Style plank*	UseStyle dock
 Style tilda*	UseStyle dock
+Style tint2		UseStyle dock
 Style synapse	!Title
 
 ######################### 事件
@@ -159,7 +138,8 @@ DestroyFunc  StartFunction
 AddToFunc    StartFunction
 + I Test (Init) Exec exec fvwm-root -r $[fvwm]/desktop.png
 + I Test (Init) Exec exec $[script]/goagent.bash
-+ I Schedule 800 ExecOnce stalonetray -t -i 16
++ I ExecOnce tint2
+#+ I Schedule 800 ExecOnce stalonetray -t -i 16
 + I ExecOnce nm-applet
 + I ExecOnce xcompmgr -C
 + I ExecOnce synapse
