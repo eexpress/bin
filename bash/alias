@@ -73,9 +73,8 @@ alias ml.speed-toggle='echo bw_toggle | nc -q 1 localhost 4000|sed 1,6d|sed /com
 alias net='echo eexp|sudo -S netstat -tulpn'
 alias ntop.启动='sudo ntop -i wlan0'
 alias osd='gnome-osd-client'
-alias pg='pgrep -l'
-alias pg='ps|grep'
-alias ps='/bin/ps -e -o pid,%mem,rss,command'
+#alias pg='pgrep -l'
+alias ps='/bin/ps -e -o pid,command'
 alias rm_empty_dir='find -type d -empty -exec rmdir {} \;'
 alias s-ffmpeg-屏幕视频='ffmpeg -f x11grab -s 1280x800 -r 25 -i :0.0 -sameq ~/screen.mpg'
 alias s-m视频监测='mencoder tv:// -tv driver=v4l -oac mp3lame -ovc lavc -o ~/监测.mpeg'
@@ -100,6 +99,7 @@ alias pl='perl -e'
 loc.(){
 locate -eLin $(($LINES-4)) -r "`pwd`/.*$1"
 }
+pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 fd(){ [ $1 ] && find . -iname "*$1*" || echo "need parameter."; }
 tree(){ /usr/bin/tree $*|/usr/bin/ascii2uni -a K;}
 gitup(){ git ci -a -m "${1:-`date`}"; git remote|grep .; [ $? == 0 ] && git push; }
