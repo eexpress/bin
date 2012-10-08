@@ -11,6 +11,7 @@ Key f A 4 JumpExec pcmanfm
 Key o A 4 JumpExec opera
 Key z A 4 JumpExec zim
 Key c A 4 JumpExec gnome-control-center
+Key s A 4 JumpExec gnome-system-monitor
 Key x A 4 JumpExec xterm
 Key t A 4 Exec exec xterm
 Key m A 4 Exec exec bash -c 'type mocp && xterm -e mocp || rhythmbox'
@@ -142,6 +143,7 @@ AddToFunc    StartFunction
 #+ I Schedule 800 ExecOnce stalonetray -t -i 16
 + I ExecOnce nm-applet
 + I ExecOnce volumeicon
++ I ExecOnce $[script]swap-mouse
 + I ExecOnce xcompmgr -C
 + I ExecOnce synapse
 + I ExecOnce cairo-weather.pl
