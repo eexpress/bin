@@ -141,6 +141,7 @@ AddToFunc    StartFunction
 + I ExecOnce tint2
 #+ I Schedule 800 ExecOnce stalonetray -t -i 16
 + I ExecOnce nm-applet
++ I ExecOnce volumeicon
 + I ExecOnce xcompmgr -C
 + I ExecOnce synapse
 + I ExecOnce cairo-weather.pl
