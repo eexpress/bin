@@ -41,8 +41,8 @@ Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 
 Mouse 1 W C Move
 Mouse 2 W C Lower
 Mouse 3 W C Close
-#Mouse 4 W C Maximize
-Mouse 4 W C ResizeMove 95 95 2 2
+Mouse 4 W C Maximize
+#Mouse 4 W C ResizeMove 95 95 2 2
 Mouse 5 W C Iconify
 
 Mouse 0 I N Iconify
