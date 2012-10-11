@@ -144,7 +144,7 @@ AddToFunc    StartFunction
 + I ExecOnce nm-applet
 + I ExecOnce volumeicon
 + I ExecOnce $[script]swap-mouse
-+ I ExecOnce xcompmgr -C
++ I ExecOnce xcompmgr -cf
 + I ExecOnce synapse
 + I ExecOnce cairo-weather.pl
 #+ I Test (Init) Exec exec gnome-settings-daemon
