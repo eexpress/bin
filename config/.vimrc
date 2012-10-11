@@ -88,7 +88,7 @@ map dot :!~/bin/flow.pl %<CR>
 map <expr> rw Replace_Current_Word()
 func Replace_Current_Word()
 	let w = expand("<cword>")
-	return "\<ESC>:%s/\<".w."\>/".w."/g\<Left>\<Left>"
+	return "\<ESC>:%s/\\<".w."\\>/".w."/g\<Left>\<Left>"
 endfun
 
 " 在当前目录搜索当前词，并打开quickfix窗口
