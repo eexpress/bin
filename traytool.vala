@@ -11,7 +11,7 @@ public bool swap_mouse(Gdk.EventButton e){
 string stdoutstr="";
 	switch(e.button){
 		case 1:
-			msg = new Notification("TrayIcon introduce", "鼠标按键说明：\n1：显示说明\n2：退出\n3：交换左右手，比如当前鼠标是右手操作，左手握鼠标，食指按下原来的3键，则交换1/3键，切换成左手设置\n4：加大音量\n5：减小音量", "dialog-information");
+			msg = new Notification("TrayTool introduce", "鼠标按键说明：\n1：显示说明\n2：退出\n3：交换左右手，比如当前鼠标是右手操作，左手握鼠标，食指按下原来的3键，则交换1/3键，切换成左手设置\n4：加大音量\n5：减小音量", "dialog-information");
 			msg.show();break;
 		case 2:
 			Gtk.main_quit();break;
