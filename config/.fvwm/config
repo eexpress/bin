@@ -2,7 +2,7 @@
 SetEnv fvwm			$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
 DesktopSize			2x1
-SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=11:encoding=iso10646-1"
+SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=12:encoding=iso10646-1"
 
 ######################### 热键
 Key F1 A N Quake gnome-terminal
@@ -31,6 +31,8 @@ Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 ######################### 窗口操作
 Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
 #EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
+MenuStyle WindowList Font "$[RegularFont]"
+Key F10 A A WindowList Root c c SortByClass,NoGeometry,NoCurrentDeskTitle
 
 #Mouse 1 T N Move
 #Mouse 2 T N Lower
