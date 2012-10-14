@@ -23,9 +23,9 @@ Key F2 A A Exec exec $[script]monitor-clip.pl
 
 Key r A CM restart
 Key q A CM quit
-Key p A CM Exec gksu shutdown
-Key s A CM Exec gksu pm-suspend
-Key h A CM Exec gksu pm-suspend-hybrid
+Key p A CM Exec bash -c 'dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
+Key s A CM Exec bash -c 'dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend'
+Key h A CM Exec bash -c 'dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Hibernate'
 Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
