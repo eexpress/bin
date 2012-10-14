@@ -98,7 +98,7 @@ AddToFunc JumpExec
 DestroyFunc ExecOnce
 AddToFunc ExecOnce
 #+ I PipeRead '/bin/ps -e -o command|grep $0|grep -v grep || echo Exec exec $*'
-+ I PipeRead 'echo $0|sed ss.*/ss|cut -b -15|xargs pgrep -u `id -u` || $0'
++ I PipeRead 'echo $0|sed ss.*/ss|cut -b -15|xargs pgrep -u `id -u` || echo Exec exec $*'
 
 DestroyFunc Quake
 AddToFunc Quake
@@ -151,7 +151,7 @@ AddToFunc    StartFunction
 + I ExecOnce synapse
 + I ExecOnce cairo-weather.pl
 #+ I Test (Init) Exec exec gnome-settings-daemon
-#+ I Test (Init) Exec exec plank
++ I Test (Init) Exec exec plank
 #+ I Test (Init) Exec exec yunio
 #+ I Test (Init) Exec exec ubuntuone-launch
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
