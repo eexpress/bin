@@ -62,7 +62,9 @@ void set_icon_tip(bool right, bool setup){
 public bool mouse(Gdk.EventButton e){
 	switch(e.button){
 		case 1:
-			menu.popup (null, null, null, 1, 0);
+		menuSystem.popup (null, null, trayicon.position_menu, e.button, 0);
+/*        menuSystem.popup (null, null, trayicon.position_menu, e.button, event_time);*/
+/*            menu.popup (null, null, null, 1, 0);*/
 /*            trayicon.popup_menu();*/
 			break;
 		case 2:
@@ -107,9 +109,9 @@ public static int main (string[] args) {
 	trayicon.button_release_event.connect(mouse);
 	trayicon.scroll_event.connect(volume);
 	create_menuSystem();
-	trayicon.popup_menu.connect((icon, button, event_time)=>{
-		menuSystem.popup (null, null, trayicon.position_menu, button, event_time);
-		});
+/*    trayicon.popup_menu.connect((icon, button, event_time)=>{*/
+/*        menuSystem.popup (null, null, trayicon.position_menu, button, event_time);*/
+/*        });*/
 
 /*    trayicon.popup_menu.connect(menuSystem_popup);*/
 	trayicon.set_visible(true);
