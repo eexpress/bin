@@ -2,9 +2,9 @@ using Gtk;
 using GLib.Process;
 using Notify;
 
-public StatusIcon trayicon;
-public Notification msg;
-public Notification vol;
+StatusIcon trayicon;
+Notification msg;
+Notification vol;
 MatchInfo info;
 string stdoutstr;
 DateTime starttime;
@@ -12,8 +12,9 @@ Menu menuSystem;
 
 void create_menuSystem() {
 	menuSystem = new Menu();
-	var menuAbout = new ImageMenuItem.with_label("Usage");
-	menuAbout.set_image(new Gtk.Image.from_stock (Gtk.Stock.EXECUTE, Gtk.IconSize.MENU));
+	var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
+/*    var menuAbout = new ImageMenuItem.with_label("Usage");*/
+/*    menuAbout.set_image(new Gtk.Image.from_stock (Gtk.Stock.EXECUTE, Gtk.IconSize.MENU));*/
 	menuAbout.activate.connect(()=>{
 			var now = new DateTime.now_local ();
 			if(now.compare(starttime)==-1) return;
@@ -22,7 +23,8 @@ void create_menuSystem() {
 			msg.show();
 			});
 	menuSystem.append(menuAbout);
-/*    menuAbout.activate.connect(()=>{});*/
+	var menuSep = new SeparatorMenuItem();
+	menuSystem.append(menuSep);
 
 	var menuShutdown = new ImageMenuItem.with_label("Shut Dwon");
 	menuShutdown.set_image(new Gtk.Image.from_stock (Stock.STOP, Gtk.IconSize.MENU));
@@ -31,9 +33,22 @@ void create_menuSystem() {
 			});
 	menuSystem.append(menuShutdown);
 
-/*    var menuSuspend = new ImageMenuItem.with_label("Suspend");*/
-/*    var menuHibernate = new ImageMenuItem.with_label("Hibernate");*/
+	var menuSuspend = new ImageMenuItem.with_label("Suspend");
+	menuSuspend.set_image(new Gtk.Image.from_stock (Stock.STOP, Gtk.IconSize.MENU));
+	menuSuspend.activate.connect(()=>{
+			spawn_command_line_async("dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend");
+			});
+	menuSystem.append(menuSuspend);
 
+	var menuHibernate = new ImageMenuItem.with_label("Hibernate");
+	menuHibernate.set_image(new Gtk.Image.from_stock (Stock.STOP, Gtk.IconSize.MENU));
+	menuHibernate.activate.connect(()=>{
+			spawn_command_line_async("dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Hibernate");
+			});
+	menuSystem.append(menuHibernate);
+
+	var menuSep1 = new SeparatorMenuItem();
+	menuSystem.append(menuSep1);
 	var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
 	menuQuit.activate.connect(Gtk.main_quit);
 	menuSystem.append(menuQuit);
@@ -59,13 +74,10 @@ void set_icon_tip(bool right, bool setup){
 	}
 }
 
-public bool mouse(Gdk.EventButton e){
+bool mouse(Gdk.EventButton e){
 	switch(e.button){
 		case 1:
-		menuSystem.popup (null, null, trayicon.position_menu, e.button, 0);
-/*        menuSystem.popup (null, null, trayicon.position_menu, e.button, event_time);*/
-/*            menu.popup (null, null, null, 1, 0);*/
-/*            trayicon.popup_menu();*/
+			menuSystem.popup (null, null, trayicon.position_menu, e.button, 0);
 			break;
 		case 2:
 			Gtk.main_quit();break;
@@ -76,7 +88,7 @@ public bool mouse(Gdk.EventButton e){
 	return true;
 }
 
-public bool volume(Gdk.EventScroll e){
+bool volume(Gdk.EventScroll e){
 string str="";
 int i;
 
@@ -100,7 +112,7 @@ int i;
 	return true;
 }
 
-public static int main (string[] args) {
+static int main (string[] args) {
 	Gtk.init(ref args);
 	var now = new DateTime.now_local ();
 	starttime=now;
@@ -109,18 +121,9 @@ public static int main (string[] args) {
 	trayicon.button_release_event.connect(mouse);
 	trayicon.scroll_event.connect(volume);
 	create_menuSystem();
-/*    trayicon.popup_menu.connect((icon, button, event_time)=>{*/
-/*        menuSystem.popup (null, null, trayicon.position_menu, button, event_time);*/
-/*        });*/
-
-/*    trayicon.popup_menu.connect(menuSystem_popup);*/
 	trayicon.set_visible(true);
 	Notify.init("TrayTool");
 	Gtk.main();
 	return 0;
 }
-/*private void menuSystem_popup(uint button, uint time) {*/
-/*    menuSystem.popup(null, null, null, button, time);*/
-/*}*/
-
 
