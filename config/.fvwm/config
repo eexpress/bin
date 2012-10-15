@@ -108,7 +108,7 @@ AddToFunc Quake
 + I None ($0) Exec exec $0 &
 
 ######################### 样式设置
-Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus
+Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
 Style gnome-terminal WindowListSkip
