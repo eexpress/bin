@@ -18,7 +18,7 @@ void create_menuSystem() {
 	menuAbout.activate.connect(()=>{
 			var now = new DateTime.now_local ();
 			if(now.compare(starttime)==-1) return;
-			msg = new Notification("TrayTool introduce", "鼠标按键说明：\n1：显示说明，30秒内只显示一次\n2：退出\n3：交换左右手鼠标。比如当前鼠标是右手操作，左手握鼠标，食指按下原来的3键，则交换1/3键，切换成左手设置\n4：（滚轮向上）加大音量\n5：（滚轮向下）减小音量\n---------------\n"+now.to_string(), "dialog-information");
+			msg = new Notification("TrayTool introduce 0.4", "鼠标按键说明：\n1：显示说明，30秒内只显示一次\n2：退出\n3：交换左右手鼠标。比如当前鼠标是右手操作，左手握鼠标，食指按下原来的3键，则交换1/3键，切换成左手设置\n4：（滚轮向上）加大音量\n5：（滚轮向下）减小音量\n---------------\n"+now.to_string(), "dialog-information");
 			starttime=now.add_seconds(30);
 			msg.show();
 			});
