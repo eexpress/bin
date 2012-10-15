@@ -152,6 +152,7 @@ AddToFunc    StartFunction
 + I ExecOnce cairo-weather.pl
 #+ I Test (Init) Exec exec gnome-settings-daemon
 + I Test (Init) Exec exec plank
++ I Test (Init) Exec exec $[script]git.pl
 #+ I Test (Init) Exec exec yunio
 #+ I Test (Init) Exec exec ubuntuone-launch
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
