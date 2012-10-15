@@ -28,7 +28,7 @@ alias head='/usr/bin/head -n $(($LINES-4))'
 alias dmesg='/bin/dmesg|tail|cut -b -$COLUMNS'
 alias dog='grep -v -E "(^$|^#|^!)"'
 alias du='du -sch'
-alias egrep='egrep --color=auto'
+alias egrep='egrep --color=always'
 alias en='export LC_ALL=C'
 alias free='free -m'
 alias g='grep --color -in'
@@ -41,7 +41,7 @@ alias dtach.slimrat='dtach -n /tmp/dtach-slimrat ~/bin/slimrat -l ~/.slimrat/que
 # w3m -dump 可代替 curl
 alias myip='curl http://members.3322.org/dyndns/getip'
 alias myip1='curl ifconfig.me/ip'
-alias grep='grep --color=auto'
+alias grep='grep --color=always'
 # alias v='/usr/bin/gvim -f --remote-silent-tab'
 function v () { (/usr/bin/gvim -f "$@" &) }
 alias sv='sudo /usr/bin/gvim --remote-silent-tab'
