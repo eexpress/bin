@@ -18,8 +18,9 @@ Key m A 4 Exec exec bash -c 'type mocp && xterm -e mocp || rhythmbox'
 
 Key p A 4 Exec exec pasteimg.pl -c
 Key Menu A A Exec exec $[script]monitor-clip.pl
-#Key Super_L A A Exec exec $[script]monitor-clip.pl
 Key F2 A A Exec exec $[script]monitor-clip.pl
+Key Alt_R A A Exec exec $[script]monitor-clip.pl
+#Key Control_R A A Lower 
 
 Key r A CM restart
 Key q A CM quit
