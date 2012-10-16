@@ -144,17 +144,17 @@ AddToFunc    StartFunction
 + I Test (Init) Exec exec fvwm-root -r $[fvwm]/desktop.png
 + I Test (Init) Exec exec $[script]/goagent.bash
 + I ExecOnce tint2
-#+ I Schedule 800 ExecOnce stalonetray -t -i 16
 + I ExecOnce nm-applet
-#+ I ExecOnce volumeicon
 + I ExecOnce $[script]traytool
 + I ExecOnce xcompmgr -cf
 + I ExecOnce synapse
 + I ExecOnce cairo-weather.pl
-#+ I Test (Init) Exec exec gnome-settings-daemon
++ I Test (Init) Exec exec gnome-settings-daemon
 + I Test (Init) Exec exec plank
 + I Test (Init) Exec exec $[script]git.pl
-#+ I Test (Init) Exec exec yunio
-#+ I Test (Init) Exec exec ubuntuone-launch
++ I Test (Init) Exec exec yunio
++ I Test (Init) Exec exec ubuntuone-launch
+#+ I ExecOnce volumeicon
+#+ I Schedule 800 ExecOnce stalonetray -t -i 16
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
 #+ I Module FvwmCommandS
