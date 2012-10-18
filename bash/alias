@@ -31,7 +31,7 @@ alias du='du -sch'
 alias egrep='egrep --color=always'
 alias en='export LC_ALL=C'
 alias free='free -m'
-alias g='grep --color -in'
+alias g='grep --color'
 alias disk='palimpsest'
 
 alias proxy.gap='dtach -n /tmp/dtach-gappproxy python ~/bin/gappproxy/localproxy/proxy.py'
