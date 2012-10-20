@@ -25,7 +25,7 @@ foreach(@url){
 my $t=""; s/\W+$//;
 #----------------------------------
 #特定网址和流媒体
-if(/v.youku.com/ || /tudou.com\/playlist/ || /v.ku6.com/ || /6.cn\/watch/        || /tv.sohu.com/){
+if(/v.youku.com/ || /tudou.com\/playlist/ || /v.ku6.com/ || /6.cn\/watch/ || /tv.sohu.com/){
    $t="下载flash资源"; `$TERM ~/bin/flash-down.pl $_`;}
 elsif(m"http://u.115.com/file/\w+"){
    $t="下载115资源"; `$TERM ~/bin/115_client $&`;}  
