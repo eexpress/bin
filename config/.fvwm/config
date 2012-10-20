@@ -55,7 +55,7 @@ Mouse 1 W M Resize
 Mouse 4 W M ResizeMove w-10 w-10 w+5 w+5
 Mouse 5 W M ResizeMove w+10 w+10 w-5 w-5
 
-Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 5 5 95 95
+Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 4 4 95 95
 Mouse 2 R N Exec synapse
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
@@ -75,8 +75,8 @@ Stroke 852 3 R N Exec exec bash -c 'mocp -p || rhythmbox-client --play'
 # 方向按键，排列窗口，占半屏幕
 #keyname in /usr/include/X11/keysymdef.h
 Key Up W C ResizeMove 100 50 0 0
-Key Left W C ResizeMove 48 95 1 2
-Key Right W C ResizeMove 48 95 51 2
+Key Left W C ResizeMove 48 95 1 1
+Key Right W C ResizeMove 48 95 51 1
 Key Down W C ResizeMove 100 50 0 50
 
 Key Left W M MoveToPage -1p 0
@@ -90,6 +90,7 @@ AddToFunc WindowListFunc
 DestroyFunc Jump
 AddToFunc Jump
 + I All ($0) WindowListFunc
++ I All ($0) Move 50-50w 50-50w
 
 DestroyFunc JumpExec
 AddToFunc JumpExec
@@ -105,7 +106,8 @@ DestroyFunc Quake
 AddToFunc Quake
 + I All ($0) Style $0 Sticky
 + I All ($0) WindowListFunc
-+ I Pick ($0) Iconify
++ I All ($0) Move 50-50w 50-50w
++ I TestRc (Match) Pick ($0) Iconify
 + I None ($0) Exec exec $0 &
 
 ######################### 样式设置
