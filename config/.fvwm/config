@@ -90,7 +90,7 @@ AddToFunc WindowListFunc
 DestroyFunc Jump
 AddToFunc Jump
 + I All ($0) WindowListFunc
-+ I All ($0) Move 50-50w 50-50w
+#+ I All ($0) Move 50-50w 50-50w
 
 DestroyFunc JumpExec
 AddToFunc JumpExec
@@ -106,7 +106,7 @@ DestroyFunc Quake
 AddToFunc Quake
 + I All ($0) Style $0 Sticky
 + I All ($0) WindowListFunc
-+ I All ($0) Move 50-50w 50-50w
+#+ I All ($0) Move 50-50w 50-50w
 + I TestRc (Match) Pick ($0) Iconify
 + I None ($0) Exec exec $0 &
 
