@@ -35,11 +35,11 @@ Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 
 MenuStyle WindowList Font "$[RegularFont]"
 Key F10 A A WindowList Root c c SortByClass,NoGeometry,NoCurrentDeskTitle
 
-#Mouse 1 T N Move
-#Mouse 2 T N Lower
-#Mouse 3 T N Close
-#Mouse 4 T N Maximize
-#Mouse 5 T N Iconify
+Mouse 1 T N Move
+Mouse 2 T N Lower
+Mouse 3 T N Close
+Mouse 4 T N Maximize
+Mouse 5 T N Iconify
 
 Mouse 1 W C Move
 Mouse 2 W C Lower
@@ -111,7 +111,10 @@ AddToFunc Quake
 + I None ($0) Exec exec $0 &
 
 ######################### 样式设置
-Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
+TitleStyle -- flat
+Style *		Font "$[RegularFont]"
+#Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
+Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
 Style gnome-terminal WindowListSkip
