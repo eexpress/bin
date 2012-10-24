@@ -2,7 +2,7 @@
 SetEnv fvwm			$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
 DesktopSize			2x1
-SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=12:encoding=iso10646-1"
+SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=11:encoding=iso10646-1"
 
 ######################### 热键
 Key F1 A N Quake gnome-terminal
@@ -112,6 +112,7 @@ AddToFunc Quake
 
 ######################### 样式设置
 TitleStyle -- flat
+TitleStyle Active HGradient 128 2 gray23 20 "dark green" 20 gray23 -- flat
 Style *		Font "$[RegularFont]"
 #Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
 Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
