@@ -162,6 +162,7 @@ AddToFunc    StartFunction
 + I Test (Init) Exec exec $[script]git.pl
 + I Test (Init) Exec exec yunio
 + I Test (Init) Exec exec ubuntuone-launch
++ I Test (Init) Exec bash -c 'msg git pull; cd bin; git pull;'
 #+ I ExecOnce volumeicon
 #+ I Schedule 800 ExecOnce stalonetray -t -i 16
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
