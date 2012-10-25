@@ -111,8 +111,10 @@ AddToFunc Quake
 + I None ($0) Exec exec $0 &
 
 ######################### 样式设置
+Colorset 91 RootTransparent buffer
 TitleStyle -- flat
-TitleStyle Active HGradient 128 2 gray23 20 "dark green" 20 gray23 -- flat
+#TitleStyle Active HGradient 128 2 gray23 20 "dark green" 20 gray23  -- flat
+TitleStyle Active Colorset 91 -- flat
 Style *		Font "$[RegularFont]"
 #Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
 Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
