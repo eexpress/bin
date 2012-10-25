@@ -2,7 +2,7 @@
 SetEnv fvwm			$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
 DesktopSize			2x1
-SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:size=11:encoding=iso10646-1"
+SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=12:encoding=iso10646-1"
 
 ######################### 热键
 Key F1 A N Quake gnome-terminal
