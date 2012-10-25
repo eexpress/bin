@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-my $Bred="\e[1;31m"; my $normal="\e[0m";
+my $Bred="\e[1;31m"; my $Bblue="\e[1;34m"; my $normal="\e[0m";
 
 chdir "$ENV{HOME}/bin";
 @_=`git status`;
@@ -11,11 +11,16 @@ exit;
 }
 @_=grep /modified:|new file:/,@_;
 if(@_){
-print @_;
+print "文件:\n @_";
+@_=grep /\d+m[-+]/,`git diff`;
+print "差异: \n @_";
+@_=`git remote`;
+print "仓库:\n$Bblue @_ $normal \n";
 print "本地需要提交。请输入提交的注释并回车（空注释将被日期代替）：\n$Bred";
 $_=<STDIN>; chomp;
 if(! $_){$_=`date '+%F %T'`; chomp;}
 print "$normal提交注释为 $_ 的更新。\n";
-`git ci -a -m \"$_\"; git pull; git push`;
+#`git ci -a -m \"$_\"; git pull; git push`;
+`git ci -a -m \"$_\"; git push`;
 exit;
 }
