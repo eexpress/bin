@@ -19,7 +19,7 @@ print "仓库:\n$Bblue @_ $normal \n";
 print "本地需要提交。请输入提交的注释并回车（空注释将被日期代替）：\n$Bred";
 $_=<STDIN>; chomp;
 if(! $_){$_=`date '+%F %T'`; chomp;}
-print "$normal提交注释为 $_ 的更新。\n";
+print "$normal提交注释为 $Bblue $_ $normal 的更新。\n";
 #`git ci -a -m \"$_\"; git pull; git push`;
 `git ci -a -m \"$_\"; git push`;
 exit;
