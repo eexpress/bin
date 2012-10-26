@@ -107,6 +107,7 @@ AddToFunc Quake
 + I None ($0) Exec exec $0
 + I Wait $0
 + I All ($0) Style $0 Sticky
++ I All ($0) Style $0 StaysOnTop
 + I All ($0,!Iconic) WindowListFunc
 + I TestRc (NoMatch) Next (!Iconic,Iconifiable) WindowListFunc
 
