@@ -55,7 +55,7 @@ Mouse 1 W M Resize
 Mouse 4 W M ResizeMove w-10 w-10 w+5 w+5
 Mouse 5 W M ResizeMove w+10 w+10 w-5 w-5
 
-Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 4 4 95 95
+Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 8 2 92 95
 Mouse 2 R N Exec synapse
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
