@@ -11,20 +11,30 @@ DateTime starttime;
 Menu menuSystem;
 bool rightmode;
 string svol;
+ImageMenuItem menuApp;
+Regex r;
 
 void create_menuSystem() {
 	menuSystem = new Menu();
-	var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
-	menuAbout.activate.connect(()=>{
-			var now = new DateTime.now_local ();
-			if(now.compare(starttime)==-1) return;
-			msg = new Notification("TrayTool introduce 0.5", "鼠标按键说明：\n1：显示说明，30秒内只显示一次\n2：退出\n3：交换左右手鼠标。比如当前鼠标是右手操作，左手握鼠标，食指按下原来的3键，则交换1/3键，切换成左手设置\n4：（滚轮向上）加大音量\n5：（滚轮向下）减小音量\n---------------\n"+now.to_string(), "dialog-information");
-			starttime=now.add_seconds(30);
-			msg.show();
+
+	string name;
+	string dir;
+	dir=GLib.Environment.get_variable("HOME")+"/.config/traytool/";
+	var d = Dir.open(dir);
+	while ((name = d.read_name()) != null) {
+		if(!name.has_suffix(".png")) continue;
+		string op;
+		op=name.slice(0,name.last_index_of(".",0));
+/*        r =/(?P<bn>.*)\.png/; r.match(name,0,out info);*/
+/*        op=info.fetch_named("bn");*/
+		menuApp = new ImageMenuItem.with_label(op);
+		menuApp.set_image(new Gtk.Image.from_file (dir+name));
+		menuApp.activate.connect(()=>{
+			spawn_command_line_async(op);
 			});
-	menuSystem.append(menuAbout);
-	var menuSep = new SeparatorMenuItem();
-	menuSystem.append(menuSep);
+		menuSystem.append(menuApp);
+	}
+	menuSystem.append(new SeparatorMenuItem());
 
 	var menuShutdown = new ImageMenuItem.with_label("Shut Dwon");
 /*    menuShutdown.set_image(new Gtk.Image.from_stock (Stock.STOP, Gtk.IconSize.MENU));*/
@@ -48,8 +58,17 @@ void create_menuSystem() {
 			});
 	menuSystem.append(menuHibernate);
 
-	var menuSep1 = new SeparatorMenuItem();
-	menuSystem.append(menuSep1);
+	menuSystem.append(new SeparatorMenuItem());
+	var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
+	menuAbout.activate.connect(()=>{
+			var now = new DateTime.now_local ();
+			if(now.compare(starttime)==-1) return;
+			msg = new Notification("TrayTool introduce 0.5", "鼠标按键说明：\n1：显示说明，30秒内只显示一次\n2：退出\n3：交换左右手鼠标。比如当前鼠标是右手操作，左手握鼠标，食指按下原来的3键，则交换1/3键，切换成左手设置\n4：（滚轮向上）加大音量\n5：（滚轮向下）减小音量\n---------------\n"+now.to_string(), "dialog-information");
+			starttime=now.add_seconds(30);
+			msg.show();
+			});
+	menuSystem.append(menuAbout);
+
 	var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
 	menuQuit.activate.connect(Gtk.main_quit);
 	menuSystem.append(menuQuit);
@@ -59,7 +78,7 @@ void create_menuSystem() {
 
 void check_status(){
 	spawn_command_line_sync("xmodmap -pp", out stdoutstr);
-	Regex r = /\b1\b\s*\b1\b/; r.match(stdoutstr,0,out info);
+	r = /\b1\b\s*\b1\b/; r.match(stdoutstr,0,out info);
 	rightmode=info.matches();
 	if(rightmode) trayicon.set_from_stock(Stock.JUSTIFY_RIGHT); else trayicon.set_from_stock(Stock.JUSTIFY_LEFT);
 	spawn_command_line_sync("amixer get Master", out stdoutstr);
@@ -102,7 +121,7 @@ int i;
 	try{
 	spawn_command_line_sync(str, out stdoutstr);
 	} catch (SpawnError e){stderr.printf ("%s\n", e.message);}
-	Regex r = /\d*%/; r.match(stdoutstr,0,out info);
+	r = /\d*%/; r.match(stdoutstr,0,out info);
 	svol=info.fetch(0);
 	trayicon.set_tooltip_text ("音量："+svol+"\n模式："+(rightmode?"右":"左")+"手鼠标");
 	i=int.parse(info.fetch(0));
