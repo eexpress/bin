@@ -79,6 +79,8 @@ func CompileRun()
 	exec "!markdown \'%\'>\'%.html\'; [ $? == 0 ] && nohup opera \'%.html\' &"
 	elseif &filetype == 'dot'
 	exec "!dot -Tsvg % -o %.svg; eog %.svg"
+	elseif &filetype == 'vala'
+	exec "!valac --pkg gtk+-3.0 %; ./%:t:r"
 	endif 
 endfunc
 
