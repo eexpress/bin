@@ -12,51 +12,55 @@ Menu menuSystem;
 bool rightmode;
 string svol;
 ImageMenuItem menuApp;
+Regex r;
+string iconpath;
 
 void create_menuSystem() {
 	menuSystem = new Menu();
-	var file = File.new_for_path (GLib.Environment.get_variable("HOME")+"/.config/traytool/app");
-	if (file.query_exists ()) {
-		try {
-		var dis = new DataInputStream(file.read());
-		string line;
-		while ((line = dis.read_line (null)) != null) {
-			if(line=="") continue;
-			string cmd =line;
-			menuApp = new ImageMenuItem.with_label(cmd);
-			menuApp.activate.connect(()=>{
-			spawn_command_line_async(cmd);
+	iconpath="/usr/share/icons/Humanity/apps/24/";
+
+	string name;
+	string dir;
+	dir=GLib.Environment.get_variable("HOME")+"/.config/traytool/";
+	var d = Dir.open(dir);
+	while ((name = d.read_name()) != null) {
+		if(!name.has_suffix(".png")) continue;
+		string op;
+		op=name.slice(0,name.last_index_of(".",0));
+/*        r =/(?P<bn>.*)\.png/; r.match(name,0,out info);*/
+/*        op=info.fetch_named("bn");*/
+		menuApp = new ImageMenuItem.with_label(op);
+		menuApp.set_image(new Gtk.Image.from_file (dir+name));
+		menuApp.activate.connect(()=>{
+			spawn_command_line_async(op);
 			});
 		menuSystem.append(menuApp);
-        }
-		}catch (Error e){error("%s", e.message);}
-	menuSystem.append(new SeparatorMenuItem());
 	}
+	menuSystem.append(new SeparatorMenuItem());
 
 	var menuShutdown = new ImageMenuItem.with_label("Shut Dwon");
 /*    menuShutdown.set_image(new Gtk.Image.from_stock (Stock.STOP, Gtk.IconSize.MENU));*/
-	menuShutdown.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/24/system-shutdown.svg"));
+	menuShutdown.set_image(new Gtk.Image.from_file (iconpath+"system-shutdown.svg"));
 	menuShutdown.activate.connect(()=>{
 			spawn_command_line_async("dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop");
 			});
 	menuSystem.append(menuShutdown);
 
 	var menuSuspend = new ImageMenuItem.with_label("Suspend");
-	menuSuspend.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/24/system-suspend.svg"));
+	menuSuspend.set_image(new Gtk.Image.from_file (iconpath+"system-suspend.svg"));
 	menuSuspend.activate.connect(()=>{
 			spawn_command_line_async("dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend");
 			});
 	menuSystem.append(menuSuspend);
 
 	var menuHibernate = new ImageMenuItem.with_label("Hibernate");
-	menuHibernate.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/24/system-suspend-hibernate.svg"));
+	menuHibernate.set_image(new Gtk.Image.from_file (iconpath+"system-suspend-hibernate.svg"));
 	menuHibernate.activate.connect(()=>{
 			spawn_command_line_async("dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Hibernate");
 			});
 	menuSystem.append(menuHibernate);
 
 	menuSystem.append(new SeparatorMenuItem());
-
 	var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
 	menuAbout.activate.connect(()=>{
 			var now = new DateTime.now_local ();
@@ -66,7 +70,6 @@ void create_menuSystem() {
 			msg.show();
 			});
 	menuSystem.append(menuAbout);
-
 	var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
 	menuQuit.activate.connect(Gtk.main_quit);
 	menuSystem.append(menuQuit);
@@ -76,7 +79,7 @@ void create_menuSystem() {
 
 void check_status(){
 	spawn_command_line_sync("xmodmap -pp", out stdoutstr);
-	Regex r = /\b1\b\s*\b1\b/; r.match(stdoutstr,0,out info);
+	r = /\b1\b\s*\b1\b/; r.match(stdoutstr,0,out info);
 	rightmode=info.matches();
 	if(rightmode) trayicon.set_from_stock(Stock.JUSTIFY_RIGHT); else trayicon.set_from_stock(Stock.JUSTIFY_LEFT);
 	spawn_command_line_sync("amixer get Master", out stdoutstr);
@@ -119,7 +122,7 @@ int i;
 	try{
 	spawn_command_line_sync(str, out stdoutstr);
 	} catch (SpawnError e){stderr.printf ("%s\n", e.message);}
-	Regex r = /\d*%/; r.match(stdoutstr,0,out info);
+	r = /\d*%/; r.match(stdoutstr,0,out info);
 	svol=info.fetch(0);
 	trayicon.set_tooltip_text ("音量："+svol+"\n模式："+(rightmode?"右":"左")+"手鼠标");
 	i=int.parse(info.fetch(0));

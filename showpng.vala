@@ -3,10 +3,7 @@ using Cairo;
 
 class ShowPNG : Gtk.Window {
 
-	public string fimg="/tmp/weather.png";
-
-	public ShowPNG() {
-/*        fimg=args[0];*/
+	public ShowPNG(string fimg) {
         title = "ShowPNG";
 		skip_taskbar_hint = true;
         decorated = false;
@@ -38,9 +35,9 @@ class ShowPNG : Gtk.Window {
 
 	static int main (string[] args) {
 		Gtk.init (ref args);
-		var showpng = new ShowPNG();
-		showpng.fimg=args[1];
-/*        stdout.printf("input: %s\n", args[1]);*/
+		string file= "/tmp/weather.png";
+		if(args[1]!=null && args[1].has_suffix(".png")) file = args[1];
+		var showpng = new ShowPNG(file);
 		showpng.show_all ();
 		Gtk.main ();
 		return 0;
