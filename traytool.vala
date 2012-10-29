@@ -11,9 +11,52 @@ DateTime starttime;
 Menu menuSystem;
 bool rightmode;
 string svol;
+ImageMenuItem menuApp;
 
 void create_menuSystem() {
 	menuSystem = new Menu();
+	var file = File.new_for_path (GLib.Environment.get_variable("HOME")+"/.config/traytool/app");
+	if (file.query_exists ()) {
+		try {
+		var dis = new DataInputStream(file.read());
+		string line;
+		while ((line = dis.read_line (null)) != null) {
+			if(line=="") continue;
+			string cmd =line;
+			menuApp = new ImageMenuItem.with_label(cmd);
+			menuApp.activate.connect(()=>{
+			spawn_command_line_async(cmd);
+			});
+		menuSystem.append(menuApp);
+        }
+		}catch (Error e){error("%s", e.message);}
+	menuSystem.append(new SeparatorMenuItem());
+	}
+
+	var menuShutdown = new ImageMenuItem.with_label("Shut Dwon");
+/*    menuShutdown.set_image(new Gtk.Image.from_stock (Stock.STOP, Gtk.IconSize.MENU));*/
+	menuShutdown.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/24/system-shutdown.svg"));
+	menuShutdown.activate.connect(()=>{
+			spawn_command_line_async("dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop");
+			});
+	menuSystem.append(menuShutdown);
+
+	var menuSuspend = new ImageMenuItem.with_label("Suspend");
+	menuSuspend.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/24/system-suspend.svg"));
+	menuSuspend.activate.connect(()=>{
+			spawn_command_line_async("dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend");
+			});
+	menuSystem.append(menuSuspend);
+
+	var menuHibernate = new ImageMenuItem.with_label("Hibernate");
+	menuHibernate.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/24/system-suspend-hibernate.svg"));
+	menuHibernate.activate.connect(()=>{
+			spawn_command_line_async("dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Hibernate");
+			});
+	menuSystem.append(menuHibernate);
+
+	menuSystem.append(new SeparatorMenuItem());
+
 	var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
 	menuAbout.activate.connect(()=>{
 			var now = new DateTime.now_local ();
@@ -23,33 +66,7 @@ void create_menuSystem() {
 			msg.show();
 			});
 	menuSystem.append(menuAbout);
-	var menuSep = new SeparatorMenuItem();
-	menuSystem.append(menuSep);
 
-	var menuShutdown = new ImageMenuItem.with_label("Shut Dwon");
-/*    menuShutdown.set_image(new Gtk.Image.from_stock (Stock.STOP, Gtk.IconSize.MENU));*/
-	menuShutdown.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/32/system-shutdown.svg"));
-	menuShutdown.activate.connect(()=>{
-			spawn_command_line_async("dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop");
-			});
-	menuSystem.append(menuShutdown);
-
-	var menuSuspend = new ImageMenuItem.with_label("Suspend");
-	menuSuspend.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/32/system-suspend.svg"));
-	menuSuspend.activate.connect(()=>{
-			spawn_command_line_async("dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend");
-			});
-	menuSystem.append(menuSuspend);
-
-	var menuHibernate = new ImageMenuItem.with_label("Hibernate");
-	menuHibernate.set_image(new Gtk.Image.from_file ("/usr/share/icons/Humanity/apps/32/system-suspend-hibernate.svg"));
-	menuHibernate.activate.connect(()=>{
-			spawn_command_line_async("dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Hibernate");
-			});
-	menuSystem.append(menuHibernate);
-
-	var menuSep1 = new SeparatorMenuItem();
-	menuSystem.append(menuSep1);
 	var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
 	menuQuit.activate.connect(Gtk.main_quit);
 	menuSystem.append(menuQuit);
