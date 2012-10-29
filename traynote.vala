@@ -53,12 +53,22 @@ class ShowNote:StatusIcon{
 static int main (string[] args) {
 	Gtk.init(ref args);
 /*    if(args.length!=4) return 1;*/
-	configpath=GLib.Environment.get_variable("HOME")+"/.config/traynote/";
+	configpath=Environment.get_variable("HOME")+"/.config/traynote/";
 
-	var sn1 = new ShowNote("market","购买","tt");
-	var sn2 = new ShowNote("web-browser","xx","tt");
-	sn1.set_visible(false);
-	sn2.set_visible(false);
+	KeyFile file=new KeyFile();
+	ShowNote sn[10];
+	int cnt=0;
+	file.load_from_file(configpath+"config",KeyFileFlags.NONE);
+	foreach (string k in file.get_groups()){
+		string i=file.get_string(k,"i");
+		string t=file.get_string(k,"t");
+		string c=file.get_string(k,"c");
+		stdout.printf("%s\t%s\t%s\n",i,t,c);
+		sn[cnt] = new ShowNote(i,t,c); sn[cnt].set_visible(false);
+	}
+/*    var sn1 = new ShowNote("market","购买","tt"); sn1.set_visible(false);*/
+/*    var sn2 = new ShowNote("web-browser","xx","tt"); sn2.set_visible(false);*/
+/*    var sn3 = new ShowNote("music","xx","tt"); sn3.set_visible(false);*/
 	Gtk.main();
 	return 0;
 }
