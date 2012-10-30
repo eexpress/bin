@@ -5,9 +5,13 @@ KeyFile cfgfile;
 string conffilename;
 
 void savecfg(string s){
+	var now = new DateTime.now_local ();
+/*    stdout.printf ("时间 %s 。\n",now.to_string());*/
+
 	var file = File.new_for_path (conffilename);
+	file.set_display_name("config-"+now.to_string(),null);
+	file = File.new_for_path (conffilename);
 	{
-		if (file.query_exists()) file.delete ();
 		var file_stream = file.create (FileCreateFlags.NONE);
 		var data_stream = new DataOutputStream (file_stream);
 		data_stream.put_string (s);
