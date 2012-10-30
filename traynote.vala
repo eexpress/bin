@@ -3,6 +3,9 @@ using Gtk;
 string ConfPath;
 KeyFile ConfFile;
 string ConfFileName;
+StatusIcon AppIcon;
+Menu AppMenu;
+ImageMenuItem AppMenuItem;
 
 void savecfg(string s){
 	var now = new DateTime.now_local ();
@@ -53,19 +56,27 @@ class ShowNote:StatusIcon{
 				sicon.set_visible(false);
 				});
 		snote.append(menuDel);
-		var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
-		menuQuit.activate.connect(()=>{sicon.set_visible(false);});
-		snote.append(menuQuit);
-
 		snote.show_all();
 	}
 }
 
+void create_AppMenu() {
+	AppMenu = new Menu();
+
+	AppMenuItem = new ImageMenuItem.from_stock(Stock.ADD, null);
+	AppMenu.append(AppMenuItem);
+	AppMenu.append(new SeparatorMenuItem());
+	AppMenuItem = new ImageMenuItem.from_stock(Stock.UNDO, null);
+	AppMenu.append(AppMenuItem);
+	AppMenuItem = new ImageMenuItem.from_stock(Stock.QUIT, null);
+	AppMenu.append(AppMenuItem);
+	AppMenu.show_all();
+}
 
 static int main (string[] args) {
 	Gtk.init(ref args);
 /*    if(args.length!=4) return 1;*/
-	ConfPath=Environment.get_variable("HOME")+"/.config/traynote/";
+	ConfPath=Environment.get_variable("HOME")+"/.config/"+args[0]+"/";
 	ConfFileName=ConfPath+"config";
 	ConfFile=new KeyFile();
 
@@ -80,6 +91,14 @@ static int main (string[] args) {
 		sn[cnt] = new ShowNote(i,t,c); sn[cnt].set_visible(false);
 		cnt++;
 	}
+	create_AppMenu();
+	AppIcon = new StatusIcon.from_file(ConfPath+args[0]+".png");
+	AppIcon.set_tooltip_text("TrayNote");
+	AppIcon.button_release_event.connect((e)=>{
+		AppMenu.popup(null, null, AppIcon.position_menu, e.button, 0);
+		return true;
+		});
+	AppIcon.set_visible(true);
 	Gtk.main();
 	return 0;
 }
