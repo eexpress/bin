@@ -1,6 +1,18 @@
 using Gtk;
 
 string configpath;
+KeyFile cfgfile;
+string conffilename;
+
+void savecfg(string s){
+	var file = File.new_for_path (conffilename);
+	{
+		if (file.query_exists()) file.delete ();
+		var file_stream = file.create (FileCreateFlags.NONE);
+		var data_stream = new DataOutputStream (file_stream);
+		data_stream.put_string (s);
+	} // Streams closed at this point
+}
 
 class ShowNote:StatusIcon{
 	private StatusIcon sicon;
@@ -31,6 +43,10 @@ class ShowNote:StatusIcon{
 
 		var menuDel = new ImageMenuItem.from_stock(Stock.DELETE, null);
 		menuDel.activate.connect(()=>{
+				cfgfile.remove_group(title);
+				savecfg(cfgfile.to_data(null,null));
+				stdout.printf ("记录 %s 被删除。\n",title);
+				sicon.set_visible(false);
 				});
 		snote.append(menuDel);
 		var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
@@ -46,15 +62,16 @@ static int main (string[] args) {
 	Gtk.init(ref args);
 /*    if(args.length!=4) return 1;*/
 	configpath=Environment.get_variable("HOME")+"/.config/traynote/";
+	conffilename=configpath+"config";
 
-	KeyFile file=new KeyFile();
+	cfgfile=new KeyFile();
 	ShowNote sn[10];
 	int cnt=0;
-	file.load_from_file(configpath+"config",KeyFileFlags.NONE);
-	foreach (string k in file.get_groups()){
-		string i=file.get_string(k,"i");
+	cfgfile.load_from_file(conffilename,KeyFileFlags.NONE);
+	foreach (string k in cfgfile.get_groups()){
+		string i=cfgfile.get_string(k,"i");
 		string t=k;
-		string c=file.get_string(k,"c");
+		string c=cfgfile.get_string(k,"c");
 		stdout.printf("%s\t%s\t%s\n",i,t,c);
 		sn[cnt] = new ShowNote(i,t,c); sn[cnt].set_visible(false);
 		cnt++;
