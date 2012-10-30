@@ -9,15 +9,12 @@ class ShowNote:StatusIcon{
 
 	public ShowNote(string icon, string title, string content){
 		sicon = new StatusIcon.from_file(configpath+icon+".png");
-		sicon.set_tooltip_text(title);
+		sicon.set_tooltip_text(title+"\n--------\n"+content);
 		sicon.button_release_event.connect((e)=>{
 			snote.popup(null, null, sicon.position_menu, e.button, 0);
 			return true;
 			});
-/*        sicon.popup_menu.connect((button,time)=>{*/
-/*            snote.popup(null, null, null, button, time);*/
-/*            });*/
-/*        sicon.set_visible(true);*/
+		sicon.set_visible(true);
 		create_snote(icon, title, content);
 	}
 
@@ -28,11 +25,6 @@ class ShowNote:StatusIcon{
 		menuApp.set_image(new Gtk.Image.from_file (configpath+icon+".png"));
 		snote.append(menuApp);
 		snote.append(new SeparatorMenuItem());
-	/*    string[] s=content.split("\\n",10);*/
-	/*    foreach(string x in s){*/
-	/*        menuApp = new ImageMenuItem.with_label(x);*/
-	/*        snote.append(menuApp);*/
-	/*    }*/
 		menuApp = new ImageMenuItem.with_label(content);
 		snote.append(menuApp);
 		snote.append(new SeparatorMenuItem());
@@ -61,14 +53,12 @@ static int main (string[] args) {
 	file.load_from_file(configpath+"config",KeyFileFlags.NONE);
 	foreach (string k in file.get_groups()){
 		string i=file.get_string(k,"i");
-		string t=file.get_string(k,"t");
+		string t=k;
 		string c=file.get_string(k,"c");
 		stdout.printf("%s\t%s\t%s\n",i,t,c);
 		sn[cnt] = new ShowNote(i,t,c); sn[cnt].set_visible(false);
+		cnt++;
 	}
-/*    var sn1 = new ShowNote("market","购买","tt"); sn1.set_visible(false);*/
-/*    var sn2 = new ShowNote("web-browser","xx","tt"); sn2.set_visible(false);*/
-/*    var sn3 = new ShowNote("music","xx","tt"); sn3.set_visible(false);*/
 	Gtk.main();
 	return 0;
 }
