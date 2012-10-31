@@ -82,7 +82,7 @@ void create_AppMenu() {
 
 class EditNote : Window {
 	private Entry eTitle;
-	private Entry eContent;
+	private TextView eContent;
 	private Grid gIcon;
 
 	public EditNote(string sicon, string stitle, string scontent){
@@ -93,7 +93,8 @@ class EditNote : Window {
 		var lContent=new Label("内容");
 		var lIcon=new Label("图标");
 		eTitle=new Entry(); eTitle.hexpand=true;
-		eContent=new Entry(); eContent.hexpand=true;
+		eContent=new TextView(); eContent.hexpand=true;
+		eContent.height_request=50;
 		gIcon=new Grid();
 		var bok=new Button.from_stock(Stock.OK);
 		var bcancel=new Button.from_stock(Stock.CANCEL);
@@ -111,7 +112,7 @@ class EditNote : Window {
 		vbox.border_width=20;
 		vbox.add(hbox1); vbox.add(hbox2); vbox.add(hbox3); vbox.add(hbox4);
 		add(vbox);
-		eTitle.text=stitle; eContent.text=scontent;
+/*        eTitle.text=stitle; eContent.insert_at_cursor(scontent);*/
 		this.show_all();
 	}
 }
