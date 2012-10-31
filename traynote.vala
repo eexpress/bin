@@ -48,6 +48,8 @@ class ShowNote:StatusIcon{
 		snote.append(menuApp);
 		snote.append(new SeparatorMenuItem());
 
+		var menuEdit = new ImageMenuItem.from_stock(Stock.EDIT, null);
+		snote.append(menuEdit);
 		var menuDel = new ImageMenuItem.from_stock(Stock.DELETE, null);
 		menuDel.activate.connect(()=>{
 				ConfFile.remove_group(title);
@@ -64,6 +66,11 @@ void create_AppMenu() {
 	AppMenu = new Menu();
 
 	AppMenuItem = new ImageMenuItem.from_stock(Stock.ADD, null);
+	AppMenuItem.activate.connect(()=>{
+			var waddnote=new EditNote("here","","");
+			waddnote.show_all();
+			}
+			);
 	AppMenu.append(AppMenuItem);
 	AppMenu.append(new SeparatorMenuItem());
 	AppMenuItem = new ImageMenuItem.from_stock(Stock.UNDO, null);
@@ -71,6 +78,41 @@ void create_AppMenu() {
 	AppMenuItem = new ImageMenuItem.from_stock(Stock.QUIT, null);
 	AppMenu.append(AppMenuItem);
 	AppMenu.show_all();
+}
+
+class EditNote : Window {
+	private Entry eTitle;
+	private Entry eContent;
+	private Grid gIcon;
+
+	public EditNote(string sicon, string stitle, string scontent){
+		title="编辑";
+		window_position = WindowPosition.CENTER;
+		set_default_size (300, 300);
+		var lTitle=new Label("标题");
+		var lContent=new Label("内容");
+		var lIcon=new Label("图标");
+		eTitle=new Entry(); eTitle.hexpand=true;
+		eContent=new Entry(); eContent.hexpand=true;
+		gIcon=new Grid();
+		var bok=new Button.from_stock(Stock.OK);
+		var bcancel=new Button.from_stock(Stock.CANCEL);
+		var hbox1 = new Box (Orientation.HORIZONTAL, 5);
+		var hbox2 = new Box (Orientation.HORIZONTAL, 5);
+		var hbox3 = new Box (Orientation.HORIZONTAL, 5);
+		var hbox4 = new Box (Orientation.HORIZONTAL, 5);
+		hbox1.add(lTitle); hbox1.add(eTitle);
+		hbox2.add(lContent); hbox2.add(eContent);
+		hbox3.add(lIcon); hbox3.add(gIcon);
+		hbox4.add(bok); hbox4.add(bcancel);
+		hbox4.hexpand=true;
+		var vbox = new Box(Orientation.VERTICAL, 15);
+		vbox.border_width=20;
+		vbox.add(hbox1); vbox.add(hbox2); vbox.add(hbox3); vbox.add(hbox4);
+		add(vbox);
+		eTitle.text=stitle; eContent.text=scontent;
+		this.show_all();
+	}
 }
 
 static int main (string[] args) {
@@ -88,7 +130,8 @@ static int main (string[] args) {
 		string t=k;
 		string c=ConfFile.get_string(k,"c");
 /*        stdout.printf("%s\t%s\t%s\n",i,t,c);*/
-		sn[cnt] = new ShowNote(i,t,c); sn[cnt].set_visible(false);
+		sn[cnt] = new ShowNote(i,t,c);
+		sn[cnt].set_visible(false);
 		cnt++;
 	}
 	create_AppMenu();
