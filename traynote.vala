@@ -105,7 +105,8 @@ class EditNote : Window {
 		hbox2.add(lContent); hbox2.add(eContent);
 		hbox3.add(lIcon); hbox3.add(gIcon);
 		hbox4.add(bok); hbox4.add(bcancel);
-		hbox4.hexpand=true;
+		hbox4.halign=Gtk.Align.CENTER;
+		hbox4.set_spacing(40);
 		var vbox = new Box(Orientation.VERTICAL, 15);
 		vbox.border_width=20;
 		vbox.add(hbox1); vbox.add(hbox2); vbox.add(hbox3); vbox.add(hbox4);
