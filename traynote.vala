@@ -83,7 +83,7 @@ void create_AppMenu() {
 class EditNote : Window {
 	private Entry eTitle;
 	private TextView eContent;
-	private Grid gIcon;
+	private IconView iIcon;
 
 	public EditNote(string sicon, string stitle, string scontent){
 		title="编辑";
@@ -95,7 +95,19 @@ class EditNote : Window {
 		eTitle=new Entry(); eTitle.hexpand=true;
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
-		gIcon=new Grid();
+
+		var lst = new ListStore(typeof (Gtk.TreeIter), typeof (string), typeof (Gdk.Pixbuf), typeof (bool));
+		lst.clear();
+		string filename="market.png";
+		lst.append(ConfPath+filename,filename, Gtk.Image.from_file(filename),true);
+		iIcon=new IconView(lst);
+		iIcon.set_selection_mode(Gtk.SelectionMode.SINGLE);
+		iIcon.set_text_column(0);
+		iIcon.set_pixbuf_column(1);
+		iIcon.selection_changed.connect(()=>{
+				});
+
+
 		var bok=new Button.from_stock(Stock.OK);
 		var bcancel=new Button.from_stock(Stock.CANCEL);
 		var hbox1 = new Box (Orientation.HORIZONTAL, 5);
@@ -104,7 +116,8 @@ class EditNote : Window {
 		var hbox4 = new Box (Orientation.HORIZONTAL, 5);
 		hbox1.add(lTitle); hbox1.add(eTitle);
 		hbox2.add(lContent); hbox2.add(eContent);
-		hbox3.add(lIcon); hbox3.add(gIcon);
+		lContent.valign=Gtk.Align.START;
+		hbox3.add(lIcon); hbox3.add(iIcon);
 		hbox4.add(bok); hbox4.add(bcancel);
 		hbox4.halign=Gtk.Align.CENTER;
 		hbox4.set_spacing(40);
