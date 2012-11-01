@@ -95,7 +95,7 @@ class EditNote : Window {
 		eTitle=new Entry(); eTitle.hexpand=true;
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
-
+/*http://buttle.shangorilla.com/1.1/handlers/monodoc.ashx?link=T%3AGtk.IconView*/
 		var lst=new ListStore(4, typeof(string), typeof(string),typeof (Gdk.Pixbuf),typeof(bool));
 /*        var lst=new ListStore(3, typeof(string), typeof(Image),typeof (bool));*/
 		lst.clear();
