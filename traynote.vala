@@ -5,7 +5,7 @@ KeyFile ConfFile;
 string ConfFileName;
 StatusIcon AppIcon;
 Menu AppMenu;
-ImageMenuItem AppMenuItem;
+ShowNote sn[10];
 
 void savecfg(string s){
 	var now = new DateTime.now_local ();
@@ -23,14 +23,13 @@ void savecfg(string s){
 
 class ShowNote:StatusIcon{
 	private StatusIcon sicon;
-	private Menu snote;
-	private ImageMenuItem menuApp;
+	private Menu NoteMenu;
 
 	public ShowNote(string icon, string title, string content){
 		sicon = new StatusIcon.from_file(ConfPath+icon+".png");
 		sicon.set_tooltip_text(title+"\n--------\n"+content);
 		sicon.button_release_event.connect((e)=>{
-			snote.popup(null, null, sicon.position_menu, e.button, 0);
+			NoteMenu.popup(null, null, sicon.position_menu, e.button, 0);
 			return true;
 			});
 		sicon.set_visible(true);
@@ -38,45 +37,52 @@ class ShowNote:StatusIcon{
 	}
 
 	void create_snote(string icon, string title, string content) {
-		snote = new Menu();
+		NoteMenu = new Menu();
+		ImageMenuItem mi;
 
-		menuApp = new ImageMenuItem.with_label(title);
-		menuApp.set_image(new Gtk.Image.from_file (ConfPath+icon+".png"));
-		snote.append(menuApp);
-		snote.append(new SeparatorMenuItem());
-		menuApp = new ImageMenuItem.with_label(content);
-		snote.append(menuApp);
-		snote.append(new SeparatorMenuItem());
+		mi = new ImageMenuItem.with_label(title);
+		mi.set_image(new Gtk.Image.from_file (ConfPath+icon+".png"));
+		NoteMenu.append(mi);
+		NoteMenu.append(new SeparatorMenuItem());
+		mi = new ImageMenuItem.with_label(content);
+		NoteMenu.append(mi);
+		NoteMenu.append(new SeparatorMenuItem());
 
-		var menuEdit = new ImageMenuItem.from_stock(Stock.EDIT, null);
-		snote.append(menuEdit);
-		var menuDel = new ImageMenuItem.from_stock(Stock.DELETE, null);
-		menuDel.activate.connect(()=>{
+		mi = new ImageMenuItem.from_stock(Stock.EDIT, null);
+		mi.activate.connect(()=>{
+				var wnew=new EditNote(icon,title,content);
+				wnew.show_all();
+				});
+		NoteMenu.append(mi);
+		mi = new ImageMenuItem.from_stock(Stock.DELETE, null);
+		mi.activate.connect(()=>{
 				ConfFile.remove_group(title);
 				savecfg(ConfFile.to_data(null,null));
 				stdout.printf ("记录 %s 被删除。\n",title);
 				sicon.set_visible(false);
 				});
-		snote.append(menuDel);
-		snote.show_all();
+		NoteMenu.append(mi);
+		NoteMenu.show_all();
 	}
 }
 
 void create_AppMenu() {
 	AppMenu = new Menu();
+	ImageMenuItem mi;
 
-	AppMenuItem = new ImageMenuItem.from_stock(Stock.ADD, null);
-	AppMenuItem.activate.connect(()=>{
-			var waddnote=new EditNote("here","","");
-			waddnote.show_all();
+	mi = new ImageMenuItem.from_stock(Stock.ADD, null);
+	mi.activate.connect(()=>{
+			var wnew=new EditNote("","","");
+			wnew.show_all();
 			}
 			);
-	AppMenu.append(AppMenuItem);
+	AppMenu.append(mi);
 	AppMenu.append(new SeparatorMenuItem());
-	AppMenuItem = new ImageMenuItem.from_stock(Stock.UNDO, null);
-	AppMenu.append(AppMenuItem);
-	AppMenuItem = new ImageMenuItem.from_stock(Stock.QUIT, null);
-	AppMenu.append(AppMenuItem);
+	mi = new ImageMenuItem.from_stock(Stock.UNDO, null);
+	AppMenu.append(mi);
+	mi = new ImageMenuItem.from_stock(Stock.QUIT, null);
+	mi.activate.connect(Gtk.main_quit);
+	AppMenu.append(mi);
 	AppMenu.show_all();
 }
 
@@ -86,7 +92,8 @@ class EditNote : Window {
 	private IconView iIcon;
 
 	public EditNote(string sicon, string stitle, string scontent){
-		title="编辑";
+		string oldgroup=stitle;
+		if(oldgroup=="")title="新建笔记";else title="编辑笔记";
 		window_position = WindowPosition.CENTER;
 		set_default_size (300, 300);
 		var lTitle=new Label("标题");
@@ -95,25 +102,24 @@ class EditNote : Window {
 		eTitle=new Entry(); eTitle.hexpand=true;
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
-/*http://buttle.shangorilla.com/1.1/handlers/monodoc.ashx?link=T%3AGtk.IconView*/
-		var lst=new ListStore(4, typeof(string), typeof(string),typeof (Gdk.Pixbuf),typeof(bool));
-/*        var lst=new ListStore(3, typeof(string), typeof(Image),typeof (bool));*/
+		if(oldgroup!=""){eTitle.text=stitle; eContent.buffer.text=scontent;/*iconview set*/}
+
+		var lst=new ListStore(3, typeof(string), typeof (Gdk.Pixbuf),typeof(bool));
 		lst.clear();
-		string filename="market.png";
 		TreeIter iter;
 		Gdk.Pixbuf img;
-		img=new Gdk.Pixbuf.from_file("/home/eexp/.config/traynote/market.png");
-/*        img=new Gdk.Pixbuf.from_file(ConfPath+filename);*/
-		lst.append(out iter);
-		lst.set(iter,0,ConfPath+filename,1,filename,2,img,3,true);
-/*        lst.set(iter,0,ConfPath+filename,1,filename,2,img,3,true);*/
+		string name;
+		var d = Dir.open(ConfPath);
+		while ((name = d.read_name()) != null) {
+			if(!name.has_suffix(".png")) continue;
+			img=new Gdk.Pixbuf.from_file(ConfPath+name);
+			lst.append(out iter);
+			lst.set(iter,0,name,1,img,2,false);
+		}
 		iIcon=new IconView.with_model(lst);
 		iIcon.set_selection_mode(Gtk.SelectionMode.SINGLE);
-		iIcon.set_text_column(0);
+		iIcon.set_columns(5);
 		iIcon.set_pixbuf_column(1);
-		iIcon.selection_changed.connect(()=>{
-				});
-
 
 		var bok=new Button.from_stock(Stock.OK);
 		var bcancel=new Button.from_stock(Stock.CANCEL);
@@ -132,6 +138,21 @@ class EditNote : Window {
 		vbox.border_width=20;
 		vbox.add(hbox1); vbox.add(hbox2); vbox.add(hbox3); vbox.add(hbox4);
 		add(vbox);
+		bcancel.clicked.connect(()=>{this.destroy();});
+		bok.clicked.connect(()=>{
+				if(oldgroup!=""){ConfFile.remove_group(oldgroup);}
+				ConfFile.set_string(eTitle.text,"c",eContent.buffer.text);
+
+/*                string iconname;*/
+/*                var s=iIcon.get_selected_items();*/
+/*                if(s==null) iconname="traynote"; else{*/
+/*                }*/
+/*        stdout.printf("==> %s\n",s);*/
+
+/*                ConfFile.set_string(eTitle.text,"i="+iIcon.get_selected_items());*/
+				savecfg(ConfFile.to_data(null,null));
+				this.destroy();
+				});
 /*        eTitle.text=stitle; eContent.insert_at_cursor(scontent);*/
 		this.show_all();
 	}
@@ -144,7 +165,6 @@ static int main (string[] args) {
 	ConfFileName=ConfPath+"config";
 	ConfFile=new KeyFile();
 
-	ShowNote sn[10];
 	int cnt=0;
 	ConfFile.load_from_file(ConfFileName,KeyFileFlags.NONE);
 	foreach (string k in ConfFile.get_groups()){
