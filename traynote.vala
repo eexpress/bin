@@ -96,11 +96,18 @@ class EditNote : Window {
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
 
-		var lst = new ListStore(typeof (Gtk.TreeIter), typeof (string), typeof (Gdk.Pixbuf), typeof (bool));
+		var lst=new ListStore(4, typeof(string), typeof(string),typeof (Gdk.Pixbuf),typeof(bool));
+/*        var lst=new ListStore(3, typeof(string), typeof(Image),typeof (bool));*/
 		lst.clear();
 		string filename="market.png";
-		lst.append(ConfPath+filename,filename, Gtk.Image.from_file(filename),true);
-		iIcon=new IconView(lst);
+		TreeIter iter;
+		Gdk.Pixbuf img;
+		img=new Gdk.Pixbuf.from_file("/home/eexp/.config/traynote/market.png");
+/*        img=new Gdk.Pixbuf.from_file(ConfPath+filename);*/
+		lst.append(out iter);
+		lst.set(iter,0,ConfPath+filename,1,filename,2,img,3,true);
+/*        lst.set(iter,0,ConfPath+filename,1,filename,2,img,3,true);*/
+		iIcon=new IconView.with_model(lst);
 		iIcon.set_selection_mode(Gtk.SelectionMode.SINGLE);
 		iIcon.set_text_column(0);
 		iIcon.set_pixbuf_column(1);
