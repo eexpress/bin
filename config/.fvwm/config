@@ -155,6 +155,7 @@ AddToFunc    StartFunction
 + I ExecOnce tint2
 + I ExecOnce nm-applet
 + I ExecOnce $[script]traytool
++ I ExecOnce $[script]traynote
 + I ExecOnce xcompmgr -cf
 + I ExecOnce synapse
 + I ExecOnce cairo-weather.pl
