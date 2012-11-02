@@ -182,9 +182,10 @@ void show_all_from_conf(){
 
 static int main (string[] args) {
 	Gtk.init(ref args);
-	appname=args[0];
-	ConfPath=Environment.get_variable("HOME")+"/.config/"+args[0]+"/";
+	appname=GLib.Path.get_basename(args[0]);
+	ConfPath=Environment.get_variable("HOME")+"/.config/"+appname+"/";
 	ConfFileName=ConfPath+"config";
+	stdout.printf ("程序 %s 使用配置文件 %s 。\n",appname,ConfFileName);
 
 	var file = File.new_for_path(ConfFileName);
 	if (!file.query_exists()) file.create(FileCreateFlags.NONE);
