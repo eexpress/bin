@@ -9,8 +9,6 @@ string appname;
 
 void savecfg(string s){
 	var now = new DateTime.now_local ();
-/*    stdout.printf ("时间 %s 。\n",now.to_string());*/
-
 	var file = File.new_for_path (ConfFileName);
 	file.set_display_name("config-"+now.to_string(),null);
 	file = File.new_for_path (ConfFileName);
@@ -50,6 +48,7 @@ class ShowNote:StatusIcon{
 
 		mi = new ImageMenuItem.from_stock(Stock.EDIT, null);
 		mi.activate.connect(()=>{
+				sicon.set_visible(false);
 				var wnew=new EditNote(icon,title,content);
 				wnew.show_all();
 				});
@@ -79,6 +78,10 @@ void create_AppMenu() {
 	AppMenu.append(mi);
 	AppMenu.append(new SeparatorMenuItem());
 	mi = new ImageMenuItem.from_stock(Stock.UNDO, null);
+	mi.activate.connect(()=>{
+/*            restore last conf file; destroy all ShowNote*/
+/*            show_all_from_conf();*/
+			});
 	AppMenu.append(mi);
 	mi = new ImageMenuItem.from_stock(Stock.QUIT, null);
 	mi.activate.connect(Gtk.main_quit);
@@ -96,17 +99,16 @@ class EditNote : Window {
 		string oldgroup=stitle;
 		if(oldgroup=="")title="新建笔记";else title="编辑笔记";
 		window_position = WindowPosition.CENTER;
-		set_default_size (300, 300);
 		var lTitle=new Label("标题");
 		var lContent=new Label("内容");
 		var lIcon=new Label("图标");
 		eTitle=new Entry(); eTitle.hexpand=true;
+		eTitle.placeholder_text="标题不能为空";
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
-		if(oldgroup!=""){eTitle.text=stitle; eContent.buffer.text=scontent;/*iconview set*/}
+		if(oldgroup!=""){eTitle.text=stitle; eContent.buffer.text=scontent;}
 
-		var lst=new ListStore(3, typeof(string), typeof (Gdk.Pixbuf),typeof(bool));
-/*        var lst = new Gtk.ListStore (2, typeof (Gdk.Pixbuf), typeof (string));*/
+		var lst=new ListStore(2, typeof(string), typeof (Gdk.Pixbuf));
 		lst.clear();
 		Gdk.Pixbuf pixbuf;
 		string iconname;
@@ -115,8 +117,7 @@ class EditNote : Window {
 			if(!iconname.has_suffix(".png")) continue;
 			pixbuf=new Gdk.Pixbuf.from_file(ConfPath+iconname);
 			lst.append(out iter);
-			lst.set(iter,0,iconname,1,pixbuf,2,false);
-/*            lst.set(iter,0,pixbuf,1,iconname);*/
+			lst.set(iter,0,iconname,1,pixbuf);
 		}
 		view=new IconView.with_model(lst);
 		view.set_selection_mode(Gtk.SelectionMode.SINGLE);
@@ -133,30 +134,30 @@ class EditNote : Window {
 		hbox2.add(lContent); hbox2.add(eContent);
 		lContent.valign=Gtk.Align.START;
 		hbox3.add(lIcon); hbox3.add(view);
+		lIcon.valign=Gtk.Align.START;
 		hbox4.add(bok); hbox4.add(bcancel);
 		hbox4.halign=Gtk.Align.CENTER;
-		hbox4.set_spacing(40);
-		var vbox = new Box(Orientation.VERTICAL, 15);
+		hbox4.set_spacing(60);
+		var vbox = new Box(Orientation.VERTICAL, 5);
 		vbox.border_width=20;
 		vbox.add(hbox1); vbox.add(hbox2); vbox.add(hbox3); vbox.add(hbox4);
 		add(vbox);
 		bcancel.clicked.connect(()=>{this.destroy();});
 		bok.clicked.connect(()=>{
+				if(eTitle.text==""){
+				eTitle.is_focus=true;
+				return;
+				}
 				if(oldgroup!=""){ConfFile.remove_group(oldgroup);}
-				ConfFile.set_string(eTitle.text,"c",eContent.buffer.text);
-	/*                var s=view.get_selected_items().data;*/
-				List<Gtk.TreePath> paths = view.get_selected_items();
 				Value iname="";
-				Value icon;
-				foreach (Gtk.TreePath path in paths) {
-					bool tmp = lst.get_iter (out iter, path);
-					assert (tmp == true);
-		/*            lst.get_value (iter, 1, out icon); */
-					lst.get_value (iter, 0, out iname); 
-		/*            stdout.printf ("%s: %p\n", (string) iname, ((Gdk.Pixbuf) icon));*/
-					}
+				var s=view.get_selected_items();
+				if(s!=null){
+				lst.get_iter(out iter,s.data);
+				lst.get_value(iter, 0, out iname);
 				iconname=(string)iname;
-				if(iconname=="")iconname=appname+".png";
+				} else iconname=appname+".png";
+
+				ConfFile.set_string(eTitle.text,"c",eContent.buffer.text);
 				ConfFile.set_string(eTitle.text,"i",iconname);
 				savecfg(ConfFile.to_data(null,null));
 				ShowNote t=new ShowNote(iconname,eTitle.text,eContent.buffer.text);
@@ -167,14 +168,8 @@ class EditNote : Window {
 	}
 }
 
-static int main (string[] args) {
-	Gtk.init(ref args);
-/*    if(args.length!=4) return 1;*/
-	ConfPath=Environment.get_variable("HOME")+"/.config/"+args[0]+"/";
-	ConfFileName=ConfPath+"config";
+void show_all_from_conf(){
 	ConfFile=new KeyFile();
-
-	int cnt=0;
 	ConfFile.load_from_file(ConfFileName,KeyFileFlags.NONE);
 	foreach (string k in ConfFile.get_groups()){
 		string i=ConfFile.get_string(k,"i");
@@ -182,10 +177,19 @@ static int main (string[] args) {
 		string c=ConfFile.get_string(k,"c");
 		ShowNote sn = new ShowNote(i,t,c);
 		sn.set_visible(false);
-		cnt++;
 	}
-	create_AppMenu();
+}
+
+static int main (string[] args) {
+	Gtk.init(ref args);
 	appname=args[0];
+	ConfPath=Environment.get_variable("HOME")+"/.config/"+args[0]+"/";
+	ConfFileName=ConfPath+"config";
+
+	var file = File.new_for_path(ConfFileName);
+	if (!file.query_exists()) file.create(FileCreateFlags.NONE);
+	else show_all_from_conf();
+	create_AppMenu();
 	AppIcon = new StatusIcon.from_file(ConfPath+appname+".png");
 	AppIcon.set_tooltip_text("TrayNote");
 	AppIcon.button_release_event.connect((e)=>{
