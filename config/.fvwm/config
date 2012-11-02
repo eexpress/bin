@@ -75,8 +75,8 @@ Stroke 852 3 R N Exec exec bash -c 'mocp -p || rhythmbox-client --play'
 # 方向按键，排列窗口，占半屏幕
 #keyname in /usr/include/X11/keysymdef.h
 Key Up W C ResizeMove 100 50 0 0
-Key Left W C ResizeMove 44 95 1 1
-Key Right W C ResizeMove 44 95 55 1
+Key Left W C ResizeMove 46 95 1 1
+Key Right W C ResizeMove 46 95 52 1
 Key Down W C ResizeMove 100 50 0 50
 
 Key Left W M MoveToPage -1p 0

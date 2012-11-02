@@ -5,7 +5,7 @@ KeyFile ConfFile;
 string ConfFileName;
 StatusIcon AppIcon;
 Menu AppMenu;
-ShowNote sn[10];
+string appname;
 
 void savecfg(string s){
 	var now = new DateTime.now_local ();
@@ -26,7 +26,7 @@ class ShowNote:StatusIcon{
 	private Menu NoteMenu;
 
 	public ShowNote(string icon, string title, string content){
-		sicon = new StatusIcon.from_file(ConfPath+icon+".png");
+		sicon = new StatusIcon.from_file(ConfPath+icon);
 		sicon.set_tooltip_text(title+"\n--------\n"+content);
 		sicon.button_release_event.connect((e)=>{
 			NoteMenu.popup(null, null, sicon.position_menu, e.button, 0);
@@ -41,7 +41,7 @@ class ShowNote:StatusIcon{
 		ImageMenuItem mi;
 
 		mi = new ImageMenuItem.with_label(title);
-		mi.set_image(new Gtk.Image.from_file (ConfPath+icon+".png"));
+		mi.set_image(new Gtk.Image.from_file (ConfPath+icon));
 		NoteMenu.append(mi);
 		NoteMenu.append(new SeparatorMenuItem());
 		mi = new ImageMenuItem.with_label(content);
@@ -89,7 +89,8 @@ void create_AppMenu() {
 class EditNote : Window {
 	private Entry eTitle;
 	private TextView eContent;
-	private IconView iIcon;
+	private IconView view;
+	private TreeIter iter;
 
 	public EditNote(string sicon, string stitle, string scontent){
 		string oldgroup=stitle;
@@ -105,21 +106,22 @@ class EditNote : Window {
 		if(oldgroup!=""){eTitle.text=stitle; eContent.buffer.text=scontent;/*iconview set*/}
 
 		var lst=new ListStore(3, typeof(string), typeof (Gdk.Pixbuf),typeof(bool));
+/*        var lst = new Gtk.ListStore (2, typeof (Gdk.Pixbuf), typeof (string));*/
 		lst.clear();
-		TreeIter iter;
-		Gdk.Pixbuf img;
-		string name;
+		Gdk.Pixbuf pixbuf;
+		string iconname;
 		var d = Dir.open(ConfPath);
-		while ((name = d.read_name()) != null) {
-			if(!name.has_suffix(".png")) continue;
-			img=new Gdk.Pixbuf.from_file(ConfPath+name);
+		while ((iconname = d.read_name()) != null) {
+			if(!iconname.has_suffix(".png")) continue;
+			pixbuf=new Gdk.Pixbuf.from_file(ConfPath+iconname);
 			lst.append(out iter);
-			lst.set(iter,0,name,1,img,2,false);
+			lst.set(iter,0,iconname,1,pixbuf,2,false);
+/*            lst.set(iter,0,pixbuf,1,iconname);*/
 		}
-		iIcon=new IconView.with_model(lst);
-		iIcon.set_selection_mode(Gtk.SelectionMode.SINGLE);
-		iIcon.set_columns(5);
-		iIcon.set_pixbuf_column(1);
+		view=new IconView.with_model(lst);
+		view.set_selection_mode(Gtk.SelectionMode.SINGLE);
+		view.set_columns(5);
+		view.set_pixbuf_column(1);
 
 		var bok=new Button.from_stock(Stock.OK);
 		var bcancel=new Button.from_stock(Stock.CANCEL);
@@ -130,7 +132,7 @@ class EditNote : Window {
 		hbox1.add(lTitle); hbox1.add(eTitle);
 		hbox2.add(lContent); hbox2.add(eContent);
 		lContent.valign=Gtk.Align.START;
-		hbox3.add(lIcon); hbox3.add(iIcon);
+		hbox3.add(lIcon); hbox3.add(view);
 		hbox4.add(bok); hbox4.add(bcancel);
 		hbox4.halign=Gtk.Align.CENTER;
 		hbox4.set_spacing(40);
@@ -142,18 +144,25 @@ class EditNote : Window {
 		bok.clicked.connect(()=>{
 				if(oldgroup!=""){ConfFile.remove_group(oldgroup);}
 				ConfFile.set_string(eTitle.text,"c",eContent.buffer.text);
-
-/*                string iconname;*/
-/*                var s=iIcon.get_selected_items();*/
-/*                if(s==null) iconname="traynote"; else{*/
-/*                }*/
-/*        stdout.printf("==> %s\n",s);*/
-
-/*                ConfFile.set_string(eTitle.text,"i="+iIcon.get_selected_items());*/
+	/*                var s=view.get_selected_items().data;*/
+				List<Gtk.TreePath> paths = view.get_selected_items();
+				Value iname="";
+				Value icon;
+				foreach (Gtk.TreePath path in paths) {
+					bool tmp = lst.get_iter (out iter, path);
+					assert (tmp == true);
+		/*            lst.get_value (iter, 1, out icon); */
+					lst.get_value (iter, 0, out iname); 
+		/*            stdout.printf ("%s: %p\n", (string) iname, ((Gdk.Pixbuf) icon));*/
+					}
+				iconname=(string)iname;
+				if(iconname=="")iconname=appname+".png";
+				ConfFile.set_string(eTitle.text,"i",iconname);
 				savecfg(ConfFile.to_data(null,null));
+				ShowNote t=new ShowNote(iconname,eTitle.text,eContent.buffer.text);
+				t.set_visible(false);
 				this.destroy();
 				});
-/*        eTitle.text=stitle; eContent.insert_at_cursor(scontent);*/
 		this.show_all();
 	}
 }
@@ -171,13 +180,13 @@ static int main (string[] args) {
 		string i=ConfFile.get_string(k,"i");
 		string t=k;
 		string c=ConfFile.get_string(k,"c");
-/*        stdout.printf("%s\t%s\t%s\n",i,t,c);*/
-		sn[cnt] = new ShowNote(i,t,c);
-		sn[cnt].set_visible(false);
+		ShowNote sn = new ShowNote(i,t,c);
+		sn.set_visible(false);
 		cnt++;
 	}
 	create_AppMenu();
-	AppIcon = new StatusIcon.from_file(ConfPath+args[0]+".png");
+	appname=args[0];
+	AppIcon = new StatusIcon.from_file(ConfPath+appname+".png");
 	AppIcon.set_tooltip_text("TrayNote");
 	AppIcon.button_release_event.connect((e)=>{
 		AppMenu.popup(null, null, AppIcon.position_menu, e.button, 0);
