@@ -99,6 +99,7 @@ class EditNote : Window {
 		string oldgroup=stitle;
 		if(oldgroup=="")title="新建笔记";else title="编辑笔记";
 		window_position = WindowPosition.CENTER;
+/*        set_default_size (300, 300);*/
 		var lTitle=new Label("标题");
 		var lContent=new Label("内容");
 		var lIcon=new Label("图标");
@@ -106,6 +107,7 @@ class EditNote : Window {
 		eTitle.placeholder_text="标题不能为空";
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
+		eContent.set_wrap_mode(Gtk.WrapMode.WORD);
 		if(oldgroup!=""){eTitle.text=stitle; eContent.buffer.text=scontent;}
 
 		var lst=new ListStore(2, typeof(string), typeof (Gdk.Pixbuf));
