@@ -30,7 +30,7 @@ Key h A CM Exec bash -c 'dbus-send --system --print-reply --dest=org.freedesktop
 Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
-Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
+Style * IconBox 1000x100+40-80, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
 #EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 MenuStyle WindowList Font "$[RegularFont]"
 Key F10 A A WindowList Root c c SortByClass,NoGeometry,NoCurrentDeskTitle
@@ -152,7 +152,8 @@ DestroyFunc  StartFunction
 AddToFunc    StartFunction
 + I Test (Init) Exec exec fvwm-root -r $[fvwm]/desktop.png
 + I Test (Init) Exec exec $[script]/goagent.bash
-+ I ExecOnce tint2
++ I ExecOnce cairo-dock
+#+ I ExecOnce tint2
 + I ExecOnce nm-applet
 + I ExecOnce $[script]traytool
 + I ExecOnce $[script]traynote
