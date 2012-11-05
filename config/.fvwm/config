@@ -30,7 +30,7 @@ Key h A CM Exec bash -c 'dbus-send --system --print-reply --dest=org.freedesktop
 Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
-Style * IconBox 1000x100+40-80, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
+Style * IconBox 1000x100+40-120, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
 #EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
 MenuStyle WindowList Font "$[RegularFont]"
 Key F10 A A WindowList Root c c SortByClass,NoGeometry,NoCurrentDeskTitle
@@ -153,20 +153,20 @@ AddToFunc    StartFunction
 + I Test (Init) Exec exec fvwm-root -r $[fvwm]/desktop.png
 + I Test (Init) Exec exec $[script]/goagent.bash
 + I ExecOnce cairo-dock
++ I Test (Init) Exec exec ubuntuone-launch
 #+ I ExecOnce tint2
 + I ExecOnce nm-applet
-+ I ExecOnce $[script]traytool
+#+ I ExecOnce $[script]traytool
 + I ExecOnce $[script]traynote
 + I ExecOnce xcompmgr -cf
-+ I ExecOnce synapse
-+ I ExecOnce cairo-weather.pl
+#+ I ExecOnce synapse
+#+ I ExecOnce cairo-weather.pl
 #+ I Test (Init) Exec exec gnome-settings-daemon
 #+ I Test (Init) Exec exec plank
 #+ I Test (Init) Exec exec $[script]git.pl
 #+ I Test (Init) Exec exec yunio
-+ I Test (Init) Exec exec ubuntuone-launch
 #+ I Test (Init) Exec exec opera
-+ I Test (Init) Exec bash -c '~/bin/msg git pull; cd bin; git pull;~/bin/msg git finished'
+#+ I Test (Init) Exec bash -c '~/bin/msg git pull; cd bin; git pull;~/bin/msg git finished'
 #+ I ExecOnce volumeicon
 #+ I Schedule 800 ExecOnce stalonetray -t -i 16
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
