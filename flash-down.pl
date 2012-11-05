@@ -84,8 +84,8 @@ if($view){
 	}
 #---------------------	
 	$bus->Notify("flash", 0, "sunny", "$name 已经完成全部下载", "", [], { }, -1);
-	chdir '..';
-	`echo "$ARGV[0]\t《$_》\t结果：$proc">>flash-down.log`;
+#    chdir '..';
+	`echo "$ARGV[0]\t《$_》\t结果：$proc">>/tmp/flash-down.log`;
 	`paplay "/usr/share/sounds/ubuntu/stereo/service-login.ogg"`;
 	} else {
 	/提示：.*/; $_=$&; s/<br\/>.*$//; 
