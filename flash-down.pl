@@ -61,7 +61,7 @@ if($view){
 	foreach(@link){
 		my $add=$_->url();
 #        print "$red 下载$normal => $green$add$normal\n";
-		my $file=sprintf "%s-%02d.flv",$name,$cnt;
+		my $file=$size>1?sprintf "%s-%02d.flv",$name,$cnt:"$name.flv";
 #                `wget -c --tries=5 --user-agent='Opera/9.80 (X11; Linux i686; U; en) Presto/2.6.30 Version/10.60' "$add" -O $file`;
 		$mech->get($add);
 		$mech->save_content($file);
