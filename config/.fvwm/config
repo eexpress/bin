@@ -123,7 +123,7 @@ Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
 Style gnome-terminal WindowListSkip
 #Style dock		!Title, !Borders, Sticky, StaysOnBottom, !Iconifiable
-Style dock		!Title, !Borders, Sticky, !Iconifiable
+Style dock		!Title, !Borders, Sticky, StaysOnTop, !Iconifiable
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
 Style *tray		UseStyle dock
