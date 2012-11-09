@@ -1,6 +1,7 @@
 using Gtk;
 
 string ConfPath;
+string IconPath;
 KeyFile ConfFile;
 string ConfFileName;
 StatusIcon AppIcon;
@@ -24,7 +25,7 @@ class ShowNote:StatusIcon{
 	private Menu NoteMenu;
 
 	public ShowNote(string icon, string title, string content){
-		sicon = new StatusIcon.from_file(ConfPath+icon);
+		sicon = new StatusIcon.from_file(IconPath+icon);
 		sicon.set_tooltip_text(title+"\n--------\n"+content);
 		sicon.button_release_event.connect((e)=>{
 			NoteMenu.popup(null, null, sicon.position_menu, e.button, 0);
@@ -39,7 +40,7 @@ class ShowNote:StatusIcon{
 		ImageMenuItem mi;
 
 		mi = new ImageMenuItem.with_label(title);
-		mi.set_image(new Gtk.Image.from_file (ConfPath+icon));
+		mi.set_image(new Gtk.Image.from_file (IconPath+icon));
 		NoteMenu.append(mi);
 		NoteMenu.append(new SeparatorMenuItem());
 		mi = new ImageMenuItem.with_label(content);
@@ -114,10 +115,10 @@ class EditNote : Window {
 		lst.clear();
 		Gdk.Pixbuf pixbuf;
 		string iconname;
-		var d = Dir.open(ConfPath);
+		var d = Dir.open(IconPath);
 		while ((iconname = d.read_name()) != null) {
 			if(!iconname.has_suffix(".png")) continue;
-			pixbuf=new Gdk.Pixbuf.from_file(ConfPath+iconname);
+			pixbuf=new Gdk.Pixbuf.from_file(IconPath+iconname);
 			lst.append(out iter);
 			lst.set(iter,0,iconname,1,pixbuf);
 		}
@@ -188,12 +189,13 @@ static int main (string[] args) {
 	ConfPath=Environment.get_variable("HOME")+"/.config/"+appname+"/";
 	ConfFileName=ConfPath+"config";
 	stdout.printf ("程序 %s 使用配置文件 %s 。\n",appname,ConfFileName);
+	IconPath="/usr/share/traynote/icons/";
 
 	var file = File.new_for_path(ConfFileName);
 	if (!file.query_exists()) file.create(FileCreateFlags.NONE);
 	else show_all_from_conf();
 	create_AppMenu();
-	AppIcon = new StatusIcon.from_file(ConfPath+appname+".png");
+	AppIcon = new StatusIcon.from_file(IconPath+appname+".png");
 	AppIcon.set_tooltip_text("TrayNote");
 	AppIcon.button_release_event.connect((e)=>{
 		AppMenu.popup(null, null, AppIcon.position_menu, e.button, 0);
