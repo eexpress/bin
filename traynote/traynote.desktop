@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Tray Note
+Name[zh_CN]=通知区域记事本
+Comment=Note in tray
+Comment[zh_CN]=小巧的通知区域记事本
+Exec=traynote
+Icon=traynote
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Universe;
