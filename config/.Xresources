@@ -8,6 +8,8 @@ Xft.antialias:	1
 
 ! ---| X11 settings  |--- {{{
 Xcursor.theme: Qetzal
+!Xcursor.theme: redglass
+!Xcursor.size: 36
 Xcursor.size: 64
 !}}}
 
