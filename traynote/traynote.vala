@@ -96,19 +96,19 @@ class EditNote : Window {
 	private IconView view;
 	private TreeIter iter;
 
-	public EditNote(string sicon, string stitle, string scontent){
-		string oldgroup=stitle;
+	public EditNote(string orgicon, string orgtitle, string orgcontent){
+		string oldgroup=orgtitle;
 		if(oldgroup=="")title="新建笔记";else title="编辑笔记";
 		window_position = WindowPosition.CENTER;
-		var lTitle=new Label("标题");
-		var lContent=new Label("内容");
-		var lIcon=new Label("图标");
+		var lTitle=new Label("标题  ");
+		var lContent=new Label("内容  ");
+		var lIcon=new Label("图标  ");
 		eTitle=new Entry(); eTitle.hexpand=true;
 		eTitle.placeholder_text="标题不能为空";
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
 		eContent.set_wrap_mode(Gtk.WrapMode.WORD);
-		if(oldgroup!=""){eTitle.text=stitle; eContent.buffer.text=scontent;}
+		if(oldgroup!=""){eTitle.text=orgtitle; eContent.buffer.text=orgcontent;}
 
 		var lst=new ListStore(2, typeof(string), typeof (Gdk.Pixbuf));
 		lst.clear();
@@ -150,7 +150,10 @@ class EditNote : Window {
 		vbox.border_width=20;
 		vbox.add(hbox1); vbox.add(hbox2); vbox.add(hbox3); vbox.add(hbox4);
 		add(vbox);
-		bcancel.clicked.connect(()=>{this.destroy();});
+		bcancel.clicked.connect(()=>{
+				ShowNote t=new ShowNote(orgicon,orgtitle,orgcontent);
+				t.set_visible(false);
+				this.destroy();});
 		bok.clicked.connect(()=>{
 				if(eTitle.text==""){
 				eTitle.is_focus=true;
@@ -163,7 +166,7 @@ class EditNote : Window {
 				lst.get_iter(out iter,s.data);
 				lst.get_value(iter, 0, out iname);
 				iconname=(string)iname;
-				} else iconname=appname+".png";
+				} else iconname=orgicon;
 
 				ConfFile.set_string(eTitle.text,"c",eContent.buffer.text);
 				ConfFile.set_string(eTitle.text,"i",iconname);

@@ -1,7 +1,0 @@
-#!/bin/bash
-
-#transmission-remote -l|sed 's/\ \{2,\}/_/g'|sed 's/\[[A-Za-z ]*\]//g'|awk -F '_' '/^_/ {print $3"  ▼"$7"K\t"$10}'
-
-transmission-remote -l|sed 's/\ \{2,\}/_/g'|sed 's/\[[A-Za-z ]*\]//g'|awk -F '_' '/^_/ {printf "%3d%% %5sK▼  %s\n", $3, $7, $10}'
-
-#▲
