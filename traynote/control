@@ -1,8 +1,8 @@
 Package: traynote
-Version: 0.3
+Version: 0.4
 Description: desktop note in tray.  
 Section: graphic
 Priority: universe
 Maintainer: eexpress@163.com
-Installed-Size: 229k
+Installed-Size: 229
 Architecture: all

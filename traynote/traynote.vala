@@ -100,7 +100,6 @@ class EditNote : Window {
 		string oldgroup=stitle;
 		if(oldgroup=="")title="新建笔记";else title="编辑笔记";
 		window_position = WindowPosition.CENTER;
-/*        set_default_size (300, 300);*/
 		var lTitle=new Label("标题");
 		var lContent=new Label("内容");
 		var lIcon=new Label("图标");
@@ -123,9 +122,15 @@ class EditNote : Window {
 			lst.set(iter,0,iconname,1,pixbuf);
 		}
 		view=new IconView.with_model(lst);
+		view.reorderable=true;
+
 		view.set_selection_mode(Gtk.SelectionMode.SINGLE);
-		view.set_columns(5);
 		view.set_pixbuf_column(1);
+		var scroll=new ScrolledWindow(null, null);
+		scroll.min_content_height=200;
+		scroll.min_content_width=300;
+		scroll.set_policy (PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
+		scroll.add(view);
 
 		var bok=new Button.from_stock(Stock.OK);
 		var bcancel=new Button.from_stock(Stock.CANCEL);
@@ -136,7 +141,7 @@ class EditNote : Window {
 		hbox1.add(lTitle); hbox1.add(eTitle);
 		hbox2.add(lContent); hbox2.add(eContent);
 		lContent.valign=Gtk.Align.START;
-		hbox3.add(lIcon); hbox3.add(view);
+		hbox3.add(lIcon); hbox3.add(scroll);
 		lIcon.valign=Gtk.Align.START;
 		hbox4.add(bok); hbox4.add(bcancel);
 		hbox4.halign=Gtk.Align.CENTER;
