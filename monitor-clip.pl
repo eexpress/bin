@@ -17,7 +17,7 @@ $_=`xsel -o`;
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`xdg-open \"$_\"`;exit;}}
 #ip格式的数字，域名，查询
 if(/\d+\.\d+\.\d+\.\d+/){ip_138($&);exit;}
-if(/(\w+\.){2,3}\w+/){ip_138($&);exit;}
+if(/(\w+\.){1,3}\w+/ && !/:/){ip_138($&);exit;}
 #单词，本地翻译
 if(/^\w+$/){`$ENV{HOME}/bin/sdcv.pl -n`; exit;}
 #ppa源，添加
@@ -27,7 +27,7 @@ if(! /:\/\//){`$ENV{HOME}/bin/web-translate.pl \"$&\"`;exit;}
 #----------------------------------
 #url处理
 @url=m"(?:http|mms|rtsp)://[^\s]*"g;
-if($#url<0){print "none url\n";return 1;}
+if($#url<0){print "none url\n";exit;}
 $TERM='xterm -e';
 foreach(@url){
 my $t=""; s/\W+$//;
