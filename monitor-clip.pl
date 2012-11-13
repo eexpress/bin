@@ -1,17 +1,25 @@
 #!/usr/bin/perl
 
-use Encode qw(decode);
+use Encode qw(encode decode);
+
+sub ip_138{
+$i=shift;
+$url="http://www.ip138.com/ips138.asp?ip=".$i;
+use LWP::Simple; $_=get($url); $_=encode("utf8",$_);
+/本站主数据.*\<\/ul\>/m;
+$_=$&; s'</li>'\\n'g; s'<.*?>''g;
+print; `$ENV{HOME}/bin/msg "IP地址查询 $i" "$_"`;
+}
 
 $_=`xsel -o`;
 #----------------------------------
 #/和~开头的存在的文件，打开
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`xdg-open \"$_\"`;exit;}}
-#ip格式的数字，查询
-if(/\d+\.\d+\.\d+\.\d+/){`$ENV{HOME}/bin/ip-138.bash $&`;exit;}
-#域名查询
-if(/(\w+\.){2,3}\w+/){`$ENV{HOME}/bin/ip-138.bash $_`;exit;}
+#ip格式的数字，域名，查询
+if(/\d+\.\d+\.\d+\.\d+/){ip_138($&);exit;}
+if(/(\w+\.){2,3}\w+/){ip_138($&);exit;}
 #单词，本地翻译
-if(/^\w+$/){`$ENV{HOME}/bin/bot/sdcv.pl -n`; exit;}
+if(/^\w+$/){`$ENV{HOME}/bin/sdcv.pl -n`; exit;}
 #ppa源，添加
 if(/ppa:.*\/ppa/){`zenity --question --title="是否添加此PPA源" --text=$&`; `gksudo add-apt-repository $&` if ! $?; exit;}
 #其他没://的，网页翻译
