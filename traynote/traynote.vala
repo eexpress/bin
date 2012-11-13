@@ -11,6 +11,7 @@ string appname;
 void savecfg(string s){
 	var now = new DateTime.now_local ();
 	var file = File.new_for_path (ConfFileName);
+	try{
 	file.set_display_name("config-"+now.to_string(),null);
 	file = File.new_for_path (ConfFileName);
 	{
@@ -18,6 +19,7 @@ void savecfg(string s){
 		var data_stream = new DataOutputStream (file_stream);
 		data_stream.put_string (s);
 	} // Streams closed at this point
+	} catch (Error e){stderr.printf ("%s\n", e.message);}
 }
 
 class ShowNote:StatusIcon{
@@ -56,7 +58,9 @@ class ShowNote:StatusIcon{
 		NoteMenu.append(mi);
 		mi = new ImageMenuItem.from_stock(Stock.DELETE, null);
 		mi.activate.connect(()=>{
+			try{
 				ConfFile.remove_group(title);
+			} catch (Error e){stderr.printf ("%s\n", e.message);}
 				savecfg(ConfFile.to_data(null,null));
 				stdout.printf ("记录 %s 被删除。\n",title);
 				sicon.set_visible(false);
@@ -113,14 +117,17 @@ class EditNote : Window {
 		var lst=new ListStore(2, typeof(string), typeof (Gdk.Pixbuf));
 		lst.clear();
 		Gdk.Pixbuf pixbuf;
-		string iconname;
-		var d = Dir.open(IconPath);
+		string iconname="";
+		Dir d;
+	try{
+		d = Dir.open(IconPath);
 		while ((iconname = d.read_name()) != null) {
 			if(!iconname.has_suffix(".png")) continue;
 			pixbuf=new Gdk.Pixbuf.from_file(IconPath+iconname);
 			lst.append(out iter);
 			lst.set(iter,0,iconname,1,pixbuf);
 		}
+	} catch (Error e){stderr.printf ("%s\n", e.message);}
 		view=new IconView.with_model(lst);
 		view.reorderable=true;
 
@@ -159,7 +166,9 @@ class EditNote : Window {
 				eTitle.is_focus=true;
 				return;
 				}
+			try{
 				if(oldgroup!=""){ConfFile.remove_group(oldgroup);}
+			} catch (Error e){stderr.printf ("%s\n", e.message);}
 				Value iname="";
 				var s=view.get_selected_items();
 				if(s!=null){
@@ -181,11 +190,18 @@ class EditNote : Window {
 
 void show_all_from_conf(){
 	ConfFile=new KeyFile();
-	ConfFile.load_from_file(ConfFileName,KeyFileFlags.NONE);
+	try{
+		ConfFile.load_from_file(ConfFileName,KeyFileFlags.NONE);
+	} catch (Error e){stderr.printf ("%s\n", e.message);}
 	foreach (string k in ConfFile.get_groups()){
-		string i=ConfFile.get_string(k,"i");
-		string t=k;
-		string c=ConfFile.get_string(k,"c");
+		string i="";
+		string t="";
+		string c="";
+		try{
+			i=ConfFile.get_string(k,"i");
+			t=k;
+			c=ConfFile.get_string(k,"c");
+		} catch (Error e){stderr.printf ("%s\n", e.message);}
 		ShowNote sn = new ShowNote(i,t,c);
 		sn.set_visible(false);
 	}
@@ -200,7 +216,12 @@ static int main (string[] args) {
 	IconPath="/usr/share/traynote/icons/";
 
 	var file = File.new_for_path(ConfFileName);
-	if (!file.query_exists()) file.create(FileCreateFlags.NONE);
+	if (!file.query_exists()){
+		try{
+			DirUtils.create_with_parents(ConfPath, 0755);
+			file.create(FileCreateFlags.NONE);
+		} catch (Error e){stderr.printf ("%s\n", e.message);}
+	}
 	else show_all_from_conf();
 	create_AppMenu();
 	AppIcon = new StatusIcon.from_file(IconPath+appname+".png");
