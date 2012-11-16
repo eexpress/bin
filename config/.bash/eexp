@@ -28,3 +28,8 @@ HISTTIMEFORMAT='%F %T '
 HISTCONTROL=erasedups
 HISTIGNORE="pwd:ls:cd:"
 
+bind 'set completion-ignore-case on'
+bind 'set show-all-if-ambiguous on'
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
