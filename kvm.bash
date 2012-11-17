@@ -9,4 +9,4 @@ file $2|grep CD-ROM
 b="-boot d -cdrom $2"
 fi
 
-kvm -smp 4 -drive file=$1,if=virtio -net nic,model=virtio -net user $b
+kvm -smp 4 -drive file=$1,if=virtio -net nic,model=virtio -net user -soundhw ac97 $b
