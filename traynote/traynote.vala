@@ -134,10 +134,16 @@ class EditNote : Window {
 		view.set_selection_mode(Gtk.SelectionMode.SINGLE);
 		view.set_pixbuf_column(1);
 		var scroll=new ScrolledWindow(null, null);
+		scroll.hexpand=true;
+		scroll.vexpand=true;
 		scroll.min_content_height=200;
 		scroll.min_content_width=300;
 		scroll.set_policy (PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
 		scroll.add(view);
+		this.check_resize.connect(()=>{
+				view.set_columns(0);
+				view.set_columns(-1);
+				});
 
 		var bok=new Button.from_stock(Stock.OK);
 		var bcancel=new Button.from_stock(Stock.CANCEL);
