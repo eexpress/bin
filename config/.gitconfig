@@ -19,4 +19,4 @@
 	name = eexpress
 	email = eexpress@163.com
 [http]
-	proxy = localhost:8087
+	proxy = %HTTP_PROXY%
