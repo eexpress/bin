@@ -19,4 +19,8 @@
 	name = eexpress
 	email = eexpress@163.com
 [http]
-	proxy = %HTTP_PROXY%
+	proxy = localhost:8087
+[core]
+	gitproxy = localhost:8087
+[https]
+	proxy = localhost:8087
