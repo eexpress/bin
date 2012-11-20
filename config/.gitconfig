@@ -21,7 +21,3 @@
 [http]
 	proxy = localhost:8087
 	sslVerify = false
-[core]
-	gitproxy = localhost:8087
-[https]
-	proxy = localhost:8087
