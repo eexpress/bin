@@ -181,7 +181,10 @@ class EditNote : Window {
 				lst.get_iter(out iter,s.data);
 				lst.get_value(iter, 0, out iname);
 				iconname=(string)iname;
-				} else iconname=orgicon;
+				} else {
+					if(oldgroup!="")iconname=orgicon;
+					else iconname=appname+".png";
+				}
 
 				ConfFile.set_string(eTitle.text,"c",eContent.buffer.text);
 				ConfFile.set_string(eTitle.text,"i",iconname);
@@ -208,6 +211,7 @@ void show_all_from_conf(){
 			t=k;
 			c=ConfFile.get_string(k,"c");
 		} catch (Error e){stderr.printf ("%s\n", e.message);}
+		if(i=="")i=appname+".png";
 		ShowNote sn = new ShowNote(i,t,c);
 		sn.set_visible(false);
 	}
