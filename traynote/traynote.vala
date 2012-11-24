@@ -104,12 +104,17 @@ class EditNote : Window {
 
 	public EditNote(string orgicon, string orgtitle, string orgcontent){
 		string oldgroup=orgtitle;
+/*        if(oldgroup=="")title=_("New Note");else title=_("Edit Note");*/
 		if(oldgroup=="")title=_("新建笔记");else title=_("编辑笔记");
 		window_position = WindowPosition.CENTER;
+/*        var lTitle=new Label(_("Title  "));*/
+/*        var lContent=new Label(_("Cotent  "));*/
+/*        var lIcon=new Label(_("Icon  "));*/
 		var lTitle=new Label(_("标题  "));
 		var lContent=new Label(_("内容  "));
 		var lIcon=new Label(_("图标  "));
 		eTitle=new Entry(); eTitle.hexpand=true;
+/*        eTitle.placeholder_text=_("Title can not be blank");*/
 		eTitle.placeholder_text=_("标题不能为空");
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
@@ -221,9 +226,24 @@ void show_all_from_conf(){
 
 static int main (string[] args) {
 	Gtk.init(ref args);
+/*    Intl.setlocale(LocaleCategory.MESSAGES, "LC_ALL");*/
+	Intl.setlocale(LocaleCategory.ALL, "");
+/*    Intl.setlocale(LocaleCategory.MESSAGES, "");*/
+	Intl.textdomain(GETTEXT_PACKAGE);
+/*    只受 LANGUAGE 影响*/
+/*● valac -X -DGETTEXT_PACKAGE="traynote" traynote.vala */
+/*● xgettext -o traynote.po -L C# -k_ --from-code=utf-8 traynote.vala */
+/*● v traynote.po*/
+/*● msgfmt -o traynote.mo traynote.po */
+
+/*    Intl.textdomain(GETTEXT_PACKAGE);*/
+/*    Intl.bind_textdomain_codeset(GETTEXT_PACKAGE, "utf-8");*/
+/*    Intl.bindtextdomain(GETTEXT_PACKAGE, "/usr/share/locale");*/
+
 	appname=GLib.Path.get_basename(args[0]);
 	ConfPath=Environment.get_variable("HOME")+"/.config/"+appname+"/";
 	ConfFileName=ConfPath+"config";
+/*    stdout.printf (_("Program %s use this config %s.\n"),appname,ConfFileName);*/
 	stdout.printf (_("程序 %s 使用配置文件 %s 。\n"),appname,ConfFileName);
 	IconPath="/usr/share/traynote/icons/";
 

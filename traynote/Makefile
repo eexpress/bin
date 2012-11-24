@@ -15,6 +15,8 @@ deb:	clean
 	cp -u -r icons/ deb/usr/share/traynote
 	-mkdir -p deb/usr/share/pixmaps
 	cp -u traynote.png deb/usr/share/pixmaps
+	-mkdir -p deb/usr/share/locale/en/LC_MESSAGES
+	cp -u traynote.mo deb/usr/share/locale/en/LC_MESSAGES
 	dpkg-deb -b deb .
 
 

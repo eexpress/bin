@@ -102,7 +102,7 @@ $max=@_;
 chdir "$appdir/calendar";
 `date`=~/.{4}/; $year=$&;
 @alllunar=`/usr/bin/calendar -A $max -f *$year*`;
-if(/12月/ ~~ @alllunar && /1月/ ~~ @alllunar){
+if(/12月/ ~~ @alllunar && /\ 1月/ ~~ @alllunar){
 @tmp=grep /^12/,@alllunar;
 $year++; $max=$max-scalar(@tmp);
 @alllunar=`/usr/bin/calendar -A $max -f *$year* -t 0101`;

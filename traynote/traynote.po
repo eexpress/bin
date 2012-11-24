@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-22 21:24+0800\n"
+"POT-Creation-Date: 2012-11-23 21:33+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,34 +17,34 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: traynote.vala:66
+#: traynote.vala:67
 msgid "记录 %s 被删除。\n"
 msgstr "record %s deleted.\n"
 
-#: traynote.vala:106
+#: traynote.vala:108
 msgid "新建笔记"
 msgstr "New Note"
 
-#: traynote.vala:106
+#: traynote.vala:108
 msgid "编辑笔记"
 msgstr "Edit Note"
 
-#: traynote.vala:108
+#: traynote.vala:113
 msgid "标题  "
-msgstr "Title"
+msgstr "Title  "
 
-#: traynote.vala:109
+#: traynote.vala:114
 msgid "内容  "
-msgstr "Cotent"
+msgstr "Cotent  "
 
-#: traynote.vala:110
+#: traynote.vala:115
 msgid "图标  "
-msgstr "Icon"
+msgstr "Icon  "
 
-#: traynote.vala:112
+#: traynote.vala:118
 msgid "标题不能为空"
 msgstr "Title can not be blank"
 
-#: traynote.vala:226
+#: traynote.vala:245
 msgid "程序 %s 使用配置文件 %s 。\n"
 msgstr "Program %s use this config %s.\n"
