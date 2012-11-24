@@ -237,8 +237,15 @@ static int main (string[] args) {
 /*● msgfmt -o traynote.mo traynote.po */
 
 /*    Intl.textdomain(GETTEXT_PACKAGE);*/
-/*    Intl.bind_textdomain_codeset(GETTEXT_PACKAGE, "utf-8");*/
+/*    Intl.bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");*/
 /*    Intl.bindtextdomain(GETTEXT_PACKAGE, "/usr/share/locale");*/
+
+	string info;
+	info=Environment.get_variable("LC_ALL");
+	info=info+"\n"+Environment.get_variable("LANGUAGE");
+	info=info+"\n"+Environment.get_variable("LANG");
+Gtk.MessageDialog msg = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, "%s", info);
+	msg.run();
 
 	appname=GLib.Path.get_basename(args[0]);
 	ConfPath=Environment.get_variable("HOME")+"/.config/"+appname+"/";
