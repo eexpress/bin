@@ -63,8 +63,8 @@ class ShowNote:StatusIcon{
 				ConfFile.remove_group(title);
 			} catch (Error e){stderr.printf ("%s\n", e.message);}
 				savecfg(ConfFile.to_data(null,null));
-/*                stdout.printf (_("record %s deleted.\n"),title);*/
-				stdout.printf (_("记录 %s 被删除。\n"),title);
+				stdout.printf (_("record %s deleted.\n"),title);
+/*                stdout.printf (_("记录 %s 被删除。\n"),title);*/
 				sicon.set_visible(false);
 				});
 		NoteMenu.append(mi);
@@ -104,18 +104,18 @@ class EditNote : Window {
 
 	public EditNote(string orgicon, string orgtitle, string orgcontent){
 		string oldgroup=orgtitle;
-/*        if(oldgroup=="")title=_("New Note");else title=_("Edit Note");*/
-		if(oldgroup=="")title=_("新建笔记");else title=_("编辑笔记");
+		if(oldgroup=="")title=_("New Note");else title=_("Edit Note");
+/*        if(oldgroup=="")title=_("新建笔记");else title=_("编辑笔记");*/
 		window_position = WindowPosition.CENTER;
-/*        var lTitle=new Label(_("Title  "));*/
-/*        var lContent=new Label(_("Cotent  "));*/
-/*        var lIcon=new Label(_("Icon  "));*/
-		var lTitle=new Label(_("标题  "));
-		var lContent=new Label(_("内容  "));
-		var lIcon=new Label(_("图标  "));
+		var lTitle=new Label(_("Title  "));
+		var lContent=new Label(_("Cotent  "));
+		var lIcon=new Label(_("Icon  "));
+/*        var lTitle=new Label(_("标题  "));*/
+/*        var lContent=new Label(_("内容  "));*/
+/*        var lIcon=new Label(_("图标  "));*/
 		eTitle=new Entry(); eTitle.hexpand=true;
-/*        eTitle.placeholder_text=_("Title can not be blank");*/
-		eTitle.placeholder_text=_("标题不能为空");
+		eTitle.placeholder_text=_("Title can not be blank");
+/*        eTitle.placeholder_text=_("标题不能为空");*/
 		eContent=new TextView(); eContent.hexpand=true;
 		eContent.height_request=50;
 		eContent.set_wrap_mode(Gtk.WrapMode.WORD);
@@ -228,6 +228,7 @@ static int main (string[] args) {
 	Gtk.init(ref args);
 /*    Intl.setlocale(LocaleCategory.MESSAGES, "LC_ALL");*/
 	Intl.setlocale(LocaleCategory.ALL, "");
+/*    Intl.setlocale(LocaleCategory.ALL, "zh_CN.UTF-8");*/
 /*    Intl.setlocale(LocaleCategory.MESSAGES, "");*/
 	Intl.textdomain(GETTEXT_PACKAGE);
 /*    只受 LANGUAGE 影响*/
@@ -240,18 +241,18 @@ static int main (string[] args) {
 /*    Intl.bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");*/
 /*    Intl.bindtextdomain(GETTEXT_PACKAGE, "/usr/share/locale");*/
 
-	string info;
-	info=Environment.get_variable("LC_ALL");
-	info=info+"\n"+Environment.get_variable("LANGUAGE");
-	info=info+"\n"+Environment.get_variable("LANG");
-Gtk.MessageDialog msg = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, "%s", info);
-	msg.run();
+/*    string info;*/
+/*    info=Environment.get_variable("HOME")+"\nLANGUAGE:"+Environment.get_variable("LANGUAGE")+"\nLANG:"+Environment.get_variable("LANG")+"\nLC_ALL:"+Environment.get_variable("LC_ALL");*/
+
+/*    Gtk.MessageDialog msg = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, "%s", info);*/
+/*    msg.run();*/
+/*    stdout.printf ("env: %s\n",info);*/
 
 	appname=GLib.Path.get_basename(args[0]);
 	ConfPath=Environment.get_variable("HOME")+"/.config/"+appname+"/";
 	ConfFileName=ConfPath+"config";
-/*    stdout.printf (_("Program %s use this config %s.\n"),appname,ConfFileName);*/
-	stdout.printf (_("程序 %s 使用配置文件 %s 。\n"),appname,ConfFileName);
+	stdout.printf (_("Program %s use this config %s.\n"),appname,ConfFileName);
+/*    stdout.printf (_("程序 %s 使用配置文件 %s 。\n"),appname,ConfFileName);*/
 	IconPath="/usr/share/traynote/icons/";
 
 	var file = File.new_for_path(ConfFileName);
