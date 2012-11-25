@@ -97,6 +97,7 @@ elsif ($url=~/m\.weather\.com\.cn/){
 else {die "no recognized url format.\n";}
 } else {die "can not fetch web.\n";}
 #        for (@_){print "$_\n";}; exit;
+#11月 25 	十二	小雨	10C-6C	北风微风级
 #---------------------------------
 $max=@_;
 chdir "$appdir/calendar";
