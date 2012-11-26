@@ -29,7 +29,7 @@ public class DrawWeather : Gtk.Window {
 /*        decorated = false;*/
 /*        app_paintable = true;*/
 		set_visual(this.get_screen().get_rgba_visual());
-/*        set_opacity(1);*/
+		set_opacity(1);
 		stick();
 /*        set_keep_below(true);*/
 		set_default_size(7*hp+h0*2,8*vp+v0*2);
@@ -47,7 +47,17 @@ public class DrawWeather : Gtk.Window {
     }
 
     private bool on_draw (Widget da, Context ctx) {
+/*        ctx.set_operator (Cairo.Operator.OVER);*/
+		ctx.set_operator (Cairo.Operator.CLEAR);
+		ctx.set_source_rgba(0.5,0,0,0.2);
+		ctx.rectangle(0,0,0.9,0.9);
+		ctx.fill();
+/*        cr.set_operator(cairo.OPERATOR_CLEAR)*/
+/*    cr.set_source_rgba(0.5,1.0,0.0,0.5)*/
+/*    cr.rectangle(0, 0, 0.9, 0.8)*/
+/*    cr.fill()*/
 /*        ctx.set_operator (Cairo.Operator.SOURCE);*/
+		ctx.set_operator (Cairo.Operator.OVER);
 		try {
 		var dis = new DataInputStream (file.read ());
 		string line;
@@ -61,26 +71,31 @@ public class DrawWeather : Gtk.Window {
 			foreach (string str in item){
 				if(str.contains("风"))ctx.set_font_size(12);else ctx.set_font_size(15);
 				ctx.set_source_rgba(0,0,0,1);
-				if(v==4){
+				if(v==5){
 					string[] two=str.split("-",2);
 					int p=0;
 					ImageSurface img;
+					ctx.save();
+					ctx.translate(day*hp+h0,1*vp+v0);
+					ctx.scale(0.6,0.6);
 					foreach(string s in two){
 						for(int i = 0; i < w.length ; i++){
-							if(str==w[i]){
+							if(s==w[i]){
 					img=new Cairo.ImageSurface.from_png("weather-icon/"+"%02d.png".printf(i));
-								ctx.set_source_surface(img,day*hp+h0+p*10,2*vp+v0+p*10);
+								ctx.set_source_surface(img,p*30,p*30);
 								ctx.paint();
 								break;
 							}
 						}
 						p++;
 					}
+					ctx.restore();
 				}
 /*                ctx.set_operator (Cairo.Operator.SATURATE);*/
 				ctx.move_to(day*hp+h0,v*vp+v0);
 				ctx.show_text(str);
-				if(v==0)v=v+3;
+/*                stdout.printf("%s - ",str);*/
+				if(v==0)v=v+4;
 				v++;
 			}
 			day++;
