@@ -29,10 +29,10 @@ public class DrawWeather : Gtk.Window {
 /*        decorated = false;*/
 /*        app_paintable = true;*/
 		set_visual(this.get_screen().get_rgba_visual());
-		set_opacity(1);
+/*        set_opacity(0.9);*/
 		stick();
 /*        set_keep_below(true);*/
-		set_default_size(7*hp+h0*2,8*vp+v0*2);
+		set_default_size(7*hp+h0*2,7*vp+v0*2);
         destroy.connect (Gtk.main_quit);
         var drawing_area = new DrawingArea ();
         drawing_area.draw.connect (on_draw);
@@ -47,16 +47,9 @@ public class DrawWeather : Gtk.Window {
     }
 
     private bool on_draw (Widget da, Context ctx) {
-/*        ctx.set_operator (Cairo.Operator.OVER);*/
 		ctx.set_operator (Cairo.Operator.CLEAR);
-		ctx.set_source_rgba(0.5,0,0,0.2);
-		ctx.rectangle(0,0,0.9,0.9);
+		ctx.rectangle(0,0,7*hp+h0*2,7*vp+v0*2);
 		ctx.fill();
-/*        cr.set_operator(cairo.OPERATOR_CLEAR)*/
-/*    cr.set_source_rgba(0.5,1.0,0.0,0.5)*/
-/*    cr.rectangle(0, 0, 0.9, 0.8)*/
-/*    cr.fill()*/
-/*        ctx.set_operator (Cairo.Operator.SOURCE);*/
 		ctx.set_operator (Cairo.Operator.OVER);
 		try {
 		var dis = new DataInputStream (file.read ());
