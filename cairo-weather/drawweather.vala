@@ -21,11 +21,12 @@ const string w[] = {
 	"", "", "","","",
 	"", "", "","",""
 };
-const string weekchar[]={"壹","貳","叁","肆","伍","陸","日"};
+const string weekchar[]={"","壹","貳","叁","肆","伍","陸","日"};
 
 public class DrawWeather : Gtk.Window {
 
     private const int SIZE = 30;
+	public	Gdk.RGBA c;
 
     public DrawWeather() {
         title = "DrawWeather";
@@ -35,7 +36,7 @@ public class DrawWeather : Gtk.Window {
 		set_visual(this.get_screen().get_rgba_visual());
 /*        set_opacity(0.9);*/
 		stick();
-		set_keep_below(true);
+/*        set_keep_below(true);*/
 		set_default_size(ww,wh);
         destroy.connect (Gtk.main_quit);
         var drawing_area = new DrawingArea ();
@@ -51,7 +52,6 @@ public class DrawWeather : Gtk.Window {
     }
 
     private bool on_draw (Widget da, Context ctx) {
-				Gdk.RGBA c={};
 		var now = new DateTime.now_local ();
 		var week=now.get_day_of_week();
 /*        stdout.printf("week: %d\n",week);*/
@@ -60,24 +60,31 @@ public class DrawWeather : Gtk.Window {
 		ctx.fill();
 		ctx.set_operator (Cairo.Operator.OVER);
 		try {
-		var dis = new DataInputStream (file.read ());
+		var data = new DataInputStream (file.read ());
 		string line;
 		int day=0;
-		while ((line = dis.read_line (null)) != null) {
+		while ((line = data.read_line (null)) != null) {
 			int v=0;
+			string tcolor;
 			if(!line.contains("风"))continue;
 			string[] item = line.split ("\t");
 			ctx.select_font_face("Vera Sans YuanTi",FontSlant.NORMAL,FontWeight.BOLD);
+			if(day==0){
+				tcolor="#E55E23";
+				frame(ctx,h0/2,0,hp,wh,0);
+				stamp(ctx, h0*3, v0*4.8, weekchar[week], 65,0.4);
+				stamp(ctx, ww/2-hp,wh-vp,"2011 湖南长沙",24,0.2);
+			} else if(week==6 || week==7 ){
+				tcolor="#E55E23";
+				frame(ctx,day*hp+h0/2,0,hp,wh,1);
+			} else tcolor="#C8C8C8";
 			foreach (string str in item){
-				if(str.contains("风"))ctx.set_font_size(12);else ctx.set_font_size(15);
-				ctx.set_source_rgba(0,0,0,1);
+				if(str.contains("风")) ctx.set_font_size(13);else ctx.set_font_size(16);
 				if(v==6){
 					string[] two=str.split("-",2);
 					int p=0;
 					ImageSurface img;
-					ctx.save();
-					ctx.translate(day*hp+h0,1*vp+v0);
-					ctx.scale(0.6,0.6);
+					ctx.save(); ctx.translate(day*hp+h0,1*vp+v0); ctx.scale(0.6,0.6);
 					foreach(string s in two){
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
@@ -91,65 +98,13 @@ public class DrawWeather : Gtk.Window {
 					}
 					ctx.restore();
 				}
-				string tcolor;
-				if(day==0){
-					tcolor="#E55E23";
-					if(v==0){
-/*                        frame*/
-						ctx.save();
-						const int r=20;
-						ctx.move_to(h0/2+r,0);
-						ctx.rel_line_to(hp-2*r,0);
-						ctx.rel_curve_to(0,0,r,0,r,r);
-						ctx.rel_line_to(0,wh-2*r);
-						ctx.rel_curve_to(0,0,0,r,-r,r);
-						ctx.rel_line_to(-(hp-2*r),0);
-						ctx.rel_curve_to(0,0,-r,0,-r,-r);
-						ctx.rel_line_to(0,-(wh-2*r));
-						ctx.rel_curve_to(0,0,0,-r,r,-r);
-						c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,0.4);
-						ctx.fill();
-
-						ctx.set_line_cap(Cairo.LineCap.BUTT);
-						ctx.set_line_join(Cairo.LineJoin.ROUND);
-						ctx.set_operator(Cairo.Operator.CLEAR);
-						int l=10;
-						ctx.set_line_width(l/2);
-						for(int i=0; i<l; i++){
-							ctx.move_to(h0/2,vp*3+i*l);
-							ctx.rel_curve_to(hp/3,l*2,hp*2/3,-l*2,hp,0);
-							ctx.stroke();
-						}
-						ctx.restore();
-/*                        weekchar*/
-						ctx.save();
-						ctx.set_operator (Cairo.Operator.SATURATE);
-						ctx.set_font_size(65);
-						c.parse("#983E16");
-						for(int i=0; i<8; i++){
-							double a=0.3;
-							ctx.move_to(day*hp+h0*3-i,v*vp+v0*4.8+i);
-							ctx.set_source_rgba(c.red-i/3,c.green-i/3,c.blue-i/3,a);
-							ctx.rotate(-0.4);
-							ctx.text_path(weekchar[day]);
-							ctx.fill_preserve();
-							ctx.stroke();
-							ctx.rotate(0.4);
-							a=a/1.2;
-						}
-						ctx.restore();
-					}
-				}else{
-					if(week==6 || week==7 )tcolor="#E55E23"; else tcolor="#C8C8C8";
-				}
-				c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,1);
+				c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,0.8);
 				ctx.move_to(day*hp+h0+1,v*vp+v0+1);
 				ctx.show_text(str);
 				c.parse(tcolor); ctx.set_source_rgba(c.red,c.green,c.blue,0.8);
 				ctx.move_to(day*hp+h0,v*vp+v0);
 				ctx.show_text(str);
-				if(v==0)v=v+5;
-				v++;
+				if(v==0) v=v+5; v++;
 			}
 			day++; week++;
 		}
@@ -157,11 +112,67 @@ public class DrawWeather : Gtk.Window {
 		return true;
 	}
 
-    private delegate void DrawMethod ();
+	private void stamp(Context ctx, double x, double y, string s, int size, double rotate){
+		ctx.save();
+		ctx.set_font_size(size);
+		c.parse("#983E16");
+		ctx.set_source_rgba(c.red/1.5,c.green/1.5,c.blue/1.5,0.6);
+		ctx.set_operator (Cairo.Operator.SATURATE);
+		ctx.move_to(x,y);
+			ctx.rotate(-rotate);
+			ctx.text_path(s);
+			ctx.set_line_width(3);
+			ctx.fill_preserve();
+			ctx.stroke();
+		for(int i=1; i<size/10+2; i++){
+			ctx.set_source_rgba(c.red-i/3,c.green-i/3,c.blue-i/3,0.8);
+			ctx.rotate(rotate);
+			ctx.move_to(x-i,y+i);
+			ctx.rotate(-rotate);
+			ctx.text_path(s);
+			ctx.fill_preserve();
+			ctx.stroke();
+		}
+		ctx.restore();
+	}
+
+	private void frame(Context ctx, int x, int y, int w, int h, int style){
+			ctx.save();
+			ctx.move_to(x,y);
+			int r;
+			if(w<h) r=w/8; else r=h/8;
+			ctx.rel_move_to(r,0);
+			ctx.rel_line_to(w-2*r,0);
+			ctx.rel_curve_to(0,0,r,0,r,r);
+			ctx.rel_line_to(0,h-2*r);
+			ctx.rel_curve_to(0,0,0,r,-r,r);
+			ctx.rel_line_to(-(w-2*r),0);
+			ctx.rel_curve_to(0,0,-r,0,-r,-r);
+			ctx.rel_line_to(0,-(h-2*r));
+			ctx.rel_curve_to(0,0,0,-r,r,-r);
+			c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,0.4);
+			ctx.fill();
+			ctx.restore();
+			ctx.save();
+
+			ctx.set_line_cap(Cairo.LineCap.BUTT);
+			ctx.set_line_join(Cairo.LineJoin.ROUND);
+			ctx.set_operator(Cairo.Operator.CLEAR);
+			int l=10;
+			ctx.set_line_width(l/2);
+			for(int i=0; i<l; i++){
+				ctx.move_to(x,wh/4+i*l);
+				if(style==0) ctx.rel_curve_to(hp/3,l*2,hp*2/3,-l*2,hp,0); else {
+				int[] t={1,-1,1,-1};foreach(int seg in t) ctx.rel_line_to(hp/4+1,seg*l);
+				}
+				ctx.stroke();
+			}
+			ctx.restore();
+	}
 
     static int main (string[] args) {
         Gtk.init (ref args);
-		InFile="t";
+		InFile="/tmp/cw.txt";
 		file = File.new_for_path (InFile);
 		
 		if (!file.query_exists ()) {
