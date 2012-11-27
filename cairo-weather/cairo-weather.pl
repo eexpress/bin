@@ -96,7 +96,6 @@ elsif ($url=~/m\.weather\.com\.cn/){
 	}
 else {die "no recognized url format.\n";}
 } else {die "can not fetch web.\n";}
-#        for (@_){print "$_\n";}; exit;
 #11月 25 	十二	小雨	10C-6C	北风微风级
 #---------------------------------
 $max=@_;
@@ -119,6 +118,7 @@ $x0=$size/6; $y0=$size/2;
 $surface = Cairo::ImageSurface->create ('argb32',$w0*$max,$size*4);
 $year="";$month=""; $cnt=0;
 #---------------------------------
+#for (@_){print "$_\n";}; exit;
 for (@_){
 	#next if ! /$today/ && ! $is;
 	@t=localtime(time+86400*$cnt);

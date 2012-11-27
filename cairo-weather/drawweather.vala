@@ -62,30 +62,41 @@ public class DrawWeather : Gtk.Window {
 		try {
 		var data = new DataInputStream (file.read ());
 		string line;
-		int day=0;
+		int daycnt=0;
+		int oldmonth=0;
 		while ((line = data.read_line (null)) != null) {
 			int v=0;
 			string tcolor;
 			if(!line.contains("风"))continue;
-			string[] item = line.split ("\t");
 			ctx.select_font_face("Vera Sans YuanTi",FontSlant.NORMAL,FontWeight.BOLD);
-			if(day==0){
+			if(daycnt==0){
 				tcolor="#E55E23";
 				frame(ctx,h0/2,0,hp,wh,0);
 				stamp(ctx, h0*3, v0*4.8, weekchar[week], 65,0.4);
 				stamp(ctx, ww/2-hp,wh-vp,"2011 湖南长沙",24,0.2);
 			} else if(week==6 || week==7 ){
 				tcolor="#E55E23";
-				frame(ctx,day*hp+h0/2,0,hp,wh,1);
+				frame(ctx,daycnt*hp+h0/2,0,hp,wh,1);
 			} else tcolor="#C8C8C8";
+			int month=now.get_month ();
+			int day=now.get_day_of_month ();
+			string date;
+			if(oldmonth!=month){date=month.to_string()+"月"+day.to_string()+"日"; oldmonth=month;}
+			else date=day.to_string()+"日";
+/*            stdout.printf("%d - %d -> %s\n",month,day,date);*/
+
+			line=date+"\t"+line;
+			string[] item = line.split ("\t");
 			foreach (string str in item){
 				if(str.contains("风")) ctx.set_font_size(13);else ctx.set_font_size(16);
 				if(v==6){
-					string[] two=str.split("-",2);
+					string[] two=str.split("转",2);
 					int p=0;
 					ImageSurface img;
-					ctx.save(); ctx.translate(day*hp+h0,1*vp+v0); ctx.scale(0.6,0.6);
+					ctx.save(); ctx.translate(daycnt*hp+h0,1*vp+v0); ctx.scale(0.6,0.6);
 					foreach(string s in two){
+						if(s.contains("-")) s=s.substring(s.index_of("-",-1));
+			stdout.printf("%s\n",s);
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
 					img=new Cairo.ImageSurface.from_png("weather-icon/"+"%02d.png".printf(i));
@@ -99,14 +110,14 @@ public class DrawWeather : Gtk.Window {
 					ctx.restore();
 				}
 				c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,0.8);
-				ctx.move_to(day*hp+h0+1,v*vp+v0+1);
+				ctx.move_to(daycnt*hp+h0+1,v*vp+v0+1);
 				ctx.show_text(str);
 				c.parse(tcolor); ctx.set_source_rgba(c.red,c.green,c.blue,0.8);
-				ctx.move_to(day*hp+h0,v*vp+v0);
+				ctx.move_to(daycnt*hp+h0,v*vp+v0);
 				ctx.show_text(str);
 				if(v==0) v=v+5; v++;
 			}
-			day++; week++;
+			daycnt++; week++; now=now.add_days(1);
 		}
 		} catch (Error e) {error ("%s", e.message);}
 		return true;
