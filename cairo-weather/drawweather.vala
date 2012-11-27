@@ -1,8 +1,9 @@
 using Gtk;
 using Cairo;
 	
+string line;
+File logfile;
 string InFile;
-File file;
 const int hp=138;
 const int vp=24;
 const int h0=30;
@@ -32,11 +33,9 @@ public class DrawWeather : Gtk.Window {
         title = "DrawWeather";
 		skip_taskbar_hint = true;
 		decorated = false;
-/*        app_paintable = true;*/
 		set_visual(this.get_screen().get_rgba_visual());
-/*        set_opacity(0.9);*/
 		stick();
-/*        set_keep_below(true);*/
+		set_keep_below(true);
 		set_default_size(ww,wh);
         destroy.connect (Gtk.main_quit);
         var drawing_area = new DrawingArea ();
@@ -54,14 +53,12 @@ public class DrawWeather : Gtk.Window {
     private bool on_draw (Widget da, Context ctx) {
 		var now = new DateTime.now_local ();
 		var week=now.get_day_of_week();
-/*        stdout.printf("week: %d\n",week);*/
 		ctx.set_operator (Cairo.Operator.CLEAR);
 		ctx.rectangle(0,0,ww,wh);
 		ctx.fill();
 		ctx.set_operator (Cairo.Operator.OVER);
 		try {
-		var data = new DataInputStream (file.read ());
-		string line;
+		var data = new DataInputStream (logfile.read ());
 		int daycnt=0;
 		int oldmonth=0;
 		while ((line = data.read_line (null)) != null) {
@@ -73,7 +70,7 @@ public class DrawWeather : Gtk.Window {
 				tcolor="#E55E23";
 				frame(ctx,h0/2,0,hp,wh,0);
 				stamp(ctx, h0*3, v0*4.8, weekchar[week], 65,0.4);
-				stamp(ctx, ww/2-hp,wh-vp,"2011 湖南长沙",24,0.2);
+				stamp(ctx, ww/2-hp,wh-vp,now.get_year().to_string(),24,0.2);
 			} else if(week==6 || week==7 ){
 				tcolor="#E55E23";
 				frame(ctx,daycnt*hp+h0/2,0,hp,wh,1);
@@ -83,11 +80,11 @@ public class DrawWeather : Gtk.Window {
 			string date;
 			if(oldmonth!=month){date=month.to_string()+"月"+day.to_string()+"日"; oldmonth=month;}
 			else date=day.to_string()+"日";
-/*            stdout.printf("%d - %d -> %s\n",month,day,date);*/
 
 			line=date+"\t"+line;
 			string[] item = line.split ("\t");
 			foreach (string str in item){
+				if(str.contains("201")) continue;
 				if(str.contains("风")) ctx.set_font_size(13);else ctx.set_font_size(16);
 				if(v==6){
 					string[] two=str.split("转",2);
@@ -95,8 +92,7 @@ public class DrawWeather : Gtk.Window {
 					ImageSurface img;
 					ctx.save(); ctx.translate(daycnt*hp+h0,1*vp+v0); ctx.scale(0.6,0.6);
 					foreach(string s in two){
-						if(s.contains("-")) s=s.substring(s.index_of("-",-1));
-			stdout.printf("%s\n",s);
+						if(s.contains("-")) s=s.substring(s.index_of("-",0)+1);
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
 					img=new Cairo.ImageSurface.from_png("weather-icon/"+"%02d.png".printf(i));
@@ -183,14 +179,24 @@ public class DrawWeather : Gtk.Window {
 
     static int main (string[] args) {
         Gtk.init (ref args);
+		string web="http://qq.ip138.com/weather/hunan/ChangSha.wml";
+		if(args[1].contains("ip138")) web=args[1];
 		InFile="/tmp/cw.txt";
-		file = File.new_for_path (InFile);
-		
-		if (!file.query_exists ()) {
-		stderr.printf ("File '%s' doesn't exist.\n", file.get_path ());
-		return 1;
+	try{
+		var url=File.new_for_uri(web);
+		logfile=File.new_for_path(InFile);
+		if(logfile.query_exists()) logfile.delete();
+		var dis = new DataInputStream (url.read ());
+		var dos = new DataOutputStream (logfile.create(FileCreateFlags.NONE));
+		while ((line = dis.read_line (null)) != null) {
+			if(line.contains("星期")){
+				line=line.replace("<br/>","\t").replace("<b>","\n").replace("</b>","").replace("星期","");
+				dos.put_string(line);
+				stdout.printf(line);
+			}
 		}
-	
+	} catch (Error e) {error ("%s", e.message);}
+
         var DW = new DrawWeather ();
         DW.show_all ();
         Gtk.main ();

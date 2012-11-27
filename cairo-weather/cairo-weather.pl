@@ -118,7 +118,7 @@ $x0=$size/6; $y0=$size/2;
 $surface = Cairo::ImageSurface->create ('argb32',$w0*$max,$size*4);
 $year="";$month=""; $cnt=0;
 #---------------------------------
-#for (@_){print "$_\n";}; exit;
+for (@_){print "$_\n";}; exit;
 for (@_){
 	#next if ! /$today/ && ! $is;
 	@t=localtime(time+86400*$cnt);
