@@ -1,14 +1,11 @@
 Package: cairo-weather
-Version: 0.83
-Architecture: all
+Version: 0.85
+Architecture: amd64
 Maintainer: eexpress
-Installed-Size: 550k
-Depends: perl, libcairo-perl, gconf2, bsdmainutils, dnsutils, libgnome2-gconf-perl, libwww-perl
-Suggests: libnotify-bin, habak
+Installed-Size: 43
+Depends: 
 Section: utils
 Description: draw weather on desktop using cairo
  Draw weather forecast on desktop. mainly support Chinese city.
- modify ~/.config/cairo-weather/config as you wish. setup something and enjoy it.
- add clock when using gtk window.
- add scroll to control volume.
+ parametr format http://qq.ip138.com/weather/hunan/ChangSha.wml
 

@@ -92,7 +92,7 @@ public class DrawWeather : Gtk.Window {
 						if(s.contains("-")) s=s.substring(s.index_of("-",0)+1,-1);
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
-					img=new Cairo.ImageSurface.from_png("weather-icon/"+"%02d.png".printf(i));
+					img=new Cairo.ImageSurface.from_png("/usr/share/cairo-weather/weather-icon/"+"%02d.png".printf(i));
 								ctx.set_source_surface(img,p*40,p*40);
 								ctx.paint();
 								break;

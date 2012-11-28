@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Cairo Weather
 Comment=Draw Weather on Desktop
-Exec=cairo-weather.pl
+Exec=cairo-weather
 Icon=cairo-weather
 Terminal=false
 Type=Application
