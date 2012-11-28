@@ -1,10 +1,8 @@
 using Gtk;
 using Cairo;
 	
-string line;
 string city;
-File logfile;
-string InFile;
+string weather;
 const int segw=138;
 const int segh=24;
 const int h0=30;
@@ -59,11 +57,9 @@ public class DrawWeather : Gtk.Window {
 		ctx.rectangle(0,0,ww,wh);
 		ctx.fill();
 		ctx.set_operator (Cairo.Operator.OVER);
-		try {
-		var data = new DataInputStream (logfile.read ());
 		int daycnt=0;
 		int oldmonth=0;
-		while ((line = data.read_line (null)) != null) {
+		foreach(string line in weather.split("\n")){
 			int v=0;
 			string tcolor;
 			if(!line.contains("风"))continue;
@@ -94,7 +90,7 @@ public class DrawWeather : Gtk.Window {
 					ImageSurface img;
 					ctx.save(); ctx.translate(daycnt*segw+h0,1*segh+v0); ctx.scale(0.6,0.6);
 					foreach(string s in two){
-						if(s.contains("-")) s=s.substring(s.index_of("-",0)+1);
+						if(s.contains("-")) s=s.substring(s.index_of("-",0)+1,-1);
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
 					img=new Cairo.ImageSurface.from_png("weather-icon/"+"%02d.png".printf(i));
@@ -117,7 +113,6 @@ public class DrawWeather : Gtk.Window {
 			}
 			daycnt++; week++; now=now.add_days(1);
 		}
-		} catch (Error e) {error ("%s", e.message);}
 		return true;
 	}
 
@@ -181,23 +176,19 @@ public class DrawWeather : Gtk.Window {
 
     static int main (string[] args) {
         Gtk.init (ref args);
+		string line;
 		string web="http://qq.ip138.com/weather/hunan/ChangSha.wml";
 		if(args[1].contains("qq.ip138.com")) web=args[1];
-		InFile="/tmp/cw.txt";
 	try{
 		var url=File.new_for_uri(web);
-		logfile=File.new_for_path(InFile);
-		if(logfile.query_exists()) logfile.delete();
 		var dis = new DataInputStream (url.read ());
-		var dos = new DataOutputStream (logfile.create(FileCreateFlags.NONE));
 		while ((line = dis.read_line (null)) != null) {
 			if(line.contains("天气预报<br/>")){
 				city=line.replace("天气预报<br/>","")._chomp();
 			}
 			if(line.contains("星期")){
-				line=line.replace("<br/>","\t").replace("<b>","\n").replace("</b>","").replace("星期","");
-				dos.put_string(line);
-				stdout.printf(line);
+				weather=line.replace("<br/>","\t").replace("<b>","\n").replace("</b>","").replace("星期","");
+				stdout.printf(weather);
 			}
 		}
 	} catch (Error e) {error ("%s", e.message);}
