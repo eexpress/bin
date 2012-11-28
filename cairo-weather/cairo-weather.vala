@@ -54,8 +54,7 @@ public class DrawWeather : Gtk.Window {
 		var now = new DateTime.now_local ();
 		var week=now.get_day_of_week();
 		ctx.set_operator (Cairo.Operator.CLEAR);
-		ctx.rectangle(0,0,ww,wh);
-		ctx.fill();
+		ctx.rectangle(0,0,ww,wh); ctx.fill();
 		ctx.set_operator (Cairo.Operator.OVER);
 		int daycnt=0;
 		int oldmonth=0;
@@ -68,9 +67,9 @@ public class DrawWeather : Gtk.Window {
 				tcolor="#E55E23";
 				frame(ctx,h0/2,0,segw,wh,0);
 				stamp(ctx, h0*3, v0*4.8, weekchar[week], 65,0.4);
-				stamp(ctx, ww/2-segw*2,wh-segh,now.get_year().to_string()+" "+city,24,0.2);
+				stamp(ctx, ww/2-segw*2,wh-segh,now.get_year().to_string()+" "+city,22,0.2);
 			} else if(week==6 || week==7 ){
-				tcolor="#E55E23";
+				tcolor="#A54E13";
 				frame(ctx,daycnt*segw+h0/2,0,segw,wh,1);
 			} else tcolor="#C8C8C8";
 			int month=now.get_month ();
@@ -106,6 +105,9 @@ public class DrawWeather : Gtk.Window {
 				c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,0.8);
 				ctx.move_to(daycnt*segw+h0+1,v*segh+v0+1);
 				ctx.show_text(str);
+				c.parse("#C4C4C4"); ctx.set_source_rgba(c.red,c.green,c.blue,0.2);
+				ctx.move_to(daycnt*segw+h0-1,v*segh+v0-1);
+				ctx.show_text(str);
 				c.parse(tcolor); ctx.set_source_rgba(c.red,c.green,c.blue,0.8);
 				ctx.move_to(daycnt*segw+h0,v*segh+v0);
 				ctx.show_text(str);
@@ -119,23 +121,18 @@ public class DrawWeather : Gtk.Window {
 	private void stamp(Context ctx, double x, double y, string s, int size, double rotate){
 		ctx.save();
 		ctx.set_font_size(size);
-		c.parse("#983E16");
-		ctx.set_source_rgba(c.red/1.5,c.green/1.5,c.blue/1.5,0.6);
 		ctx.set_operator (Cairo.Operator.SATURATE);
-		ctx.move_to(x,y);
-			ctx.rotate(-rotate);
-			ctx.text_path(s);
-			ctx.set_line_width(3);
-			ctx.fill_preserve();
-			ctx.stroke();
-		for(int i=1; i<size/10+2; i++){
-			ctx.set_source_rgba(c.red-i/3,c.green-i/3,c.blue-i/3,0.8);
-			ctx.rotate(rotate);
+		for(double i=0; i<size/10; i++){
+			double j, a;
+			if(i==0) {j=1.5;a=0.58;} else {j=1;a=0.73;i++;}
+			c.parse("#E55E23");
+			ctx.set_source_rgba((c.red-i/3)/j,(c.green-i/3)/j,(c.blue-i/3)/j,a);
 			ctx.move_to(x-i,y+i);
 			ctx.rotate(-rotate);
 			ctx.text_path(s);
 			ctx.fill_preserve();
 			ctx.stroke();
+			ctx.rotate(rotate);
 		}
 		ctx.restore();
 	}
@@ -143,7 +140,7 @@ public class DrawWeather : Gtk.Window {
 	private void frame(Context ctx, int x, int y, int w, int h, int style){
 			ctx.save();
 			ctx.move_to(x,y);
-			int r;
+			int r; double alpha;
 			if(w<h) r=w/8; else r=h/8;
 			ctx.rel_move_to(r,0);
 			ctx.rel_line_to(w-2*r,0);
@@ -154,7 +151,8 @@ public class DrawWeather : Gtk.Window {
 			ctx.rel_curve_to(0,0,-r,0,-r,-r);
 			ctx.rel_line_to(0,-(h-2*r));
 			ctx.rel_curve_to(0,0,0,-r,r,-r);
-			c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,0.4);
+			if(style==0)alpha=0.4;else alpha=0.2;
+			c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,alpha);
 			ctx.fill();
 			ctx.restore();
 			ctx.save();
@@ -162,10 +160,10 @@ public class DrawWeather : Gtk.Window {
 			ctx.set_line_cap(Cairo.LineCap.BUTT);
 			ctx.set_line_join(Cairo.LineJoin.ROUND);
 			ctx.set_operator(Cairo.Operator.CLEAR);
-			int l=10;
-			ctx.set_line_width(l/2);
+			int l=12; int lw=4;
+			ctx.set_line_width(lw);
 			for(int i=0; i<l; i++){
-				ctx.move_to(x,wh/4+i*l);
+				ctx.move_to(x,wh/4+i*lw*2);
 				if(style==0) ctx.rel_curve_to(segw/3,l*2,segw*2/3,-l*2,segw,0); else {
 				int[] t={1,-1,1,-1};foreach(int seg in t) ctx.rel_line_to(segw/4+1,seg*l);
 				}
