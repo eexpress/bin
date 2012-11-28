@@ -2,14 +2,15 @@ using Gtk;
 using Cairo;
 	
 string line;
+string city;
 File logfile;
 string InFile;
-const int hp=138;
-const int vp=24;
+const int segw=138;
+const int segh=24;
 const int h0=30;
 const int v0=40;
-const int ww=7*hp+h0*2;
-const int wh=8*vp+v0*2;
+const int ww=7*segw+h0*2;
+const int wh=8*segh+v0*2;
 
 const string w[] = {
 	"", "", "","","",
@@ -46,7 +47,7 @@ public class DrawWeather : Gtk.Window {
 		if(e.button == 1){
 			begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
 		} else {Gtk.main_quit();}
-		this.move(get_screen().get_width()-ww-vp,vp*3);
+		this.move(get_screen().get_width()-ww-segh,segh*3);
 		return true;
 		});
     }
@@ -69,12 +70,12 @@ public class DrawWeather : Gtk.Window {
 			ctx.select_font_face("Vera Sans YuanTi",FontSlant.NORMAL,FontWeight.BOLD);
 			if(daycnt==0){
 				tcolor="#E55E23";
-				frame(ctx,h0/2,0,hp,wh,0);
+				frame(ctx,h0/2,0,segw,wh,0);
 				stamp(ctx, h0*3, v0*4.8, weekchar[week], 65,0.4);
-				stamp(ctx, ww/2-hp,wh-vp,now.get_year().to_string(),24,0.2);
+				stamp(ctx, ww/2-segw*2,wh-segh,now.get_year().to_string()+" "+city,24,0.2);
 			} else if(week==6 || week==7 ){
 				tcolor="#E55E23";
-				frame(ctx,daycnt*hp+h0/2,0,hp,wh,1);
+				frame(ctx,daycnt*segw+h0/2,0,segw,wh,1);
 			} else tcolor="#C8C8C8";
 			int month=now.get_month ();
 			int day=now.get_day_of_month ();
@@ -91,7 +92,7 @@ public class DrawWeather : Gtk.Window {
 					string[] two=str.split("转",2);
 					int p=0;
 					ImageSurface img;
-					ctx.save(); ctx.translate(daycnt*hp+h0,1*vp+v0); ctx.scale(0.6,0.6);
+					ctx.save(); ctx.translate(daycnt*segw+h0,1*segh+v0); ctx.scale(0.6,0.6);
 					foreach(string s in two){
 						if(s.contains("-")) s=s.substring(s.index_of("-",0)+1);
 						for(int i = 0; i < w.length ; i++){
@@ -107,10 +108,10 @@ public class DrawWeather : Gtk.Window {
 					ctx.restore();
 				}
 				c.parse("#141414"); ctx.set_source_rgba(c.red,c.green,c.blue,0.8);
-				ctx.move_to(daycnt*hp+h0+1,v*vp+v0+1);
+				ctx.move_to(daycnt*segw+h0+1,v*segh+v0+1);
 				ctx.show_text(str);
 				c.parse(tcolor); ctx.set_source_rgba(c.red,c.green,c.blue,0.8);
-				ctx.move_to(daycnt*hp+h0,v*vp+v0);
+				ctx.move_to(daycnt*segw+h0,v*segh+v0);
 				ctx.show_text(str);
 				if(v==0) v=v+5; v++;
 			}
@@ -170,8 +171,8 @@ public class DrawWeather : Gtk.Window {
 			ctx.set_line_width(l/2);
 			for(int i=0; i<l; i++){
 				ctx.move_to(x,wh/4+i*l);
-				if(style==0) ctx.rel_curve_to(hp/3,l*2,hp*2/3,-l*2,hp,0); else {
-				int[] t={1,-1,1,-1};foreach(int seg in t) ctx.rel_line_to(hp/4+1,seg*l);
+				if(style==0) ctx.rel_curve_to(segw/3,l*2,segw*2/3,-l*2,segw,0); else {
+				int[] t={1,-1,1,-1};foreach(int seg in t) ctx.rel_line_to(segw/4+1,seg*l);
 				}
 				ctx.stroke();
 			}
@@ -181,7 +182,7 @@ public class DrawWeather : Gtk.Window {
     static int main (string[] args) {
         Gtk.init (ref args);
 		string web="http://qq.ip138.com/weather/hunan/ChangSha.wml";
-		if(args[1].contains("ip138")) web=args[1];
+		if(args[1].contains("qq.ip138.com")) web=args[1];
 		InFile="/tmp/cw.txt";
 	try{
 		var url=File.new_for_uri(web);
@@ -190,6 +191,9 @@ public class DrawWeather : Gtk.Window {
 		var dis = new DataInputStream (url.read ());
 		var dos = new DataOutputStream (logfile.create(FileCreateFlags.NONE));
 		while ((line = dis.read_line (null)) != null) {
+			if(line.contains("天气预报<br/>")){
+				city=line.replace("天气预报<br/>","")._chomp();
+			}
 			if(line.contains("星期")){
 				line=line.replace("<br/>","\t").replace("<b>","\n").replace("</b>","").replace("星期","");
 				dos.put_string(line);
@@ -200,7 +204,7 @@ public class DrawWeather : Gtk.Window {
 
         var DW = new DrawWeather ();
         DW.show_all ();
-		DW.move(DW.get_screen().get_width()-ww-vp,vp*3);
+		DW.move(DW.get_screen().get_width()-ww-segh,segh*3);
         Gtk.main ();
         return 0;
     }
