@@ -3,12 +3,13 @@ using Cairo;
 	
 string city;
 string weather;
+const double scale=1;
 const int segw=138;
 const int segh=24;
 const int h0=30;
 const int v0=40;
-const int ww=7*segw+h0*2;
-const int wh=8*segh+v0*2;
+const int ww=(int)((7*segw+h0*2)*scale);
+const int wh=(int)((8*segh+v0*2)*scale);
 
 const string w[] = {
 	"", "", "","","",
@@ -56,6 +57,7 @@ public class DrawWeather : Gtk.Window {
 		ctx.set_operator (Cairo.Operator.CLEAR);
 		ctx.rectangle(0,0,ww,wh); ctx.fill();
 		ctx.set_operator (Cairo.Operator.OVER);
+		ctx.scale(scale,scale);
 		int daycnt=0;
 		int oldmonth=0;
 		foreach(string line in weather.split("\n")){
