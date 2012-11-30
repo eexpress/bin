@@ -13,6 +13,7 @@ deb:	clean
 	cp -u cairo-weather deb/usr/bin
 	cp -u cairo-weather.desktop deb/usr/share/applications
 	cp -ur weather-icon/ deb/usr/share/cairo-weather
+	cp -ur calendar/ deb/usr/share/cairo-weather
 	cp -u cairo-weather.png deb/usr/share/pixmaps
 	dpkg-deb -b deb .
 

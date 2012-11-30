@@ -10,6 +10,7 @@ const int h0=30;
 const int v0=40;
 const int ww=(int)((7*segw+h0*2)*scale);
 const int wh=(int)((8*segh+v0*2)*scale);
+const string sharepath="/usr/share/cairo-weather/";
 
 const string w[] = {
 	"", "", "","","",
@@ -79,6 +80,21 @@ public class DrawWeather : Gtk.Window {
 			string date;
 			if(oldmonth!=month){date=month.to_string()+"月"+day.to_string()+"日"; oldmonth=month;}
 			else date=day.to_string()+"日";
+// lunar
+			try{
+				string calendar=sharepath+"calendar/calendar."+now.get_year().to_string()+".lunar";
+				var file = File.new_for_path(calendar);
+				if(file.query_exists() == true){
+					string file_contents;
+					FileUtils.get_contents(calendar, out file_contents);
+					foreach(string l in file_contents.split("\n")){
+						if(l.contains("%s/%s".printf(month.to_string(),day.to_string()))){
+							date=date+"-"+l.split("\t",0)[1];
+							break;
+						}
+					}
+				}
+			} catch (Error e) {error ("%s", e.message);}
 
 			line=date+"\t"+line;
 			string[] item = line.split ("\t");
@@ -94,7 +110,7 @@ public class DrawWeather : Gtk.Window {
 						if(s.contains("-")) s=s.substring(s.index_of("-",0)+1,-1);
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
-					img=new Cairo.ImageSurface.from_png("/usr/share/cairo-weather/weather-icon/"+"%02d.png".printf(i));
+					img=new Cairo.ImageSurface.from_png(sharepath+"weather-icon/"+"%02d.png".printf(i));
 								ctx.set_source_surface(img,p*40,p*40);
 								ctx.paint();
 								break;
