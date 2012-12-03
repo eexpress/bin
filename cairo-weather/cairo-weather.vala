@@ -61,6 +61,7 @@ public class DrawWeather : Gtk.Window {
 		ctx.scale(scale,scale);
 		int daycnt=0;
 		int oldmonth=0;
+		string oldlmonth="";
 		foreach(string line in weather.split("\n")){
 			int v=0;
 			string tcolor;
@@ -69,8 +70,8 @@ public class DrawWeather : Gtk.Window {
 			if(daycnt==0){
 				tcolor="#E55E23";
 				frame(ctx,h0/2,0,segw,wh,0);
-				stamp(ctx, h0*3, v0*4.8, weekchar[week], 65,0.4);
-				stamp(ctx, ww/2-segw*2,wh-segh,now.get_year().to_string()+" "+city,22,0.2);
+				stamp(ctx, h0*3, v0*4.8, weekchar[week], 56,0.4);
+				stamp(ctx, ww/2-segw,wh-segh,now.get_year().to_string()+" "+city,22,0.2);
 			} else if(week==6 || week==7 ){
 				tcolor="#A54E13";
 				frame(ctx,daycnt*segw+h0/2,0,segw,wh,1);
@@ -86,10 +87,14 @@ public class DrawWeather : Gtk.Window {
 				var file = File.new_for_path(calendar);
 				if(file.query_exists() == true){
 					string file_contents;
+					string lmonth="";
 					FileUtils.get_contents(calendar, out file_contents);
 					foreach(string l in file_contents.split("\n")){
+						if(l.contains("月")) lmonth=l.split("\t",0)[1];
 						if(l.contains("%s/%s".printf(month.to_string(),day.to_string()))){
-							date=date+"-"+l.split("\t",0)[1];
+							if(!date.contains("月") && oldlmonth!=lmonth) {
+								date=date+"-"+lmonth+l.split("\t",0)[1];oldlmonth=lmonth;}
+							else date=date+"-"+l.split("\t",0)[1];
 							break;
 						}
 					}
