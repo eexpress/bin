@@ -10,17 +10,15 @@ $select="imagebin";	# 缺省的网站
 GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$name, "confirm"=>\$confirm);
 #----------------------------------
 %web=(
-	"http://imm.io/"=>{"image"=>'xxxx'},
-	"http://www.cjb.net/"=>{"image"=>'xxxx'},
+	"http://imm.io/"=>{"image"=>'xxxx'},		#改js了
+	"http://www.cjb.net/"=>{"image"=>'xxxx'},	#废弃
 	"http://bkup.co/"=>{"file1"=>'xxxx'},
 	"http://kimag.es/"=>{"userfile1"=>'xxxx'},
 	"http://imagebin.org/index.php?page=add"=>{"nickname"=>$name,"image"=>'xxxx',"disclaimer_agree"=>"Y"},
 	"http://paste.ubuntu.org.cn/"=>{"poster"=>$name,"screenshot"=>'xxxx',"submit"=>"paste"},
 	"http://uploadpie.com/"=>{"uploadedfile"=>'xxxx',"result"=>'value.*?auto_select,http[^"]*'},
 	"http://ompldr.org/"=>{"file1"=>'xxxx',"result"=>'BBCode.*?img,http[^]]*'},
-# <input type="text" id="uploaded" value="http://uploadpie.com/LkkXu" onclick="auto_select();" readonly="readonly" />
-#        "http://picpaste.com/"=>{"upload"=>'xxxx',"rules"=>"yes","submit"=>"submit","result"=>'Picture\ URL.*/a,http[^"]*'},
-#$mech->select("rules","yes");
+	"http://picpaste.com/"=>{"upload"=>'xxxx',"rules"=>"yes","result"=>'Picture\ URL.*?/a,http[^"]*'},
 #        "http://twpic.org/"=>{"attached"=>'xxxx',"result"=>'url.*?url,http[^\[]*'},
 #        <textarea name="textarea" cols="100" wrap="soft" rows="3">[url=http://twpic.org][img]http://twpic.org/uploads2/6ed6ac3661.png[/img][/url]</textarea 无法获取结果网页。
 #        "http://tinypic.com/"=>{"the_file"=>'xxxx'},	#Error GETing http://tinypic.com/ 需要图片校验 nnnnnd
@@ -100,7 +98,7 @@ if ($mech->success()) {
 #                print $rr;
 		@ss=split ",",$result;
 		foreach (@ss){
-			$rr=~/$_/m; $rr=$&;
+			$rr=~/$_/s; $rr=$&;
 			pc "parse",$rr;
 			}
 	}
