@@ -17,6 +17,7 @@ GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$nam
 	"http://imagebin.org/index.php?page=add"=>{"nickname"=>$name,"image"=>'xxxx',"disclaimer_agree"=>"Y"},
 	"http://paste.ubuntu.org.cn/"=>{"poster"=>$name,"screenshot"=>'xxxx',"submit"=>"paste"},
 	"http://uploadpie.com/"=>{"uploadedfile"=>'xxxx',"result"=>'value.*?auto_select,http[^"]*'},
+	"http://ompldr.org/"=>{"file1"=>'xxxx',"result"=>'BBCode.*?img,http[^]]*'},
 # <input type="text" id="uploaded" value="http://uploadpie.com/LkkXu" onclick="auto_select();" readonly="readonly" />
 #        "http://picpaste.com/"=>{"upload"=>'xxxx',"rules"=>"yes","submit"=>"submit","result"=>'Picture\ URL.*/a,http[^"]*'},
 #$mech->select("rules","yes");
