@@ -88,13 +88,15 @@ public class DrawWeather : Gtk.Window {
 				if(file.query_exists() == true){
 					string file_contents;
 					string lmonth="";
+					string lunar="";
 					FileUtils.get_contents(calendar, out file_contents);
 					foreach(string l in file_contents.split("\n")){
 						if(l.contains("月")) lmonth=l.split("\t",0)[1];
 						if(l.contains("%s/%s".printf(month.to_string(),day.to_string()))){
-							if(!date.contains("月") && oldlmonth!=lmonth) {
-								date=date+"-"+lmonth+l.split("\t",0)[1];oldlmonth=lmonth;}
-							else date=date+"-"+l.split("\t",0)[1];
+							lunar=l.split("\t",0)[1];
+							if(!date.contains("月") && oldlmonth!=lmonth && !lunar.contains("月")) {
+								date=date+"-"+lmonth+lunar;oldlmonth=lmonth;}
+							else date=date+"-"+lunar;
 							break;
 						}
 					}
