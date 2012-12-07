@@ -15,3 +15,7 @@ s0_show_handles_key = <Alt>x
 [scale]
 s0_initiate_all_edge = BottomLeft|BottomRight
 
+[addhelper]
+s0_brightness = 50
+s0_saturation = 80
+
