@@ -140,6 +140,10 @@ public class DrawWeather : Gtk.Window {
 			}
 			daycnt++; week++; now=now.add_days(1);
 		}
+		try{
+			Gdk.Pixbuf screenshot = Gdk.pixbuf_get_from_window(da.get_window(),0,0,ww,wh);
+			screenshot.save("/tmp/cw.png","png");
+		} catch (Error e) {error ("%s", e.message);}
 		return true;
 	}
 
