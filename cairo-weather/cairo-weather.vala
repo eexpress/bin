@@ -48,6 +48,8 @@ public class DrawWeather : Gtk.Window {
 			begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
 		} else {Gtk.main_quit();}
 		this.move(get_screen().get_width()-ww-segh,segh*3);
+		var pb=Gdk.pixbuf_get_from_window(this.window,0,0,100,100);
+		pb.save("/tmp/testimage.png", "png");
 		return true;
 		});
     }
