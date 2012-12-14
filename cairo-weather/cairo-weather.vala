@@ -3,14 +3,20 @@ using Cairo;
 	
 string city;
 string weather;
-const double scale=1;
+string appname;
+string sharepath;
+string conffile;
 const int segw=138;
 const int segh=24;
 const int h0=30;
 const int v0=40;
-const int ww=(int)((7*segw+h0*2)*scale);
-const int wh=(int)((8*segh+v0*2)*scale);
-const string sharepath="/usr/share/cairo-weather/";
+int ww;
+int wh;
+/*config*/
+double scale=1;
+string fontname;
+string web;
+/*string pos="-80,80";*/
 
 const string w[] = {
 	"", "", "","","",
@@ -48,8 +54,6 @@ public class DrawWeather : Gtk.Window {
 			begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
 		} else {Gtk.main_quit();}
 		this.move(get_screen().get_width()-ww-segh,segh*3);
-		var pb=Gdk.pixbuf_get_from_window(this.window,0,0,100,100);
-		pb.save("/tmp/testimage.png", "png");
 		return true;
 		});
     }
@@ -68,7 +72,7 @@ public class DrawWeather : Gtk.Window {
 			int v=0;
 			string tcolor;
 			if(!line.contains("风"))continue;
-			ctx.select_font_face("Vera Sans YuanTi",FontSlant.NORMAL,FontWeight.BOLD);
+			ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
 			if(daycnt==0){
 				tcolor="#E55E23";
 				frame(ctx,h0/2,0,segw,wh,0);
@@ -206,9 +210,24 @@ public class DrawWeather : Gtk.Window {
     static int main (string[] args) {
         Gtk.init (ref args);
 		string line;
-		string web="http://qq.ip138.com/weather/hunan/ChangSha.wml";
-		if(args[1].contains("qq.ip138.com")) web=args[1];
+		web="http://qq.ip138.com/weather/hunan/ChangSha.wml";
+		fontname="Vera Sans YuanTi";
+		appname=GLib.Path.get_basename(args[0]);
+		sharepath="/usr/share/"+appname+"/";
+		conffile=Environment.get_variable("HOME")+"/.config/"+appname+"/config";
+		stdout.printf(conffile+" : url, font, scale.\n");
 	try{
+		var conf=File.new_for_path(conffile);
+		var rc = new DataInputStream (conf.read ());
+		while ((line = rc.read_line (null)) != null) {
+			if(line.contains("#")) continue;
+			if(!line.contains("=")) continue;
+			string[] k=line.split("=",2);
+			stdout.printf(k[0]+" -> "+k[1]+"\n");
+			if(k[0]=="url") web=k[1];
+			if(k[0]=="font") fontname=k[1];
+			if(k[0]=="scale") scale=double.parse(k[1]);
+		}
 		var url=File.new_for_uri(web);
 		var dis = new DataInputStream (url.read ());
 		while ((line = dis.read_line (null)) != null) {
@@ -222,6 +241,9 @@ public class DrawWeather : Gtk.Window {
 		}
 	} catch (Error e) {error ("%s", e.message);}
 
+		if(args[1].contains("qq.ip138.com")) web=args[1];
+		ww=(int)((7*segw+h0*2)*scale);
+		wh=(int)((8*segh+v0*2)*scale);
         var DW = new DrawWeather ();
         DW.show_all ();
 		DW.move(DW.get_screen().get_width()-ww-segh,segh*3);
