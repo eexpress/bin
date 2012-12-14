@@ -37,6 +37,8 @@ public class DrawWeather : Gtk.Window {
 	public	Gdk.RGBA c;
 
     public DrawWeather() {
+		ww=(int)((7*segw+h0*2)*scale);
+		wh=(int)((8*segh+v0*2)*scale);
         title = "DrawWeather";
 		skip_taskbar_hint = true;
 		decorated = false;
@@ -48,12 +50,27 @@ public class DrawWeather : Gtk.Window {
         var drawing_area = new DrawingArea ();
         drawing_area.draw.connect (on_draw);
         add (drawing_area);
-		drawing_area.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
+		drawing_area.add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 		drawing_area.button_press_event.connect ((e) => {
 		if(e.button == 1){
 			begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
 		} else {Gtk.main_quit();}
 		this.move(get_screen().get_width()-ww-segh,segh*3);
+		return true;
+		});
+		drawing_area.scroll_event.connect ((e) => {
+			if(e.direction==Gdk.ScrollDirection.UP){
+				scale/=0.9;
+				if(scale>2)scale=2;
+			}
+			if(e.direction==Gdk.ScrollDirection.DOWN){
+				scale*=0.9;
+				if(scale<0.5)scale=0.5;
+			}
+/*        stdout.printf("scale : "+scale.to_string()+"\n");*/
+			ww=(int)((7*segw+h0*2)*scale);
+			wh=(int)((8*segh+v0*2)*scale);
+			this.resize(ww,wh);
 		return true;
 		});
     }
@@ -146,10 +163,6 @@ public class DrawWeather : Gtk.Window {
 			}
 			daycnt++; week++; now=now.add_days(1);
 		}
-		try{
-			Gdk.Pixbuf screenshot = Gdk.pixbuf_get_from_window(da.get_window(),0,0,ww,wh);
-			screenshot.save("/tmp/cw.png","png");
-		} catch (Error e) {error ("%s", e.message);}
 		return true;
 	}
 
@@ -228,6 +241,7 @@ public class DrawWeather : Gtk.Window {
 			if(k[0]=="font") fontname=k[1];
 			if(k[0]=="scale") scale=double.parse(k[1]);
 		}
+		if(args[1].contains("qq.ip138.com")) web=args[1];
 		var url=File.new_for_uri(web);
 		var dis = new DataInputStream (url.read ());
 		while ((line = dis.read_line (null)) != null) {
@@ -236,17 +250,18 @@ public class DrawWeather : Gtk.Window {
 			}
 			if(line.contains("星期")){
 				weather=line.replace("<br/>","\t").replace("<b>","\n").replace("</b>","").replace("星期","");
-				stdout.printf(weather);
+				stdout.printf(weather+"\n");
 			}
 		}
 	} catch (Error e) {error ("%s", e.message);}
 
-		if(args[1].contains("qq.ip138.com")) web=args[1];
-		ww=(int)((7*segw+h0*2)*scale);
-		wh=(int)((8*segh+v0*2)*scale);
         var DW = new DrawWeather ();
         DW.show_all ();
 		DW.move(DW.get_screen().get_width()-ww-segh,segh*3);
+		try{
+			Gdk.Pixbuf screenshot = Gdk.pixbuf_get_from_window(DW.get_window(),0,0,ww,wh);
+			screenshot.save("/tmp/cw.png","png");
+		} catch (Error e) {error ("%s", e.message);}
         Gtk.main ();
         return 0;
     }
