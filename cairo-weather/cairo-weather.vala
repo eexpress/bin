@@ -61,7 +61,7 @@ public class DrawWeather : Gtk.Window {
 		drawing_area.scroll_event.connect ((e) => {
 			if(e.direction==Gdk.ScrollDirection.UP){
 				scale/=0.9;
-				if(scale>2)scale=2;
+				if(scale>1.5)scale=1.5;
 			}
 			if(e.direction==Gdk.ScrollDirection.DOWN){
 				scale*=0.9;
@@ -92,12 +92,12 @@ public class DrawWeather : Gtk.Window {
 			ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
 			if(daycnt==0){
 				tcolor="#E55E23";
-				frame(ctx,h0/2,0,segw,wh,0);
+				frame(ctx,h0/2,0,segw,8*segh+v0*2,0);
 				stamp(ctx, h0*3, v0*4.8, weekchar[week], 56,0.4);
-				stamp(ctx, ww/2-segw,wh-segh,now.get_year().to_string()+" "+city,22,0.2);
+				stamp(ctx, 3*segw+h0,7*segh+v0*2,now.get_year().to_string()+" "+city,22,0.2);
 			} else if(week==6 || week==7 ){
 				tcolor="#A54E13";
-				frame(ctx,daycnt*segw+h0/2,0,segw,wh,1);
+				frame(ctx,daycnt*segw+h0/2,0,segw,8*segh+v0*2,1);
 			} else tcolor="#C8C8C8";
 			int month=now.get_month ();
 			int day=now.get_day_of_month ();
@@ -163,6 +163,10 @@ public class DrawWeather : Gtk.Window {
 			}
 			daycnt++; week++; now=now.add_days(1);
 		}
+		try{
+			Gdk.Pixbuf screenshot = Gdk.pixbuf_get_from_window(da.get_window(),0,0,ww,wh);
+			screenshot.save("/tmp/cw.png","png");
+		} catch (Error e) {error ("%s", e.message);}
 		return true;
 	}
 
@@ -258,10 +262,6 @@ public class DrawWeather : Gtk.Window {
         var DW = new DrawWeather ();
         DW.show_all ();
 		DW.move(DW.get_screen().get_width()-ww-segh,segh*3);
-		try{
-			Gdk.Pixbuf screenshot = Gdk.pixbuf_get_from_window(DW.get_window(),0,0,ww,wh);
-			screenshot.save("/tmp/cw.png","png");
-		} catch (Error e) {error ("%s", e.message);}
         Gtk.main ();
         return 0;
     }
