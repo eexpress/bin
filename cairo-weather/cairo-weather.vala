@@ -47,6 +47,12 @@ public class DrawWeather : Gtk.Window {
 		set_keep_below(true);
 		set_default_size(ww,wh);
         destroy.connect (Gtk.main_quit);
+
+		var surface = new ImageSurface (Format.ARGB32, ww, wh);
+		var ctx = new Cairo.Context (surface);
+		drawpng (ctx);
+		surface.write_to_png ("/tmp/cw.png");
+
         var drawing_area = new DrawingArea ();
         drawing_area.draw.connect (on_draw);
         add (drawing_area);
@@ -75,7 +81,8 @@ public class DrawWeather : Gtk.Window {
 		});
     }
 
-    private bool on_draw (Widget da, Context ctx) {
+/*    private bool on_draw (Widget da, Context ctx) {*/
+    private void drawpng (Context ctx) {
 		var now = new DateTime.now_local ();
 		var week=now.get_day_of_week();
 		ctx.set_operator (Cairo.Operator.CLEAR);
@@ -163,11 +170,11 @@ public class DrawWeather : Gtk.Window {
 			}
 			daycnt++; week++; now=now.add_days(1);
 		}
-		try{
-			Gdk.Pixbuf screenshot = Gdk.pixbuf_get_from_window(da.get_window(),0,0,ww,wh);
-			screenshot.save("/tmp/cw.png","png");
-		} catch (Error e) {error ("%s", e.message);}
-		return true;
+/*        try{*/
+/*            Gdk.Pixbuf screenshot = Gdk.pixbuf_get_from_window(da.get_window(),0,0,ww,wh);*/
+/*            screenshot.save("/tmp/cw.png","png");*/
+/*        } catch (Error e) {error ("%s", e.message);}*/
+/*        return true;*/
 	}
 
 	private void stamp(Context ctx, double x, double y, string s, int size, double rotate){
