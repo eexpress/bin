@@ -12,6 +12,7 @@ const int h0=30;
 const int v0=40;
 int ww;
 int wh;
+const string outputfile="/tmp/cw.png";
 /*config*/
 double scale=1;
 string fontname;
@@ -33,7 +34,6 @@ const string weekchar[]={"","壹","貳","叁","肆","伍","陸","日"};
 
 public class DrawWeather : Gtk.Window {
 
-    private const int SIZE = 30;
 	public	Gdk.RGBA c;
 
     public DrawWeather() {
@@ -51,20 +51,25 @@ public class DrawWeather : Gtk.Window {
 		var surface = new ImageSurface (Format.ARGB32, ww, wh);
 		var ctx = new Cairo.Context (surface);
 		drawpng (ctx);
-		surface.write_to_png ("/tmp/cw.png");
+		surface.write_to_png (outputfile);
 
-        var drawing_area = new DrawingArea ();
-        drawing_area.draw.connect (on_draw);
-        add (drawing_area);
-		drawing_area.add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
-		drawing_area.button_press_event.connect ((e) => {
-		if(e.button == 1){
-			begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
-		} else {Gtk.main_quit();}
-		this.move(get_screen().get_width()-ww-segh,segh*3);
-		return true;
+		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
+        draw.connect ((da,ctx)=>{
+			var png = new ImageSurface.from_png(outputfile);
+			ctx.set_operator (Cairo.Operator.SOURCE);
+			ctx.scale(scale,scale);
+			ctx.set_source_surface(png,0,0);
+			ctx.paint();
+			return true;
+			});
+		button_press_event.connect ((e) => {
+			if(e.button == 1){
+				begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
+			} else {Gtk.main_quit();}
+			this.move(get_screen().get_width()-ww-segh,segh*3);
+			return true;
 		});
-		drawing_area.scroll_event.connect ((e) => {
+		scroll_event.connect ((e) => {
 			if(e.direction==Gdk.ScrollDirection.UP){
 				scale/=0.9;
 				if(scale>1.5)scale=1.5;
@@ -73,20 +78,16 @@ public class DrawWeather : Gtk.Window {
 				scale*=0.9;
 				if(scale<0.5)scale=0.5;
 			}
-/*        stdout.printf("scale : "+scale.to_string()+"\n");*/
 			ww=(int)((7*segw+h0*2)*scale);
 			wh=(int)((8*segh+v0*2)*scale);
 			this.resize(ww,wh);
-		return true;
+			return true;
 		});
     }
 
-/*    private bool on_draw (Widget da, Context ctx) {*/
     private void drawpng (Context ctx) {
 		var now = new DateTime.now_local ();
 		var week=now.get_day_of_week();
-		ctx.set_operator (Cairo.Operator.CLEAR);
-		ctx.rectangle(0,0,ww,wh); ctx.fill();
 		ctx.set_operator (Cairo.Operator.OVER);
 		ctx.scale(scale,scale);
 		int daycnt=0;
@@ -170,11 +171,6 @@ public class DrawWeather : Gtk.Window {
 			}
 			daycnt++; week++; now=now.add_days(1);
 		}
-/*        try{*/
-/*            Gdk.Pixbuf screenshot = Gdk.pixbuf_get_from_window(da.get_window(),0,0,ww,wh);*/
-/*            screenshot.save("/tmp/cw.png","png");*/
-/*        } catch (Error e) {error ("%s", e.message);}*/
-/*        return true;*/
 	}
 
 	private void stamp(Context ctx, double x, double y, string s, int size, double rotate){
