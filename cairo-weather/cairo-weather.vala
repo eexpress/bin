@@ -48,7 +48,7 @@ public class DrawWeather : Gtk.Window {
 		set_default_size(ww,wh);
         destroy.connect (Gtk.main_quit);
 
-		var surface = new ImageSurface (Format.ARGB32, ww, wh);
+		var surface = new ImageSurface (Format.ARGB32, ww*2, wh*2);
 		var ctx = new Cairo.Context (surface);
 		drawpng (ctx);
 		surface.write_to_png (outputfile);
@@ -57,7 +57,7 @@ public class DrawWeather : Gtk.Window {
         draw.connect ((da,ctx)=>{
 			var png = new ImageSurface.from_png(outputfile);
 			ctx.set_operator (Cairo.Operator.SOURCE);
-			ctx.scale(scale,scale);
+			ctx.scale(scale/2,scale/2);
 			ctx.set_source_surface(png,0,0);
 			ctx.paint();
 			return true;
@@ -89,7 +89,7 @@ public class DrawWeather : Gtk.Window {
 		var now = new DateTime.now_local ();
 		var week=now.get_day_of_week();
 		ctx.set_operator (Cairo.Operator.OVER);
-		ctx.scale(scale,scale);
+		ctx.scale(scale*2,scale*2);
 		int daycnt=0;
 		int oldmonth=0;
 		string oldlmonth="";
