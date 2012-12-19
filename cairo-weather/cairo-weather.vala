@@ -38,6 +38,7 @@ public class DrawWeather : Gtk.Window {
 	public int angle=100;
 	ImageSurface png;
 	ImageSurface appicon;
+	string todaypng="";
 
     public DrawWeather() {
 		ww=(int)((7*segw+h0*2)*scale);
@@ -56,7 +57,7 @@ public class DrawWeather : Gtk.Window {
 		drawpng (ctx);
 		surface.write_to_png (outputfile);
 		png = new ImageSurface.from_png(outputfile);
-		appicon = new ImageSurface.from_png("/usr/share/pixmaps/cairo-weather.png");
+		appicon = new ImageSurface.from_png(todaypng);
 
 		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.ENTER_NOTIFY_MASK);
         draw.connect ((da,ctx)=>{
@@ -67,10 +68,9 @@ public class DrawWeather : Gtk.Window {
 			if(angle<90){
 				var i=Math.cos(angle*Math.PI/180);
 				ctx.set_operator (Cairo.Operator.OVER);
-				ctx.scale(i,i);
+				ctx.scale(2*i,2*i);
 				ctx.set_source_surface(appicon,appicon.get_width()/2*(1-i),appicon.get_height()/2*(1-i));
 				ctx.paint();
-/*stdout.printf("angle : "+angle.to_string()+"\twidth : "+i.to_string()+".\n");*/
 			}
 			return true;
 			});
@@ -169,7 +169,9 @@ public class DrawWeather : Gtk.Window {
 						if(s.contains("-")) s=s.substring(s.index_of("-",0)+1,-1);
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
-					img=new ImageSurface.from_png(sharepath+"weather-icon/"+"%02d.png".printf(i));
+								var sp=sharepath+"weather-icon/"+"%02d.png".printf(i);
+								if(todaypng=="")todaypng=sp;
+								img=new ImageSurface.from_png(sp);
 								ctx.set_source_surface(img,p*40,p*40);
 								ctx.paint();
 								break;
