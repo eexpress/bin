@@ -67,8 +67,10 @@ public class DrawWeather : Gtk.Window {
 			if(angle<90){
 				var i=Math.cos(angle*Math.PI/180);
 				ctx.set_operator (Cairo.Operator.OVER);
-				ctx.scale(i,1);
-				ctx.set_source_surface(appicon,64/2*(1-i),0);
+/*                ctx.scale(i,1);*/
+/*                ctx.set_source_surface(appicon,64/2*(1-i),0);*/
+				ctx.scale(i,i);
+				ctx.set_source_surface(appicon,64/2*(1-i),64/2*(1-i));
 				ctx.paint();
 /*stdout.printf("angle : "+angle.to_string()+"\twidth : "+i.to_string()+".\n");*/
 			}
