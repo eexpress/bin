@@ -13,7 +13,6 @@ const int v0=40;
 int ww;
 int wh;
 const string outputfile="/tmp/cw.png";
-ImageSurface png;
 /*config*/
 double scale=1;
 string fontname;
@@ -36,6 +35,9 @@ const string weekchar[]={"","壹","貳","叁","肆","伍","陸","日"};
 public class DrawWeather : Gtk.Window {
 
 	public	Gdk.RGBA c;
+	public int angle=100;
+	ImageSurface png;
+	ImageSurface appicon;
 
     public DrawWeather() {
 		ww=(int)((7*segw+h0*2)*scale);
@@ -54,13 +56,31 @@ public class DrawWeather : Gtk.Window {
 		drawpng (ctx);
 		surface.write_to_png (outputfile);
 		png = new ImageSurface.from_png(outputfile);
+		appicon = new ImageSurface.from_png("/usr/share/pixmaps/cairo-weather.png");
 
-		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
+		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.ENTER_NOTIFY_MASK);
         draw.connect ((da,ctx)=>{
 			ctx.set_operator (Cairo.Operator.SOURCE);
 			ctx.scale(scale/2,scale/2);
 			ctx.set_source_surface(png,0,0);
 			ctx.paint();
+			if(angle<90){
+				var i=Math.cos(angle*Math.PI/180);
+				ctx.set_operator (Cairo.Operator.OVER);
+				ctx.scale(i,1);
+				ctx.set_source_surface(appicon,64/2*(1-i),0);
+				ctx.paint();
+/*stdout.printf("angle : "+angle.to_string()+"\twidth : "+i.to_string()+".\n");*/
+			}
+			return true;
+			});
+		enter_notify_event.connect ((e) => {
+			angle=0;
+			GLib.Timeout.add(80,()=>{
+				angle+=15;
+				queue_draw();
+				if(angle>80)return false; else return true;
+				});
 			return true;
 			});
 		button_press_event.connect ((e) => {
@@ -149,7 +169,7 @@ public class DrawWeather : Gtk.Window {
 						if(s.contains("-")) s=s.substring(s.index_of("-",0)+1,-1);
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
-					img=new Cairo.ImageSurface.from_png(sharepath+"weather-icon/"+"%02d.png".printf(i));
+					img=new ImageSurface.from_png(sharepath+"weather-icon/"+"%02d.png".printf(i));
 								ctx.set_source_surface(img,p*40,p*40);
 								ctx.paint();
 								break;
