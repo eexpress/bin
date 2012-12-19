@@ -13,6 +13,7 @@ const int v0=40;
 int ww;
 int wh;
 const string outputfile="/tmp/cw.png";
+ImageSurface png;
 /*config*/
 double scale=1;
 string fontname;
@@ -52,10 +53,10 @@ public class DrawWeather : Gtk.Window {
 		var ctx = new Cairo.Context (surface);
 		drawpng (ctx);
 		surface.write_to_png (outputfile);
+		png = new ImageSurface.from_png(outputfile);
 
 		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
         draw.connect ((da,ctx)=>{
-			var png = new ImageSurface.from_png(outputfile);
 			ctx.set_operator (Cairo.Operator.SOURCE);
 			ctx.scale(scale/2,scale/2);
 			ctx.set_source_surface(png,0,0);
