@@ -19,6 +19,7 @@ string fontname;
 string web;
 /*string pos="-80,80";*/
 
+const int zoom[]={6,5,4,3,2,1,0,1,2,3,2,1,0,1,2,3,4,5,6};
 const string w[] = {
 	"", "", "","","",
 	"", "", "雨夹雪","阵雨","小雨",
@@ -35,7 +36,7 @@ const string weekchar[]={"","壹","貳","叁","肆","伍","陸","日"};
 public class DrawWeather : Gtk.Window {
 
 	public	Gdk.RGBA c;
-	public int angle=100;
+	public int step=zoom.length;
 	ImageSurface png;
 	ImageSurface appicon0;
 	ImageSurface appicon1;
@@ -68,8 +69,8 @@ public class DrawWeather : Gtk.Window {
 			ctx.scale(scale/2,scale/2);
 			ctx.set_source_surface(png,0,0);
 			ctx.paint();
-			if(angle<90){
-				var i=Math.cos(angle*Math.PI/180);
+			if(step<zoom.length){
+				var i=Math.cos(zoom[step]*15*Math.PI/180);
 				ctx.set_operator (Cairo.Operator.OVER);
 				ctx.scale(2*i,2*i);
 				ctx.set_source_surface(appicon0,appicon0.get_width()/2*(1-i),appicon0.get_height()/2*(1-i));
@@ -80,11 +81,11 @@ public class DrawWeather : Gtk.Window {
 			return true;
 			});
 		enter_notify_event.connect ((e) => {
-			angle=0;
+			step=0;
 			GLib.Timeout.add(80,()=>{
-				angle+=15;
+				step++;
 				queue_draw();
-				if(angle>80)return false; else return true;
+				if(step<zoom.length)return true; else return false;
 				});
 			return true;
 			});
