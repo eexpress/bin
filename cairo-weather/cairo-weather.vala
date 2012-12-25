@@ -19,7 +19,7 @@ string fontname;
 string web;
 /*string pos="-80,80";*/
 
-const int zoom[]={6,5,4,3,2,1,0,0,0,0,0,1,2,3,4,5,6};
+const int zoom[]={9,8,7,6,5,4,3,2,1,0,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9};
 /*const int zoom[]={6,5,4,3,2,1,0,1,2,3,2,1,0,1,2,3,4,5,6};*/
 const string w[] = {
 	"", "", "","","",
@@ -71,19 +71,19 @@ public class DrawWeather : Gtk.Window {
 			ctx.set_source_surface(png,0,0);
 			ctx.paint();
 			if(step<zoom.length){
-				var i=Math.cos(zoom[step]*15*Math.PI/180);
+				var i=Math.cos(zoom[step]*10*Math.PI/180);
 				ctx.set_operator (Cairo.Operator.OVER);
 				ctx.scale(2*i,2*i);
 				ctx.set_source_surface(appicon0,appicon0.get_width()/2*(1-i)+zoom[step]*10,appicon0.get_height()/2*(1-i)+w0);
 				ctx.paint();
-				ctx.set_source_surface(appicon1,appicon1.get_width()/2*(1-i)+h0+zoom[step]*100,appicon1.get_height()/2*(1-i)+h0+w0);
+				ctx.set_source_surface(appicon1,appicon1.get_width()/2*(1-i)+h0+zoom[step]*30,appicon1.get_height()/2*(1-i)+h0+w0);
 				ctx.paint();
 			}
 			return true;
 			});
 		enter_notify_event.connect ((e) => {
 			step=0;
-			GLib.Timeout.add(80,()=>{
+			GLib.Timeout.add(50,()=>{
 				step++;
 				queue_draw();
 				if(step<zoom.length)return true; else return false;
