@@ -13,7 +13,6 @@ my @FuncDef=(
 	'd,点阵字,a-d点阵字.bash,p',
 	'r,倒字,a-r倒字.bash,p',
 	'x,花字,a-h花字.bash,p',
-	'bd,百度,baidu.pl,m',
 	'bk,百科,baike.pl,m',
 	'deb,软件包信息,deb.pl,p',
 	'ap,精确ip查询,apnic.pl,p',
@@ -32,7 +31,8 @@ my @Amynick=qw(iFvwm iGoogle iGnome iOpera Oooops eexp eexpress);
 my @botnick=@Amynick;
 my $cfg_nick=shift @botnick;
 my $cfg_room="#ubuntu-cn";
-my $cfg_room="#eexpress";
+$cfg_room=$ARGV[0] if($ARGV[0]);
+if($cfg_room!~/^#/){$cfg_room="#".$cfg_room;}
 
 my $irc = new Net::IRC;
 print "Creating connection to IRC server...";
@@ -63,8 +63,8 @@ sub on_connect {
 	my $self = shift;
 	print "*** Connected to IRC.\n";
 	print "*** Joining $cfg_room ...\n";
-	$self->join("${cfg_room}");
-	$self->privmsg("${cfg_room}", "Ξ");
+	$self->join("$cfg_room");
+	$self->privmsg("$cfg_room", "Ξ");
 }
 #----------------------------------------------	
 sub on_init {
@@ -112,7 +112,7 @@ sub on_public {
 		if ($g!~/\.flv$|\.w..$|\.mp.{1,2}$|\.gz$|\.rar$|\.zip$|\.deb$|\.bz.$/){
 			pc "url:\tweb-title.pl \'$g\'";
 			my $t=`./web-title.pl \'$g\'`;
-			$self->privmsg("${cfg_room}", "$g 网页标题：$t\n");
+			$self->privmsg("$cfg_room", "$g 网页标题：$t\n");
 		}}}}
 }
 #----------------------------------------------	
@@ -166,7 +166,7 @@ while($a eq ""){
 	print "$host==$a==\n";
 	$_="欢迎来自 $a 的 $nick 加入聊天室。《".$event->user."》\n";
 	if(($welcome==1 and $isknow) or $welcome==2) {
-	$self->privmsg("${cfg_room}", $_);}
+	$self->privmsg("$cfg_room", $_);}
 	else{
 	print $_;}
 }
@@ -180,9 +180,9 @@ sub on_msg {
 if(join(" ",@Amynick)=~$nick){	# 主人列表，私聊命令
 	my ($c,$w)=split(/\s/,$arg);
 	switch ($c){
-		case "join" {$self->join("${cfg_room}");}
+		case "join" {$self->join("$cfg_room");}
 		case "nick" {$self->nick($w);}
-		case "me" {$self->me("${cfg_room}",$w);}
+		case "me" {$self->me("$cfg_room",$w);}
 		case "op" {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops Oooops");}
 		case "deop" {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".$self->nick);}
 		case "kick" {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot");}
@@ -197,7 +197,7 @@ if(join(" ",@Amynick)=~$nick){	# 主人列表，私聊命令
 		else {$self->privmsg("$nick", "My Lord, all commands list: ".join(" ",@ACmd)." join nick me op deop kick eval\n");}
 	}
 }
-else {$self->privmsg("${cfg_room}", "$nick: 别私聊。不告诉你，气死你。 :D \n");}
+else {$self->privmsg("$cfg_room", "$nick: 别私聊。不告诉你，气死你。 :D \n");}
 }
 #----------------------------------------------	
 sub on_nick_taken {
