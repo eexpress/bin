@@ -198,7 +198,7 @@ if(join(" ",@Amynick)=~$nick){ # 主人列表，私聊命令
 		when ("me") {$self->me("$cfg_room",$w);}
 		when ("op") {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops $w");}
 		when ("deop") {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".$self->nick);}
-		when ("kick") {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot");}
+		when ("kick") {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot") if(join(" ",@Amynick)!~$nick);}
 		when ("eval") {$arg=~s/.*?\s//;$self->privmsg("$nick","运行结果：".eval("$arg"));}
 		when (\@ACmd) {
 			my $cmd;
