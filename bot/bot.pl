@@ -160,7 +160,7 @@ while($a eq ""){
 	given ($host) {
 		when ("59.36.101.19")	{$a="ubuntu-cn论坛的webirc"}
 		when (/^${ipv6}.*/)	{$a="太阳系v6"}
-		when (/^${ipv4}$/)	{$a=`w3m -dump -no-cookie 'http://www.ip138.com/ips1388.asp?ip=$host&action=2'|grep  本站主数据`;$a=~s/.*：//;chomp $a;}
+		when (/^${ipv4}$/)	{$a=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$a=~s/.*：//;chomp $a;}
 		when (/.*mibbit.*/)	{$a="mibbit"}
 		when (m:/:)	{$a="太阳系"}
 		default {
