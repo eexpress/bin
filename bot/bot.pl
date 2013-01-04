@@ -1,13 +1,12 @@
 #!/usr/bin/perl
 # eexpress perl bot
 
+use feature qw(switch say);
 use strict;
 use Net::IRC;
-use Switch;
 use File::Basename qw/basename dirname/;
 use Encode qw(_utf8_on _utf8_off);
-#binmode STDIN, ':encoding(utf8)';
-#binmode STDOUT, ':encoding(utf8)';
+
 #----------------------------------------------	
 my @FuncDef=(
 	't,字典,sdcv.pl -1,p',
@@ -44,7 +43,7 @@ my $conn = $irc->newconn(Server   => "irc.freenode.net",
              Ircname  => "eexp-bot",
              Username => "eexp-bot")
     or die "Can't connect to IRC server.";
-print "done!\n";
+say "done!";
 
 print "Installing local handlers...";
 $conn->add_handler('public', \&on_public);
@@ -54,17 +53,17 @@ print "done!\nInstalling global handlers...";
 $conn->add_global_handler([ 251,252,253,254,302,255 ], \&on_init);
 $conn->add_global_handler(376, \&on_connect);
 $conn->add_global_handler(433, \&on_nick_taken);
-print "done!\n";
+say "done!";
 $irc->start;
 #----------------------------------------------	
 sub pc {
-print "\e[1m\e[33m\e[44m $_[0] \e[0m\n";
+say "\e[1m\e[33m\e[44m $_[0] \e[0m";
 }
 #----------------------------------------------	
 sub on_connect {
 	my $self = shift;
-	print "*** Connected to IRC.\n";
-	print "*** Joining $cfg_room ...\n";
+	say "*** Connected to IRC.";
+	say "*** Joining $cfg_room ...";
 	$self->join("$cfg_room");
 	$self->privmsg("$cfg_room", "Ξ");
 }
@@ -73,7 +72,7 @@ sub on_init {
 	my ($self, $event) = @_;
 	my (@args) = ($event->args);
 	shift (@args);
-	print "*** @args\n";
+	say "*** @args";
 }
 #----------------------------------------------	
 sub on_public {
@@ -92,7 +91,7 @@ sub on_public {
 #        my ($c,@T)=split(/\s/,$arg); # $w没匹配到，就$c也没内容
 		my ($c,$w)=($arg=~/(\S+)(\s*.*)/);
 		if($w=~/[\|`><\$()\/]/){
-			if(join(" ",@Amynick)=~$nick)
+			if(@Amynick ~~ $nick)
 			{$self->privmsg($cfg_room,"发现非法字符");}
 			else{$self->privmsg($cfg_room,"$nick: 死家伙，用命令的都踢了。");}
 		}
@@ -131,7 +130,7 @@ sub on_join {
 	my $host=$event->host;
 	my $isknow=0;
 
-	if(join(" ",@Amynick)=~$nick) {return 1;}	# 主人列表，忽略
+	if(@Amynick ~~ $nick) {return 1;}	# 主人列表，忽略
 
 	my @Anick=(
 	["roylez","金主席"],["GundamZZ","包包"],["bones7456","排骨"],
@@ -157,26 +156,26 @@ sub on_join {
 	}
 my $a="";
 while($a eq ""){
-	switch ($host) {
-		case "59.36.101.19"	{$a="ubuntu-cn论坛的webirc"}
-		case /^${ipv6}.*/	{$a="太阳系v6"}
-		case /^${ipv4}$/	{$a=`w3m -dump -no-cookie 'http://www.ip138.com/ips1388.asp?ip=$host&action=2'|grep  本站主数据`;$a=~s/.*：//;chomp $a;}
-		case /.*mibbit.*/	{$a="mibbit"}
-		case m:/:	{$a="太阳系"}
-		else{
-		print "---------\n";
-		while (my ($k,$v) = each %$event){print "- $k => $v\n";}
-		$host=`host $host`;
-		chomp($host);
-		pc "- new host----$host";
-		if($host=~/\b${ipv4}\b/){$host=$&;}
-		else{$a="鬼搞鬼搞的地方";}
+	given ($host) {
+		when ("59.36.101.19")	{$a="ubuntu-cn论坛的webirc"}
+		when (/^${ipv6}.*/)	{$a="太阳系v6"}
+		when (/^${ipv4}$/)	{$a=`w3m -dump -no-cookie 'http://www.ip138.com/ips1388.asp?ip=$host&action=2'|grep  本站主数据`;$a=~s/.*：//;chomp $a;}
+		when (/.*mibbit.*/)	{$a="mibbit"}
+		when (m:/:)	{$a="太阳系"}
+		default {
+			say "---------";
+			while (my ($k,$v) = each %$event){say "- $k => $v";}
+			$host=`host $host`;
+			chomp($host);
+			pc "- new host----$host";
+			if($host=~/\b${ipv4}\b/){$host=$&;}
+			else{$a="鬼搞鬼搞的地方";}
 		}
 	}
 }
 	if($a=~"IANA"){$a="外太空";}
 	chomp($a);
-	print "$host==$a==\n";
+	say "$host==$a==";
 	$_="欢迎来自 $a 的 $nick 加入聊天室。《".$event->user."》\n";
 	pc $_;
 	if(($welcome==1 and $isknow) or $welcome==2) {
@@ -189,24 +188,24 @@ sub on_msg {
     my ($arg) = ($event->args);
     my $host=$event->host;
     
-if(join(" ",@Amynick)=~$nick){	# 主人列表，私聊命令
+if(@Amynick ~~ $nick){	# 主人列表，私聊命令
 	my ($c,$w)=split(/\s/,$arg);
-	switch ($c){
-		case "join" {$self->join("$cfg_room");}
-		case "nick" {$self->nick($w);}
-		case "me" {$self->me("$cfg_room",$w);}
-		case "op" {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops $w");}
-		case "deop" {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".$self->nick);}
-		case "kick" {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot");}
-		case "eval" {$arg=~s/.*?\s//;$self->privmsg("$nick","运行结果：".eval("$arg"));}
-		case (\@ACmd) {
+	given ($c){
+		when ("join") {$self->join("$cfg_room");}
+		when ("nick") {$self->nick($w);}
+		when ("me") {$self->me("$cfg_room",$w);}
+		when ("op") {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops $w");}
+		when ("deop") {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".$self->nick);}
+		when ("kick") {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot");}
+		when ("eval") {$arg=~s/.*?\s//;$self->privmsg("$nick","运行结果：".eval("$arg"));}
+		when (\@ACmd) {
 			my $cmd;
 			$cmd="$c=$w";
 			eval "\$$cmd";
 			$self->privmsg("$nick", "Yes, Sir. $cmd\n");
 			eval "$cmd";
 		}
-		else {$self->privmsg("$nick", "My Lord, all commands list: ".join(" ",@ACmd)." join nick me op deop kick eval\n");}
+		default {$self->privmsg("$nick", "My Lord, all commands list: ".join(" ",@ACmd)." join nick me op deop kick eval\n");}
 	}
 }
 else {$self->privmsg("$cfg_room", "$nick: 别私聊。不告诉你，气死你。 :D \n");}
