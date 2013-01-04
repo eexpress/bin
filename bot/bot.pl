@@ -49,6 +49,7 @@ print "Installing local handlers...";
 $conn->add_handler('public', \&on_public);
 $conn->add_handler('msg',    \&on_msg);
 $conn->add_handler('join',    \&on_join);
+$conn->add_handler('kick',    \&on_kick);
 print "done!\nInstalling global handlers...";
 $conn->add_global_handler([ 251,252,253,254,302,255 ], \&on_init);
 $conn->add_global_handler(376, \&on_connect);
@@ -66,6 +67,7 @@ sub on_connect {
 	say "*** Joining $cfg_room ...";
 	$self->join("$cfg_room");
 	$self->privmsg("$cfg_room", "Ξ");
+	pc "Enter $cfg_room";
 }
 #----------------------------------------------	
 sub on_init {
@@ -188,7 +190,7 @@ sub on_msg {
     my ($nick) = $event->nick;
     my ($arg) = ($event->args);
     my $host=$event->host;
-    
+	
 #if(@Amynick ~~ $nick){	# 主人列表，私聊命令
 if(join(" ",@Amynick)=~$nick){ # 主人列表，私聊命令
 	my ($c,$w)=split(/\s/,$arg);
@@ -197,18 +199,20 @@ if(join(" ",@Amynick)=~$nick){ # 主人列表，私聊命令
 		when ("nick") {$self->nick($w);}
 		when ("me") {$self->me("$cfg_room",$w);}
 		when ("op") {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops $w");}
-		when ("deop") {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".$self->nick);}
+		when ("deop") {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".($w eq ""?$self->nick:$w));}
 		when ("kick") {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot") if(join(" ",@Amynick)!~$w);}
-		when ("eval") {$arg=~s/.*?\s//;$self->privmsg("$nick","运行结果：".eval("$arg"));}
+		when ("eval") {$arg=~s/.*?\s//;$self->privmsg("$nick","$arg 运行结果：".(eval "$arg"));}
 		when (\@ACmd) {
 			my $cmd;
-			$cmd="$c=$w";
-			eval "\$$cmd";
-			$self->privmsg("$nick", "Yes, Sir. $cmd\n");
-			eval "$cmd";
+			if($w eq ""){$self->privmsg("$nick", "Now $c is ".(print $c).", Sir.");}
+			else{
+				$cmd="$c=$w"; eval "$cmd";
+				$self->privmsg("$nick", "Yes, Sir. $cmd\n");
+			}
 		}
-		default {$self->privmsg("$nick", "My Lord, all commands list: ".join(" ",@ACmd)." join nick me op deop kick eval\n");}
+		default {$self->privmsg("$nick", "My Lord, Parameter: welcome=".(print $welcome)." http=".(print $http)."; Commands: join nick me op deop kick eval\n"); $nick="x";}
 	}
+	pc "$nick -> $arg" if $nick ne "x";
 }
 else {$self->privmsg("$cfg_room", "$nick: 别私聊。不告诉你，气死你。 :D \n");}
 }
@@ -216,6 +220,13 @@ else {$self->privmsg("$cfg_room", "$nick: 别私聊。不告诉你，气死你�
 sub on_nick_taken {
 	my ($self) = shift;
 	$self->nick(shift @botnick);
+}
+#----------------------------------------------	
+sub on_kick {
+	my ($self, $event) = @_;
+    my ($nick) = $event->nick;
+	$self->join("$cfg_room");
+	$self->privmsg("$cfg_room", "谁那么无聊啊。nnnnnd $nick 你又咋了。");
 }
 #----------------------------------------------	
 
