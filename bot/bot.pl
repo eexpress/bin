@@ -91,8 +91,8 @@ sub on_public {
 #        my ($c,@T)=split(/\s/,$arg); # $w没匹配到，就$c也没内容
 		my ($c,$w)=($arg=~/(\S+)(\s*.*)/);
 		if($w=~/[\|`><\$()\/]/){
-			if(@Amynick ~~ $nick)
-			{$self->privmsg($cfg_room,"发现非法字符");}
+#            if(@Amynick ~~ $nick)
+			if(join(" ",@Amynick)=~$nick){$self->privmsg($cfg_room,"发现非法字符");}
 			else{$self->privmsg($cfg_room,"$nick: 死家伙，用命令的都踢了。");}
 		}
 		else{
@@ -130,7 +130,8 @@ sub on_join {
 	my $host=$event->host;
 	my $isknow=0;
 
-	if(@Amynick ~~ $nick) {return 1;}	# 主人列表，忽略
+#    if(@Amynick ~~ $nick) {return 1;}	# 主人列表，忽略
+	if(join(" ",@Amynick)=~$nick) {return 1;}       # 主人列表，忽略
 
 	my @Anick=(
 	["roylez","金主席"],["GundamZZ","包包"],["bones7456","排骨"],
@@ -188,7 +189,8 @@ sub on_msg {
     my ($arg) = ($event->args);
     my $host=$event->host;
     
-if(@Amynick ~~ $nick){	# 主人列表，私聊命令
+#if(@Amynick ~~ $nick){	# 主人列表，私聊命令
+if(join(" ",@Amynick)=~$nick){ # 主人列表，私聊命令
 	my ($c,$w)=split(/\s/,$arg);
 	given ($c){
 		when ("join") {$self->join("$cfg_room");}
