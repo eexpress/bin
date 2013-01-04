@@ -5,7 +5,9 @@ use strict;
 use Net::IRC;
 use Switch;
 use File::Basename qw/basename dirname/;
-
+use Encode qw(_utf8_on _utf8_off);
+binmode STDIN, ':encoding(utf8)';
+binmode STDOUT, ':encoding(utf8)';
 #----------------------------------------------	
 my @FuncDef=(
 	't,字典,sdcv.pl -1,p',
@@ -89,22 +91,21 @@ sub on_public {
 		$arg=~s/^-//;
 #        my ($c,@T)=split(/\s/,$arg); # $w没匹配到，就$c也没内容
 		my ($c,$w)=($arg=~/(\S+)(\s*.*)/);
-		if($w=~/\|/){$self->privmsg($cfg_room,"$nick: 死家伙，用管道的都踢了。");}
+		if($w=~/\|/ || $w=~/`/){$self->privmsg($cfg_room,"$nick: 死家伙，用管道的都踢了。");}
 		else{
-		my @cc=grep(/^$c,/,@FuncDef);
-		if($cc[0]){
-			my @cmd=split ',',$cc[0];
-			pc "cmd:\t <$cmd[2] $w>\n";
-			my @send=`./$cmd[2] 2>/dev/null $w`;
+			my @cc=grep(/^$c,/,@FuncDef);
+			if($cc[0]){
+				my @cmd=split ',',$cc[0];
+				pc "cmd:\t <$cmd[2] $w>\n";
+				my @send=`./$cmd[2] 2>/dev/null $w`;
 
-			if($cmd[3]=~/m/){$w=$nick;} else {$w=$cfg_room;}	#私聊?
-			my $total=0;
-			foreach (@send){	#多行输出
-			$self->privmsg("$w", substr($_,0,240));
-			$total++; last if($total>15);
-			sleep 1 if(!$total%2);
+				if($cmd[3]=~/m/){$w=$nick;} else {$w=$cfg_room;}	#私聊?
+				my $total=0;
+				$_=join ' ',@send; _utf8_on($_); @_=/.{1,130}/g;
+				foreach(@_){
+					_utf8_off($_); $self->privmsg("$w",$_);
+					$total++;last if($total>4);}
 			}
-		}
 		}
 	}
 
