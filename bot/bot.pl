@@ -91,7 +91,7 @@ sub on_public {
 		$arg=~s/^-//;
 #        my ($c,@T)=split(/\s/,$arg); # $w没匹配到，就$c也没内容
 		my ($c,$w)=($arg=~/(\S+)(\s*.*)/);
-		if($w=~/\|/ || $w=~/`/){$self->privmsg($cfg_room,"$nick: 死家伙，用管道的都踢了。");}
+		if($w=~/[\|`><\$\(\)]/){$self->privmsg($cfg_room,"$nick: 死家伙，用命令的都踢了。");}
 		else{
 			my @cc=grep(/^$c,/,@FuncDef);
 			if($cc[0]){
@@ -191,7 +191,7 @@ if(join(" ",@Amynick)=~$nick){	# 主人列表，私聊命令
 		case "join" {$self->join("$cfg_room");}
 		case "nick" {$self->nick($w);}
 		case "me" {$self->me("$cfg_room",$w);}
-		case "op" {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops Oooops");}
+		case "op" {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops $w");}
 		case "deop" {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".$self->nick);}
 		case "kick" {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot");}
 		case "eval" {$arg=~s/.*?\s//;$self->privmsg("$nick","运行结果：".eval("$arg"));}
