@@ -27,7 +27,8 @@ if($reply->is_success){
 			}else{
 			$html=$1;
 			}
-		$html=~s/<.*?>//g; $html=~s/\r//g; $html=~s/&#.*?;//g;
+		$html=~s/<.*?>//g; $html=~s/\r//g; $html=~s/&.*?;//g;
+		$html=~s/if\s\(.*\}//;
 		$html=encode("UTF-8", decode("GBK", $html));
 		print $html;
 	}
