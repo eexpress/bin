@@ -3,6 +3,7 @@ adb
 cdnproxy
 chs/*
 gappproxy/*
+Hold-Script-Dir/*
 slimrat*
 *.png
 *.jpg
@@ -14,3 +15,9 @@ chsdir
 *ssh
 *vim
 *xmodmaprc
+*.swp
+*.deb
+.DirIcon
+.encfs*
+Quake*
+*.mo
