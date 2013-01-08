@@ -101,7 +101,7 @@ sub on_public {
 			my @cc=grep(/^$c,/,@FuncDef);
 			if($cc[0]){
 				my @cmd=split ',',$cc[0];
-				pc "cmd:\t <$cmd[2] $w>\n";
+				pc "cmd:\t <$cmd[2] $w>";
 				my @send=`./$cmd[2] 2>/dev/null $w`;
 
 				if($cmd[3]=~/m/){$w=$nick;} else {$w=$cfg_room;}	#私聊?
@@ -163,8 +163,9 @@ while($a eq ""){
 		when ("59.36.101.19")	{$a="ubuntu-cn论坛的webirc"}
 		when (/^${ipv6}.*/)	{$a="太阳系v6"}
 		when (/^${ipv4}$/)	{$a=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$a=~s/.*：//;chomp $a;}
-		when (/.*mibbit.*/)	{$a="mibbit"}
-		when (m:/:)	{$a="太阳系"}
+		when (/mibbit/)	{$a="mibbit"}
+		when (/redhat/)	{$a="帽帽"}
+		when (/unaffiliated/)	{$a="太阳系"}
 		default {
 			say "---------";
 			while (my ($k,$v) = each %$event){say "- $k => $v";}
@@ -179,7 +180,7 @@ while($a eq ""){
 	if($a=~"IANA"){$a="外太空";}
 	chomp($a);
 	say "$host==$a==";
-	$_="欢迎来自 $a 的 $nick 加入聊天室。《".$event->user."》\n";
+	$_="欢迎来自 $a 的 $nick 加入聊天室。《".$event->user."》";
 	pc $_;
 	if(($welcome==1 and $isknow) or $welcome==2) {
 	$self->privmsg("$cfg_room", $_);}
@@ -190,7 +191,7 @@ sub on_msg {
     my ($nick) = $event->nick;
     my ($arg) = ($event->args);
     my $host=$event->host;
-	
+
 #if(@Amynick ~~ $nick){	# 主人列表，私聊命令
 if(join(" ",@Amynick)=~$nick){ # 主人列表，私聊命令
 	my ($c,$w)=split(/\s/,$arg);
