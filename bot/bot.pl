@@ -162,9 +162,9 @@ while($a eq ""){
 		when ("59.36.101.19")	{$a="ubuntu-cn论坛的webirc"}
 		when (/^${ipv6}.*/)	{$a="太阳系v6"}
 		when (/^${ipv4}$/)	{$a=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$a=~s/.*：//;chomp $a;}
-		when (/.*mibbit.*/)	{$a="mibbit"}
+		when (/mibbit/)	{$a="mibbit"}
 		when (/redhat/)	{$a="帽帽"}
-		when (m:/:)	{$a="太阳系"}
+		when (/unaffiliated/)	{$a="太阳系"}
 		default {
 			say "---------";
 			while (my ($k,$v) = each %$event){say "- $k => $v";}
