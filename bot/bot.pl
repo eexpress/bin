@@ -66,6 +66,7 @@ sub on_connect {
 	say "*** Joining $cfg_room ...";
 	$self->join("$cfg_room");
 	$self->privmsg("$cfg_room", "Ξ");
+	pc $cfg_room;
 }
 #----------------------------------------------	
 sub on_init {
@@ -99,7 +100,7 @@ sub on_public {
 			my @cc=grep(/^$c,/,@FuncDef);
 			if($cc[0]){
 				my @cmd=split ',',$cc[0];
-				pc "cmd:\t <$cmd[2] $w>\n";
+				pc "cmd:\t <$cmd[2] $w>";
 				my @send=`./$cmd[2] 2>/dev/null $w`;
 
 				if($cmd[3]=~/m/){$w=$nick;} else {$w=$cfg_room;}	#私聊?
@@ -177,7 +178,7 @@ while($a eq ""){
 	if($a=~"IANA"){$a="外太空";}
 	chomp($a);
 	say "$host==$a==";
-	$_="欢迎来自 $a 的 $nick 加入聊天室。《".$event->user."》\n";
+	$_="欢迎来自 $a 的 $nick 加入聊天室。《".$event->user."》";
 	pc $_;
 	if(($welcome==1 and $isknow) or $welcome==2) {
 	$self->privmsg("$cfg_room", $_);}
