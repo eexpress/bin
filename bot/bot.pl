@@ -163,6 +163,7 @@ while($a eq ""){
 		when (/^${ipv6}.*/)	{$a="太阳系v6"}
 		when (/^${ipv4}$/)	{$a=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$a=~s/.*：//;chomp $a;}
 		when (/.*mibbit.*/)	{$a="mibbit"}
+		when (/redhat/)	{$a="帽帽"}
 		when (m:/:)	{$a="太阳系"}
 		default {
 			say "---------";
