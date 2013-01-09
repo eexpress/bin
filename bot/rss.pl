@@ -9,19 +9,14 @@ sub cv {
 @RSS=qw(
 http://^hsyyf.me/feed/
 http://cn.^engadget.com/rss.xml
-http://cdn.^ubuntu.org.cn/ubuntuforum/feed.php
 http://^linuxtoy.org/feed/
 http://feed.feedsky.com/^ldcn
 http://www.^cnbeta.com/backend.php
 http://^solidot.org/index.rss
 http://feed.feedsky.com/^lerosua
-http://^eexpress.blog.ubuntu.org.cn/feed/
-http://^yaoms.blogspot.com/feeds/posts/default?alt=rss
-http://www.^ibm.com/developerworks/cn/views/rss/customrssatom.jsp?zone_by=Linux&max_entries=10&feed_by=rss
 http://^imtx.cn/feed/latest/
-http://^joolix.com/feed/
-http://www.^sxnsx.com/feed/
 http://feeds2.feedburner.com/^jandan
+http://www.^ibm.com/developerworks/cn/views/rss/customrssatom.jsp?zone_type=AllZones&zone_by=Linux&content_type=select_zones&type_by=%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0&search_by=&day=1&month=01&year=2008&max_entries=10&feed_by=rss&ibm-submit=%E6%8F%90%E4%BA%A4
 );
 
 if(!$ARGV[0]){
