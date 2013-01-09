@@ -116,7 +116,8 @@ sub on_public {
 	if($arg=~/http:\/\/\S*/){
 		my $g=$&;
 		if($g!~/\<paste\./){
-		if ($g!~/\.flv$|\.w..$|\.mp.{1,2}$|\.gz$|\.rar$|\.zip$|\.deb$|\.bz.$/){
+		if ($g!~/\.(flv|w..|mp.{1,2}|gz|rar|zip|deb|bz)$/){
+#        if ($g!~/\.flv$|\.w..$|\.mp.{1,2}$|\.gz$|\.rar$|\.zip$|\.deb$|\.bz.$/){
 			pc "url:\tweb-title.pl \'$g\'";
 			my $t=`./web-title.pl \'$g\'`;
 			$self->privmsg("$cfg_room", "$g 网页标题：$t\n");
@@ -165,7 +166,7 @@ sub on_join {
 			["${ipv6}","外太空"],["59.36.101.19","论坛"],["wikipedia","维基"],
 			);
 	my $add="";
-	if($host=~/\b${ipv4}\b/){$add=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$add=~s/.*：//;chomp $add;}
+	if($host=~/\b${ipv4}\b/ || ($host=~/\.(com|net|org)$/ and $host!~/\//)){$add=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$add=~s/.*：//;chomp $add;}
 	else{
 		for my $i ( 0 .. $#Aip ){
 			if($host=~/$Aip[$i][0]/){ $add=$Aip[$i][1]; last; }
