@@ -21,8 +21,6 @@ my @FuncDef=(
 	);
 #----------------------------------------------	
 chdir dirname (-l $0?readlink $0:$0);
-my $ipv4='\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
-my $ipv6='[\da-fA-F]{1,4}:[\da-fA-F]{1,4}:[\da-fA-F]{1,4}';
 
 my @ACmd=qw(welcome http);
 my $welcome=1;
@@ -94,8 +92,8 @@ sub on_public {
 		my ($c,$w)=($arg=~/(\S+)(\s*.*)/);
 		if($w=~/[\|`><\$()\/]/){
 #            if(@Amynick ~~ $nick)
-			if(join(" ",@Amynick)=~$nick){$self->privmsg($cfg_room,"发现非法字符");}
-			else{$self->privmsg($cfg_room,"$nick: 死家伙，用命令的都踢了。");}
+			if(join(" ",@Amynick)=~/\b$nick\b/){$self->privmsg($cfg_room,"发现非法字符");}
+			else{$self->privmsg($nick,"死家伙，用命令的都踢了。");}
 		}
 		else{
 			my @cc=grep(/^$c,/,@FuncDef);
@@ -129,11 +127,10 @@ sub on_join {
 	my ($self, $event) = @_;
 	my ($nick) = $event->nick;
 	my ($arg) = ($event->args);
-	my $host=$event->host;
 	my $isknow=0;
 
 #    if(@Amynick ~~ $nick) {return 1;}	# 主人列表，忽略
-	if(join(" ",@Amynick)=~$nick) {return 1;}       # 主人列表，忽略
+	if(join(" ",@Amynick)=~/\b$nick\b/) {return 1;}       # 主人列表，忽略
 
 	my @Anick=(
 	["roylez","金主席"],["GundamZZ","包包"],["bones7456","排骨"],
@@ -152,38 +149,32 @@ sub on_join {
 #    ["",""],["",""],["",""],["",""],["",""],
 	);
 	for my $i ( 0 .. $#Anick ){
-	if($nick=~/^$Anick[$i][0]\d*\b/i){
-	$nick=$Anick[$i][1];
-	$isknow=1; last;
-	}
-	}
-my $a="";
-while($a eq ""){
-	given ($host) {
-		when ("59.36.101.19")	{$a="ubuntu-cn论坛的webirc"}
-		when (/^${ipv6}.*/)	{$a="太阳系v6"}
-		when (/^${ipv4}$/)	{$a=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$a=~s/.*：//;chomp $a;}
-		when (/mibbit/)	{$a="mibbit"}
-		when (/redhat/)	{$a="帽帽"}
-		when (/unaffiliated/)	{$a="太阳系"}
-		default {
-			say "---------";
-			while (my ($k,$v) = each %$event){say "- $k => $v";}
-			$host=`host $host`;
-			chomp($host);
-			pc "- new host----$host";
-			if($host=~/\b${ipv4}\b/){$host=$&;}
-			else{$a="鬼搞鬼搞的地方";}
+		if($nick=~/^$Anick[$i][0]\d*\b/i){
+			$nick=$Anick[$i][1];
+			$isknow=1; last;
 		}
 	}
-}
-	if($a=~"IANA"){$a="外太空";}
-	chomp($a);
-	say "$host==$a==";
-	$_="欢迎来自 $a 的 $nick 加入聊天室。《".$event->user."》";
+#--------------------
+	my $ipv4='\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
+	my $ipv6='[\da-fA-F]{1,4}:[\da-fA-F]{1,4}';
+	my $host=$event->host;
+	say $host;
+	$host=~s/(\d)-(\d)/$1.$2/g;		#42-65-57-75.dynamic-ip.hinet.net
+	my @Aip=(
+			["unaffiliated","太阳系"],["redhat","帽帽"],["mibbit","mibbit"],
+			["${ipv6}","外太空"],["59.36.101.19","论坛"],["wikipedia","维基"],
+			);
+	my $add="";
+	if($host=~/\b${ipv4}\b/){$add=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$add=~s/.*：//;chomp $add;}
+	else{
+		for my $i ( 0 .. $#Aip ){
+			if($host=~/$Aip[$i][0]/){ $add=$Aip[$i][1]; last; }
+		}
+		$add="鬼搞鬼搞的地方" if $add eq "";
+	}
+	$_="欢迎来自 $add 的 $nick 加入聊天室。《 ".$event->user." 》";
 	pc $_;
-	if(($welcome==1 and $isknow) or $welcome==2) {
-	$self->privmsg("$cfg_room", $_);}
+	if(($welcome==1 and $isknow) or $welcome==2){$self->privmsg("$cfg_room", $_);}
 }
 #----------------------------------------------	
 sub on_msg {
@@ -193,7 +184,7 @@ sub on_msg {
     my $host=$event->host;
 
 #if(@Amynick ~~ $nick){	# 主人列表，私聊命令
-if(join(" ",@Amynick)=~$nick){ # 主人列表，私聊命令
+if(join(" ",@Amynick)=~/\b$nick\b/){ # 主人列表，私聊命令
 	my ($c,$w)=split(/\s/,$arg);
 	given ($c){
 		when ("join") {$self->join("$cfg_room");}
@@ -201,7 +192,7 @@ if(join(" ",@Amynick)=~$nick){ # 主人列表，私聊命令
 		when ("me") {$self->me("$cfg_room",$w);}
 		when ("op") {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops $w");}
 		when ("deop") {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".($w eq ""?$self->nick:$w));}
-		when ("kick") {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot") if(join(" ",@Amynick)!~$w);}
+		when ("kick") {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot") if(join(" ",@Amynick)!~/\b$w\b/);}
 		when ("eval") {$arg=~s/.*?\s//;$self->privmsg("$nick","$arg 运行结果：".(eval "$arg"));}
 		when (\@ACmd) {
 			my $cmd;
@@ -215,7 +206,8 @@ if(join(" ",@Amynick)=~$nick){ # 主人列表，私聊命令
 	}
 	pc "$nick -> $arg" if $nick ne "x";
 }
-else {$self->privmsg("$cfg_room", "$nick: 别私聊。不告诉你，气死你。 :D \n");}
+else {$self->privmsg("$nick", "别私聊。不告诉你，气死你。 :D \n");}
+#else {$self->privmsg("$cfg_room", "$nick: 别私聊。不告诉你，气死你。 :D \n");}
 }
 #----------------------------------------------	
 sub on_nick_taken {
