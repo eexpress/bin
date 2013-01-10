@@ -9,15 +9,11 @@ use Encode qw(_utf8_on _utf8_off);
 
 #----------------------------------------------	
 my @FuncDef=(
-	't,字典,sdcv.pl -1,p',
-	'p,查询IP,ip-138.bash,p',
-	'd,点阵字,a-d点阵字.bash,p',
-	'r,倒字,a-r倒字.bash,p',
-	'x,花字,a-h花字.bash,p',
-	'bk,百科,baike.pl,p',
-	'deb,软件包信息,deb.pl,p',
-	'ap,精确ip查询,apnic.pl,p',
-	'rss,新闻订阅,rss.pl,p',
+	't,字典,sdcv0.pl,p',
+	'bk,百科,baike.pl,m',
+	'deb,软件包信息,deb.pl,m',
+	'ap,精确ip查询,apnic.pl,m',
+	'rss,新闻订阅,rss.pl,m',
 	);
 #----------------------------------------------	
 chdir dirname (-l $0?readlink $0:$0);
@@ -102,7 +98,7 @@ sub on_public {
 				pc "cmd:\t <$cmd[2] $w>";
 				my @send=`./$cmd[2] 2>/dev/null $w`;
 
-				if($cmd[3]=~/m/){$w=$nick;} else {$w=$cfg_room;}	#私聊?
+				if($cmd[3]=~/m/ && $w){$w=$nick;} else {$w=$cfg_room;}	#私聊?
 				my $total=0;
 				$_=join ' ',@send; _utf8_on($_); @_=/.{1,140}/g;
 				foreach(@_){
