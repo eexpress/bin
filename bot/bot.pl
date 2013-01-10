@@ -11,16 +11,17 @@ use Encode qw(_utf8_on _utf8_off);
 my @FuncDef=(
 	't,字典,sdcv0.pl,p',
 	'bk,百科,baike.pl,m',
-	'deb,软件包信息,deb.pl,m',
+	'deb,软件包信息,deb.pl,p',
 	'ap,精确ip查询,apnic.pl,m',
 	'rss,新闻订阅,rss.pl,m',
 	);
 #----------------------------------------------	
 chdir dirname (-l $0?readlink $0:$0);
 
-my @ACmd=qw(welcome http);
-my $welcome=1;
+my @ACmd=qw(welcome http msgorpub);
+my $welcome=0;
 my $http=0;
+my $msgorpub=1; #choose by FuncDef
 
 my @Amynick=qw(iFvwm iGoogle iGnome iOpera Oooops eexp eexpress);
 my @botnick=@Amynick;
@@ -98,7 +99,12 @@ sub on_public {
 				pc "cmd:\t <$cmd[2] $w>";
 				my @send=`./$cmd[2] 2>/dev/null $w`;
 
-				if($cmd[3]=~/m/ && $w){$w=$nick;} else {$w=$cfg_room;}	#私聊?
+#                if($cmd[3]=~/m/ && $w){$w=$nick;} else {$w=$cfg_room;}	#私聊?
+	given ($msgorpub){
+		when (0) {$w=$nick;}
+		when (2) {$w=$cfg_room;}
+		default {if($cmd[3]=~/m/ && $w){$w=$nick;} else {$w=$cfg_room;}}
+	}
 				my $total=0;
 				$_=join ' ',@send; _utf8_on($_); @_=/.{1,140}/g;
 				foreach(@_){
@@ -186,20 +192,27 @@ if(join(" ",@Amynick)=~/\b$nick\b/){ # 主人列表，私聊命令
 	given ($c){
 		when ("join") {$self->join("$cfg_room");}
 		when ("nick") {$self->nick($w);}
-		when ("me") {$self->me("$cfg_room",$w);}
+		when ("me") {$arg=~s/.*?\s//;$self->me("$cfg_room",$arg);}
+		when ("say") {$arg=~s/.*?\s//;$self->privmsg("$cfg_room",$arg);}
 		when ("op") {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops $w");}
 		when ("deop") {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".($w eq ""?$self->nick:$w));}
 		when ("kick") {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot") if(join(" ",@Amynick)!~/\b$w\b/);}
-		when ("eval") {$arg=~s/.*?\s//;$self->privmsg("$nick","$arg 运行结果：".(eval "$arg"));}
+		when ("eval") {$arg=~s/.*?\s//;eval "$arg";}
+#        eval $self->me("$cfg_room","holle");
+#        eval $self->privmsg("igoogle", "你来了。");
+#        eval print $nick
 		when (\@ACmd) {
 			my $cmd;
 			if($w eq ""){$self->privmsg("$nick", "Now $c is ".(print $c).", Sir.");}
 			else{
-				$cmd="$c=$w"; eval "$cmd";
+				$cmd="$c=$w"; eval "\$$cmd";
 				$self->privmsg("$nick", "Yes, Sir. $cmd\n");
 			}
 		}
-		default {$self->privmsg("$nick", "My Lord, Parameter: welcome=".(print $welcome)." http=".(print $http)."; Commands: join nick me op deop kick eval\n"); $nick="x";}
+		default {
+			my $out=""; foreach(@ACmd){$out.=" $_=".(eval "\$$_");}
+			$self->privmsg("$nick", "My Lord, Parameter: $out; Commands: join nick me say op deop kick eval;");
+			$nick="x";}
 	}
 	pc "$nick -> $arg" if $nick ne "x";
 }
