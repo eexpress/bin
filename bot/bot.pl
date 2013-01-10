@@ -18,16 +18,16 @@ my @FuncDef=(
 #----------------------------------------------	
 chdir dirname (-l $0?readlink $0:$0);
 
-my @ACmd=qw(welcome http msgorpub);
+my @ACmd=qw(welcome http msgorpub voice);
 my $welcome=0;
 my $http=0;
 my $msgorpub=1; #choose by FuncDef
+my $voice=1;
 
 my @Amynick=qw(iFvwm iGoogle iGnome iOpera Oooops eexp eexpress);
 my @botnick=@Amynick;
 my $cfg_nick=shift @botnick;
-my $cfg_room="#ubuntu-cn";
-$cfg_room=$ARGV[0] if($ARGV[0]);
+my $cfg_room=$ARGV[0]//"#ubuntu-cn";
 if($cfg_room!~/^#/){$cfg_room="#".$cfg_room;}
 
 my $irc = new Net::IRC;
@@ -81,7 +81,7 @@ sub on_public {
     
 	if($nick=~$self->nick) {return 1;}	# bot自己的话
 	# 提到主人的信息，提示声音
-	foreach (@Amynick){if($arg=~/\b$_\b/i){`aplay 2>/dev/null default.wav`;last;}}
+	if($voice==1){foreach (@Amynick){if($arg=~/\b$_\b/i){`aplay 2>/dev/null default.wav`;last;}}}
 	if($arg=~/^-h/){$arg="帮助： ";{foreach(@FuncDef){my @info=split ','; $arg.="-$info[0] $info[1], ";}} $self->privmsg("$cfg_room",$arg); return 1;}
 	if($arg=~/^-/){		# 命令以-开始
 		$arg=~s/^-//;
