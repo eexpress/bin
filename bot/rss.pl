@@ -2,6 +2,7 @@
 
 @RSS=qw(
 http://cn.^engadget.com/rss.xml
+http://www.^ubuntuhome.com/feed
 http://^linuxtoy.org/feed/
 http://feed.feedsky.com/^ldcn
 http://www.^cnbeta.com/backend.php
