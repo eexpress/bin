@@ -13,7 +13,7 @@ http://www.^ibm.com/developerworks/cn/views/rss/customrssatom.jsp?zone_type=AllZ
 );
 
 if(!$ARGV[0]){
-print "如果没有直接指定rss地址。可输入单词，在全部rss地址列表里，按照次序匹配：";
+print "没有指定rss地址或者输入缩写。输入缩写可在rss地址列表里按照次序匹配：";
 foreach(@RSS){ s/http.*\^//g;s/\..*$//g; print " ► ".$_; }
 exit;
 }
@@ -21,10 +21,10 @@ exit;
 use LWP::UserAgent;
 my $url=shift;
 if($url!~/^http/){
-foreach(@RSS){
-if($_=~/$url/) {s/\^//g;$url=$_; goto FOUND;}
-}
-die "列表中找不到此URL。\n";
+	foreach(@RSS){
+		if($_=~/$url/) {s/\^//g;$url=$_; goto FOUND;}
+	}
+	die "列表中找不到此URL。\n";
 }
 FOUND:
 
@@ -36,7 +36,8 @@ my $html= $re->content;
 print "RSS新闻：";
 #得到页面中所有RSS标题和链接
 while($html=~m{<title>(.*?)</title>.*?<link>(.*?)</link>}gsi){
-$_="► $1 --> $2 ";
+	$u=`./shorturl.pl $2`;
+$_="► $1 --> $u ";
 s/&amp;/&/g; s/&gt;/>/g; s/&lt;/</g; s/&quot;/"/g; s/&nbsp;/ /g;
 s/<!\[CDATA\[//g; s/]]>//g; s/&p=[0-9#p]*//g;
 s/\n//g; s/&.*?;//g;
