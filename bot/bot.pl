@@ -168,7 +168,8 @@ sub on_join {
 			["${ipv6}","外太空"],["59.36.101.19","论坛"],["wikipedia","维基"],
 			);
 	my $add="";
-	if($host=~/\b${ipv4}\b/ || ($host=~/\.(com|net|org)$/ and $host!~/\//)){$add=`w3m -dump -no-cookie 'http://www.ip138.com/ips138.asp?ip=$host&action=2'|grep  本站主数据`;$add=~s/.*：//;chomp $add;}
+	if($host=~/\b${ipv4}\b/ || ($host=~/\.(com|net|org)$/ and $host!~/\//)){
+		$add=`./getip.pl $host`; }
 	else{
 		for my $i ( 0 .. $#Aip ){
 			if($host=~/$Aip[$i][0]/){ $add=$Aip[$i][1]; last; }
