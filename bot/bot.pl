@@ -60,8 +60,8 @@ sub on_connect {
 	my $self = shift;
 	say "*** Connected to IRC.";
 	say "*** Joining $cfg_room ...";
-	$self->join("$cfg_room");
-	$self->privmsg("$cfg_room", "Ξ");
+	$self->join($cfg_room);
+	$self->privmsg($cfg_room, "Ξ");
 	pc "Enter $cfg_room";
 }
 #----------------------------------------------	
@@ -82,7 +82,7 @@ sub on_public {
 	if($nick=~$self->nick) {return 1;}	# bot自己的话
 	# 提到主人的信息，提示声音
 	foreach (@Amynick){if($arg=~/\b$_\b/i){`aplay 2>/dev/null default.wav`;last;}}
-	if($arg=~/^-h/){$arg="帮助： ";{foreach(@FuncDef){my @info=split ','; $arg.="-$info[0] $info[1], ";}} $self->privmsg("$cfg_room",$arg); return 1;}
+	if($arg=~/^-h/){$arg="帮助： ";{foreach(@FuncDef){my @info=split ','; $arg.="-$info[0] $info[1], ";}} $self->privmsg($cfg_room,$arg); return 1;}
 	if($arg=~/^-/){		# 命令以-开始
 		$arg=~s/^-//;
 #        my ($c,@T)=split(/\s/,$arg); # $w没匹配到，就$c也没内容
@@ -108,7 +108,7 @@ sub on_public {
 				my $total=0;
 				$_=join ' ',@send; _utf8_on($_); @_=/.{1,140}/g;
 				foreach(@_){
-					_utf8_off($_); $self->privmsg("$w",$_);
+					_utf8_off($_); $self->privmsg($w,$_);
 					$total++;last if($total>3);}
 			}
 		}
@@ -122,7 +122,7 @@ sub on_public {
 #        if ($g!~/\.flv$|\.w..$|\.mp.{1,2}$|\.gz$|\.rar$|\.zip$|\.deb$|\.bz.$/){
 			pc "url:\tweb-title.pl \'$g\'";
 			my $t=`./web-title.pl \'$g\'`;
-			$self->privmsg("$cfg_room", "$g 网页标题：$t\n");
+			$self->privmsg($cfg_room, "$g 网页标题：$t\n");
 		}}}}
 }
 #----------------------------------------------	
@@ -177,7 +177,7 @@ sub on_join {
 	}
 	$_="欢迎来自 $add 的 $nick 加入聊天室。《 ".$event->user." 》";
 	pc $_;
-	if(($welcome==1 and $isknow) or $welcome==2){$self->privmsg("$cfg_room", $_);}
+	if(($welcome==1 and $isknow) or $welcome==2){$self->privmsg($cfg_room, $_);}
 }
 #----------------------------------------------	
 sub on_msg {
@@ -190,34 +190,35 @@ sub on_msg {
 if(join(" ",@Amynick)=~/\b$nick\b/){ # 主人列表，私聊命令
 	my ($c,$w)=split(/\s/,$arg);
 	given ($c){
-		when ("join") {$self->join("$cfg_room");}
+		when ("join") {$self->join($cfg_room);}
 		when ("nick") {$self->nick($w);}
-		when ("me") {$arg=~s/.*?\s//;$self->me("$cfg_room",$arg);}
-		when ("say") {$arg=~s/.*?\s//;$self->privmsg("$cfg_room",$arg);}
+		when ("me") {$arg=~s/.*?\s//;$self->me($cfg_room,$arg);}
+		when ("say") {$arg=~s/.*?\s//;$self->privmsg($cfg_room,$arg);}
+		when ("msg") {$arg=~s/.*?\s//;my ($c,$w)=split(/\s/,$arg);$self->privmsg($c,$w);}
 		when ("op") {$self->sl_real("PRIVMSG NickServ :IDENTIFY Oooops $w");}
 		when ("deop") {$self->sl_real("PRIVMSG ChanServ :DEOP ".$cfg_room." ".($w eq ""?$self->nick:$w));}
 		when ("kick") {$self->sl_real("KICK ".$cfg_room." ".$w." 冲撞bot") if(join(" ",@Amynick)!~/\b$w\b/);}
 		when ("eval") {$arg=~s/.*?\s//;eval "$arg";}
-#        eval $self->me("$cfg_room","holle");
+#        eval $self->me($cfg_room,"holle");
 #        eval $self->privmsg("igoogle", "你来了。");
 #        eval print $nick
 		when (\@ACmd) {
 			my $cmd;
-			if($w eq ""){$self->privmsg("$nick", "Now $c is ".(print $c).", Sir.");}
+			if($w eq ""){$self->privmsg($nick, "Now $c is ".(print $c).", Sir.");}
 			else{
 				$cmd="$c=$w"; eval "\$$cmd";
-				$self->privmsg("$nick", "Yes, Sir. $cmd\n");
+				$self->privmsg($nick, "Yes, Sir. $cmd\n");
 			}
 		}
 		default {
 			my $out=""; foreach(@ACmd){$out.=" $_=".(eval "\$$_");}
-			$self->privmsg("$nick", "My Lord, Parameter: $out; Commands: join nick me say op deop kick eval;");
+			$self->privmsg($nick, "My Lord, Parameter: $out; Commands: join nick me say op deop kick eval;");
 			$nick="x";}
 	}
 	pc "$nick -> $arg" if $nick ne "x";
 }
-else {$self->privmsg("$nick", "别私聊。不告诉你，气死你。 :D \n");}
-#else {$self->privmsg("$cfg_room", "$nick: 别私聊。不告诉你，气死你。 :D \n");}
+else {$self->privmsg($nick, "别私聊。不告诉你，气死你。 :D \n");}
+#else {$self->privmsg($cfg_room, "$nick: 别私聊。不告诉你，气死你。 :D \n");}
 }
 #----------------------------------------------	
 sub on_nick_taken {
@@ -228,8 +229,8 @@ sub on_nick_taken {
 sub on_kick {
 	my ($self, $event) = @_;
     my ($nick) = $event->nick;
-	$self->join("$cfg_room");
-	$self->privmsg("$cfg_room", "谁那么无聊啊。nnnnnd $nick 你又咋了。");
+	$self->join($cfg_room);
+	$self->privmsg($cfg_room, "谁那么无聊啊。nnnnnd $nick 你又咋了。");
 }
 #----------------------------------------------	
 

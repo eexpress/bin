@@ -33,14 +33,16 @@ my $re= $ua->get($url);
 die if (!$re->is_success);
 my $html= $re->content;
 
+my $cnt=0;
 print "RSS新闻：";
 #得到页面中所有RSS标题和链接
 while($html=~m{<title>(.*?)</title>.*?<link>(.*?)</link>}gsi){
-	$u=`./shorturl.pl $2`;
+	$u=`./shorturl.pl \"$2\"`;
 $_="► $1 --> $u ";
 s/&amp;/&/g; s/&gt;/>/g; s/&lt;/</g; s/&quot;/"/g; s/&nbsp;/ /g;
 s/<!\[CDATA\[//g; s/]]>//g; s/&p=[0-9#p]*//g;
 s/\n//g; s/&.*?;//g;
 print;
+$cnt++; exit if $cnt>6;
 }
 
