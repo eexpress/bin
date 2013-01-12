@@ -7,17 +7,23 @@ use Net::DBus;
 binmode STDOUT, ':utf8';
 
 use Getopt::Long;
-my $view; my $decoder; my $help;
-GetOptions('view'=>\$view,'decoder'=>\$decoder,'help'=>\$help);
+my $view; my $help;
+GetOptions('view'=>\$view,'help'=>\$help);
 
 if($help){
 print <<HELP;
 AUTHOR:         eexpress
-VERSION:        1.1
-USAGE:          flash-down.pl [--view] [--decoder] [--help] url
+VERSION:        1.2
+USAGE:          flash-down.pl [--view] [--help] url
 HELP
 exit 0;
 }
+
+use File::Pid;
+my $pidfile=File::Pid->new({file=>'/tmp/flash-down.pid'});
+if(my $num=$pidfile->running){print $pidfile->program_name." is already running with PID: $num\nwait....\n";}
+while ($pidfile->running){ sleep 5; }
+$pidfile->write;
 
 my $black="\e[30m";my $red="\e[31m";my $green="\e[32m";
 my $yellow="\e[33m";my $blue="\e[34m";my $pink="\e[35m";
@@ -42,7 +48,6 @@ if ($mech->success()) {
 	$_=$&; 
 	s/^.*?>//;s/<.*$//s;s/\s*//g;
 	print "$red$bold".$_."$normal==================\n";
-#    mkdir "$_"; chdir "$_";
 	my $name="$_";
 	my @link=$mech->find_all_links(text_regex => qr/http:\/\/.*[0-9a-fA-F]*/,);
 	my $size=@link;
@@ -51,13 +56,17 @@ if ($mech->success()) {
 	print map "=> $green".$_->url()."$normal\n",@link;
 #    open(LINK,">link.log"); print LINK map $_->url()."\n",@link; close LINK;
 	my $cnt=1; my $proc="▭"x$size;
+#---------------------	
 if($view){
 	foreach(@link){
 		my $add=$_->url();
 		`mplayer -quiet $add`;
 		}
+		$pidfile->remove;
 		exit;
 }
+#---------------------	
+	if($size>4){mkdir "$_"; chdir "$_";}
 	foreach(@link){
 		my $add=$_->url();
 #        print "$red 下载$normal => $green$add$normal\n";
@@ -75,14 +84,6 @@ if($view){
 		$cnt++;
 	}
 #---------------------	
-	if($decoder){
-	`paplay "/usr/share/sounds/ubuntu/stereo/service-login.ogg"`;
-	$name=~s/ /-/g;
-	print "\e]2;$name 使用mencoder压缩中。。。\a";
-	$bus->Notify("flash", 0, "sunny", "flash 视频转换成 avi", "$dir/$name.avi", [], { }, -1);
-	`/usr/bin/mencoder -profile c430 *.flv -o $dir/$name.avi 2>&1`;
-	}
-#---------------------	
 	$bus->Notify("flash", 0, "sunny", "$name 已经完成全部下载", "", [], { }, -1);
 #    chdir '..';
 	`echo "$ARGV[0]\t《$_》\t结果：$proc">>/tmp/flash-down.log`;
@@ -94,4 +95,6 @@ if($view){
 } else {
 	$bus->Notify("flash", 0, "gtk-cancel", '网页无效', ':(', [], { }, -1);
 }
+
+$pidfile->remove;
 #======================
