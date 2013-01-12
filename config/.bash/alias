@@ -116,6 +116,9 @@ ping -c 5 ${1:-www.163.com}
 xargs(){
 /usr/bin/xargs -I{} $* {}
 }
+waitend(){
+while pgrep $1 1>/dev/null; do sleep 5; done;
+}
 #--------TAB COMPLETION ADD------------------------
 _show_installed()
 {
