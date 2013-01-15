@@ -10,6 +10,7 @@ const int segw=138;
 const int segh=24;
 const int w0=30;
 const int h0=40;
+const int maxday=7;
 int ww;
 int wh;
 const string outputfile="/tmp/cw.png";
@@ -45,7 +46,7 @@ public class DrawWeather : Gtk.Window {
 	string todaypng1="";
 
     public DrawWeather() {
-		ww=(int)((7*segw+w0*2)*scale);
+		ww=(int)((maxday*segw+w0*2)*scale);
 		wh=(int)((8*segh+h0*2)*scale);
         title = "DrawWeather";
 		skip_taskbar_hint = true;
@@ -106,14 +107,14 @@ public class DrawWeather : Gtk.Window {
 				scale*=0.9;
 				if(scale<0.5)scale=0.5;
 			}
-			ww=(int)((7*segw+w0*2)*scale);
+			ww=(int)((maxday*segw+w0*2)*scale);
 			wh=(int)((8*segh+h0*2)*scale);
 			this.resize(ww,wh);
 			return true;
 		});
-    }
+	}
 
-    private void drawpng (Context ctx) {
+	private void drawpng (Context ctx) {
 		var now = new DateTime.now_local ();
 		var week=now.get_day_of_week();
 		ctx.set_operator (Cairo.Operator.OVER);
@@ -205,6 +206,7 @@ public class DrawWeather : Gtk.Window {
 				if(v==0) v=v+5; v++;
 			}
 			daycnt++; week++; now=now.add_days(1);
+			if(daycnt>=maxday) break;
 		}
 	}
 

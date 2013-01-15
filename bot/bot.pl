@@ -169,7 +169,7 @@ sub on_join {
 			);
 	my $add="";
 	if($host=~/\b${ipv4}\b/ || ($host=~/\.(com|net|org)$/ and $host!~/\//)){
-		$add=`./getip.pl $host`; }
+		$add=`./getip.pl \"$host\"`; }
 	else{
 		for my $i ( 0 .. $#Aip ){
 			if($host=~/$Aip[$i][0]/){ $add=$Aip[$i][1]; last; }
@@ -231,6 +231,7 @@ sub on_kick {
 	my ($self, $event) = @_;
     my ($nick) = $event->nick;
 	$self->join($cfg_room);
+	while(my ($k,$v)=each %$event){print "$k => $v\n";}
 	$self->privmsg($cfg_room, "谁那么无聊啊。nnnnnd $nick 你又咋了。");
 }
 #----------------------------------------------	
