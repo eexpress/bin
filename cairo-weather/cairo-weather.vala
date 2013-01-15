@@ -274,16 +274,18 @@ public class DrawWeather : Gtk.Window {
 		conffile=Environment.get_variable("HOME")+"/.config/"+appname+"/config";
 		stdout.printf(conffile+" : url, font, scale.\n");
 	try{
-		var conf=File.new_for_path(conffile);
-		var rc = new DataInputStream (conf.read ());
-		while ((line = rc.read_line (null)) != null) {
-			if(line.contains("#")) continue;
-			if(!line.contains("=")) continue;
-			string[] k=line.split("=",2);
-			stdout.printf(k[0]+" -> "+k[1]+"\n");
-			if(k[0]=="url") web=k[1];
-			if(k[0]=="font") fontname=k[1];
-			if(k[0]=="scale") scale=double.parse(k[1]);
+		if(File.new_for_path(conffile).query_exists() == true){
+			var conf=File.new_for_path(conffile);
+			var rc = new DataInputStream (conf.read ());
+			while ((line = rc.read_line (null)) != null) {
+				if(line.contains("#")) continue;
+				if(!line.contains("=")) continue;
+				string[] k=line.split("=",2);
+				stdout.printf(k[0]+" -> "+k[1]+"\n");
+				if(k[0]=="url") web=k[1];
+				if(k[0]=="font") fontname=k[1];
+				if(k[0]=="scale") scale=double.parse(k[1]);
+			}
 		}
 		if(args[1].contains("qq.ip138.com")) web=args[1];
 		var url=File.new_for_uri(web);
