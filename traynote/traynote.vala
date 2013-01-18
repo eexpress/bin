@@ -143,8 +143,8 @@ class EditNote : Window {
 		var scroll=new ScrolledWindow(null, null);
 		scroll.hexpand=true;
 		scroll.vexpand=true;
-		scroll.min_content_height=200;
-		scroll.min_content_width=300;
+		scroll.min_content_height=300;
+		scroll.min_content_width=400;
 		scroll.set_policy (PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
 		scroll.add(view);
 		this.check_resize.connect(()=>{
