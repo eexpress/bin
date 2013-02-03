@@ -206,6 +206,7 @@ public class DrawWeather : Gtk.Window {
 				if(v==0) v=v+5; v++;
 			}
 			daycnt++; week++; now=now.add_days(1);
+			if(week>7){week-=7;}
 			if(daycnt>=maxday) break;
 		}
 	}
