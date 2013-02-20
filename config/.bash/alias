@@ -95,11 +95,7 @@ routel|grep 'default.*static'|awk '{print $NF}'
 }
 alias mp3info='mutagen-inspect'
 alias mp3enca='mid3iconv --remove-v1 -d -e GBK'
-alias loc='locate -beLin $(($LINES-4))'
 alias pl='perl -e'
-loc.(){
-locate -eLin $(($LINES-4)) -r "`pwd`/.*$1"
-}
 pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 fd(){ [ $1 ] && find . -iname "*$1*" || echo "need parameter."; }
 tree(){ /usr/bin/tree $*|/usr/bin/ascii2uni -a K;}
@@ -118,6 +114,13 @@ xargs(){
 }
 waitend(){
 while pgrep $1 1>/dev/null; do sleep 5; done;
+}
+#alias loc='locate -beLin $(($LINES-4))'
+#loc.(){
+#locate -eLin $(($LINES-4)) -r "`pwd`/.*$1"
+#}
+loc(){
+locate -eLin $(($LINES-4)) "`pwd`/*/$1"
 }
 #--------TAB COMPLETION ADD------------------------
 _show_installed()
