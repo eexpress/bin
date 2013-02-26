@@ -3,8 +3,8 @@
 if [ ! $1 ]; then
 	echo "Find filename in current directory, need (multi) parameter."; exit
 fi
-
-cmd='find . '
+#不搜索隐藏文件夹
+cmd='find . ! -path "*/.*" '
 for p in $*; do
 cmd=$cmd"-iname \"*$p*\" "
 done
