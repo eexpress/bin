@@ -6,6 +6,7 @@
 	dflog = log -p
 	ls = !sh -c 'git ls-files|ascii2uni -a K'
 	lg = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr)%Creset %s'
+	ll = reflog
 
 [color]
 	diff = always
