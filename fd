@@ -10,7 +10,7 @@ cmd='find . ! -path "*/.*" '
 color='|sed'
 for p in $*; do
 cmd=$cmd"-iname \"*$p*\" "
-color=$color" -e 's/$p/$redB&$end/g'"
+color=$color" -e 'h;s:.*/::;s/$p/$redB&$end/g;x;s:[^/]\+$::g;G;s/\n//'"
 done
 echo -e "$blueB>>>> $cmd\n$end"
 eval $cmd$color
