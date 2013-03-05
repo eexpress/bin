@@ -7,10 +7,11 @@ if [ ! $1 ]; then
 fi
 #不搜索隐藏文件夹
 cmd='find . ! -path "*/.*" '
-color='|sed'
+color="|sed 'h;s:.*/::;"
 for p in $*; do
 cmd=$cmd"-iname \"*$p*\" "
-color=$color" -e 'h;s:.*/::;s/$p/$redB&$end/g;x;s:[^/]\+$::g;G;s/\n//'"
+color=$color"s/$p/$redB&$end/g;"
 done
+color=$color"x;s:[^/]\+$::g;G;s/\n//'"
 echo -e "$blueB>>>> $cmd\n$end"
 eval $cmd$color
