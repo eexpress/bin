@@ -7,7 +7,8 @@ SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=8:encodin
 ######################### 热键
 Key F1 A N Quake gnome-terminal
 #Key v A 4 Jump gvim
-Key f A 4 JumpExec pcmanfm
+#Key f A 4 JumpExec pcmanfm
+Key f A 4 JumpExec nautilus --no-desktop
 Key o A 4 JumpExec opera
 Key z A 4 JumpExec zim
 Key c A 4 JumpExec gnome-control-center
@@ -57,6 +58,9 @@ Mouse 5 W M ResizeMove w+10 w+10 w-5 w-5
 
 Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 8 2 90 90
 Mouse 2 R N Exec synapse
+Key Escape A C Exec synapse
+Key F3 A N Exec synapse
+PointerKey Escape R N Exec synapse
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
@@ -122,13 +126,13 @@ Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlaceme
 Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
 Style MPlayer	StaysOnTop
 Style gnome-terminal WindowListSkip
-#Style dock		!Title, !Borders, Sticky, StaysOnBottom, !Iconifiable
+Style back		!Title, !Borders, Sticky, StaysOnBottom, !Iconifiable
 Style dock		!Title, !Borders, Sticky, StaysOnTop, !Iconifiable
 Style *panel	UseStyle dock
 Style *dock		UseStyle dock
 Style *tray		UseStyle dock
 Style *clock	UseStyle dock
-Style cairo-*	UseStyle dock
+Style cairo-*	UseStyle back
 Style plank*	UseStyle dock
 Style tilda*	UseStyle dock
 Style tint2		UseStyle dock
@@ -151,17 +155,17 @@ SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
 ######################### 启动
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
-+ I Test (Init) Exec exec fvwm-root -r $[fvwm]/desktop.png
++ I fvwm-root -r $[fvwm]/desktop.png
 + I Test (Init) Exec exec $[script]/goagent.bash
-+ I ExecOnce cairo-dock
+#+ I ExecOnce cairo-dock
 + I Test (Init) Exec exec ubuntuone-launch
 #+ I ExecOnce tint2
 + I ExecOnce nm-applet
-#+ I ExecOnce $[script]traytool
-+ I ExecOnce $[script]traynote
-+ I ExecOnce xcompmgr -cf
++ I ExecOnce $[script]/traytool/traytool
+#+ I ExecOnce $[script]traynote
+#+ I ExecOnce xcompmgr -cf
 #+ I ExecOnce synapse
-#+ I ExecOnce cairo-weather.pl
++ I ExecOnce cairo-weather
 #+ I Test (Init) Exec exec gnome-settings-daemon
 #+ I Test (Init) Exec exec plank
 #+ I Test (Init) Exec exec $[script]git.pl
@@ -169,6 +173,6 @@ AddToFunc    StartFunction
 #+ I Test (Init) Exec exec opera
 #+ I Test (Init) Exec bash -c '~/bin/msg git pull; cd bin; git pull;~/bin/msg git finished'
 #+ I ExecOnce volumeicon
-#+ I Schedule 800 ExecOnce stalonetray -t -i 16
++ I Schedule 800 ExecOnce stalonetray -t -i 16
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
 #+ I Module FvwmCommandS

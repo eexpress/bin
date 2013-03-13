@@ -131,6 +131,7 @@ int i;
 	switch (e.direction){
 		case Gdk.ScrollDirection.DOWN:	str="amixer set Master 5%-";break;
 		case Gdk.ScrollDirection.UP:	str="amixer set Master 5%+";break;
+		default: return false;
 	}
 	exec_sync(str);
 	r = /\d*%/; r.match(stdoutstr,0,out info);

@@ -11,6 +11,7 @@ GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$nam
 #----------------------------------
 %web=(
 	"http://imm.io/"=>{"image"=>'xxxx'},		#改js了
+	"file://localhost/home/eexp/imm.io.html"=>{"image"=>'xxxx'},
 	"http://www.cjb.net/"=>{"image"=>'xxxx'},	#废弃
 	"http://bkup.co/"=>{"file1"=>'xxxx'},
 	"http://kimag.es/"=>{"userfile1"=>'xxxx'},
@@ -31,8 +32,10 @@ GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$nam
 if($help){pod2usage(-verbose => 2); exit;}
 #----------------------------------
 if($list){
-foreach (keys %web){s'http://'';s'/.*'';$_.="\t\e[30;42m*\e[0m" if /$select/;
-print "$_\n";}
+foreach (keys %web){
+	if(/^file/){ s'.*/''; }else{ s'http://'';s'/.*''; }
+	$_.="\t\e[30;42m*\e[0m" if /$select/;
+	print "$_\n";}
 exit;
 }
 #`echo $ARGV[0]>>/tmp/pi-file`;
