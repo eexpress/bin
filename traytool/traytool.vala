@@ -98,7 +98,13 @@ void check_status(){
 	exec_sync("amixer get Master");
 	r = /\d*%/; r.match(stdoutstr,0,out info);
 	svol=info.fetch(0);
-	trayicon.set_tooltip_text ("音量："+svol+"\n模式："+(rightmode?"右":"左")+"手鼠标");
+}
+
+bool settip(int x, int y, bool k, Tooltip t){
+	check_status();
+	exec_sync("date");
+	t.set_text(stdoutstr+"音量："+svol+"\n模式："+(rightmode?"右":"左")+"手鼠标");
+	return true;
 }
 
 bool mouse(Gdk.EventButton e){
@@ -118,7 +124,6 @@ bool mouse(Gdk.EventButton e){
 				rightmode=true;
 				exec("xmodmap -e 'pointer = 1 2 3'");
 			}
-			trayicon.set_tooltip_text ("音量："+svol+"\n模式："+(rightmode?"右":"左")+"手鼠标");
 			break;
 	}
 	return true;
@@ -135,8 +140,6 @@ int i;
 	}
 	exec_sync(str);
 	r = /\d*%/; r.match(stdoutstr,0,out info);
-	svol=info.fetch(0);
-	trayicon.set_tooltip_text ("音量："+svol+"\n模式："+(rightmode?"右":"左")+"手鼠标");
 	i=int.parse(info.fetch(0));
 	if(i<30) str="low";
 	else if(i>70) str="high";
@@ -154,9 +157,11 @@ static int main (string[] args) {
 	var now = new DateTime.now_local ();
 	starttime=now;
 	trayicon = new StatusIcon.from_stock(Stock.JUSTIFY_LEFT);
+	trayicon.set_tooltip_text (" ");	//oops, can not omit this?
 	check_status();
 	trayicon.button_release_event.connect(mouse);
 	trayicon.scroll_event.connect(volume);
+	trayicon.query_tooltip.connect(settip);
 	create_menuSystem();
 	trayicon.set_visible(true);
 	Notify.init("TrayTool");
