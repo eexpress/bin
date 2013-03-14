@@ -165,7 +165,7 @@ AddToFunc    StartFunction
 #+ I ExecOnce $[script]traynote
 #+ I ExecOnce xcompmgr -cf
 #+ I ExecOnce synapse
-+ I ExecOnce cairo-weather
+#+ I ExecOnce cairo-weather
 #+ I Test (Init) Exec exec gnome-settings-daemon
 #+ I Test (Init) Exec exec plank
 #+ I Test (Init) Exec exec $[script]git.pl
@@ -173,6 +173,7 @@ AddToFunc    StartFunction
 #+ I Test (Init) Exec exec opera
 #+ I Test (Init) Exec bash -c '~/bin/msg git pull; cd bin; git pull;~/bin/msg git finished'
 #+ I ExecOnce volumeicon
-+ I Schedule 800 ExecOnce stalonetray -t -i 16
++ I Schedule 800 ExecOnce trayer
+#+ I Schedule 800 ExecOnce stalonetray
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
 #+ I Module FvwmCommandS
