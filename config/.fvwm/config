@@ -155,13 +155,13 @@ SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
 ######################### 启动
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
-+ I fvwm-root -r $[fvwm]/desktop.png
-+ I Test (Init) Exec exec $[script]/goagent.bash
++ I Exec fvwm-root -r $[fvwm]desktop.png
++ I Test (Init) Exec exec $[script]goagent.bash
 #+ I ExecOnce cairo-dock
-+ I Test (Init) Exec exec ubuntuone-launch
++ I Test (Init) Exec ubuntuone-launch
 #+ I ExecOnce tint2
 + I ExecOnce nm-applet
-+ I ExecOnce $[script]/traytool/traytool
++ I ExecOnce $[script]traytool/traytool
 #+ I ExecOnce $[script]traynote
 #+ I ExecOnce xcompmgr -cf
 #+ I ExecOnce synapse
