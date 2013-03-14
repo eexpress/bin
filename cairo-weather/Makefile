@@ -1,5 +1,8 @@
 #!/usr/bin/make -f
 
+compile:
+	/usr/bin/valac --pkg gtk+-3.0 cairo-weather.vala
+
 clean:
 	rm -rf deb
 
@@ -18,3 +21,4 @@ deb:	clean
 	cp -u cairo-weather.png deb/usr/share/pixmaps
 	dpkg-deb -b deb .
 
+all: compile deb
