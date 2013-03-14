@@ -117,8 +117,10 @@ AddToFunc Quake
 ######################### 样式设置
 Colorset 91 RootTransparent buffer
 #TitleStyle -- flat
-TitleStyle Active HGradient 128 PaleGreen1 tomato1 -- flat
-TitleStyle InActive Colorset 91 -- flat
+#● less /etc/X11/rgb.txt
+TitleStyle InActive HGradient 128 Black DimGrey -- flat
+TitleStyle Active HGradient 128 PaleGreen3 tomato3 -- flat
+#TitleStyle InActive Colorset 91 -- flat
 #TitleStyle Colorset 91 -- flat
 Style *		Font "$[RegularFont]"
 #Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
