@@ -3,6 +3,7 @@
 title="计划任务提醒"
 icon="/usr/share/pixmaps/ubuntu-screensaver.svg"
 sound="/home/eexp/bin/resources/sound/kongas.ogg"
+[ -f $sound ] || sound="/usr/share/sounds/gnome/default/alerts/drip.ogg"
 case $# in
 1)
 	msg=$1;;
