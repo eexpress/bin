@@ -6,7 +6,7 @@ cd `dirname "$1"`
 f=`exif -m -t 0x9003 "${1#file://}"`
 echo $f|grep '^20'
 if [ $? -eq 1 ]; then
-f="noexif-"`date '+%Y:%m:%d-%H:%M:%S'`
+f="noexif-"`date '+%Y-%m-%d_%H-%M-%S'`
 else
 f=`echo $f|sed 's/\ /-/g'`
 fi
