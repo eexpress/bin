@@ -8,7 +8,7 @@ echo $f|grep '^20'
 if [ $? -eq 1 ]; then
 f="noexif-"`date '+%Y-%m-%d_%H-%M-%S'`
 else
-f=`echo $f|sed 's/\ /-/g'`
+f=`echo $f|sed 's/\ /_/g'|sed 's/:/-/g'`
 fi
 
 s=`identify -format "%wx%h" "$1"`
@@ -19,7 +19,7 @@ if [ $x -gt $y ]; then
 p=0.99; s=720
 else
 p=1.5; s=480
-if [ $# -lt 5 ]; then p=0; s=600; fi
+#if [ $# -lt 5 ]; then p=0; s=600; fi
 fi
 t=`echo "sqrt($#)+$p"|bc -l`
 t=`echo $t|cut -d. -f1`
