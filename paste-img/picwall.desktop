@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Picture Wall
+Name[zh_CN]=照片墙
+Comment=puzzle multi images into one picture wall
+Comment[zh_CN]=将多个图片拼接成照片墙
+Exec=picwall.bash %U
+Icon=picwall
+NoDisplay=false
+MimeType=image/jpeg;image/png;image/gif;
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Graphics;
+

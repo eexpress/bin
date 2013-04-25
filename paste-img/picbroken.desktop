@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Picture Broken
+Name[zh_CN]=破报纸效果
+Comment=make picture looks like broken paper
+Comment[zh_CN]=给图片加上破报纸的纸边效果
+Exec=picbroken.bash %U
+Icon=picbroken
+NoDisplay=false
+MimeType=image/jpeg;image/png;image/gif;
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Graphics;
+
