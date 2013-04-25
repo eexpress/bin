@@ -2,7 +2,7 @@
 
 #for i in "$@"; do echo \"${i#file://}\" >>~/tmp; done
 #exit
-cd `dirname "$1"`
+cd "`dirname "$1"`"
 f=`exif -m -t 0x9003 "${1#file://}"`
 echo $f|grep '^20'
 if [ $? -eq 1 ]; then
