@@ -25,12 +25,13 @@ deb:	clean
 	-mkdir -p deb/usr/share/paste-img
 	-mkdir -p deb/usr/share/pixmaps
 	cp -u *.desktop deb/usr/share/applications
-	cp -u *.pl *.glade *.png deb/usr/share/paste-img
+	cp -u *.pl *.glade *.png *.bash deb/usr/share/paste-img
 	cd deb/usr/share/pixmaps; \
 	ln -sf ../paste-img/*.png . ;\
 	cd ../../../..
 	cd deb/usr/bin; \
 	ln -sf ../share/paste-img/*.pl . ;\
+	ln -sf ../share/paste-img/*.bash . ;\
 	cd ../../..
 	dpkg-deb -b deb .
 #	rm -r deb

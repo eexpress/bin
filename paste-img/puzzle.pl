@@ -31,4 +31,6 @@ $a="\'".join("\' \'",@ARGV)."\'";
 
 $tile=int(sqrt(@ARGV)+$p);
 `montage -tile $tile -geometry +0+0 -background none /tmp/4in1* ./p-$f.jpg`;
-`rm $a`;
+`eog "./p-$f.jpg"`;
+`zenity --question --title=删除 --text="是否 $#ARGV 个删除文件"`;
+print "delete...\n",`rm $a` if ! $?;
