@@ -13,12 +13,3 @@
 [user]
 	name = eexpress
 	email = eexpress@163.com
-[http]
-	proxy = localhost:8087
-	sslVerify = false
-[giggle]
-	main-window-maximized = false
-	main-window-geometry = 876x677+842+226
-	file-view-vpane-position = 433
-	main-window-view = FileView
-	history-view-vpane-position = 402
