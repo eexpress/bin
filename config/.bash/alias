@@ -16,6 +16,8 @@ alias ag='sudo aptitude upgrade'
 alias as='aptitude search'
 alias aw='aptitude show'
 
+alias cam='mplayer tv://'
+alias rd='recordmydesktop --overwrite --fps 15 --on-the-fly-encoding'
 alias lnsf='sudo ln -sf'
 alias o='xdg-open'
 alias cal='cal -3'
