@@ -33,11 +33,13 @@ fi
 fi
 echo -e "\e[34m输出：$f\t文件：$#\t缩放宽度：$s\t列数：$t\e[0m"
 
-rm /tmp/4in1*
-convert -scale $s "$@" /tmp/4in1
-montage -tile $t -geometry +0+0 -background none /tmp/4in1* ./p-$f.jpg
+l=`basename $0`
+l=${l%%.*}
+rm /tmp/$l*
+convert -scale $s "$@" /tmp/$l
+montage -tile $t -geometry +0+0 -background none /tmp/$l* ./p-$f.jpg
 eog "./p-$f.jpg"
 zenity --question --title=删除 --text="是否 $# 个删除文件"
-[ $? -eq 0 ] && echo "删除。。。" && for i in "$@"; do j=${i#file://}; echo $j>>~/tmp; rm "$j"; done
+[ $? -eq 0 ] && echo "删除。。。" && for i in "$@"; do j=${i#file://}; echo $j>>/tmp/$l.log; rm "$j"; done
 #[ $? -eq 0 ] && echo "删除。。。" && rm "$@"
 
