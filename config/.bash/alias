@@ -32,7 +32,7 @@ alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
 alias dmesg='/bin/dmesg|tail|cut -b -$COLUMNS'
 alias dog='grep -v -E "(^$|^#|^!)"'
-alias du='du -sch'
+#alias du='du -sch'
 #alias egrep='egrep --color=always'
 alias free='free -m'
 alias g='grep --color -in'
@@ -106,12 +106,9 @@ gitup(){ git ci -a -m "${*:-`date`}"; git remote|grep .; [ $? == 0 ] && git push
 c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 #md () { mkdir -p "$1" && cd "$1"; }
-nmap(){
-/usr/bin/nmap ${1:-localhost}
-}
-p(){
-ping -c 5 ${1:-www.163.com}
-}
+nmap(){ /usr/bin/nmap ${1:-localhost}; }
+p(){ ping -c 5 ${1:-www.163.com}; }
+du(){ /usr/bin/du -sh "$@"|sort -rh; }
 #xargs(){
 #/usr/bin/xargs -I{} $* {}
 #}
