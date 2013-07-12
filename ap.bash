@@ -2,7 +2,7 @@
 
 sudo ifconfig wlan0 192.168.0.1 netmask 255.255.255.0
 sudo -i sysctl -w net.ipv4.ip_forward=1
-sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -j MASQUERADE
 sudo pkill -9 dhcpd
 
 if [ ! -f /etc/apparmor.d/disable/usr.sbin.dhcpd ]; then
