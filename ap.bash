@@ -24,9 +24,8 @@ sudo dhcpd wlan0 -cf /tmp/dhcpd.conf -pf /var/run/dhcp-server/dhcpd.pid
 
 cat > /tmp/hostapd.conf << EOF
 interface=wlan0
-#bridge=br0
 driver=nl80211
-ssid=eexp-hostapd
+ssid=`hostname`-hostapd
 hw_mode=g
 channel=11
 auth_algs=1
