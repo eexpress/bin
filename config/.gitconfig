@@ -13,3 +13,5 @@
 [user]
 	name = eexpress
 	email = eexpress@163.com
+[http]
+	sslVerify = false
