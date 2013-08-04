@@ -1,5 +1,6 @@
 using Gtk;
 using Cairo;
+using Rsvg;
 	
 string city;
 string weather;
@@ -162,7 +163,7 @@ public class DrawWeather : Gtk.Window {
 						}
 					}
 				}
-			} catch (Error e) {error ("%s", e.message);}
+			} catch (GLib.Error e) {error ("%s", e.message);}
 
 			line=date+"\t"+line;
 			string[] item = line.split ("\t");
@@ -181,11 +182,28 @@ public class DrawWeather : Gtk.Window {
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
 								var sp=sharepath+"weather-icon/"+"%02d.png".printf(i);
+								var svg=sharepath+"weather-icon/"+"%02d.svg".printf(i);
 								if(daycnt==0){
 									if(p==0)todaypng0=sp;
 									else todaypng1=sp;
 								}
+//add svg support.
+							if(File.new_for_path(svg).query_exists() == true){
+								Rsvg.Handle handle;
+								try {
+									handle = new Rsvg.Handle.from_file(svg);
+									img=new ImageSurface(Format.ARGB32,100,100);
+									var temp_cr = new Cairo.Context(img);
+/*                                    temp_cr.translate(0,0); temp_cr.scale(160,160);*/
+									handle.render_cairo(temp_cr);
+								} catch (GLib.Error e) {error ("%s", e.message);}
+/*                                SvgSurface vect=new SvgSurface(svg,60,60);*/
+/*                                temp_cr.save( );*/
+/*                                temp_cr.restore( );*/
+							}
+							else{
 								img=new ImageSurface.from_png(sp);
+							}
 								ctx.set_source_surface(img,p*h0,p*h0);
 								ctx.paint();
 								break;
@@ -301,7 +319,7 @@ public class DrawWeather : Gtk.Window {
 				stdout.printf(weather+"\n");
 			}
 		}
-	} catch (Error e) {error ("%s", e.message);}
+	} catch (GLib.Error e) {error ("%s", e.message);}
 
         var DW = new DrawWeather ();
         DW.show_all ();
