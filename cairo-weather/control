@@ -1,5 +1,5 @@
 Package: cairo-weather
-Version: 0.92
+Version: 0.93
 Architecture: amd64
 Maintainer: eexpress
 Installed-Size: 567
@@ -9,5 +9,5 @@ Description: draw weather on desktop using Cairo
  Draw weather forecast on desktop. mainly support Chinese city.
  parametr format http://qq.ip138.com/weather/hunan/ChangSha.wml
  or config file: ~/.config/cairo-weather/config.
- animate weather add.
+ animate weather effect. weather icon can be svg or png format.
 
