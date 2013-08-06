@@ -40,7 +40,7 @@ public class DrawWeather : Gtk.Window {
 
 	public	Gdk.RGBA c;
 	public int step=zoom.length;
-	ImageSurface png;
+	ImageSurface bgpng;
 	ImageSurface appicon0;
 	ImageSurface appicon1;
 	string todaypng0="";
@@ -62,15 +62,17 @@ public class DrawWeather : Gtk.Window {
 		var ctx = new Cairo.Context (surface);
 		drawpng (ctx);
 		surface.write_to_png (outputfile);
-		png = new ImageSurface.from_png(outputfile);
-		appicon0 = new ImageSurface.from_png(todaypng0);
-		appicon1 = new ImageSurface.from_png(todaypng1);
+		bgpng = new ImageSurface.from_png(outputfile);
+/*        appicon0 = new ImageSurface.from_png(todaypng0);*/
+/*        appicon1 = new ImageSurface.from_png(todaypng1);*/
+		appicon0 = getimg(todaypng0);
+		appicon1 = getimg(todaypng1);
 
 		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.ENTER_NOTIFY_MASK);
         draw.connect ((da,ctx)=>{
 			ctx.set_operator (Cairo.Operator.SOURCE);
 			ctx.scale(scale/2,scale/2);
-			ctx.set_source_surface(png,0,0);
+			ctx.set_source_surface(bgpng,0,0);
 			ctx.paint();
 			if(step<zoom.length){
 				var i=Math.cos(zoom[step]*10*Math.PI/180);
@@ -172,8 +174,7 @@ public class DrawWeather : Gtk.Window {
 				if(str.contains("风")) ctx.set_font_size(13);else ctx.set_font_size(16);
 				if(v==6){
 					string[] two=str.split("转",2);
-					int p=0;
-					ImageSurface img;
+					int vcnt=0;
 					ctx.save(); ctx.translate(daycnt*segw+w0,1*segh+h0); ctx.scale(0.6,0.6);
 					foreach(string s in two){
 						if(s.contains("到")) s=s.split("到",2)[1];
@@ -181,35 +182,16 @@ public class DrawWeather : Gtk.Window {
 /*                        if(s.contains("-")) s=s.substring(s.index_of("-",0)+1,-1);*/
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
-								var sp=sharepath+"weather-icon/"+"%02d.png".printf(i);
-								var svg=sharepath+"weather-icon/"+"%02d.svg".printf(i);
-								if(daycnt==0){
-									if(p==0)todaypng0=sp;
-									else todaypng1=sp;
-								}
-//add svg support.
-							if(File.new_for_path(svg).query_exists() == true){
-								Rsvg.Handle handle;
-								try {
-									handle = new Rsvg.Handle.from_file(svg);
-									img=new ImageSurface(Format.ARGB32,100,100);
-									var temp_cr = new Cairo.Context(img);
-/*                                    temp_cr.translate(0,0); temp_cr.scale(160,160);*/
-									handle.render_cairo(temp_cr);
-								} catch (GLib.Error e) {error ("%s", e.message);}
-/*                                SvgSurface vect=new SvgSurface(svg,60,60);*/
-/*                                temp_cr.save( );*/
-/*                                temp_cr.restore( );*/
-							}
-							else{
-								img=new ImageSurface.from_png(sp);
-							}
-								ctx.set_source_surface(img,p*h0,p*h0);
+								var sp=sharepath+"weather-icon/"+"%02d".printf(i);
+								ctx.set_source_surface(getimg(sp),vcnt*h0,vcnt*h0);
 								ctx.paint();
+								if(daycnt==0){
+									if(vcnt==0)todaypng0=sp; else todaypng1=sp;
+								}
 								break;
 							}
 						}
-						p++;
+						vcnt++;
 					}
 					ctx.restore();
 				}
@@ -228,6 +210,26 @@ public class DrawWeather : Gtk.Window {
 			if(week>7){week-=7;}
 			if(daycnt>=maxday) break;
 		}
+	}
+
+	private ImageSurface getimg(string fbase){
+		ImageSurface img;
+		string sp="";
+		if(File.new_for_path(fbase+".svg").query_exists() == true){
+			sp=fbase+".svg";
+			Rsvg.Handle handle;
+			try {
+				handle = new Rsvg.Handle.from_file(sp);
+				img=new ImageSurface(Format.ARGB32,128,128);
+				var temp_cr = new Cairo.Context(img);
+				handle.render_cairo(temp_cr);
+			} catch (GLib.Error e) {error ("%s", e.message);}
+		}
+		else{
+			sp=fbase+".png";
+			img=new ImageSurface.from_png(sp);
+		}
+		return img;
 	}
 
 	private void stamp(Context ctx, double x, double y, string s, int size, double rotate){
