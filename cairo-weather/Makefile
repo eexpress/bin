@@ -3,7 +3,7 @@
 compile:
 #    /usr/bin/valac --pkg gtk+-3.0 cairo-weather.vala
 	/usr/bin/valac --pkg gtk+-3.0 --pkg librsvg-2.0 cairo-weather.vala
-#● ai librsvg2-dev
+#● ai libgtk-3-dev librsvg2-dev
 clean:
 	rm -rf deb
 

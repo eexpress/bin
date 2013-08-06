@@ -22,7 +22,6 @@ string web;
 /*string pos="-80,80";*/
 
 const int zoom[]={9,8,7,6,5,4,3,2,1,0,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9};
-/*const int zoom[]={6,5,4,3,2,1,0,1,2,3,2,1,0,1,2,3,4,5,6};*/
 const string w[] = {
 	"", "", "","","",
 	"雨夹雪", "冰雹", "冻雨","阵雨","小雨",
@@ -63,8 +62,6 @@ public class DrawWeather : Gtk.Window {
 		drawpng (ctx);
 		surface.write_to_png (outputfile);
 		bgpng = new ImageSurface.from_png(outputfile);
-/*        appicon0 = new ImageSurface.from_png(todaypng0);*/
-/*        appicon1 = new ImageSurface.from_png(todaypng1);*/
 		appicon0 = getimg(todaypng0);
 		appicon1 = getimg(todaypng1);
 
@@ -80,8 +77,10 @@ public class DrawWeather : Gtk.Window {
 				ctx.scale(2*i,2*i);
 				ctx.set_source_surface(appicon0,appicon0.get_width()/2*(1-i)+zoom[step]*10,appicon0.get_height()/2*(1-i)+w0);
 				ctx.paint();
+				if(todaypng1!=""){
 				ctx.set_source_surface(appicon1,appicon1.get_width()/2*(1-i)+h0+zoom[step]*30,appicon1.get_height()/2*(1-i)+h0+w0);
 				ctx.paint();
+				}
 			}
 			return true;
 			});
@@ -179,7 +178,6 @@ public class DrawWeather : Gtk.Window {
 					foreach(string s in two){
 						if(s.contains("到")) s=s.split("到",2)[1];
 						if(s.contains("-")) s=s.split("-",2)[1];
-/*                        if(s.contains("-")) s=s.substring(s.index_of("-",0)+1,-1);*/
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
 								var sp=sharepath+"weather-icon/"+"%02d".printf(i);
