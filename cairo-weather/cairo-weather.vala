@@ -173,7 +173,7 @@ public class DrawWeather : Gtk.Window {
 				if(str.contains("风")) ctx.set_font_size(13);else ctx.set_font_size(16);
 				if(v==6){
 					string[] two=str.split("转",2);
-					int vcnt=0;
+					double vcnt=0;
 					ctx.save(); ctx.translate(daycnt*segw+w0,1*segh+h0); ctx.scale(0.6,0.6);
 					foreach(string s in two){
 						if(s.contains("到")) s=s.split("到",2)[1];
@@ -181,11 +181,12 @@ public class DrawWeather : Gtk.Window {
 						for(int i = 0; i < w.length ; i++){
 							if(s==w[i]){
 								var sp=sharepath+"weather-icon/"+"%02d".printf(i);
-								ctx.set_source_surface(getimg(sp),vcnt*h0,vcnt*h0);
-								ctx.paint();
 								if(daycnt==0){
 									if(vcnt==0)todaypng0=sp; else todaypng1=sp;
 								}
+								if(two[1]==null){vcnt=0.5;}
+								ctx.set_source_surface(getimg(sp),vcnt*h0,vcnt*h0);
+								ctx.paint();
 								break;
 							}
 						}
