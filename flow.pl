@@ -4,6 +4,8 @@
 $ext="svg"; $sep='///'; $font='Vera Sans YuanTi';
 @color=qw(#eecc80 #6495ED #ccee80 #80ccee #eecc80 #80eecc);
 $send='[shape=ellipse]'.$end; $dend='[shape=diamond]'.$end;
+$eend='[shape=egg]'.$end; $hend='[shape=house]'.$end;
+#http://www.graphviz.org/content/node-shapes
 #--------------------------------
 if(($#ARGV==-1) || ($ARGV[0]=~/--help|-h/i) || ! -f "$ARGV[0]"){
 print <<HELP;
@@ -41,7 +43,7 @@ for $j (0 .. $#v){
 		$out="$i->"; next;
 		}
 	if($i=~/^>/){ #出口
-		$i=~s/^>//; setshape($i,$send);
+		$i=~s/^>//; setshape($i,$hend);
 		push @output,$out.$i.$end if $out=~/->/;
 		$out='';
 		next;
@@ -74,7 +76,7 @@ $out=~s/->$//g; push @output,$out.$end if $out=~/->/;
 #--------------------------------
 unshift @output,"
 digraph G {
-node [peripheries=2 shape=box style=filled fontname=$font] label=\"$ARGV[0]\"
+node [peripheries=2 shape=box style=\"rounded,filled\" fontname=$font] label=\"$ARGV[0]\"
 ";
 push @output,"}\n}\n";
 open OUT,">$base.dot"; print OUT @output;close OUT;
