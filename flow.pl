@@ -71,10 +71,16 @@ open OUT,">$base.dot"; print OUT @output;close OUT;
 #--------------------------------
 sub jump(){
 	my ($_, $YN)=@_;
-	if($_ eq ""){$_=$v[$j+1]; s/\?.*//;} #为空，分支到下一句
+	my $x=0; if($_ eq "" || /^>/){$x=1;}	#空或者出口，不自动转下一句
+	my $next=$v[$j+1]; $next=~s/\?.*//;
+	if($_ eq ""){$_=$next;} #为空，分支到下一句
 	s/^>//; #判断分支，都是返回，不管出口标志
 	if($YN eq "y"){push @output,"$t[0]:s->$_".'[label="Yes"];'."\n";}
 	else{push @output,"$t[0]:e->$_".'[label="No" style=dotted];'."\n";}
+	if($x){return;}
+# 跳转分支自动转下一句
+	s/.*->//; #最后一条
+	push @output,"$_->$next;\n";
 }
 #--------------------------------
 sub setshape(){ # 名称，形状
