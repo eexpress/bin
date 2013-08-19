@@ -10,15 +10,15 @@ $eend='[shape=egg]'.$end; $hend='[shape=house]'.$end;
 if(($#ARGV==-1) || ($ARGV[0]=~/--help|-h/i) || ! -f "$ARGV[0]"){
 print <<HELP;
 AUTHOR:		eexpress
-VERSION:	1.4
+VERSION:	1.5
 USAGE:		flow.pl source_file
 DESCRIPTION:
 自动根据注释里面的///后面的内容，生成流程图。依赖graphviz。
 flow.pl 文件【各类语法的源码，只要注释不和///冲突】
 语法说明：
 	xxx> 表示函数入口。通常是函数名。必须有一个。
-	>xxx 表示函数出口或者跳转。通常是return或者else/break/next/continue等强制分支。
-	xxx?yyy:zzz 条件判断语句。yyy为真，zzz为假。可省略其一，省略的直接接下一句；都不省略的，2个条件都接下一句。如：xxx?yyy 或者 xxx?:zzz。yyy/zzz 均认为是跳转，不需要写>前缀。
+	>xxx 表示函数出口。通常是return或者exit这样的。
+	xxx?yyy:zzz 条件判断语句。yyy为真，zzz为假。可省略其一，如：xxx?yyy 或者 xxx?:zzz。省略的直接接下一句；都不省略的短语，2个条件都接下一句。
 HELP
 exit 0;
 }
@@ -30,47 +30,57 @@ $base=$ARGV[0];$base=~s/\..*//;
 #for(@v){print "$_\n";}
 #--------------------------------
 for $j (0 .. $#v){
-	$i=$v[$j];
-	next if $i eq "";
-	$i=~s/[\ -\.]/_/g;	#空格中杠点，都转成下划线。
-	$i=~s/;/->/g;	#增加;分割的写法。判断语句前不能写;
-	if($i=~/>$/){ #入口
+	$_=$v[$j];
+	next if $_ eq "";
+	s/[\ -\.]/_/g;	#空格中杠点，都转成下划线。
+	s/_*;_*/->/g;	#增加;分割的写法。判断语句前不能写;
+	if(/>$/){		#入口
 		$out=~s/->$//g; push @output,$out.$end if $out=~/->/;
 		push @output,"}\n" if $cc;
 		push @output, "\nsubgraph{\t".'node [color="'.($color[$cc%$cnt]).'"]'.$end; $cc++;
 		@hasshape=[];
-		$i=~s/>//g; setshape($i,$send);
-		$out="$i->"; next;
+		$_=~s/>//g; setshape($_,$send);
+		$out="$_->"; next;
 		}
-	if($i=~/^>/){ #出口
-		$i=~s/^>//; setshape($i,$hend);
-		push @output,$out.$i.$end if $out=~/->/;
+	if(/^>/){ #出口
+		$_=~s/^>//; setshape($_,$hend);
+		push @output,$out.$_.$end if $out=~/->/;
 		$out='';
 		next;
 		}
-	if ($i!~/\?/){ #常规
-		$out.="$i->"; next;
+	if (! /\?/){ #常规
+		$out.="$_->"; next;
 		}
 	# 条件判断，包括出口
-	@t=[];@t=split /[?:]/,$i;
+	@t=[];@t=split /[?:]/;
 	push @output,$out.$t[0].$end if $out=~/->/;
 	$out="";
 	setshape($t[0],$dend); push @isdia,$t[0];
+#    下句的第一个
+	$_=$v[$j+1]; s/[;?].*//; s/^>//; s/[\ -\.]/_/g;
+	my $next=$_;
 
-	my $next=$v[$j+1]; $next=~s/\?.*//;
-	$_=$t[1]||$next; if(/->/){$out="$_->"; s/->.*//;}
+	$_=$t[1]||$next; if(/->/){$out=$_; s/->.*//;}
+	if(/^>/){s/^>//; setshape($_,$hend);}
 	push @output,"$t[0]:s->$_".'[label="Yes"];'."\n";
-	$_=$t[2]||$next; if(/->/){$out="$_->"; s/->.*//;}
+	$_=$t[2]||$next; if(/->/){$out=$_; s/->.*//;}
+	if(/^>/){s/^>//; setshape($_,$hend);}
 	push @output,"$t[0]:e->$_".'[label="No" style=dotted];'."\n";
+#    退出的情况
+	$_=$out;
+#    if(/^>/){s/^>//; setshape($_,$hend); $out="";}
+	if(/->>/){push @output, $_.$end; s/.*->//; setshape($_,$hend); $out="";}
+	if($out){$out=~s/^>//; $out.="->";}
+#    真假条件都有的短语，均接下一句
 	if($t[1] && $t[2]){
-		push @output,"$t[1]->$next$end";
-		$out="$t[2]->";
+		$_=$t[1]; s/^>//; push @output,"$_->$next$end";
+		$_=$t[1]; s/^>//; $out="$_->";
 	}
 }
 #--------------------------------
 for(@output){ # 判断的入口，全部顶部
-	$i=$_; for(@isdia){$i=~s/->$_/->$_:n/;} $_=$i;
-	s/->>(.*?)->/->$1;/;	#断开出口语句。‘设置5->>返回->关闭’ 改成 ‘设置5->返回;关闭’
+	$in=$_; for(@isdia){$in=~s/->$_/->$_:n/;} $_=$in;
+	s/>>/>/;
 }
 $out=~s/->$//g; push @output,$out.$end if $out=~/->/;
 #--------------------------------
@@ -85,6 +95,7 @@ open OUT,">$base.dot"; print OUT @output;close OUT;
 #--------------------------------
 sub setshape(){ # 名称，形状
 	my ($name, $shape)=@_;
+	$name=~s/>//g;
 	my $has=grep /^\Q$name\E$/,@hasshape;
 	if($has==0){push @hasshape,$name, push @output,"\t".$name.$shape.$end;}
 }
