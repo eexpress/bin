@@ -2,13 +2,13 @@
 
 #----------define here-----------
 $ext="svg"; $sep='///'; $font='Vera Sans YuanTi';
-@color=qw(#6495ED #eecc80 #ccee80 #80ccee #eecc80 #80eecc);
+@color=qw(#eecc80 #6495ED #ccee80 #80ccee #eecc80 #80eecc);
 $send='[shape=ellipse]'.$end; $dend='[shape=diamond]'.$end;
 #--------------------------------
 if(($#ARGV==-1) || ($ARGV[0]=~/--help|-h/i) || ! -f "$ARGV[0]"){
 print <<HELP;
 AUTHOR:		eexpress
-VERSION:	1.2
+VERSION:	1.3
 USAGE:		flow.pl source_file
 DESCRIPTION:
 自动根据注释里面的///后面的内容，生成流程图。依赖graphviz。
