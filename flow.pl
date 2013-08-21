@@ -91,13 +91,6 @@ open OUT,">$base.dot"; print OUT @output;close OUT;
 `dot -T$ext "$base.dot" -o $base.dot.$ext`;
 `eog $base.dot.$ext`;
 #--------------------------------
-sub saveout(){
-	my $i=shift;
-	if($i){$out.=$i;}else{$out=~s/->$//;}
-	push @output,$out.$end if $out=~/->/;
-	$out="";
-}
-#--------------------------------
 sub setshape(){ # 名称，形状
 	my ($name, $shape)=@_;
 	my $has=grep /^\Q$name\E$/,@shapegroup;
@@ -113,13 +106,27 @@ sub normal_segment(){
 			$out.="$_->"; next;}
 		if($_ eq "0"){
 			push @output,$out.$q.$end if $out=~/->/;
+			$out='';
 		}else{
-			my @tmp=grep "$_-",@contents;
-			my @tmp1=split /[-;]/,$tmp[0];
-			push @output,$out."$tmp1[1]_$tmp[0]".$end;
+			$d=0; $d=$_;
+			for $line (@contents){
+				$_=$line; s/\ .*//;
+				if($d>$_){next;}
+				$_=fetch01seg($line);
+			print "fetch....$_....\n";
+				saveout($_);
+				return;
+			}
 		}
-		$out=''; break;
+		break;
 	}
+}
+#--------------------------------
+sub saveout(){
+	my $i=shift;
+	if($i){$out.=$i;}else{$out=~s/->$//;}
+	push @output,$out.$end if $out=~/->/;
+	$out="";
 }
 #--------------------------------
 sub fetch01seg(){
