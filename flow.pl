@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #--------------------------------
-$ext="svg"; $sep='///'; $font='Vera Sans YuanTi';
+$ext="svg"; $sep='/'; $font='Vera Sans YuanTi';
 @color=qw(#eecc80 #6495ED #ccee80 #80ccee #eecc80 #80eecc);
 $cnt=@color; $cc=0; $end=";\n"; $out=""; @isdia=[];
 $quitstr="退出";
@@ -29,8 +29,8 @@ exit 0;
 }
 #--------------------------------
 open IN,"<$ARGV[0]"; while(<IN>){
-	next if ! /$sep/;
-	s/.*$sep\s*//; s/\s*$//;	#去掉首尾空格
+	next if ! /$sep{3}/;
+	s/.*$sep{3}\s*//; s/\s*$//;	#去掉首尾空格
 #    s/;/_$.->/g; push @contents, $_."_$."; }
 	push @contents, "$. $_"; }
 close IN;
@@ -40,7 +40,7 @@ for $j (0 .. $#contents){
 	$contents[$j]=~/ /; $line=$`; $_=$';
 	if(/^>/ || ! $j){	#入口。带>或者第一行。不能带;号。
 		if($j){
-		saveout(); setshape($q,$EXIT);
+		saveout($q); setshape($q,$EXIT);
 		push @output,"}\n";	#结束subgraph
 		}
 		push @output, "\nsubgraph{\t".'node [color="'.($color[$cc%$cnt]).'"]'.$end; $cc++;
@@ -62,7 +62,10 @@ for $j (0 .. $#contents){
 #    $_=$contents[$j+1]; s/[;?].*//; /\ /;
 #    $_=$'."_$`"; $_="\"$_\"" if /[- .]/;
 
-	my $next=fetch01seg($contents[$j+1]);
+	$_=$contents[$j+1];
+#    if(/\d+\ >/ || $_ eq ""){return $q;}
+#下一个入口/数据完，都退出。
+	my $next=(/\d+\ >/ || $_ eq "")?$q:fetch01seg($_);
 
 	if($byes ne ""){
 		$goto=fetch01seg("$line $byes");
@@ -80,7 +83,7 @@ for(@output){ # 判断的入口，全部顶部
 	$in=$_; for(@isdia){$in=~s/->$_/->$_:n/;} $_=$in;
 	s/>>/>/;
 }
-saveout(); setshape($q,$EXIT);
+saveout($q); setshape($q,$EXIT);
 #--------------------------------
 unshift @output,"
 digraph G {
@@ -113,7 +116,7 @@ sub normal_segment(){
 				$_=$line; s/\ .*//;
 				if($d>$_){next;}
 				$_=fetch01seg($line);
-			print "fetch....$_....\n";
+#            print "fetch....$_....\n";
 				saveout($_);
 				return;
 			}
