@@ -31,14 +31,13 @@ exit 0;
 open IN,"<$ARGV[0]"; while(<IN>){
 	next if ! /$sep{3}/;
 	s/.*$sep{3}\s*//; s/\s*$//;	#去掉首尾空格
-#    s/;/_$.->/g; push @contents, $_."_$."; }
 	push @contents, "$. $_"; }
 close IN;
 #for(@contents){print "$_\n";} exit;
 #--------------------------------
 for $j (0 .. $#contents){
 	$contents[$j]=~/ /; $line=$`; $_=$';
-	if(/^>/ || ! $j){	#入口。带>或者第一行。不能带;号。
+	if(/^>/ || ! $j){	#入口。带>或者第一行。
 		if($j){
 		saveout($q); setshape($q,$EXIT);
 		push @output,"}\n";	#结束subgraph
@@ -53,18 +52,11 @@ for $j (0 .. $#contents){
 #--------------------------------
 	# 条件判断
 	($judge,$byes,$bno)=split /[?:]/;
-#    $judge.="_$line"; $_=$judge; $_="\"$_\"" if /[- .]/;
-#    $out.=$_; saveout();
 	$judge=makeup($judge); saveout($judge);
 	setshape($judge,$JUDGE); push @isdia,$judge;
 
-#    下句的第一个段
-#    $_=$contents[$j+1]; s/[;?].*//; /\ /;
-#    $_=$'."_$`"; $_="\"$_\"" if /[- .]/;
-
+#    下句的第一个段。下一个是入口或者数据完，都退出。
 	$_=$contents[$j+1];
-#    if(/\d+\ >/ || $_ eq ""){return $q;}
-#下一个入口/数据完，都退出。
 	my $next=(/\d+\ >/ || $_ eq "")?$q:fetch01seg($_);
 
 	if($byes ne ""){
