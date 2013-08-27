@@ -13,9 +13,9 @@ sudo iptables -t nat -A POSTROUTING -j MASQUERADE
 #set DNS using 8.8.8.8 through udp.
 #sudo iptables -t nat -A PREROUTING -i usb0 -p udp -m udp --dport 53 -j DNAT --to-destination 8.8.8.8:53
 #get active interface
-#ip route|grep default|cut -d' ' -f 5
+ip route|grep default|cut -d' ' -f 5|grep wlan0
 #force setup DNS
-sudo iptables -t nat -A PREROUTING -i usb0 -p udp -m udp --dport 53 -j DNAT --to-destination 8.8.8.8:53
+if [ $? -eq 0 ]; then sudo iptables -t nat -A PREROUTING -i usb0 -p udp -m udp --dport 53 -j DNAT --to-destination 8.8.8.8:53; fi
 
 echo "Connecting to the phone via 'adb ppp'..."
 /usr/bin/adb ppp "shell:pppd nodetach noauth noipdefault defaultroute /dev/tty" nodetach noauth noipdefault notty 10.0.0.1:10.0.0.2
