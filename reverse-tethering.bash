@@ -14,6 +14,8 @@ sudo iptables -t nat -A POSTROUTING -j MASQUERADE
 #sudo iptables -t nat -A PREROUTING -i usb0 -p udp -m udp --dport 53 -j DNAT --to-destination 8.8.8.8:53
 #get active interface
 #ip route|grep default|cut -d' ' -f 5
+#force setup DNS
+sudo iptables -t nat -A PREROUTING -i usb0 -p udp -m udp --dport 53 -j DNAT --to-destination 8.8.8.8:53
 
 echo "Connecting to the phone via 'adb ppp'..."
 /usr/bin/adb ppp "shell:pppd nodetach noauth noipdefault defaultroute /dev/tty" nodetach noauth noipdefault notty 10.0.0.1:10.0.0.2
