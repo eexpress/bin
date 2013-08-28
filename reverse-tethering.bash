@@ -17,7 +17,7 @@ ip route|grep default|cut -d' ' -f 5|grep wlan0
 #force setup DNS
 if [ $? -eq 0 ]; then sudo iptables -t nat -A PREROUTING -i usb0 -p udp -m udp --dport 53 -j DNAT --to-destination 8.8.8.8:53; fi
 
-echo "Connecting to the phone via 'adb ppp'..."
-/usr/bin/adb ppp "shell:pppd nodetach noauth noipdefault defaultroute /dev/tty" nodetach noauth noipdefault notty 10.0.0.1:10.0.0.2
+#echo "Connecting to the phone via 'adb ppp'..."
+#/usr/bin/adb ppp "shell:pppd nodetach noauth noipdefault defaultroute /dev/tty" nodetach noauth noipdefault notty 10.0.0.1:10.0.0.2
 
 echo "Done."
