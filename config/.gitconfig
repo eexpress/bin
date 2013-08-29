@@ -3,6 +3,8 @@
 	st = !sh -c 'git status|grep \":\"'
 	co = checkout
 	df = diff
+	df1= diff HEAD^
+	df2= diff HEAD^^
 	dflog = log -p
 	ls = !sh -c 'git ls-files|ascii2uni -a K'
 	lg = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr)%Creset %s'
