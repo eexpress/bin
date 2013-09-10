@@ -96,7 +96,8 @@ alias t.u='tar uPvf '
 #routel|sed -n "2p"|awk '{print $4}'
 #routel|grep 'default.*static'|awk '{print $NF}'
 #}
-netname(){ ip route get 1.1.1.1|grep dev|cut -d' ' -f 5; }
+#netname(){ ip route get 1.1.1.1|grep dev|cut -d' ' -f 5; }
+netname(){ ip route|head -n 1|cut -d' ' -f 5; }
 #alias mp3info='mutagen-inspect'
 #alias mp3enca='mid3iconv --remove-v1 -d -e GBK'
 alias pl='perl -e'
