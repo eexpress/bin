@@ -7,35 +7,37 @@ using Cairo;
 /*const string outputfile="/tmp/nmn.png";*/
 /*const string alphatable="d1 r2 m3 f4 s5 l6 x7 t7";*/
 /*const string input[]={"1d2","3b3","44","2d1","|","34","2e0","7a2","5e3"};*/
-const string input[]={"3","3","3-","4","#","4-","|","5+","0-","5-","#","4-","5-","|","6","6","6-","7","1d-","|","n","5++","6-","5-","|","2++","6-","5-","|","3++","4-","3-","|","n","2","3","#","4-","5","6-","|","5++","0","|","3","3","3-","4","#","4-","|","n","5+","0-","5-","#","4-","5-","|","6","6","6-","7","1d-","|","4d-","3d-","|","n","2d+","6","3d-","2d-","|","1d+","5","#","4-","5-","|","6","6","7-","6","5-","|","","",""};
+
+const string instr=""" 333-4#4-|5+0-5-#4-5-|666-71-,|5++(6-5-)|
+2++6-5-|3++4-3-|23#4-(56-)|5++0|
+333-(4#4-)|5+0-5-#4-5-|666-(71-,)|3,++4-,3-,|
+2,+63-,2-,|1,+5#4-5-|66-6--7-(65-)|1,++0|
+""";
 const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const int pagex=50;
 const int pagey=80;
-	
+string contents;
+int dncnt;
+int upcnt;
+
+
 public class DrawOnWindow : Gtk.Window {
 	int ww;
 	int wh;
 	int size=20;
-/*    string fontname="Vera Sans YuanTi";*/
 	string fontname="Nimbus Roman No9 L";
 	Cairo.TextExtents ex;
 	double bw;
 	double bh;
 	double vspace;
 	double textheight;
-	double yoffset;
-	double bx;
-	double by;
 
 
 	public DrawOnWindow() {
-		title = "numbered musical notation";
+		title = "numbered musical notation - eexpress - v 1.0";
 		destroy.connect (Gtk.main_quit);
-/*        set_visual(this.get_screen().get_rgba_visual());*/
 		ww=700;
-		wh=500;
-/*        bw=size*1.5;*/
-/*        vspace=bh/10;*/
+		wh=600;
 		set_default_size(ww,wh);
 		var drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
@@ -46,8 +48,11 @@ public class DrawOnWindow : Gtk.Window {
 	}
 
 	private bool on_draw (Widget da, Context ctx) {
-		bx=pagex;
-		by=pagey;
+	double x;
+	double y;
+	string ss;
+	double bx0=0;
+	double bx1=0;
 /*        setup size according to font size*/
 		ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(size);
@@ -57,115 +62,79 @@ public class DrawOnWindow : Gtk.Window {
 		vspace=textheight/3;
 		bw=textheight*1.8;
 		bh=textheight*6;
-/*        stdout.printf(textheight.to_string()+"\n");*/
 
 		ctx.set_source_rgb (0, 0, 0);
-		for(int i=0; i<input.length;i++){
-			bx+=bw;
-			drawnote(ctx,bx,by,input[i]);
-		}
-		return true;
-	}
+		x=pagex;
+		y=pagey;
+/*----------------------------------------------------------*/
+		for(int l=0; l<contents.length; l++){
+			char i=contents[l];
+			if(i!='-'&&i!='.'){dncnt=0;}
+			if(i!=','){upcnt=0;}
+			if(i>='0' && i<'8'){
+				ctx.move_to(x-centerpos(ctx,i.to_string()),y);
+				ctx.show_text(i.to_string());
 
-	private void drawnote(Context ctx, double x, double y, string s){
-		int i;
-		string sshow;
-		ctx.save();
-/*        ctx.move_to(x,y); ctx.line_to(x+bw,y); ctx.line_to(x+bw,y+bh); ctx.line_to(x,y+bh); ctx.line_to(x,y); ctx.stroke();*/
-		if(s==""){return;}
-/*-------------------------*/
-/*        x,y as center point, locate at bottom of text*/
-		i=s[0];
-		switch(i){
+				ss=tone[i-'0'];
+				ctx.set_font_size(size/1.2);
+				ctx.move_to(x-centerpos(ctx,ss),y+vspace*7);
+				ctx.show_text(ss);
+				ctx.set_font_size(size);
+				x+=bw;
+				continue;
+			}
+			switch(i){
+
 			case '|':
 				ctx.move_to(x,y-bh/4);
 				ctx.line_to(x,y+bh/4);
 				ctx.stroke();
-				return;
+				x+=bw;
+				break;
 			case '#':
 				ctx.move_to(x-bw/2,y-ex.height+vspace/4);
 				ctx.set_font_size(size/2);
 				ctx.show_text("#");
 				ctx.set_font_size(size);
-				bx-=bw;
-				return;
-			case 'n':
-				bx=pagex;
-				by=by+bh;
-				return;
-		}
-		if(i>='0' && i<'8'){
-			ctx.move_to(x-centerpos(ctx,s[0].to_string()),y);
-			ctx.show_text(s[0].to_string());
-
-			sshow=tone[i-'0'];
-			ctx.set_font_size(size/1.2);
-			ctx.move_to(x-centerpos(ctx,sshow),y+vspace*7);
-			ctx.show_text(sshow);
-		}
-/*-------------------------*/
-/*        c tone can omit*/
-		int j;
-		if(s[1]=='-'||s[1]=='+'){i=s[1];j=s[2];}else{i=s[2];j=s[3];}
-		ctx.set_font_size(size);
-		switch(i){
+				break;
+			case '\n':
+				x=pagex;
+				y=y+bh;
+				break;
 			case '+':
-				sshow="-";
-				ctx.move_to(x+bw-centerpos(ctx,sshow),y-vspace);
-				ctx.show_text(sshow);
-				bx+=bw;
-				if(j=='+'){
-					ctx.move_to(x+2*bw-2*centerpos(ctx,sshow),y-vspace);
-					ctx.show_text(sshow);
-					bx+=bw;
-				}
-				yoffset=0;
+				ss="-";
+				ctx.move_to(x-centerpos(ctx,ss),y-vspace);
+				ctx.show_text(ss);
+				x+=bw;
 				break;
 			case '-':
-				yoffset=y+vspace;
-				ctx.move_to(x-bw/2,yoffset); ctx.line_to(x+bw/2,yoffset);
-				yoffset=1;
-/*                if(j=='-'){goto case '=';}*/
-				if(j=='-'){
-					yoffset=y+vspace*2;
-					ctx.move_to(x-bw/2,yoffset); ctx.line_to(x+bw/2,yoffset);
-					yoffset=2;
-				}
+				dncnt++;
+				ctx.move_to(x-bw/2,y+dncnt*vspace); ctx.rel_line_to(-bw,0);
+				ctx.stroke();
 				break;
-			default:
-				yoffset=0;
+			case '.':
+				dncnt++;
+				ctx.arc(x-bw,y+dncnt*vspace,2,0,360*Math.PI/180);
+				ctx.fill();
 				break;
+			case ',':
+				upcnt++;
+				ctx.arc(x-bw,y-textheight-upcnt*vspace,2,0,360*Math.PI/180);
+				ctx.fill();
+				break;
+			case '(':
+				bx0=x;
+				break;
+			case ')':
+				bx1=x-bw;
+				double by=y-textheight-vspace;
+				ctx.move_to(bx0,by);
+				ctx.curve_to(bx0+vspace,by-vspace,bx1-vspace,by-vspace,bx1,by);
+				ctx.stroke();
+				break;
+			}
 		}
-		ctx.stroke();
-		if(i==s[1]){return;}
-
-/*-------------------------*/
-		yoffset=y+yoffset*vspace+vspace;
-		i=s[1];
-		switch(i){
-			case 'a':
-				ctx.arc(x,yoffset,2,0,360*Math.PI/180);
-				ctx.arc(x,yoffset+vspace,2,0,360*Math.PI/180);
-				ctx.fill();
-				break;
-			case 'b':
-				ctx.arc(x,yoffset,2,0,360*Math.PI/180);
-				ctx.fill();
-				break;
-			case 'c':
-				break;
-			case 'd':
-				ctx.arc(x,y-textheight-vspace,2,0,360*Math.PI/180);
-				ctx.fill();
-				break;
-			case 'e':
-				ctx.arc(x,y-textheight-vspace,2,0,360*Math.PI/180);
-				ctx.arc(x,y-textheight-2*vspace,2,0,360*Math.PI/180);
-				ctx.fill();
-				break;
-		}
-/*-------------------------*/
-		ctx.restore();
+		return true;
 	}
 
 	private double centerpos(Context ctx, string s){
@@ -175,6 +144,16 @@ public class DrawOnWindow : Gtk.Window {
 
 	static int main (string[] args) {
 		Gtk.init (ref args);
+		if(args[1]==null) contents=instr;
+		else{
+			try{
+				if(File.new_for_path(args[1]).query_exists() == true){
+					FileUtils.get_contents(args[1], out contents);
+				}else{
+					contents=instr;
+				}
+			} catch (GLib.Error e) {error ("%s", e.message);}
+		}
 		var DW = new DrawOnWindow ();
 		DW.show_all ();
 		Gtk.main ();
