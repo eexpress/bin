@@ -102,16 +102,16 @@ public class DrawWeather : Gtk.Window {
 		});
 		scroll_event.connect ((e) => {
 			if(e.direction==Gdk.ScrollDirection.UP){
-				scale/=0.9;
+				scale/=0.98;
 				if(scale>1.5)scale=1.5;
 			}
 			if(e.direction==Gdk.ScrollDirection.DOWN){
-				scale*=0.9;
+				scale*=0.98;
 				if(scale<0.5)scale=0.5;
 			}
 			ww=(int)((maxday*segw+w0*2)*scale);
 			wh=(int)((8*segh+h0*2)*scale);
-			this.resize(ww,wh);
+			resize(ww,wh);
 			return true;
 		});
 	}
