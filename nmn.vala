@@ -6,9 +6,9 @@ using Cairo;
 /*string fontname;*/
 /*const string outputfile="/tmp/nmn.png";*/
 /*const string alphatable="d1 r2 m3 f4 s5 l6 x7 t7";*/
-/*const string input[]={"1d2","3b3","4c4","2d1","|","3c4","2e0","7a2","5e3"};*/
-const string input[]={"3c2","3c2","3c3","4c2","#","4c3","|","5c1","0c3","5c3","#","4c3","5c3","|","6c2","6c2","6c3","7c2","1d3","|","n","5c0","6c3","5c3","|","2c0","6c3","5c3","|","3c0","4c3","3c3","|","n","2c2","3c2","#","4c3","5c2","6c3","|","5c0","0c2","|","3c2","3c2","3c3","4c2","#","4c2","|","n","5c1","0c3","5c3","#","4c3","5c3","|","","","","","","","","",""};
-const string tone[]={"Do","Re","Mi","Fa","Sol","La","Si"};
+/*const string input[]={"1d2","3b3","44","2d1","|","34","2e0","7a2","5e3"};*/
+const string input[]={"3","3","3-","4","#","4-","|","5+","0-","5-","#","4-","5-","|","6","6","6-","7","1d-","|","n","5++","6-","5-","|","2++","6-","5-","|","3++","4-","3-","|","n","2","3","#","4-","5","6-","|","5++","0","|","3","3","3-","4","#","4-","|","n","5+","0-","5-","#","4-","5-","|","6","6","6-","7","1d-","|","4d-","3d-","|","n","2d+","6","3d-","2d-","|","1d+","5","#","4-","5-","|","6","6","7-","6","5-","|","","",""};
+const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const int pagex=50;
 const int pagey=80;
 	
@@ -33,7 +33,7 @@ public class DrawOnWindow : Gtk.Window {
 		destroy.connect (Gtk.main_quit);
 /*        set_visual(this.get_screen().get_rgba_visual());*/
 		ww=700;
-		wh=400;
+		wh=500;
 /*        bw=size*1.5;*/
 /*        vspace=bh/10;*/
 		set_default_size(ww,wh);
@@ -72,6 +72,7 @@ public class DrawOnWindow : Gtk.Window {
 		string sshow;
 		ctx.save();
 /*        ctx.move_to(x,y); ctx.line_to(x+bw,y); ctx.line_to(x+bw,y+bh); ctx.line_to(x,y+bh); ctx.line_to(x,y); ctx.stroke();*/
+		if(s==""){return;}
 /*-------------------------*/
 /*        x,y as center point, locate at bottom of text*/
 		i=s[0];
@@ -97,50 +98,46 @@ public class DrawOnWindow : Gtk.Window {
 			ctx.move_to(x-centerpos(ctx,s[0].to_string()),y);
 			ctx.show_text(s[0].to_string());
 
-			sshow=tone[i-'1'];
+			sshow=tone[i-'0'];
 			ctx.set_font_size(size/1.2);
 			ctx.move_to(x-centerpos(ctx,sshow),y+vspace*7);
 			ctx.show_text(sshow);
 		}
 /*-------------------------*/
-		i=s[2];
+/*        c tone can omit*/
+		int j;
+		if(s[1]=='-'||s[1]=='+'){i=s[1];j=s[2];}else{i=s[2];j=s[3];}
 		ctx.set_font_size(size);
 		switch(i){
-			case '0':
+			case '+':
 				sshow="-";
-				ctx.move_to(x+bw-2*centerpos(ctx,sshow),y-vspace);
-				ctx.show_text(sshow);
-				ctx.move_to(x+2*bw-2*centerpos(ctx,sshow),y-vspace);
-				ctx.show_text(sshow);
-/*                ctx.rel_move_to(bw,0);*/
-/*                ctx.show_text(sshow);*/
-				bx+=2*bw;
-				yoffset=0;
-				break;
-			case '1':
-				sshow="-";
-				ctx.move_to(x+bw-centerpos(ctx,sshow),y);
+				ctx.move_to(x+bw-centerpos(ctx,sshow),y-vspace);
 				ctx.show_text(sshow);
 				bx+=bw;
+				if(j=='+'){
+					ctx.move_to(x+2*bw-2*centerpos(ctx,sshow),y-vspace);
+					ctx.show_text(sshow);
+					bx+=bw;
+				}
 				yoffset=0;
 				break;
-			case '2':
-				yoffset=0;
-				break;
-			case '3':
+			case '-':
 				yoffset=y+vspace;
 				ctx.move_to(x-bw/2,yoffset); ctx.line_to(x+bw/2,yoffset);
 				yoffset=1;
+/*                if(j=='-'){goto case '=';}*/
+				if(j=='-'){
+					yoffset=y+vspace*2;
+					ctx.move_to(x-bw/2,yoffset); ctx.line_to(x+bw/2,yoffset);
+					yoffset=2;
+				}
 				break;
-			case '4':
-				yoffset=y+vspace;
-				ctx.move_to(x-bw/2,yoffset); ctx.line_to(x+bw/2,yoffset);
-				yoffset=y+vspace*2;
-				ctx.move_to(x-bw/2,yoffset); ctx.line_to(x+bw/2,yoffset);
-				yoffset=2;
+			default:
+				yoffset=0;
 				break;
 		}
 		ctx.stroke();
+		if(i==s[1]){return;}
 
 /*-------------------------*/
 		yoffset=y+yoffset*vspace+vspace;
@@ -166,7 +163,6 @@ public class DrawOnWindow : Gtk.Window {
 				ctx.arc(x,y-textheight-2*vspace,2,0,360*Math.PI/180);
 				ctx.fill();
 				break;
-
 		}
 /*-------------------------*/
 		ctx.restore();
