@@ -4,6 +4,8 @@ using Cairo;
 public class DrawOnWindow : Gtk.Window {
 	int ww;
 	int wh;
+	string fontname="Nimbus Roman No9 L";
+	int size=20;
 
 	public DrawOnWindow() {
 		title = "DrawOnWindow Sample";
@@ -17,6 +19,8 @@ public class DrawOnWindow : Gtk.Window {
 	}
 
 	private bool on_draw (Widget da, Context ctx) {
+		ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
+		ctx.set_font_size(size);
 		ctx.set_source_rgb (0, 0, 0);
 		drawnote(ctx, 100,100,"text at 100,100");
 		return true;
@@ -26,7 +30,7 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.save();
 		ctx.move_to(x,y);
 		ctx.text_path(s);
-		ctx.stroke();
+		ctx.fill();
 		ctx.restore();
 	}
 
