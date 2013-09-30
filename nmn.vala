@@ -52,13 +52,22 @@ public class DrawOnWindow : Gtk.Window {
 		set_default_size(ww,wh);
 		var drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
+/*        drawing_area.destroy.connect (on_destroy);*/
 		add (drawing_area);
 /*        key_press_event.connect ((e) => {*/
 /*            return true;*/
 /*        });*/
 	}
 
-	private bool on_draw (Widget da, Context ctx) {
+/*    private bool on_destroy(){*/
+/*        var surface = new ImageSurface (Format.ARGB32, 800, 800);*/
+/*        var ctx = new Cairo.Context (surface);*/
+/*        on_draw(ctx);*/
+/*        surface.write_to_png ("/tmp/nmn.png");*/
+/*    }*/
+
+/*    private bool on_draw (Widget da, Context ctx) {*/
+	private bool on_draw (Context ctx) {
 	double x;
 	double y;
 	string ss;

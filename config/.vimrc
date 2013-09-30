@@ -80,7 +80,7 @@ func CompileRun()
 	elseif &filetype == 'dot'
 	exec "!dot -Tsvg % -o %.svg; eog %.svg"
 	elseif &filetype == 'vala'
-	exec "!valac --pkg gtk+-3.0 %; ./%:t:r"
+	exec "!valac --pkg gtk+-3.0 %; [ $? -eq 0 ] && ./%:t:r"
 	endif 
 endfunc
 
