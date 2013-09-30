@@ -11,15 +11,13 @@ using Cairo;
 const string instr=""" 333-4#4-|5+0-5-#4-5-|666-71-,|5++(6-5-)|
 2++6-5-|3++4-3-|23#4-(56-)|5++0|
 333-(4#4-)|5+0-5-#4-5-|666-(71-,)|3,++4-,3-,|
-2,+63-,2-,|1,+5#4-5-|66-6--7-(65-)|1,++0||
-""";
+2,+63-,2-,|1,+5#4-5-|66-6--7-(65-)|1,++0|| """;
 const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
-const int pagex=50;
-const int pagey=80;
 string contents;
 int dncnt;
 int upcnt;
-int maxtoneperline;
+int maxcolumn;
+int maxrow;
 
 int calwidth(string s){
 	int cnt=0;
@@ -42,6 +40,8 @@ public class DrawOnWindow : Gtk.Window {
 	double bh;
 	double vspace;
 	double textheight;
+	int pagex;
+	int pagey;
 
 
 	public DrawOnWindow() {
@@ -71,8 +71,13 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.text_extents("8",out ex);
 		textheight=ex.height;
 		vspace=textheight/3;
-/*        bw=textheight*1.8;*/
+		bw=textheight*1.8;
 		bh=textheight*6;
+		pagex=(int)textheight*4;
+		pagey=(int)textheight*6;
+		resize(pagex*2+(int)((maxcolumn-1)*bw),pagey*2+(int)(maxrow*bh));
+/*        stdout.printf (textheight.to_string()+"\n");*/
+
 
 		ctx.set_source_rgb (0, 0, 0);
 		x=pagex;
@@ -82,8 +87,8 @@ public class DrawOnWindow : Gtk.Window {
 /*            adjust align*/
 			if(line=="")continue;
 			double adj=calwidth(line);
-			if(maxtoneperline-adj>3){adj=1;}else{
-				adj=1+(maxtoneperline-adj)/(adj-0.5);
+			if(maxcolumn-adj>3){adj=1;}else{
+				adj=1+(maxcolumn-adj)/(adj-0.5);
 			}
 			bw=textheight*1.8*adj;
 		for(int l=0; l<line.length; l++){
@@ -191,8 +196,9 @@ public class DrawOnWindow : Gtk.Window {
 		foreach(string l in contents.split("\n")){
 			int toneinline=calwidth(l);
 /*            stdout.printf ("toneinline: %d\n",toneinline);*/
-			if(toneinline>maxtoneperline){maxtoneperline=toneinline;}
+			if(toneinline>maxcolumn){maxcolumn=toneinline;}
 		}
+		maxrow=contents.split("\n").length;
 		var DW = new DrawOnWindow ();
 		DW.show_all ();
 		Gtk.main ();
