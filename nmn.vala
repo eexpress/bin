@@ -83,7 +83,7 @@ public class DrawOnWindow : Gtk.Window {
 			if(line=="")continue;
 			double adj=calwidth(line);
 			if(maxtoneperline-adj>3){adj=1;}else{
-				adj=1+(maxtoneperline-adj)/adj;
+				adj=1+(maxtoneperline-adj)/(adj-0.5);
 			}
 			bw=textheight*1.8*adj;
 		for(int l=0; l<line.length; l++){
