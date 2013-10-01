@@ -26,6 +26,7 @@ const string instr="""
 
 const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 string contents;
+string filename;
 
 public class DrawOnWindow : Gtk.Window {
 	int ww;
@@ -106,7 +107,7 @@ public class DrawOnWindow : Gtk.Window {
 		bw=textheight*1.8;
 		bh=textheight*6;
 		pagex=(int)textheight*4;
-		pagey=(int)textheight*6;
+		pagey=(int)textheight*8;
 		resize(pagex*2+(int)((maxcolumn-1)*bw),pagey*2+(int)(arraycnt.length*bh));
 
 		ctx.set_source_rgb (0, 0, 0);
@@ -208,6 +209,9 @@ public class DrawOnWindow : Gtk.Window {
 		}
 		x=pagex; y=y+bh;
 		}
+		this.get_size(out ww,out wh);
+		ctx.move_to(ww/2-centerpos(ctx,filename), pagey/2);
+		ctx.show_text(filename);
 		return true;
 	}
 
@@ -218,11 +222,14 @@ public class DrawOnWindow : Gtk.Window {
 	
 	static int main (string[] args) {
 		Gtk.init (ref args);
+		filename="Sample";
 		if(args[1]==null) contents=instr;
 		else{
 			try{
-				if(File.new_for_path(args[1]).query_exists() == true){
+				File f=File.new_for_path(args[1]);
+				if(f.query_exists() == true){
 					FileUtils.get_contents(args[1], out contents);
+					filename=f.get_basename();
 				}else{
 					contents=instr;
 				}
