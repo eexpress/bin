@@ -145,7 +145,7 @@ public class DrawOnWindow : Gtk.Window {
 						if(ss.contains(":")){
 							sx=ss.split(":",2);
 							if(sx[1]=="")sx[1]=sx[0];
-							ctx.move_to(x-centerpos(ctx,i.to_string()),y+vspace*14);
+							ctx.move_to(x-centerpos(ctx,i.to_string()),y+vspace*12);
 							ctx.show_text(sx[1]);
 							ss=sx[0];
 						}
