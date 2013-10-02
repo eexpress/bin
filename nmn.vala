@@ -14,10 +14,10 @@ using Cairo;
 /*2,+63-,2-,|1,+5#4-5-|66-6--7-(65-)|1,++0|| """;*/
 
 const string instr="""
-3'越'3'过'3'辽'-4'阔'#4'天'-|5'空，'+0-5'啦'-#4'啦啦'-5-|6'飞'6'向'6'遥'-7'远'1'群'-,|5'星'，++(6'来'-5-)|
-2'吧！'++6'阿'-5'童'-|3'木'++4'爱'-3'科'-|2'学'3'的'#4'好'-(5'少'6-)|5'年'++0|
-3'善'，3'良'3'勇'-(4'敢'#4'的'-)|5+0-5'啦'-#4'啦'-5'啦'-|6'铁'6'臂'6'阿'-(7'童'1-,)|3'木',++4'十'-,3'万'-,|
-2'马',+6'力，'3'七'-,2'大'-,|1'神',+5'力，'#4'无'-5'私'-|6'无'6'畏'-6'的'--7'阿'-(6'童'5-)|1'木',++0|| """;
+3'越:穿'3'过:过'3'辽:广'-4'阔:阔'#4'天:大'-|5'空，:地，'+0-5'啦:啦'-#4'啦啦:啦啦'-5-|6'飞:潜'6'向:入'6'遥:深'-7'远:深'1'群:海'-,|5'星，:洋，'，++(6'来:'-5-)|
+2'吧！:'++6'阿:'-5'童:'-|3'木:'++4'爱:'-3'科:'-|2'学:'3'的:'#4'好:'-(5'少:'6-)|5'年。:'++0|
+3'善:'，3'良:'3'勇:'-(4'敢:'#4'的:'-)|5+0-5'啦:'-#4'啦:'-5'啦:'-|6'铁:'6'臂:'6'阿:'-(7'童:'1-,)|3'木，:',++4'十:我'-,3'万'-,|
+2'马:们',+6'力，:的'3'七:好'-,2'大:朋'-,|1'神:友',+5'力，:啊'#4'无:'-5'私:'-|6'无:'6'畏:'-6'的:'--7'阿:'-(6'童:'5-)|1'木。:',++0|| """;
 
 /*const string lyric=""" 越过辽阔天空，啦啦啦飞向遥远群星，来*/
 /*吧！阿童木爱科学的好少年*/
@@ -97,6 +97,7 @@ public class DrawOnWindow : Gtk.Window {
 	string ss;
 	double bx0=0;
 	double bx1=0;
+	string[] sx;
 /*        setup size according to font size*/
 		ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(size);
@@ -112,6 +113,7 @@ public class DrawOnWindow : Gtk.Window {
 
 		ctx.set_source_rgb (0, 0, 0);
 		lyric=contents.contains("'");
+		if(contents.contains(":")){bh=textheight*8;}
 		x=pagex;
 		y=pagey;
 /*        stdout.printf("Start Draw. -------------\n");*/
@@ -138,13 +140,17 @@ public class DrawOnWindow : Gtk.Window {
 					if(line[l+1]=='\''){
 						ss=line.substring(l+2,-1);
 						ss=ss.substring(0,ss.index_of_char('\'',0));
-/*                        ss=line.substring(l+2,-1).delimit("'",'\0');*/
-/*                        ss=line.substring(l+2,-1).replace("'*","");*/
-/*                        delimit 需要类型‘gchar *’，但实参的类型为‘const gchar *’*/
+						l+=ss.length;
 /*                    左对齐歌词*/
+						if(ss.contains(":")){
+							sx=ss.split(":",2);
+							if(sx[1]=="")sx[1]=sx[0];
+							ctx.move_to(x-centerpos(ctx,i.to_string()),y+vspace*14);
+							ctx.show_text(sx[1]);
+							ss=sx[0];
+						}
 						ctx.move_to(x-centerpos(ctx,i.to_string()),y+vspace*7);
 						ctx.show_text(ss);
-						l+=ss.length;
 					}
 				}else{
 					ss=tone[i-'0'];
