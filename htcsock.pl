@@ -15,8 +15,8 @@ print $sock "\x00\x03\x00\x00"; receivesock();
 print $sock "\x00\x05\x00\x00";
 close $sock;  
 
-sysctl net.ipv4.ip_forward|grep '= 1'
-[ $? -eq 0 ] && ~/bin/reverse-tethering.bash
+$_=`sysctl net.ipv4.ip_forward`;
+`~/bin/reverse-tethering.bash` if /=\ 0/;
 
 sub receivesock{
 local $/=\4;
