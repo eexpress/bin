@@ -3,12 +3,10 @@
 $log='/var/log/kern.log';
 $re='proc\b';
 
-open IN,$log; @_=grep /$re/,<IN>; close IN;
+open IN,$log.".1"; @_=grep /$re/,<IN>; close IN;
+open IN,$log; @tmp=grep /$re/,<IN>; close IN;
+push @_,@tmp;
 
-if(@_<3){
-	$log.=".1";
-	open IN,$log; @_=grep /$re/,<IN>; close IN;
-}
 print "从 $log 读取开关机记录：\n";
 #---------------------------------------
 $lastday="";
