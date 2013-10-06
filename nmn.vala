@@ -7,6 +7,10 @@ using Cairo;
 /*const string outputfile="/tmp/nmn.png";*/
 /*const string alphatable="d1 r2 m3 f4 s5 l6 x7 t7";*/
 /*const string input[]={"1d2","3b3","44","2d1","|","34","2e0","7a2","5e3"};*/
+const int GDK_KEY_Left = 0xff51;
+const int GDK_KEY_Up = 0xff52;
+const int GDK_KEY_Right = 0xff53;
+const int GDK_KEY_Down = 0xff54;
 
 /*" 越过辽阔天空，啦啦啦飞向遥远群星，来吧！阿童木爱科学的好少年善，良勇敢的啦啦啦铁臂阿童木十万马力，七大神力，无私无畏的阿童木 "*/
 
@@ -23,6 +27,7 @@ const string instr="""
 
 
 const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
+const string outputfile="/tmp/nmn.png";
 string contents;
 string filename;
 
@@ -35,8 +40,8 @@ public class DrawOnWindow : Gtk.Window {
 	Cairo.TextExtents ex;
 	int[] arraycnt={};	//每行有效列数
 	int maxcolumn;
-	int crow=3;
-	int ccol=5;
+	int crow=0;
+	int ccol=0;
 
 
 	public DrawOnWindow() {
@@ -48,10 +53,39 @@ public class DrawOnWindow : Gtk.Window {
 		var drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
 		add (drawing_area);
-/*        drawing_area.destroy.connect (on_destroy);*/
-/*        key_press_event.connect ((e) => {*/
-/*            return true;*/
-/*        });*/
+		add_events(Gdk.EventMask.KEY_PRESS_MASK);
+		key_press_event.connect ((e) => {
+			switch(e.keyval){
+			case GDK_KEY_Up:
+			case 'k':
+				crow--;
+				if(crow<0){crow=arraycnt.length-1;}
+				if(ccol>arraycnt[crow]-1)ccol=arraycnt[crow]-1;
+				break;
+			case GDK_KEY_Down:
+			case 'j':
+				crow++;
+				if(crow>arraycnt.length-1){crow=0;}
+				if(ccol>arraycnt[crow]-1)ccol=arraycnt[crow]-1;
+				break;
+			case GDK_KEY_Right:
+			case 'l':
+				ccol++;
+				if(ccol>arraycnt[crow]-1)ccol=0;
+				break;
+			case GDK_KEY_Left:
+			case 'h':
+				ccol--;
+				if(ccol<0)ccol=arraycnt[crow]-1;
+				break;
+			case 'p':
+				screenshot();
+				stdout.printf("screenshot save at %s\n", outputfile);
+				break;
+			}
+			drawing_area.queue_draw_area(0,0,ww,wh);
+			return false;
+		});
 		setarraycnt();
 	}
 
@@ -69,14 +103,13 @@ public class DrawOnWindow : Gtk.Window {
 		}
 	}
 
-/*    private bool on_destroy(){*/
-/*        var surface = new ImageSurface (Format.ARGB32, 800, 800);*/
-/*        var ctx = new Cairo.Context (surface);*/
-/*        on_draw(ctx);*/
-/*        surface.write_to_png ("/tmp/nmn.png");*/
-/*    }*/
+	private void screenshot(){
+		var surface = new ImageSurface (Format.ARGB32, ww, wh);
+		var ctx = new Cairo.Context (surface);
+		on_draw(ctx);
+		surface.write_to_png (outputfile);
+	}
 
-/*    private bool on_draw (Widget da, Context ctx) {*/
 	private bool on_draw (Context ctx) {
 		double bw, bh;		//单元格尺寸
 		double vspace;		//垂直标记的间隔
@@ -101,7 +134,6 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.set_source_rgb (0, 0, 0);
 		lyric=contents.contains("'");
 		if(contents.contains(":")){bh=fixheight*8;}
-/*        stdout.printf("Start Draw. -------------\n");*/
 /*----------------------------------------------------------*/
 		string ss;
 		int row=0, col=0;
@@ -116,19 +148,17 @@ public class DrawOnWindow : Gtk.Window {
 			if(maxcolumn-adj>3){adj=1;}/*差距太大，不做调整*/
 			else{ adj=1+(maxcolumn-adj)/(adj-0.5); }
 			bw=fixheight*1.8*adj;
-			row++;
-			col=0;
 		for(int j=0; j<line.length; j++){
 			char i=line[j];
 			if((i>='0' && i<'8') || i=='+' || i=='|'){
 				x=pagex+col*bw+bw/2;	//x是格子中心坐标
-				col++;
 				if(row==crow && col==ccol){
 					ctx.set_source_rgba (0, 0, 1, 0.2);
 					ctx.rectangle(x-bw/2,y-bh/4,bw,bh);
 					ctx.fill();
 					ctx.set_source_rgb (0, 0, 0);
 				}
+				col++;
 			}
 			if(i!='-'&&i!='.'){dncnt=0;}
 			if(i!=','){upcnt=0;}
@@ -211,7 +241,9 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			}
 		}
+		row++; col=0;
 		}
+/*        显示标题*/
 		this.get_size(out ww,out wh);
 		ctx.move_to(ww/2-centerpos(ctx,filename), bh/2);
 		ctx.show_text(filename);
