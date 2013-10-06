@@ -8,6 +8,8 @@ using Cairo;
 /*const string alphatable="d1 r2 m3 f4 s5 l6 x7 t7";*/
 /*const string input[]={"1d2","3b3","44","2d1","|","34","2e0","7a2","5e3"};*/
 
+/*" 越过辽阔天空，啦啦啦飞向遥远群星，来吧！阿童木爱科学的好少年善，良勇敢的啦啦啦铁臂阿童木十万马力，七大神力，无私无畏的阿童木 "*/
+
 /*const string instr=""" 333-4#4-|5+0-5-#4-5-|666-71-,|5++(6-5-)|*/
 /*2++6-5-|3++4-3-|23#4-(56-)|5++0|*/
 /*333-(4#4-)|5+0-5-#4-5-|666-(71-,)|3,++4-,3-,|*/
@@ -19,10 +21,6 @@ const string instr="""
 3'善:'，3'良:'3'勇:'-(4'敢:'#4'的:'-)|5+0-5'啦:'-#4'啦:'-5'啦:'-|6'铁:'6'臂:'6'阿:'-(7'童:'1-,)|3'木，:',++4'十:我'-,3'万'-,|
 2'马:们',+6'力，:的'3'七:好'-,2'大:朋'-,|1'神:友',+5'力，:啊'#4'无:'-5'私:'-|6'无:'6'畏:'-6'的:'--7'阿:'-(6'童:'5-)|1'木。:',++0|| """;
 
-/*const string lyric=""" 越过辽阔天空，啦啦啦飞向遥远群星，来*/
-/*吧！阿童木爱科学的好少年*/
-/*善，良勇敢的啦啦啦铁臂阿童木十万*/
-/*马力，七大神力，无私无畏的阿童木 """;*/
 
 const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 string contents;
@@ -30,23 +28,15 @@ string filename;
 
 public class DrawOnWindow : Gtk.Window {
 	int ww;
-	int wh;
-	int size=20;
+	int wh;		//窗口尺寸
+	int size=20;	//字体尺寸
 	string fontname="Vera Sans YuanTi";
 /*    string fontname="Nimbus Roman No9 L";*/
 	Cairo.TextExtents ex;
-	double bw;
-	double bh;
-	double vspace;
-	double textheight;
-	int pagex;
-	int pagey;
-	bool lyric;
-	int[] arraycnt={};
+	int[] arraycnt={};	//每行有效列数
 	int maxcolumn;
-	int dncnt;
-	int upcnt;
-/*    int maxrow;*/
+	int crow=3;
+	int ccol=5;
 
 
 	public DrawOnWindow() {
@@ -70,17 +60,13 @@ public class DrawOnWindow : Gtk.Window {
 			int cnt=0;
 			for(int i=0;i<s.length;i++){
 				char j=s[i];
-				if(j>='0'&&j<='7'){cnt++;continue;}
-				if(j=='+'){cnt++;continue;}
-				if(j=='|'&&s[i+1]!='|'){cnt++;continue;}
+				if((j>='0' && j<'8') || j=='+' || (j=='|' && s[i+1]!='|'))
+				{cnt++;continue;}
 			}
 			if(cnt==0)continue;
 			arraycnt+=cnt;
 			if(cnt>maxcolumn){maxcolumn=cnt;}
 		}
-/*            stdout.printf("\n---------> arraycnt:");*/
-/*            foreach(int x in arraycnt){ stdout.printf(x.to_string()+","); }*/
-/*            stdout.printf("\b\t maxcolumn:%d\t maxrow:%d\n", maxcolumn, arraycnt.length);*/
 	}
 
 /*    private bool on_destroy(){*/
@@ -92,44 +78,58 @@ public class DrawOnWindow : Gtk.Window {
 
 /*    private bool on_draw (Widget da, Context ctx) {*/
 	private bool on_draw (Context ctx) {
-	double x;
-	double y;
-	string ss;
-	double bx0=0;
-	double bx1=0;
-	string[] sx;
-/*        setup size according to font size*/
+		double bw, bh;		//单元格尺寸
+		double vspace;		//垂直标记的间隔
+		int dncnt=0, upcnt=0;	//垂直位置计数
+		double fixheight;		//初始的固定高度，字宽度变化大。
+		bool lyric;
+		int pagex, pagey;
+
 		ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(size);
 		ctx.set_line_width(0.5);
 		ctx.text_extents("8",out ex);
-		textheight=ex.height;
-		vspace=textheight/3;
-		bw=textheight*1.8;
-		bh=textheight*6;
-		pagex=(int)textheight*4;
-		pagey=(int)textheight*8;
-		resize(pagex*2+(int)((maxcolumn-1)*bw),pagey*2+(int)(arraycnt.length*bh));
+		fixheight=ex.height;
+/*        尺寸由字体高度决定*/
+		vspace=fixheight/3;
+		bw=fixheight*1.8;		//目前是最长行的最紧格式宽度
+		bh=fixheight*5;
+		pagex=(int)(bw*2);
+		pagey=(int)(bh*2);
+		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*2+arraycnt.length*bh));
 
 		ctx.set_source_rgb (0, 0, 0);
 		lyric=contents.contains("'");
-		if(contents.contains(":")){bh=textheight*8;}
-		x=pagex;
-		y=pagey;
+		if(contents.contains(":")){bh=fixheight*8;}
 /*        stdout.printf("Start Draw. -------------\n");*/
 /*----------------------------------------------------------*/
-		int loop=0;
+		string ss;
+		int row=0, col=0;
+		double x=0, y;		//由row,col计算出来
+		double x0=0;		//上连括号
+
 		foreach(string line in contents.split("\n")){
-/*            adjust align*/
+			y=pagey+row*bh-bh/4;
 			if(line=="")continue;
-/*            double adj=calwidth(line);*/
-			double adj=arraycnt[loop]; loop++;
-			if(maxcolumn-adj>3){adj=1;}else{
-				adj=1+(maxcolumn-adj)/(adj-0.5);
+/*            右边缘对齐*/
+			double adj=arraycnt[row];
+			if(maxcolumn-adj>3){adj=1;}/*差距太大，不做调整*/
+			else{ adj=1+(maxcolumn-adj)/(adj-0.5); }
+			bw=fixheight*1.8*adj;
+			row++;
+			col=0;
+		for(int j=0; j<line.length; j++){
+			char i=line[j];
+			if((i>='0' && i<'8') || i=='+' || i=='|'){
+				x=pagex+col*bw+bw/2;	//x是格子中心坐标
+				col++;
+				if(row==crow && col==ccol){
+					ctx.set_source_rgba (0, 0, 1, 0.2);
+					ctx.rectangle(x-bw/2,y-bh/4,bw,bh);
+					ctx.fill();
+					ctx.set_source_rgb (0, 0, 0);
+				}
 			}
-			bw=textheight*1.8*adj;
-		for(int l=0; l<line.length; l++){
-			char i=line[l];
 			if(i!='-'&&i!='.'){dncnt=0;}
 			if(i!=','){upcnt=0;}
 			if(i>='0' && i<'8'){
@@ -137,34 +137,34 @@ public class DrawOnWindow : Gtk.Window {
 				ctx.show_text(i.to_string());
 
 				if(lyric){
-					if(line[l+1]=='\''){
-						ss=line.substring(l+2,-1);
+					if(line[j+1]=='\''){
+						ss=line.substring(j+2,-1);
 						ss=ss.substring(0,ss.index_of_char('\'',0));
-						l+=ss.length;
+						j+=ss.length;
 /*                    左对齐歌词*/
 						if(ss.contains(":")){
-							sx=ss.split(":",2);
+							string[] sx=ss.split(":",2);
 							if(sx[1]=="")sx[1]=sx[0];
-							ctx.move_to(x-centerpos(ctx,i.to_string()),y+vspace*12);
+							ctx.move_to(x-centerpos(ctx,i.to_string()),y+vspace*4+fixheight*3);
 							ctx.show_text(sx[1]);
 							ss=sx[0];
 						}
-						ctx.move_to(x-centerpos(ctx,i.to_string()),y+vspace*7);
+						ctx.move_to(x-centerpos(ctx,i.to_string()),y+vspace*2+fixheight*2);
 						ctx.show_text(ss);
 					}
 				}else{
 					ss=tone[i-'0'];
 					ctx.set_font_size(size/1.2);
-					ctx.move_to(x-centerpos(ctx,ss),y+vspace*7);
+					ctx.move_to(x-centerpos(ctx,ss),y+vspace*2+fixheight*2);
 					ctx.show_text(ss);
 					ctx.set_font_size(size);
 				}
-				x+=bw; continue;
+				continue;
 			}
 			switch(i){
 			case '|':
-				if(line[l+1]=='|'){
-					l++;
+				if(line[j+1]=='|'){
+					j++;
 					ctx.move_to(x,y-bh/4);
 					ctx.rel_line_to(0,bh/2);
 					ctx.stroke();
@@ -178,45 +178,42 @@ public class DrawOnWindow : Gtk.Window {
 					ctx.line_to(x,y+bh/4);
 					ctx.stroke();
 				}
-				x+=bw; break;
+				break;
 			case '#':
-				ctx.move_to(x-bw/2,y-ex.height+vspace/4);
+				ctx.move_to(x+bw/2,y-fixheight+vspace/4);
 				ctx.set_font_size(size/2);
 				ctx.show_text("#");
 				ctx.set_font_size(size);
 				break;
-/*            case '\n': x=pagex; y=y+bh; break;*/
 			case '+':
 				ss="-";
 				ctx.move_to(x-centerpos(ctx,ss),y-vspace);
-				ctx.show_text(ss); x+=bw; break;
+				ctx.show_text(ss); break;
 			case '-':
 				dncnt++;
-				ctx.move_to(x-bw/2,y+dncnt*vspace); ctx.rel_line_to(-bw,0);
+				ctx.move_to(x+bw/2,y+dncnt*vspace); ctx.rel_line_to(-bw,0);
 				ctx.stroke(); break;
 			case '.':
 				dncnt++;
-				ctx.arc(x-bw,y+dncnt*vspace,size/7,0,360*Math.PI/180);
+				ctx.arc(x,y+dncnt*vspace,size/7,0,360*Math.PI/180);
 				ctx.fill(); break;
 			case ',':
 				upcnt++;
-				ctx.arc(x-bw,y-textheight-upcnt*vspace,size/7,0,360*Math.PI/180);
+				ctx.arc(x,y-fixheight-upcnt*vspace,size/7,0,360*Math.PI/180);
 				ctx.fill(); break;
 			case '(':
-				bx0=x; break;
+				x0=x+bw; break;
 			case ')':
-				bx1=x-bw;
-				double by=y-textheight-vspace;
-				ctx.move_to(bx0,by);
-				ctx.curve_to(bx0+vspace,by-vspace,bx1-vspace,by-vspace,bx1,by);
+				double by=y-fixheight-vspace;
+				ctx.move_to(x0,by);
+				ctx.curve_to(x0+vspace,by-vspace,x-vspace,by-vspace,x,by);
 				ctx.stroke();
 				break;
 			}
 		}
-		x=pagex; y=y+bh;
 		}
 		this.get_size(out ww,out wh);
-		ctx.move_to(ww/2-centerpos(ctx,filename), pagey/2);
+		ctx.move_to(ww/2-centerpos(ctx,filename), bh/2);
 		ctx.show_text(filename);
 		return true;
 	}
