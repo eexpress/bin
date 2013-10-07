@@ -84,23 +84,69 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			}
 			drawing_area.queue_draw_area(0,0,ww,wh);
+			showdata();
 			return false;
 		});
 		setarraycnt();
 	}
 
+	private void showdata(){
+		int posbegin=0, posend, pos=0;
+		int i,cnt=0;
+		char j;
+		for(i=0;i<crow;i++){
+			posbegin=contents.index_of_char('\n',posbegin+1);
+		}
+		posend=contents.index_of_char('\n',posbegin+1);
+		for(i=posbegin;i<posend;i++){
+			j=contents[i];
+			if((j>='0' && j<'8') || j=='+' || (j=='|' && contents[i+1]!='|')){
+				if(cnt==ccol){
+					string t=contents.substring(i+1,-1);
+					t._delimit("01234567+|",'\0');
+					t=j.to_string()+t;
+					stdout.printf("->%s<-\n",t);
+					pos=i;
+					break;
+				}
+				cnt++;
+			}
+			
+		}
+		stdout.printf("crow %d ccol %d in contents pos:%d @ %d - %d\n",crow,ccol,pos,posbegin,posend);
+
+/*        string s=contents.split("\n")[crow];*/
+/*        int cnt=0;*/
+/*        for(i=0;i<s.length;i++){*/
+/*            char j=s[i];*/
+/*            if((j>='0' && j<'8') || j=='+' || (j=='|' && s[i+1]!='|')){*/
+/*                if(cnt==ccol){*/
+/*                    string t=s.substring(i+1,-1);*/
+/*                    t._delimit("01234567+|",'\0');*/
+/*                    stdout.printf("->%s%s<-\n",j.to_string(),t);*/
+/*                }*/
+/*                cnt++;*/
+/*            }*/
+/*        }*/
+	}
+
 	void setarraycnt(){
+		string tmp="";
 		foreach(string s in contents.split("\n")){
+			if(s=="")continue;
+			tmp+=s; tmp+="\n";
 			int cnt=0;
+			maxcolumn=0;
 			for(int i=0;i<s.length;i++){
 				char j=s[i];
 				if((j>='0' && j<'8') || j=='+' || (j=='|' && s[i+1]!='|'))
 				{cnt++;continue;}
 			}
-			if(cnt==0)continue;
+/*            if(cnt==0)continue;*/
 			arraycnt+=cnt;
 			if(cnt>maxcolumn){maxcolumn=cnt;}
 		}
+		contents=tmp;
 	}
 
 	private void screenshot(){
