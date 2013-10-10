@@ -3,15 +3,22 @@
 redB='\x1b[1;31m'; blueB='\x1b[1;34m'; greenB='\x1b[1;32m'; end='\x1b[0m';
 
 if [ ! $1 ]; then
-	echo "Find filename in current directory, need (multi) parameter."; exit
+	echo "在当前目录查找文件名的关键词。支持多参数，可使用-号表示排除。"
+	echo "Find filename in current directory. multi keyword, use prefix - to exclude word."; exit
 fi
 #不搜索隐藏文件夹
 cmd='find . ! -path "*/.*" '
 color="|sed 'h;s:.*/::;"
 for p in $*; do
+if [[ "$p" == "-"* ]]; then
+x=${p:1:9}
+cmd=$cmd"! -iname \"*$x*\" "
+else
 cmd=$cmd"-iname \"*$p*\" "
-color=$color"s/$p/$redB&$end/g;"
+fi
+color=$color"s/$p/$redB&$end/Ig;"
 done
 color=$color"x;s:[^/]\+$::g;G;s/\n//'"
-echo -e "$blueB>>>> $cmd\n$end"
+#echo -e "$blueB>>>> $cmd\n$end"
+echo $cmd$color>/tmp/fd
 eval $cmd$color
