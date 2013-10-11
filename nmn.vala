@@ -29,6 +29,7 @@ const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const string outputfile="/tmp/nmn.png";
 const string alphatable="d1r2m3f4s5l6x7t7";
 string contents;
+string oldcontents;
 string filename;
 
 public class DrawOnWindow : Gtk.Window {
@@ -131,7 +132,10 @@ public class DrawOnWindow : Gtk.Window {
 				changedate(t);
 				break;
 			case 'u':
-			case 's':
+				if(oldcontents!="")contents=oldcontents;
+				break;
+			case 'w':
+				FileUtils.set_contents("/tmp/nmn.nmn", contents, -1);
 				break;
 			}
 			showdata();
@@ -144,6 +148,7 @@ public class DrawOnWindow : Gtk.Window {
 
 	private void changedate(string s){
 		string t0,t1;
+		oldcontents=contents;
 		t0=contents.slice(0,pos);
 		t1=contents.substring(pos+notation.length,-1);
 		contents=t0+s+t1;
