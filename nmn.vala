@@ -39,6 +39,7 @@ public class DrawOnWindow : Gtk.Window {
 /*    string fontname="Nimbus Roman No9 L";*/
 	Cairo.TextExtents ex;
 	int[] arraycnt={};	//每行有效列数
+	string curnotation="";
 	int maxcolumn;
 	int crow=0;
 	int ccol=0;
@@ -104,19 +105,17 @@ public class DrawOnWindow : Gtk.Window {
 			if((c>='0' && c<'8') || c=='+' || (c=='|' && contents[l+1]!='|')){
 				if(cnt==ccol){
 					string t=contents.substring(l+1,-1);
-					t._delimit("01234567*/",'\0');
+					t._delimit("01234567+|\n",'\0');
 /*                    t._delimit("01234567+|",'+');*/
 /*                    t=t.slice(0,t.index_of("+",0));*/
 					t=c.to_string()+t;
-					stdout.printf("->%s<-\n",t);
+				curnotation="%d,%d <%s>".printf(crow,ccol,t);
 					pos=l;
 					break;
 				}
 				cnt++;
 			}
-			
 		}
-/*stdout.printf("crow %d ccol %d pos:%d @ %d - %d\n",crow,ccol,pos,posbegin,posend);*/
 	}
 
 	void setarraycnt(){
@@ -188,7 +187,7 @@ public class DrawOnWindow : Gtk.Window {
 			if((i>='0' && i<'8') || i=='+' || i=='|'){
 				x=pagex+col*bw+bw/2;	//x是格子中心坐标
 				if(row==crow && col==ccol){
-					ctx.set_source_rgba (0, 0, 1, 0.2);
+					ctx.set_source_rgba (0, 0, 1, 0.4);
 					ctx.rectangle(x-bw/2,y-bh/4,bw,bh);
 					ctx.fill();
 					ctx.set_source_rgb (0, 0, 0);
@@ -283,6 +282,10 @@ public class DrawOnWindow : Gtk.Window {
 		this.get_size(out ww,out wh);
 		ctx.move_to(ww/2-centerpos(ctx,filename), bh/2);
 		ctx.show_text(filename);
+		ctx.set_source_rgba (0, 0, 1, 0.5);
+		ctx.move_to(bw*2,wh-vspace);
+		ctx.show_text(curnotation);
+/*        ctx.set_source_rgb (0, 0, 0);*/
 		return true;
 	}
 
