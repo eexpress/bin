@@ -5,7 +5,6 @@ using Cairo;
 
 /*string fontname;*/
 /*const string outputfile="/tmp/nmn.png";*/
-/*const string alphatable="d1 r2 m3 f4 s5 l6 x7 t7";*/
 /*const string input[]={"1d2","3b3","44","2d1","|","34","2e0","7a2","5e3"};*/
 const int GDK_KEY_Left = 0xff51;
 const int GDK_KEY_Up = 0xff52;
@@ -28,6 +27,7 @@ const string instr="""
 
 const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const string outputfile="/tmp/nmn.png";
+const string alphatable="d1r2m3f4s5l6x7t7";
 string contents;
 string filename;
 
@@ -39,10 +39,11 @@ public class DrawOnWindow : Gtk.Window {
 /*    string fontname="Nimbus Roman No9 L";*/
 	Cairo.TextExtents ex;
 	int[] arraycnt={};	//每行有效列数
-	string curnotation="";
+	string notation="";
 	int maxcolumn;
 	int crow=0;
 	int ccol=0;
+	int pos=0;
 
 
 	public DrawOnWindow() {
@@ -56,26 +57,32 @@ public class DrawOnWindow : Gtk.Window {
 		add (drawing_area);
 		add_events(Gdk.EventMask.KEY_PRESS_MASK);
 		key_press_event.connect ((e) => {
+			if(e.str!="" && alphatable.contains(e.str)){
+				int p=alphatable.index_of(e.str,0);
+				if(p==p/2*2){p++;}
+				string t=alphatable[p].to_string()+notation.substring(1,-1);
+				changedate(t);
+			}
 			switch(e.keyval){
 			case GDK_KEY_Up:
-			case 'k':
+/*            case 'k':*/
 				crow--;
 				if(crow<0){crow=arraycnt.length-1;}
 				if(ccol>arraycnt[crow]-1)ccol=arraycnt[crow]-1;
 				break;
 			case GDK_KEY_Down:
-			case 'j':
+/*            case 'j':*/
 				crow++;
 				if(crow>arraycnt.length-1){crow=0;}
 				if(ccol>arraycnt[crow]-1)ccol=arraycnt[crow]-1;
 				break;
 			case GDK_KEY_Right:
-			case 'l':
+/*            case 'l':*/
 				ccol++;
 				if(ccol>arraycnt[crow]-1)ccol=0;
 				break;
 			case GDK_KEY_Left:
-			case 'h':
+/*            case 'h':*/
 				ccol--;
 				if(ccol<0)ccol=arraycnt[crow]-1;
 				break;
@@ -83,16 +90,67 @@ public class DrawOnWindow : Gtk.Window {
 				screenshot();
 				stdout.printf("screenshot save at %s\n", outputfile);
 				break;
+			case '-':
+			case ',':
+			case '.':
+				string t=notation;
+				if(!(t[0]>='0' && t[0]<'8')) break;
+				int cnt=0;
+				int i;
+				for(i=0; i<t.length;i++){if(t[i]==e.keyval)cnt++;}
+				cnt++; if(cnt>3)cnt=0;
+				int p;
+				if(e.str=="-"){
+					p=-1;
+/*                    t._delimit("-",'?');*/
+					t=t.replace("-","");
+				}else{
+					p=t.last_index_of ("-",0);
+/*                    t._delimit(",.",'?');*/
+					t=t.replace(",","");
+					t=t.replace(".","");
+				}
+				if(p<0)p=t.last_index_of ("'",0);
+				if(p<0)p=0;
+				p++;
+				string t0=t.substring(0,p);
+/*                if(t.contains("?")){p=t.last_index_of ("?",0)+1;}*/
+				string t1=t.substring(p,-1);
+				t=t0; for(i=0;i<cnt;i++){t+=e.str;} t+=t1;
+				changedate(t);
+				break;
+			case '+':
+			case '|':
+				changedate(e.str);
+				break;
+			case '#':
+			case '(':
+			case ')':
+				string t=notation;
+				if(t.contains(e.str)){ t=t.replace(e.str,""); }else{ t+=e.str; }
+				changedate(t);
+				break;
+			case 'u':
+			case 's':
+				break;
 			}
-			drawing_area.queue_draw_area(0,0,ww,wh);
 			showdata();
+			drawing_area.queue_draw_area(0,0,ww,wh);
 			return false;
 		});
 		setarraycnt();
+		showdata();
+	}
+
+	private void changedate(string s){
+		string t0,t1;
+		t0=contents.slice(0,pos);
+		t1=contents.substring(pos+notation.length,-1);
+		contents=t0+s+t1;
 	}
 
 	private void showdata(){
-		int posbegin=0, posend, pos=0;
+		int posbegin=0, posend;
 		int l,cnt=0;
 		char c;
 /*        string s=contents.split("\n")[crow];*/
@@ -108,8 +166,7 @@ public class DrawOnWindow : Gtk.Window {
 					t._delimit("01234567+|\n",'\0');
 /*                    t._delimit("01234567+|",'+');*/
 /*                    t=t.slice(0,t.index_of("+",0));*/
-					t=c.to_string()+t;
-				curnotation="%d,%d <%s>".printf(crow,ccol,t);
+					notation=c.to_string()+t;
 					pos=l;
 					break;
 				}
@@ -267,7 +324,7 @@ public class DrawOnWindow : Gtk.Window {
 				ctx.arc(x,y-fixheight-upcnt*vspace,size/7,0,360*Math.PI/180);
 				ctx.fill(); break;
 			case '(':
-				x0=x+bw; break;
+				x0=x; break;
 			case ')':
 				double by=y-fixheight-vspace;
 				ctx.move_to(x0,by);
@@ -284,7 +341,7 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.show_text(filename);
 		ctx.set_source_rgba (0, 0, 1, 0.5);
 		ctx.move_to(bw*2,wh-vspace);
-		ctx.show_text(curnotation);
+		ctx.show_text("%d,%d <%s>".printf(crow,ccol,notation));
 /*        ctx.set_source_rgb (0, 0, 0);*/
 		return true;
 	}
