@@ -6,6 +6,7 @@ const int GDK_KEY_Left = 0xff51;
 const int GDK_KEY_Up = 0xff52;
 const int GDK_KEY_Right = 0xff53;
 const int GDK_KEY_Down = 0xff54;
+const int GDK_KEY_Return = 0xff0d;
 
 /*逐字模式，使用‘’包括进入单词模式*/
 const string instr="""
@@ -15,18 +16,20 @@ const string instr="""
 2,+63-,2-,|1,+5#4-5-|66-6--7-6(5-)|1,++0||
 
 :越过辽阔天'空，' 啦啦啦飞向遥远群'星，'来 '吧！'阿童木爱科学的好少 '年。' 善良勇敢的  啦啦啦铁臂阿童 '木，'十万马'力，'七大神'力，'无私无畏的阿童 '木。'
-
 :穿过广阔大'地，' 啦啦啦潜入深深海'洋，'来 '吧！'阿童木爱科学的好少 '年。' 善良勇敢的  啦啦啦铁臂阿童 '木，'我 们的好朋友'啊，'无私无畏的阿童 '木。'
 """;
 
-const string help0="编辑： d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 #（）切换上面的附加音符。 方向键移动。";
-const string help1="+ | 是延长音和分割符。 u 恢复最后一次。 p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.nmn。";
+const string help="""编辑： d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 #（）切换上面的附加音符。 方向键移动。
++ | 是延长音和分割符。 u 可恢复最后三次。 p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.nmn。
+i a x 插入/追加/删除音符。回车 j 是新行和合并行。""";
 
 const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const string outputfile="/tmp/nmn.png";
 const string alphatable="d1r2m3f4s5l6x7t7";
 string notation;
-string oldnotation;
+string old0;
+string old1;
+string old2;
 string lyric1;
 string lyric2;
 string filename;
@@ -56,6 +59,7 @@ public class DrawOnWindow : Gtk.Window {
 		drawing_area.draw.connect (on_draw);
 		add (drawing_area);
 		add_events(Gdk.EventMask.KEY_PRESS_MASK);
+		setarraycnt(); showdata();
 		key_press_event.connect ((e) => {
 			if(e.str!="" && alphatable.contains(e.str)){
 				int p=alphatable.index_of(e.str,0);
@@ -115,6 +119,29 @@ public class DrawOnWindow : Gtk.Window {
 				t=t0; for(i=0;i<cnt;i++){t+=e.str;} t+=t1;
 				changedate(t);
 				break;
+			case 'i':
+				changedate("0"+nmn);
+				arraycnt[crow]++;
+				break;
+			case 'a':
+				changedate(nmn+"0");
+				arraycnt[crow]++;
+				break;
+			case 'x':
+				changedate("");
+				arraycnt[crow]--;
+				break;
+			case 'j':
+				int k=notation.index_of("\n",pos);
+				pos=k; nmn="?";
+				changedate("");
+				break;
+			case GDK_KEY_Return:
+				ccol=arraycnt[crow];
+				showdata();
+				changedate("\n"+nmn);
+				crow++; ccol=0;
+				break;
 			case '+':
 			case '|':
 				changedate(e.str);
@@ -127,7 +154,9 @@ public class DrawOnWindow : Gtk.Window {
 				changedate(t);
 				break;
 			case 'u':
-				if(oldnotation!="")notation=oldnotation;
+				if(old0!="")notation=old0;
+				old0=old1;
+				old1=old2;
 				break;
 			case 'w':
 				try{
@@ -137,23 +166,24 @@ public class DrawOnWindow : Gtk.Window {
 				stdout.printf("notation save to /tmp/nmn.nmn\n");
 				break;
 			}
-			showdata();
+			setarraycnt(); showdata();
 			drawing_area.queue_draw_area(0,0,ww,wh);
 			return false;
 		});
-		setarraycnt();
-		showdata();
 	}
 
 	private void changedate(string s){
 		string t0,t1;
-		oldnotation=notation;
+		old2=old1;
+		old1=old0;
+		old0=notation;
 		t0=notation.slice(0,pos);
 		t1=notation.substring(pos+nmn.length,-1);
 		notation=t0+s+t1;
 	}
 
 	private void showdata(){
+/*        find nmn pos with crow ccol*/
 		int posbegin=0, posend;
 		int l,cnt=0;
 		char c;
@@ -181,6 +211,7 @@ public class DrawOnWindow : Gtk.Window {
 
 	void setarraycnt(){
 		string tmp="";
+		arraycnt={};
 		foreach(string s in notation.split("\n")){
 			if(s=="")continue;
 			tmp+=s; tmp+="\n";
@@ -360,11 +391,14 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.set_source_rgba (0, 0, 1, 0.5);
 		ctx.move_to(bw*2,wh-bh/4*3);
 		ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
+
 		ctx.set_font_size(12);
-		ctx.move_to(bw*2,wh-bh/2);
-		ctx.show_text(help0);
-		ctx.move_to(bw*2,wh-bh/4);
-		ctx.show_text(help1);
+		double vh=wh-bh/2;
+		foreach(string s in help.split("\n")){
+			ctx.move_to(bw*2,vh);
+			ctx.show_text(s);
+			vh+=fixheight*1.5;
+		}
 		ctx.set_font_size(size);
 /*        ctx.set_source_rgb (0, 0, 0);*/
 		return true;
@@ -396,9 +430,9 @@ public class DrawOnWindow : Gtk.Window {
 		}
 		if(lyric1==null)lyric1="";
 		if(lyric2==null)lyric2="";
-		stdout.printf("notation : %s\n",notation);
-		stdout.printf("lyric1 : %s\n",lyric1);
-		stdout.printf("lyric2 : %s\n",lyric2);
+/*        stdout.printf("notation : %s\n",notation);*/
+/*        stdout.printf("lyric1 : %s\n",lyric1);*/
+/*        stdout.printf("lyric2 : %s\n",lyric2);*/
 		var DW = new DrawOnWindow ();
 		DW.show_all ();
 		Gtk.main ();
