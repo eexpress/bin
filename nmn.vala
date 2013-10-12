@@ -19,6 +19,9 @@ const string instr="""
 :穿过广阔大'地，' 啦啦啦潜入深深海'洋，'来 '吧！'阿童木爱科学的好少 '年。' 善良勇敢的  啦啦啦铁臂阿童 '木，'我 们的好朋友'啊，'无私无畏的阿童 '木。'
 """;
 
+const string help0="编辑： d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 #（）切换上面的附加音符。 方向键移动。";
+const string help1="+ | 是延长音和分割符。 u 恢复最后一次。 p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.nmn。";
+
 const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const string outputfile="/tmp/nmn.png";
 const string alphatable="d1r2m3f4s5l6x7t7";
@@ -355,8 +358,14 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.move_to(ww/2-centerpos(ctx,filename), bh/2);
 		ctx.show_text(filename);
 		ctx.set_source_rgba (0, 0, 1, 0.5);
-		ctx.move_to(bw*2,wh-bh/2);
+		ctx.move_to(bw*2,wh-bh/4*3);
 		ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
+		ctx.set_font_size(12);
+		ctx.move_to(bw*2,wh-bh/2);
+		ctx.show_text(help0);
+		ctx.move_to(bw*2,wh-bh/4);
+		ctx.show_text(help1);
+		ctx.set_font_size(size);
 /*        ctx.set_source_rgb (0, 0, 0);*/
 		return true;
 	}
