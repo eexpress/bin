@@ -38,7 +38,8 @@ public class DrawOnWindow : Gtk.Window {
 	int ww;
 	int wh;		//窗口尺寸
 	int size=20;	//字体尺寸
-	string fontname="Vera Sans YuanTi";
+/*    string fontname="Vera Sans YuanTi";*/
+	string fontname="AR PL UKai CN";
 /*    string fontname="Nimbus Roman No9 L";*/
 	Cairo.TextExtents ex;
 	int[] arraycnt={};	//每行有效列数
@@ -187,7 +188,6 @@ public class DrawOnWindow : Gtk.Window {
 		int posbegin=0, posend;
 		int l,cnt=0;
 		char c;
-/*        string s=notation.split("\n")[crow];*/
 		for(l=0;l<crow;l++){
 			posbegin=notation.index_of_char('\n',posbegin+1);
 		}
@@ -198,8 +198,6 @@ public class DrawOnWindow : Gtk.Window {
 				if(cnt==ccol){
 					string t=notation.substring(l+1,-1);
 					t._delimit("01234567+|\n",'\0');
-/*                    t._delimit("01234567+|",'+');*/
-/*                    t=t.slice(0,t.index_of("+",0));*/
 					nmn=c.to_string()+t;
 					pos=l;
 					break;
@@ -212,22 +210,19 @@ public class DrawOnWindow : Gtk.Window {
 	void setarraycnt(){
 		string tmp="";
 		arraycnt={};
+		maxcolumn=0;
 		foreach(string s in notation.split("\n")){
 			if(s=="")continue;
 			tmp+=s; tmp+="\n";
 			int cnt=0;
-			maxcolumn=0;
 			for(int l=0;l<s.length;l++){
 				char c=s[l];
 				if((c>='0' && c<'8') || c=='+' || (c=='|' && s[l+1]!='|'))
 				{cnt++;continue;}
 			}
-/*            if(cnt==0)continue;*/
 			arraycnt+=cnt;
-/*            stdout.printf("%d-",cnt);*/
 			if(cnt>maxcolumn){maxcolumn=cnt;}
 		}
-/*            stdout.printf("\tmax:%d\n",maxcolumn);*/
 		notation=tmp;
 	}
 
@@ -271,7 +266,7 @@ public class DrawOnWindow : Gtk.Window {
 		double x0=0;		//上连括号
 
 		foreach(string line in notation.split("\n")){
-			y=pagey+row*bh-bh/4;
+			y=pagey+row*bh-bh/2;
 			if(line=="")continue;
 /*            右边缘对齐*/
 			double adj=arraycnt[row];
@@ -389,7 +384,7 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.move_to(ww/2-centerpos(ctx,filename), bh/2);
 		ctx.show_text(filename);
 		ctx.set_source_rgba (0, 0, 1, 0.5);
-		ctx.move_to(bw*2,wh-bh/4*3);
+		ctx.move_to(bw*2,bh/2);
 		ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
 
 		ctx.set_font_size(12);
