@@ -155,9 +155,10 @@ public class DrawOnWindow : Gtk.Window {
 				changedate(t);
 				break;
 			case 'u':
-				if(old0!="")notation=old0;
-				old0=old1;
-				old1=old2;
+				if(old0!=""){
+					notation=old0;
+					old0=old1; old1=old2; old2="";
+				}
 				break;
 			case 'w':
 				try{
@@ -242,7 +243,7 @@ public class DrawOnWindow : Gtk.Window {
 		double vspace;		//垂直标记的间隔
 		int dncnt=0, upcnt=0;	//垂直位置计数
 		double fixheight;		//初始的固定高度，字宽度变化大。
-		int pagex, pagey;
+		int pagex;
 		int lyp0=0;
 		int lyp1=0;
 
@@ -256,9 +257,9 @@ public class DrawOnWindow : Gtk.Window {
 		bw=fixheight*1.8;		//目前是最长行的最紧格式宽度
 		bh=fixheight*7;
 		pagex=(int)(bw*2);
-		pagey=(int)(bh*2);
 		if(lyric2!=""){bh=fixheight*8;}
-		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*2+(arraycnt.length-1)*bh));
+/*        resize((int)(pagex*2+maxcolumn*bw),(int)((arraycnt.length+2)*bh));*/
+		resize((int)(pagex*2+maxcolumn*bw),(int)(bh*3+(arraycnt.length-1)*bh));
 
 		ctx.set_source_rgba (0.8, 0.8, 0.8, 0.4);
 		ctx.paint();
@@ -270,7 +271,7 @@ public class DrawOnWindow : Gtk.Window {
 		double x0=0;		//上连括号
 
 		foreach(string line in notation.split("\n")){
-			y=pagey+row*bh-bh/2;
+			y=bh+row*bh+bh/2;
 			if(line=="")continue;
 /*            右边缘对齐*/
 			double adj=arraycnt[row];
@@ -384,15 +385,16 @@ public class DrawOnWindow : Gtk.Window {
 		row++; col=0;
 		}
 /*        显示标题*/
+		double vh=bh*3/4;
 		this.get_size(out ww,out wh);
-		ctx.move_to(ww/2-centerpos(ctx,filename), bh/2);
+		ctx.move_to(ww/2-centerpos(ctx,filename), vh);
 		ctx.show_text(filename);
 		ctx.set_source_rgba (0, 0, 1, 0.5);
-		ctx.move_to(bw*2,bh/2);
+		ctx.move_to(bw*2,vh);
 		ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
 
+		vh=wh-bh/2;
 		ctx.set_font_size(12);
-		double vh=wh-bh/2;
 		foreach(string s in help.split("\n")){
 			ctx.move_to(bw*2,vh);
 			ctx.show_text(s);
@@ -429,6 +431,7 @@ public class DrawOnWindow : Gtk.Window {
 		}
 		if(lyric1==null)lyric1="";
 		if(lyric2==null)lyric2="";
+		old0=""; old1=""; old2="";
 /*        stdout.printf("notation : %s\n",notation);*/
 /*        stdout.printf("lyric1 : %s\n",lyric1);*/
 /*        stdout.printf("lyric2 : %s\n",lyric2);*/
