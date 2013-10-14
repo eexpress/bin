@@ -2,6 +2,8 @@
 
 using Gtk;
 using Cairo;
+using GLib.Process;
+
 const int GDK_KEY_Left = 0xff51;
 const int GDK_KEY_Up = 0xff52;
 const int GDK_KEY_Right = 0xff53;
@@ -21,11 +23,17 @@ const string instr="""
 
 const string help="""编辑： d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 #（）切换上面的附加音符。 方向键移动。
 + | 是延长音和分割符。 u 可恢复最后三次。 p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.nmn。
-i a x 插入/追加/删除音符。回车 j 是新行和合并行。""";
+i a x 插入/追加/删除音符。回车 j 是新行和合并行。q 产生/tmp/nmn.wav并播放当前乐曲。""";
 
-const string tone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
-const string outputfile="/tmp/nmn.png";
+const string strtone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const string alphatable="d1r2m3f4s5l6x7t7";
+const string tone[]={
+	"0","c1","d1","e1","f1","g1","a1","b1",
+	"0","c2","d2","e2","f2","g2","a2","b2",
+	"0","c3","d3","e3","f3","g3","a3","b3",
+	"0","c4","d4","e4","f4","g4","a4","b4",
+	"0","c5","d5","e5","f5","g5","a5","b5"
+};
 string notation;
 string old0;
 string old1;
@@ -89,7 +97,7 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			case 'p':
 				screenshot();
-				stdout.printf("screenshot save at %s\n", outputfile);
+				stdout.printf("screenshot save at /tmp/nmn.png\n");
 				break;
 			case '-':
 			case ',':
@@ -142,6 +150,9 @@ public class DrawOnWindow : Gtk.Window {
 				showdata();
 				changedate("\n"+nmn);
 				crow++; ccol=0;
+				break;
+			case 'q':
+				create_wav();
 				break;
 			case '+':
 			case '|':
@@ -235,7 +246,46 @@ public class DrawOnWindow : Gtk.Window {
 		var surface = new ImageSurface (Format.ARGB32, ww, wh);
 		var ctx = new Cairo.Context (surface);
 		on_draw(ctx);
-		surface.write_to_png (outputfile);
+		surface.write_to_png ("/tmp/nmn.png");
+	}
+
+	private void create_wav(){
+		int i=7;
+		int oldr=crow;
+		int oldc=ccol;
+		string wav="";
+		for(crow=0;crow<arraycnt.length;crow++){
+			for(ccol=0;ccol<arraycnt[crow];ccol++){
+				showdata();
+				int j=400;
+				if(nmn.contains("|"))continue;
+				if(!nmn.contains("+")){
+					i=nmn[0]-'0'+16;
+					for(int l=1;l<nmn.length;l++){
+						switch(nmn[l]){
+							case ',':
+								i+=8;
+								break;
+							case '.':
+								i-=8;
+								break;
+							case '-':
+								j/=2;
+								break;
+						}
+					}
+				}
+				if(i<0)i=0; if(i>tone.length)i=0;
+				wav+="%s:%d 0:20 ".printf(tone[i],j);
+			}
+		}
+/*        stdout.printf("wav->%s\n",wav);*/
+		crow=oldr; ccol=oldc;
+		try{
+			spawn_command_line_async("rm /tmp/nmn.wav");
+			spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
+			spawn_command_line_async("aplay /tmp/nmn.wav");
+		} catch (GLib.Error e) {error ("%s", e.message);}
 	}
 
 	private bool on_draw (Context ctx) {
@@ -324,7 +374,7 @@ public class DrawOnWindow : Gtk.Window {
 					}
 				}
 				}else{
-					ss=tone[i-'0'];
+					ss=strtone[i-'0'];
 					ctx.set_font_size(size/1.2);
 					ctx.move_to(x-centerpos(ctx,ss),y+vspace*2+fixheight*2);
 					ctx.show_text(ss);
