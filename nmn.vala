@@ -223,6 +223,10 @@ public class DrawOnWindow : Gtk.Window {
 			arraycnt+=cnt;
 			if(cnt>maxcolumn){maxcolumn=cnt;}
 		}
+		if(crow>arraycnt.length-1)crow=arraycnt.length-1;
+		if(crow<0)crow=0;
+		if(ccol>arraycnt[crow]-1)ccol=arraycnt[crow]-1;
+		if(ccol<0)ccol=0;
 		notation=tmp;
 	}
 
