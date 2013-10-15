@@ -174,10 +174,13 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			case 'c':
 				FontChooserDialog dialog;
-				dialog = new FontChooserDialog("Pick your favourite font",this);
-				dialog.preview_text="nmn 字体选择。";
+				dialog = new FontChooserDialog("nmn",this);
+				dialog.preview_text="nmn 选择简谱的显示字体。 123";
+				dialog.set_font("%s %d".printf(fontname, size));
+				dialog.set_show_preview_entry(false);
 				if (dialog.run () == Gtk.ResponseType.OK) {
 					fontname=dialog.get_font_family().get_name();
+					size=dialog.get_font_size()/1024;
 				}
 				dialog.close();
 				break;
@@ -454,7 +457,7 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
 
 		vh=wh-bh;
-		ctx.set_font_size(12);
+		ctx.set_font_size(size*3/4);
 		foreach(string s in help.split("\n")){
 			ctx.move_to(bw*2,vh);
 			ctx.show_text(s);
