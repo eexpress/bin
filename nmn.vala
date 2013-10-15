@@ -45,9 +45,9 @@ string filename;
 public class DrawOnWindow : Gtk.Window {
 	int ww;
 	int wh;		//窗口尺寸
-	int size=20;	//字体尺寸
+	int size=16;	//字体尺寸
 /*    string fontname="Vera Sans YuanTi";*/
-	string fontname="AR PL UKai CN";
+	string fontname="WenQuanYi Zen Hei Mono";
 /*    string fontname="Nimbus Roman No9 L";*/
 	Cairo.TextExtents ex;
 	int[] arraycnt={};	//每行有效列数
@@ -171,6 +171,17 @@ public class DrawOnWindow : Gtk.Window {
 					old0=old1; old1=old2; old2="";
 				}
 				break;
+/*            case 'c':*/
+/*                Gtk.FontChooserDialog dialog;*/
+/*                dialog = new Gtk.FontChooserDialog ("Pick your favourite font", this);*/
+/*                dialog.preview_text="xxx";*/
+/*                if (dialog.run () == Gtk.ResponseType.OK) {*/
+/*                    stdout.printf (" font: %s\n",dialog.get_font_family().get_name());*/
+/*                    stdout.printf (" font: %s\n", dialog.font);*/
+/*                    stdout.printf (" font: %s\n", dialog.get_font ().to_string ());*/
+/*                }*/
+/*                dialog.close ();*/
+/*                break;*/
 			case 'w':
 				try{
 					string s=notation+"\n:"+lyric1+"\n:"+lyric2;
