@@ -21,9 +21,10 @@ const string instr="""
 :穿过广阔大'地，' 啦啦啦潜入深深海'洋，'来 '吧！'阿童木爱科学的好少 '年。' 善良勇敢的  啦啦啦铁臂阿童 '木，'我 们的好朋友'啊，'无私无畏的阿童 '木。'
 """;
 
-const string help="""编辑： d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 #（）切换上面的附加音符。 方向键移动。
+const string help="""编辑：d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 #（）切换上面的附加音符。 
 + | 是延长音和分割符。 u 可恢复最后三次。 p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.nmn。
-i a x 插入/追加/删除音符。回车 j 是新行和合并行。q 产生/tmp/nmn.wav并播放当前乐曲。""";
+i a x 插入/追加/删除音符。回车 j 是新行和合并行。q 产生/tmp/nmn.wav并播放当前乐曲。
+c 选择显示字体。""";
 
 const string strtone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const string alphatable="d1r2m3f4s5l6x7t7";
@@ -172,16 +173,13 @@ public class DrawOnWindow : Gtk.Window {
 				}
 				break;
 			case 'c':
-				Gtk.FontChooserDialog dialog;
-				dialog = new Gtk.FontChooserDialog ("Pick your favourite font", this);
-/*                dialog.preview_text="xxx";*/
-/*                dialog.border_width;*/
+				FontChooserDialog dialog;
+				dialog = new FontChooserDialog("Pick your favourite font",this);
+				dialog.preview_text="nmn 字体选择。";
 				if (dialog.run () == Gtk.ResponseType.OK) {
-/*                    stdout.printf (" font: %s\n",dialog.get_font_family().get_name());*/
-/*                    stdout.printf (" font: %s\n", dialog.preview_text);*/
-/*                    stdout.printf (" font: %s\n", dialog.get_font ().to_string ());*/
+					fontname=dialog.get_font_family().get_name();
 				}
-				dialog.close ();
+				dialog.close();
 				break;
 			case 'w':
 				try{
@@ -333,7 +331,7 @@ public class DrawOnWindow : Gtk.Window {
 		double x0=0;		//上连括号
 
 		foreach(string line in notation.split("\n")){
-			y=bh+row*bh+bh/2;
+			y=bh+row*bh;
 			if(line=="")continue;
 /*            右边缘对齐*/
 			double adj=arraycnt[row];
@@ -447,7 +445,7 @@ public class DrawOnWindow : Gtk.Window {
 		row++; col=0;
 		}
 /*        显示标题*/
-		double vh=bh*3/4;
+		double vh=bh*2/4;
 		this.get_size(out ww,out wh);
 		ctx.move_to(ww/2-centerpos(ctx,filename), vh);
 		ctx.show_text(filename);
@@ -455,7 +453,7 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.move_to(bw*2,vh);
 		ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
 
-		vh=wh-bh/2;
+		vh=wh-bh;
 		ctx.set_font_size(12);
 		foreach(string s in help.split("\n")){
 			ctx.move_to(bw*2,vh);
