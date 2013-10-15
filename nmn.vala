@@ -22,9 +22,10 @@ const string instr="""
 """;
 
 const string help="""编辑：d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 #（）切换上面的附加音符。 
-+ | 是延长音和分割符。 u 可恢复最后三次。 p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.nmn。
-i a x 插入/追加/删除音符。回车 j 是新行和合并行。q 产生/tmp/nmn.wav并播放当前乐曲。
-c 选择显示字体。""";
++ | 延长音和分割符。 u 恢复最后三次。 i a x 插入/追加/删除音符。回车/j 新行和合并行。
+p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.nmn。 q 产生/tmp/nmn.wav并播放当前乐曲。
+c 选择显示字体。
+""";
 
 const string strtone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const string alphatable="d1r2m3f4s5l6x7t7";
@@ -181,6 +182,7 @@ public class DrawOnWindow : Gtk.Window {
 				if (dialog.run () == Gtk.ResponseType.OK) {
 					fontname=dialog.get_font_family().get_name();
 					size=dialog.get_font_size()/1024;
+					if(size<8||size>36)size=16;
 				}
 				dialog.close();
 				break;
