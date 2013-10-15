@@ -171,17 +171,18 @@ public class DrawOnWindow : Gtk.Window {
 					old0=old1; old1=old2; old2="";
 				}
 				break;
-/*            case 'c':*/
-/*                Gtk.FontChooserDialog dialog;*/
-/*                dialog = new Gtk.FontChooserDialog ("Pick your favourite font", this);*/
+			case 'c':
+				Gtk.FontChooserDialog dialog;
+				dialog = new Gtk.FontChooserDialog ("Pick your favourite font", this);
 /*                dialog.preview_text="xxx";*/
-/*                if (dialog.run () == Gtk.ResponseType.OK) {*/
+/*                dialog.border_width;*/
+				if (dialog.run () == Gtk.ResponseType.OK) {
 /*                    stdout.printf (" font: %s\n",dialog.get_font_family().get_name());*/
-/*                    stdout.printf (" font: %s\n", dialog.font);*/
+/*                    stdout.printf (" font: %s\n", dialog.preview_text);*/
 /*                    stdout.printf (" font: %s\n", dialog.get_font ().to_string ());*/
-/*                }*/
-/*                dialog.close ();*/
-/*                break;*/
+				}
+				dialog.close ();
+				break;
 			case 'w':
 				try{
 					string s=notation+"\n:"+lyric1+"\n:"+lyric2;
@@ -293,7 +294,7 @@ public class DrawOnWindow : Gtk.Window {
 /*        stdout.printf("wav->%s\n",wav);*/
 		crow=oldr; ccol=oldc;
 		try{
-			spawn_command_line_async("rm /tmp/nmn.wav");
+			FileUtils.unlink("/tmp/nmn.wav");
 			spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
 			spawn_command_line_async("aplay /tmp/nmn.wav");
 		} catch (GLib.Error e) {error ("%s", e.message);}
