@@ -181,7 +181,8 @@ public class DrawOnWindow : Gtk.Window {
 				dialog.set_font("%s %d".printf(fontname, size));
 				dialog.set_show_preview_entry(false);
 				if (dialog.run () == Gtk.ResponseType.OK) {
-					fontname=dialog.get_font_family().get_name();
+					string s=dialog.get_font_family().get_name();
+					if(s!=null)fontname=s;
 					size=dialog.get_font_size()/1024;
 					if(size<8||size>36)size=16;
 				}
