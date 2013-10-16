@@ -161,6 +161,7 @@ public class DrawOnWindow : Gtk.Window {
 				changedate(e.str);
 				break;
 			case '#':
+			case 'b':
 			case '(':
 			case ')':
 				string t=nmn;
@@ -416,9 +417,10 @@ public class DrawOnWindow : Gtk.Window {
 				}
 				break;
 			case '#':
+			case 'b':
 				ctx.move_to(x+bw/2,y-fixheight+vspace/4);
 				ctx.set_font_size(size/2);
-				ctx.show_text("#");
+				ctx.show_text(i.to_string());
 				ctx.set_font_size(size);
 				break;
 			case '+':
