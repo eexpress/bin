@@ -21,10 +21,10 @@ const string instr="""
 :穿过广阔大'地，' 啦啦啦潜入深深海'洋，'来 '吧！'阿童木爱科学的好少 '年。' 善良勇敢的  啦啦啦铁臂阿童 '木，'我 们的好朋友'啊，'无私无畏的阿童 '木。'
 """;
 
-const string help="""编辑：d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 #（）切换上面的附加音符。 
+const string help="""编辑：d1r2m3f4s5l6x7t7 输入音符。 - , . 循环切换音调和拍子。 # b（）切换附加音符。 
 + | 延长音和分割符。 u 恢复最后三次。 i a x 插入/追加/删除音符。回车/j 新行和合并行。
-p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.nmn。 q 产生/tmp/nmn.wav并播放当前乐曲。
-c 选择显示字体。
+p 截图到 /tmp/nmn.png。 w 保存文本到 /tmp/nmn.txt。 q 产生/tmp/nmn.wav并播放当前乐曲。
+P 截图到 /tmp/nmn.pdf。 S 截图到 /tmp/nmn.svg。 c 选择显示字体。
 """;
 
 const string strtone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
@@ -58,6 +58,7 @@ public class DrawOnWindow : Gtk.Window {
 	int crow=0;
 	int ccol=0;
 	int pos=0;
+	bool shoting=false;
 
 
 	public DrawOnWindow() {
@@ -97,9 +98,17 @@ public class DrawOnWindow : Gtk.Window {
 				ccol--;
 				if(ccol<0)ccol=arraycnt[crow]-1;
 				break;
+			case 'S':
+				screensvg();
+				stdout.printf("screen save as svg to /tmp/nmn.svg\n");
+				break;
+			case 'P':
+				screenpdf();
+				stdout.printf("screen save as pdf to /tmp/nmn.png\n");
+				break;
 			case 'p':
 				screenshot();
-				stdout.printf("screenshot save at /tmp/nmn.png\n");
+				stdout.printf("screen save as png to /tmp/nmn.png\n");
 				break;
 			case '-':
 			case ',':
@@ -191,9 +200,9 @@ public class DrawOnWindow : Gtk.Window {
 			case 'w':
 				try{
 					string s=notation+"\n:"+lyric1+"\n:"+lyric2;
-					FileUtils.set_contents("/tmp/nmn.nmn", s, -1);
+					FileUtils.set_contents("/tmp/nmn.txt", s, -1);
 				} catch (GLib.Error e) {error ("%s", e.message);}
-				stdout.printf("notation save to /tmp/nmn.nmn\n");
+				stdout.printf("notation save to /tmp/nmn.txt\n");
 				break;
 			}
 			setarraycnt(); showdata();
@@ -262,8 +271,23 @@ public class DrawOnWindow : Gtk.Window {
 	private void screenshot(){
 		var surface = new ImageSurface (Format.ARGB32, ww, wh);
 		var ctx = new Cairo.Context (surface);
+		shoting=true;
 		on_draw(ctx);
 		surface.write_to_png ("/tmp/nmn.png");
+	}
+
+	private void screensvg(){
+		var surface = new SvgSurface("/tmp/nmn.svg", ww, wh);
+		var ctx = new Cairo.Context (surface);
+		shoting=true;
+		on_draw(ctx);
+	}
+
+	private void screenpdf(){
+		var surface = new PdfSurface("/tmp/nmn.pdf", ww, wh);
+		var ctx = new Cairo.Context (surface);
+		shoting=true;
+		on_draw(ctx);
 	}
 
 	private void create_wav(){
@@ -349,7 +373,7 @@ public class DrawOnWindow : Gtk.Window {
 			char i=line[l];
 			if((i>='0' && i<'8') || i=='+' || i=='|'){
 				x=pagex+col*bw+bw/2;	//x是格子中心坐标
-				if(row==crow && col==ccol){
+				if(row==crow && col==ccol && ! shoting){
 					ctx.set_source_rgba (0, 0, 1, 0.4);
 					ctx.rectangle(x-bw/2,y-bh/4,bw,bh);
 					ctx.fill();
@@ -458,8 +482,11 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.move_to(ww/2-centerpos(ctx,filename), vh);
 		ctx.show_text(filename);
 		ctx.set_source_rgba (0, 0, 1, 0.5);
-		ctx.move_to(bw*2,vh);
-		ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
+		if(! shoting){
+			ctx.move_to(bw*2,vh);
+			ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
+		}
+		shoting=false;
 
 		vh=wh-bh;
 		ctx.set_font_size(size*3/4);
