@@ -405,7 +405,7 @@ public class DrawOnWindow : Gtk.Window {
 				x=pagex+col*bw+bw/2;	//x是格子中心坐标
 				if(row==crow && col==ccol && ! shoting){
 					ctx.set_source_rgba (0, 0, 1, 0.4);
-					ctx.rectangle(x-bw/2,y-bh/4,bw,bh);
+					ctx.rectangle(x-bw/2,y-bh/2+fixheight,bw,bh);
 					ctx.fill();
 					ctx.set_source_rgb (0, 0, 0);
 				}
@@ -535,7 +535,8 @@ public class DrawOnWindow : Gtk.Window {
 				y0=y0*vspace;
 				ctx.move_to(x0,by-y0);
 			ctx.curve_to(x0+vect,by-vect-y0,x-vect,by-vect-y0,x,by-y0);
-				ctx.stroke();
+			ctx.curve_to(x-vect,by-vect-y0-vspace*0.8,x0+vect,by-vect-y0-vspace*0.8,x0,by-y0);
+				ctx.fill();
 				y0=0;
 				break;
 			}
