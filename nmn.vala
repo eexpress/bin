@@ -10,7 +10,7 @@ const int GDK_KEY_Right = 0xff53;
 const int GDK_KEY_Down = 0xff54;
 const int GDK_KEY_Return = 0xff0d;
 
-/*逐字模式，使用‘’包括进入单词模式*/
+/*歌词使用逐字模式，使用‘’包括进入单词模式*/
 const string instr="""
 333-4#4-|5+0-5-#4-5-|666-71-,|5++6-(5-)|
 2++6-5-|3++4-3-|23#4-5(6-)|5++0|
@@ -51,9 +51,7 @@ public class DrawOnWindow : Gtk.Window {
 	int ww;
 	int wh;		//窗口尺寸
 	int size=16;	//字体尺寸
-/*    string fontname="Vera Sans YuanTi";*/
 	string fontname="WenQuanYi Zen Hei Mono";
-/*    string fontname="Nimbus Roman No9 L";*/
 	Cairo.TextExtents ex;
 	int[] arraycnt={};	//每行有效列数
 	string nmn="";
@@ -125,15 +123,12 @@ public class DrawOnWindow : Gtk.Window {
 				int p;
 				if(e.str=="-"){
 					p=-1;
-/*                    t._delimit("-",'?');*/
 					t=t.replace("-","");
 				}else{
 					p=t.last_index_of ("-",0);
-/*                    t._delimit(",.",'?');*/
 					t=t.replace(",","");
 					t=t.replace(".","");
 				}
-/*                if(p<0)p=t.last_index_of ("'",0);*/
 				if(p<0)p=0;
 				p++;
 				string t0=t.substring(0,p);
@@ -148,7 +143,6 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			case ' ':
 				string t=nmn.substring(0,1);
-/*                stdout.printf("nmn:\"%s\"\n",t);*/
 				changedate(t);
 				break;
 			case 'a':
@@ -242,7 +236,7 @@ public class DrawOnWindow : Gtk.Window {
 	}
 
 	private void showdata(){
-/*        find nmn pos with crow ccol*/
+/*        根据 crow ccol 找到 nmn 位置*/
 		int posbegin=0, posend;
 		int l,cnt=0;
 		char c;
@@ -356,7 +350,6 @@ public class DrawOnWindow : Gtk.Window {
 			if(minlen==0)break;
 			ccol=0;
 		}
-/*        stdout.printf("wav->%s\n",wav);*/
 		crow=oldr; ccol=oldc;
 		try{
 			FileUtils.unlink("/tmp/nmn.wav");
@@ -387,7 +380,6 @@ public class DrawOnWindow : Gtk.Window {
 		pagex=(int)(fixheight*3);
 		pagey=(int)(fixheight*10);
 		if(lyric2!=""){bh=fixheight*8;}
-/*        resize((int)(pagex*2+maxcolumn*bw),(int)((arraycnt.length+2)*bh));*/
 		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*3+(arraycnt.length-1)*bh));
 
 		ctx.set_source_rgba (0.8, 0.8, 0.8, 0.4);
@@ -404,7 +396,7 @@ public class DrawOnWindow : Gtk.Window {
 			if(line=="")continue;
 /*            右边缘对齐*/
 			double adj=arraycnt[row];
-			if(maxcolumn-adj>3){adj=1;}/*差距太大，不做调整*/
+			if(maxcolumn-adj>4){adj=1;}/*差距太大，不做调整*/
 			else{ adj=1+(maxcolumn-adj)/(adj-0.5); }
 			bw=fixheight*1.6*adj;
 		for(int l=0; l<line.length; l++){
@@ -461,48 +453,49 @@ public class DrawOnWindow : Gtk.Window {
 				}
 				continue;
 			}
+			double center=y-fixheight/2;
 			switch(i){
 			case '=':
-				ctx.move_to(x-size/8,y-bh/4);
+				ctx.move_to(x,center-bh/4);
 				ctx.rel_line_to(0,bh/2);
 				ctx.stroke();
 				ctx.set_line_width(size/5);
-				ctx.move_to(x+size/8,y-bh/4);
+				ctx.move_to(x+size/4,center-bh/4);
 				ctx.rel_line_to(0,bh/2);
 				ctx.stroke();
 				ctx.set_line_width(0.5);
 				break;
 			case ':':
-				ctx.move_to(x-size/8,y-bh/4);
+				ctx.move_to(x,center-bh/4);
 				ctx.rel_line_to(0,bh/2);
 				ctx.stroke();
 				ctx.set_line_width(size/5);
-				ctx.move_to(x+size/8,y-bh/4);
+				ctx.move_to(x+size/4,center-bh/4);
 				ctx.rel_line_to(0,bh/2);
 				ctx.stroke();
 				ctx.set_line_width(0.5);
-				ctx.arc(x-size/2.5,y-bh/8,size/7,0,360*Math.PI/180);
+				ctx.arc(x-size/4,center-bh/8,size/7,0,360*Math.PI/180);
 				ctx.fill();
-				ctx.arc(x-size/2.5,y+bh/8,size/7,0,360*Math.PI/180);
+				ctx.arc(x-size/4,center+bh/8,size/7,0,360*Math.PI/180);
 				ctx.fill();
 				break;
 			case ';':
 				ctx.set_line_width(size/5);
-				ctx.move_to(x-size/8,y-bh/4);
+				ctx.move_to(x,center-bh/4);
 				ctx.rel_line_to(0,bh/2);
 				ctx.stroke();
 				ctx.set_line_width(0.5);
-				ctx.move_to(x+size/8,y-bh/4);
+				ctx.move_to(x+size/4,center-bh/4);
 				ctx.rel_line_to(0,bh/2);
 				ctx.stroke();
-				ctx.arc(x+size/2.5,y-bh/8,size/7,0,360*Math.PI/180);
+				ctx.arc(x+size/2,center-bh/8,size/7,0,360*Math.PI/180);
 				ctx.fill();
-				ctx.arc(x+size/2.5,y+bh/8,size/7,0,360*Math.PI/180);
+				ctx.arc(x+size/2,center+bh/8,size/7,0,360*Math.PI/180);
 				ctx.fill();
 				break;
 			case '|':
-				ctx.move_to(x,y-bh/4);
-				ctx.line_to(x,y+bh/4);
+				ctx.move_to(x,center-bh/4);
+				ctx.rel_line_to(0,bh/2);
 				ctx.stroke();
 				break;
 			case '#':
@@ -537,8 +530,7 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			case ')':
 				double by=y-fixheight-vspace;
-				double vect=(x-x0)/bw*vspace*0.5;
-/*                double vect=vspace;*/
+				double vect=(x-x0)/bw*vspace;
 				if(y0<upcnt)y0=upcnt;
 				y0=y0*vspace;
 				ctx.move_to(x0,by-y0);
@@ -552,7 +544,6 @@ public class DrawOnWindow : Gtk.Window {
 		}
 /*        显示标题*/
 		double vh=pagey/2;
-/*        double vh=bh*2/4;*/
 		this.get_size(out ww,out wh);
 		ctx.set_font_size(size*1.5);
 		ctx.move_to(ww/2-centerpos(ctx,filename), vh);
@@ -564,7 +555,7 @@ public class DrawOnWindow : Gtk.Window {
 			ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
 		}
 		shoting=false;
-
+/*        显示帮助*/
 		vh=wh-bh*1.2;
 		ctx.set_font_size(size*3/4);
 		foreach(string s in help.split("\n")){
@@ -573,7 +564,6 @@ public class DrawOnWindow : Gtk.Window {
 			vh+=fixheight*1.5;
 		}
 		ctx.set_font_size(size);
-/*        ctx.set_source_rgb (0, 0, 0);*/
 		return true;
 	}
 
@@ -606,9 +596,6 @@ public class DrawOnWindow : Gtk.Window {
 		if(lyric1==null)lyric1="";
 		if(lyric2==null)lyric2="";
 		old0=""; old1=""; old2="";
-/*        stdout.printf("notation : %s\n",filename);*/
-/*        stdout.printf("lyric1 : %s\n",lyric1);*/
-/*        stdout.printf("lyric2 : %s\n",lyric2);*/
 		var DW = new DrawOnWindow ();
 		DW.show_all ();
 		Gtk.main ();
