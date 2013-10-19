@@ -316,8 +316,8 @@ public class DrawOnWindow : Gtk.Window {
 /*            for(;ccol<arraycnt[crow];ccol++){*/
 				showdata();
 				ccol++;
-				int j=600;
-				if(nmn.contains("|")){
+				int j=500;
+				if("|;:=".contains(nmn[0].to_string())){	//4种分割符
 					if(minlen==0)break;
 					else continue;
 				}
@@ -351,6 +351,7 @@ public class DrawOnWindow : Gtk.Window {
 			ccol=0;
 		}
 		crow=oldr; ccol=oldc;
+		stdout.printf("wav -> %s\n",wav);
 		try{
 			FileUtils.unlink("/tmp/nmn.wav");
 			spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
