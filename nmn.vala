@@ -172,7 +172,7 @@ public class DrawOnWindow : Gtk.Window {
 				crow++; ccol=0;
 				break;
 			case 'q':
-				create_wav(0,0,100);
+				create_wav(0,0,1000);
 				break;
 			case 'Q':
 				create_wav(crow,ccol,8);
