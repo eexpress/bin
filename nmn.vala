@@ -368,6 +368,7 @@ public class DrawOnWindow : Gtk.Window {
 		int pagey;
 		int lyp0=0;
 		int lyp1=0;
+		double lyh=0;
 
 		ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(size);
@@ -378,9 +379,10 @@ public class DrawOnWindow : Gtk.Window {
 		vspace=fixheight/3;
 		bw=fixheight*1.6;		//目前是最长行的最紧格式宽度
 		bh=fixheight*7;
+		lyh=fixheight*2;
 		pagex=(int)(fixheight*3);
 		pagey=(int)(fixheight*10);
-		if(lyric2!=""){bh=fixheight*8;}
+		if(lyric2!=""){bh+=lyh;}
 		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*3+(arraycnt.length-1)*bh));
 
 		ctx.set_source_rgba (0.8, 0.8, 0.8, 0.4);
@@ -393,7 +395,7 @@ public class DrawOnWindow : Gtk.Window {
 		double x0=0, y0=0;		//上连括号
 
 		foreach(string line in notation.split("\n")){
-			y=pagey+row*bh;
+			y=pagey+row*bh;		//y是音符底部
 			if(line=="")continue;
 /*            右边缘对齐*/
 			double adj=arraycnt[row];
@@ -406,7 +408,7 @@ public class DrawOnWindow : Gtk.Window {
 				x=pagex+col*bw+bw/2;	//x是格子中心坐标
 				if(row==crow && col==ccol && ! shoting){
 					ctx.set_source_rgba (0, 0, 1, 0.4);
-					ctx.rectangle(x-bw/2,y-bh/2+fixheight,bw,bh);
+					ctx.rectangle(x-bw/2,y-fixheight-lyh,bw,bh);
 					ctx.fill();
 					ctx.set_source_rgb (0, 0, 0);
 				}
@@ -428,7 +430,7 @@ public class DrawOnWindow : Gtk.Window {
 							ss=lyric1.slice(lyp0,k);
 							lyp0=k+1;
 						}
-						ctx.move_to(x-centerpos(ctx,ss.get_char(0).to_string()),y+fixheight*3);
+						ctx.move_to(x-centerpos(ctx,ss.get_char(0).to_string()),y+fixheight+lyh);
 						ctx.show_text(ss);
 					}
 				if(lyric2!=""){
@@ -441,7 +443,7 @@ public class DrawOnWindow : Gtk.Window {
 							ss=lyric2.slice(lyp1,k);
 							lyp1=k+1;
 						}
-						ctx.move_to(x-centerpos(ctx,ss.get_char(0).to_string()),y+fixheight*5);
+						ctx.move_to(x-centerpos(ctx,ss.get_char(0).to_string()),y+fixheight+lyh*2);
 						ctx.show_text(ss);
 					}
 				}
