@@ -38,7 +38,10 @@ print "now. 运行了 $t";
 sub epoch2hms()
 {
 	$_=shift;
-	($h,$m,$s)=split /:/,`date -d "\@$_" +%H:%M:%S`;
-	$h-=8;
-	return "$h:$m:$s";
+	$h=int($_/3600);
+	$m=int(($_-3600*$h)/60);
+	$s=int($_-3600*$h-60*$m);
+#    ($h,$m,$s)=split /:/,`date -d "\@$_" +%H:%M:%S`;
+#    $h-=7;
+	return "$h:$m:$s\n";
 }
