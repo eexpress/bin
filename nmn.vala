@@ -23,10 +23,11 @@ const string instr="""
 
 const string help="""输入：z0d1r2m3f4s5l6x7t7 输入音符  + - 输入增时线和切换减时线  ' 附点 | 小节符
 # b 升降符  ( ) 连音符  ; : 左右重复标记  = 输入结束符 , . 高低音点 空格快速清除 
-编辑：u 恢复最后三次。 i a x 插入/追加/删除音符。回车/j 新行和合并行。
+编辑：u 恢复最后三次。 i a X 插入/追加/删除音符。回车/j 新行和合并行。
 p 截图到 /tmp/nmn.png。 P 截图到 /tmp/nmn.pdf。 S 截图到 /tmp/nmn.svg。 
 q 产生/tmp/nmn.wav并播放当前乐曲。Q 播放当前位置至少10个音节，直到遇到分段。
-w 保存文本到 /tmp/nmn.txt。 c 选择显示字体。 歌词使用*开头的行录入，空格控制对齐。
+w 保存文本到 /tmp/nmn.txt。 F 选择显示字体。 歌词使用*开头的行录入，空格控制对齐。
+[ ] 调整第一行当前歌词位置，{ } 第二行。
 """;
 
 const string strtone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
@@ -43,8 +44,8 @@ string notation;
 string old0;
 string old1;
 string old2;
+string lyric0;
 string lyric1;
-string lyric2;
 string filename;
 
 public class DrawOnWindow : Gtk.Window {
@@ -60,13 +61,24 @@ public class DrawOnWindow : Gtk.Window {
 	int ccol=0;
 	int pos=0;
 	bool shoting=false;
+	int lyp0c=-1;
+	int lyp1c=-1;
+	string tmp;
 
 
 	public DrawOnWindow() {
-		title = "numbered musical notation - eexpress - v 1.2";
+		title = "numbered musical notation - eexpress - v 1.3";
 		destroy.connect (Gtk.main_quit);
 		ww=700;
 		wh=600;
+		try{
+			FileUtils.get_contents(Environment.get_variable("HOME")+"/.config/nmn.conf", out tmp);
+		} catch (GLib.Error e) {error ("%s", e.message);}
+		foreach(string line in tmp.split("\n")){
+			string[] str=line.split("=",2);
+			if(str[0].strip()=="font"){ fontname=str[1].strip(); }
+			if(str[0].strip()=="size"){ size=int.parse(str[1].strip()); }
+		}
 		set_default_size(ww,wh);
 		var drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
@@ -150,7 +162,7 @@ public class DrawOnWindow : Gtk.Window {
 				ccol++;
 				arraycnt[crow]++;
 				break;
-			case 'x':
+			case 'X':
 				changedate("");
 				arraycnt[crow]--;
 				break;
@@ -197,7 +209,7 @@ public class DrawOnWindow : Gtk.Window {
 					old0=old1; old1=old2; old2="";
 				}
 				break;
-			case 'c':
+			case 'F':
 				FontChooserDialog dialog;
 				dialog = new FontChooserDialog("nmn",this);
 				dialog.preview_text="nmn 选择简谱的显示字体。 123";
@@ -210,13 +222,40 @@ public class DrawOnWindow : Gtk.Window {
 					if(size<8||size>36)size=16;
 				}
 				dialog.close();
+				try{
+					FileUtils.set_contents(Environment.get_variable("HOME")+"/.config/nmn.conf", "font="+fontname+"\nsize="+size.to_string()+"\n", -1);
+				} catch (GLib.Error e) {error ("%s", e.message);}
 				break;
 			case 'w':
 				try{
-					string s=notation+"\n:"+lyric1+"\n:"+lyric2;
+					string s=notation+"\n*"+lyric0+"\n*"+lyric1;
 					FileUtils.set_contents("/tmp/nmn.txt", s, -1);
 				} catch (GLib.Error e) {error ("%s", e.message);}
 				stdout.printf("notation save to /tmp/nmn.txt\n");
+				break;
+			case '[':
+				if(!alphatable.contains(nmn[0].to_string()))break;
+				if(lyp0c>0 && lyric0[lyp0c-1]==' '){
+			lyric0=lyric0.slice(0,lyp0c-1)+lyric0.slice(lyp0c,lyric0.length);
+				}
+				break;
+			case ']':
+				if(!alphatable.contains(nmn[0].to_string()))break;
+				if(lyp0c>=0){
+			lyric0=lyric0.slice(0,lyp0c)+" "+lyric0.slice(lyp0c,lyric0.length);
+				}
+				break;
+			case '{':
+				if(!alphatable.contains(nmn[0].to_string()))break;
+				if(lyp1c>0 && lyric1[lyp1c-1]==' '){
+			lyric1=lyric1.slice(0,lyp1c-1)+lyric1.slice(lyp1c,lyric1.length);
+				}
+				break;
+			case '}':
+				if(!alphatable.contains(nmn[0].to_string()))break;
+				if(lyp1c>=0){
+			lyric1=lyric1.slice(0,lyp1c)+" "+lyric1.slice(lyp1c,lyric1.length);
+				}
 				break;
 			}
 			setarraycnt(); showdata();
@@ -351,7 +390,7 @@ public class DrawOnWindow : Gtk.Window {
 			ccol=0;
 		}
 		crow=oldr; ccol=oldc;
-		stdout.printf("wav -> %s\n",wav);
+/*        stdout.printf("wav -> %s\n",wav);*/
 		try{
 			FileUtils.unlink("/tmp/nmn.wav");
 			spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
@@ -382,7 +421,7 @@ public class DrawOnWindow : Gtk.Window {
 		lyh=fixheight*2;
 		pagex=(int)(fixheight*3);
 		pagey=(int)(fixheight*10);
-		if(lyric2!=""){bh+=lyh;}
+		if(lyric1!=""){bh+=lyh;}
 		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*3+(arraycnt.length-1)*bh));
 
 		ctx.set_source_rgba (0.8, 0.8, 0.8, 0.4);
@@ -420,27 +459,29 @@ public class DrawOnWindow : Gtk.Window {
 				ctx.move_to(x-centerpos(ctx,i.to_string()),y);
 				ctx.show_text(i.to_string());
 
-				if(lyric1!=""){
-					while(!lyric1.valid_char(lyp0) && lyp0<lyric1.length) lyp0++;
-					ss=lyric1.get_char(lyp0).to_string();
+				if(lyric0!=""){
+					while(!lyric0.valid_char(lyp0) && lyp0<lyric0.length) lyp0++;
+					ss=lyric0.get_char(lyp0).to_string();
+					if(row==crow && col==ccol+1){ lyp0c=lyp0; }
 					if(ss!="\n"){
 						lyp0++;
 						if(ss=="'"){
-							int k=lyric1.index_of("'",lyp0);
-							ss=lyric1.slice(lyp0,k);
+							int k=lyric0.index_of("'",lyp0);
+							ss=lyric0.slice(lyp0,k);
 							lyp0=k+1;
 						}
 						ctx.move_to(x-centerpos(ctx,ss.get_char(0).to_string()),y+fixheight+lyh);
 						ctx.show_text(ss);
 					}
-				if(lyric2!=""){
-					while(!lyric2.valid_char(lyp1) && lyp1<lyric2.length) lyp1++;
-					ss=lyric2.get_char(lyp1).to_string();
+				if(lyric1!=""){
+					while(!lyric1.valid_char(lyp1) && lyp1<lyric1.length) lyp1++;
+					ss=lyric1.get_char(lyp1).to_string();
+					if(row==crow && col==ccol+1){ lyp1c=lyp1; }
 					if(ss!="\n"){
 						lyp1++;
 						if(ss=="'"){
-							int k=lyric2.index_of("'",lyp1);
-							ss=lyric2.slice(lyp1,k);
+							int k=lyric1.index_of("'",lyp1);
+							ss=lyric1.slice(lyp1,k);
 							lyp1=k+1;
 						}
 						ctx.move_to(x-centerpos(ctx,ss.get_char(0).to_string()),y+fixheight+lyh*2);
@@ -595,10 +636,10 @@ public class DrawOnWindow : Gtk.Window {
 		}
 		if(notation.contains("*")){
 			string[] s=notation.split("*",3);
-			notation=s[0]; lyric1=s[1]; lyric2=s[2];
+			notation=s[0]; lyric0=s[1]; lyric1=s[2];
 		}
+		if(lyric0==null)lyric0="";
 		if(lyric1==null)lyric1="";
-		if(lyric2==null)lyric2="";
 		old0=""; old1=""; old2="";
 		var DW = new DrawOnWindow ();
 		DW.show_all ();

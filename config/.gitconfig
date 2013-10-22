@@ -17,6 +17,7 @@
 	email = eexpress@163.com
 [http]
 	sslVerify = false
+	proxy=http://localhost:8087
 [giggle]
 	main-window-maximized = false
 	main-window-geometry = 1017x771+666+171
