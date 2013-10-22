@@ -349,6 +349,8 @@ public class DrawOnWindow : Gtk.Window {
 		int oldc=ccol;
 		int oldj=0;
 		string wav="";
+		string repeatwav="";
+		bool repeat=false;
 		crow=r0; ccol=c0;
 		for(;crow<arraycnt.length;crow++){
 			while(ccol<arraycnt[crow]){
@@ -357,6 +359,8 @@ public class DrawOnWindow : Gtk.Window {
 				ccol++;
 				int j=500;
 				if("|;:=".contains(nmn[0].to_string())){	//4种分割符
+					if(nmn[0]==';'){repeatwav="";repeat=true;}
+					if(nmn[0]==':'){wav+=repeatwav; repeatwav="";repeat=false;}
 					if(minlen==0)break;
 					else continue;
 				}
@@ -383,6 +387,7 @@ public class DrawOnWindow : Gtk.Window {
 				if(i<0)i=0; if(i>tone.length)i=0;
 /*                wav+="%s:%d 0:10 ".printf(tone[i],j);*/
 				wav+="%s:%d ".printf(tone[i],j);
+				if(repeat) repeatwav+="%s:%d ".printf(tone[i],j);
 				oldj=j;
 				if(minlen>0)minlen--;
 			}
@@ -390,7 +395,7 @@ public class DrawOnWindow : Gtk.Window {
 			ccol=0;
 		}
 		crow=oldr; ccol=oldc;
-/*        stdout.printf("wav -> %s\n",wav);*/
+		stdout.printf("wav -> %s\n",wav);
 		try{
 			FileUtils.unlink("/tmp/nmn.wav");
 			spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
