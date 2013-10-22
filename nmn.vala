@@ -64,6 +64,7 @@ public class DrawOnWindow : Gtk.Window {
 	int lyp0c=-1;
 	int lyp1c=-1;
 	string tmp;
+	string fconf;
 
 
 	public DrawOnWindow() {
@@ -71,14 +72,17 @@ public class DrawOnWindow : Gtk.Window {
 		destroy.connect (Gtk.main_quit);
 		ww=700;
 		wh=600;
+		fconf=Environment.get_variable("HOME")+"/.config/nmn.conf";
 		try{
-			FileUtils.get_contents(Environment.get_variable("HOME")+"/.config/nmn.conf", out tmp);
+			if(FileUtils.test(fconf,FileTest.IS_REGULAR)){
+				FileUtils.get_contents(fconf, out tmp);
+				foreach(string line in tmp.split("\n")){
+					string[] str=line.split("=",2);
+					if(str[0].strip()=="font"){ fontname=str[1].strip(); }
+					if(str[0].strip()=="size"){ size=int.parse(str[1].strip()); }
+				}
+			}
 		} catch (GLib.Error e) {error ("%s", e.message);}
-		foreach(string line in tmp.split("\n")){
-			string[] str=line.split("=",2);
-			if(str[0].strip()=="font"){ fontname=str[1].strip(); }
-			if(str[0].strip()=="size"){ size=int.parse(str[1].strip()); }
-		}
 		set_default_size(ww,wh);
 		var drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
@@ -223,7 +227,7 @@ public class DrawOnWindow : Gtk.Window {
 				}
 				dialog.close();
 				try{
-					FileUtils.set_contents(Environment.get_variable("HOME")+"/.config/nmn.conf", "font="+fontname+"\nsize="+size.to_string()+"\n", -1);
+					FileUtils.set_contents(fconf, "font="+fontname+"\nsize="+size.to_string()+"\n", -1);
 				} catch (GLib.Error e) {error ("%s", e.message);}
 				break;
 			case 'w':
@@ -395,9 +399,9 @@ public class DrawOnWindow : Gtk.Window {
 			ccol=0;
 		}
 		crow=oldr; ccol=oldc;
-		stdout.printf("wav -> %s\n",wav);
 		try{
 			FileUtils.unlink("/tmp/nmn.wav");
+			FileUtils.set_contents("/tmp/nmn.tones",wav,-1);
 			spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
 			spawn_command_line_async("aplay /tmp/nmn.wav");
 		} catch (GLib.Error e) {error ("%s", e.message);}
@@ -606,10 +610,10 @@ public class DrawOnWindow : Gtk.Window {
 		}
 		shoting=false;
 /*        显示帮助*/
-		vh=wh-bh*1.2;
+		vh=wh-bh*1.5;
 		ctx.set_font_size(size*3/4);
 		foreach(string s in help.split("\n")){
-			ctx.move_to(bw*1,vh);
+			ctx.move_to(bw*2,vh);
 			ctx.show_text(s);
 			vh+=fixheight*1.5;
 		}
@@ -628,11 +632,12 @@ public class DrawOnWindow : Gtk.Window {
 		if(args[1]==null) notation=instr;
 		else{
 			try{
-				File f=File.new_for_path(args[1]);
-				if(f.query_exists() == true){
+				if(FileUtils.test(args[1],FileTest.IS_REGULAR)){
 					FileUtils.get_contents(args[1], out notation);
-					filename=f.get_basename();
-					int k=filename.index_of(".",0);
+					filename=args[1];
+					int k=filename.last_index_of("/",0);
+					filename=filename.substring(k+1,-1);
+					k=filename.index_of(".",0);
 					filename=filename.slice(0,k);
 				}else{
 					notation=instr;
