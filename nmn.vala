@@ -113,6 +113,7 @@ public class DrawOnWindow : Gtk.Window {
 					drawing_area.queue_draw_area(0,0,ww,wh);
 				}
 			}
+			showdata();
 			return false;
 		});
 		key_press_event.connect ((e) => {
