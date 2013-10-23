@@ -65,7 +65,12 @@ public class DrawOnWindow : Gtk.Window {
 	int lyp1c=-1;
 	string tmp;
 	string fconf;
-
+		double bw;
+		double bh;		//单元格尺寸
+		double fixheight=0;		//初始的固定高度，字宽度变化大。
+		double lyh=0;
+		int pagex;
+		int pagey;
 
 	public DrawOnWindow() {
 		title = "numbered musical notation - eexpress - v 1.3";
@@ -87,8 +92,29 @@ public class DrawOnWindow : Gtk.Window {
 		var drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
 		add (drawing_area);
-		add_events(Gdk.EventMask.KEY_PRESS_MASK);
+		add_events(Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.KEY_PRESS_MASK);
 		setarraycnt(); showdata();
+		button_press_event.connect ((e) => {
+			if(e.x<pagex || e.y<pagey-fixheight-lyh || e.x>pagex+arraycnt[arraycnt.length-1]*bw || e.y>pagey-fixheight-lyh+(arraycnt.length)*bh){
+				begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
+			}else{
+				if(e.button == 1 && fixheight != 0){
+					double row=(e.y-pagey+fixheight+lyh)/bh;
+				double adj=arraycnt[(int)row];
+				if(maxcolumn-adj>4){adj=1;}
+				else{ adj=1+(maxcolumn-adj)/(adj-0.5); }
+				bw=fixheight*1.6*adj;
+					double col=(e.x-pagex)/bw;
+					ccol=(int)col; crow=(int)row;
+					if(crow<0)crow=0;
+					if(crow>arraycnt.length-1)crow=arraycnt.length-1;
+					if(ccol<0)ccol=0;
+					if(ccol>arraycnt[crow]-1)ccol=arraycnt[crow]-1;
+					drawing_area.queue_draw_area(0,0,ww,wh);
+				}
+			}
+			return false;
+		});
 		key_press_event.connect ((e) => {
 			if(e.str!="" && alphatable.contains(e.str)){
 				int p=alphatable.index_of(e.str,0);
@@ -406,19 +432,14 @@ public class DrawOnWindow : Gtk.Window {
 				spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
 				spawn_command_line_async("aplay /tmp/nmn.wav");
 			} catch (GLib.Error e) {error ("%s", e.message);}
-		}else stdout.printf("CAUTION: play wav need external command \"tones\", please install \"siggen\" package.");
+		}else stdout.printf("CAUTION: play wav need external command \"tones\", please install \"siggen\" package.\n");
 	}
 
 	private bool on_draw (Context ctx) {
-		double bw, bh;		//单元格尺寸
 		double vspace;		//垂直标记的间隔
 		int dncnt=0, upcnt=0;	//垂直位置计数
-		double fixheight;		//初始的固定高度，字宽度变化大。
-		int pagex;
-		int pagey;
 		int lyp0=0;
 		int lyp1=0;
-		double lyh=0;
 
 		ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(size);
