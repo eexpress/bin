@@ -5,7 +5,7 @@ public class DrawOnWindow : Gtk.Window {
 	int ww;
 	int wh;
 	string fontname="文泉驿正黑";
-	int size=20;
+	int size=12;
 	string str="text";
 	private const Gtk.TargetEntry[] targets={{"text/uri-list",0,0}};
 	DrawingArea drawing_area;
@@ -15,8 +15,8 @@ public class DrawOnWindow : Gtk.Window {
 	public DrawOnWindow() {
 		title = "DrawOnWindow Sample";
 		destroy.connect (Gtk.main_quit);
-		ww=600;
-		wh=400;
+		ww=800;
+		wh=600;
 		set_default_size(ww,wh);
 		drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
@@ -44,9 +44,10 @@ public class DrawOnWindow : Gtk.Window {
 
 	private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y, Gtk.SelectionData data, uint info, uint time){
 		foreach(string uri in data.get_uris ()){
-			string file = uri.replace("file://","").replace("file:/","");
-			file = Uri.unescape_string (file);
-			str=file;
+			File file = File.new_for_uri(uri);
+			string mime=file.query_info ("standard::content-type", 0, null).get_content_type ();
+/*            str=file.get_basename ()+" [%s]".printf(mime);*/
+			str=Uri.unescape_string(uri.replace("file://",""))+" [%s]".printf(mime);
 		}
 		wx=x; wy=y;
 		Gtk.drag_finish (drag_context, true, false, time);
