@@ -4,8 +4,13 @@ using Cairo;
 public class DrawOnWindow : Gtk.Window {
 	int ww;
 	int wh;
-	string fontname="Nimbus Roman No9 L";
+	string fontname="文泉驿正黑";
 	int size=20;
+	string str="text";
+	private const Gtk.TargetEntry[] targets={{"text/uri-list",0,0}};
+	DrawingArea drawing_area;
+	int wx=100;
+	int wy=100;
 
 	public DrawOnWindow() {
 		title = "DrawOnWindow Sample";
@@ -13,16 +18,19 @@ public class DrawOnWindow : Gtk.Window {
 		ww=600;
 		wh=400;
 		set_default_size(ww,wh);
-		var drawing_area = new DrawingArea ();
+		drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
 		add (drawing_area);
+
+		Gtk.drag_dest_set (this,Gtk.DestDefaults.ALL, targets, Gdk.DragAction.COPY);
+		this.drag_data_received.connect(this.on_drag_data_received);
 	}
 
 	private bool on_draw (Widget da, Context ctx) {
 		ctx.select_font_face(fontname,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(size);
 		ctx.set_source_rgb (0, 0, 0);
-		drawnote(ctx, 100,100,"text at 100,100");
+		drawnote(ctx,wx,wy,str+" at %d,%d".printf(wx,wy));
 		return true;
 	}
 
@@ -32,6 +40,17 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.text_path(s);
 		ctx.fill();
 		ctx.restore();
+	}
+
+	private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y, Gtk.SelectionData data, uint info, uint time){
+		foreach(string uri in data.get_uris ()){
+			string file = uri.replace("file://","").replace("file:/","");
+			file = Uri.unescape_string (file);
+			str=file;
+		}
+		wx=x; wy=y;
+		Gtk.drag_finish (drag_context, true, false, time);
+		drawing_area.queue_draw_area(0,0,ww,wh);
 	}
 
 	static int main (string[] args) {
