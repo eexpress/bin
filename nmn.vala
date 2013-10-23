@@ -30,9 +30,9 @@ w 保存文本到 /tmp/nmn.txt。 F 选择显示字体。 歌词使用*开头的
 [ ] 调整第一行当前歌词位置，{ } 第二行。
 """;
 
-const string strtone[]={"","Do","Re","Mi","Fa","Sol","La","Si"};
+const string[] strtone={"","Do","Re","Mi","Fa","Sol","La","Si"};
 const string alphatable="z0d1r2m3f4s5l6x7t7";
-const string tone[]={
+const string[] tone={
 	"0","c1","d1","e1","f1","g1","a1","b1",
 	"0","c2","d2","e2","f2","g2","a2","b2",
 	"0","c3","d3","e3","f3","g3","a3","b3",
@@ -399,12 +399,14 @@ public class DrawOnWindow : Gtk.Window {
 			ccol=0;
 		}
 		crow=oldr; ccol=oldc;
-		try{
-			FileUtils.unlink("/tmp/nmn.wav");
-			FileUtils.set_contents("/tmp/nmn.tones",wav,-1);
-			spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
-			spawn_command_line_async("aplay /tmp/nmn.wav");
-		} catch (GLib.Error e) {error ("%s", e.message);}
+		if(FileUtils.test("/usr/bin/tones",FileTest.IS_EXECUTABLE)){
+			try{
+				FileUtils.unlink("/tmp/nmn.wav");
+				FileUtils.set_contents("/tmp/nmn.tones",wav,-1);
+				spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
+				spawn_command_line_async("aplay /tmp/nmn.wav");
+			} catch (GLib.Error e) {error ("%s", e.message);}
+		}else stdout.printf("CAUTION: play wav need external command \"tones\", please install \"siggen\" package.");
 	}
 
 	private bool on_draw (Context ctx) {
