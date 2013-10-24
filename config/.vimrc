@@ -122,13 +122,15 @@ autocmd BufRead *.c set foldmethod=syntax 	" 设置语法折叠
 "autocmd BufRead *.perl,*.pl set foldmethod=marker
 set foldcolumn=3 	"设置折叠区域的宽度
 set foldminlines=4
-nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zo')<CR>
+nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zO')<CR>
                             " 用空格键来开关折叠
 set foldenable!
 
 "============= Ctags && Cscope ============
-"ctags 主要用于补全。 cscope 主要用于阅读调用关系。
-nm <silent> tt :!ctags -R --fields=+lS .<CR>
+"ctags 主要用于补全 CTRL-]/T。 cscope 主要用于阅读调用关系。
+nm <silent> ct :!ctags -R --fields=+lS .<CR>
+"cscope的路径里面不能有空格。
+nm <silent> cs :!cscope -Rbkq<CR><CR>:cs add cscope.out<CR>
 " cscope setting
 "● cscope -Rbkq
 if has("cscope")
@@ -143,7 +145,9 @@ if has("cscope")
 	set csverb
 endif
 
+"列出出现的位置
 nmap <leader>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+"查找定义，相当于ctags的CTRL-]，返回都是CTRL-T
 nmap <leader>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <leader>cs :cs help find<CR>
 "s: 查找C语言符号，即查找函数名、宏、枚举值等出现的地方
