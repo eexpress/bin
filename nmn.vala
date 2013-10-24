@@ -77,13 +77,15 @@ public class DrawOnWindow : Gtk.Window {
 	private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y, Gtk.SelectionData data, uint info, uint time){
 		foreach(string uri in data.get_uris ()){
 			File file = File.new_for_uri(uri);
-			string str=file.query_info ("standard::content-type", 0, null).get_content_type ();
-			if(str=="text/plain"){
-				str=Uri.unescape_string(uri.replace("file://",""));
-				loadfile(str);
-				drawing_area.queue_draw_area(0,0,ww,wh);
-				break;
-			}
+			try{
+				string str=file.query_info ("standard::content-type", 0, null).get_content_type ();
+				if(str=="text/plain"){
+					str=Uri.unescape_string(uri.replace("file://",""));
+					loadfile(str);
+					drawing_area.queue_draw_area(0,0,ww,wh);
+					break;
+				}
+			} catch (GLib.Error e) {error ("%s", e.message);}
 		}
 		Gtk.drag_finish (drag_context, true, false, time);
 	}
@@ -485,13 +487,13 @@ public class DrawOnWindow : Gtk.Window {
 		pagex=(int)(fixheight*3);
 		pagey=(int)(fixheight*10);
 		if(lyric1!=""){bh+=lyh;}
-		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*3+(arraycnt.length-1)*bh));
+		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*2+(arraycnt.length)*bh));
 		this.get_size(out ww,out wh);
 		if(filename=="Sample"){
 			string ss="Drag File Here.";
 			ctx.set_source_rgba (0, 0, 1, 0.4);
-			ctx.set_font_size(size*3);
-			ctx.move_to(ww/2-centerpos(ctx,ss),wh/2+size*3);
+			ctx.set_font_size(size*4);
+			ctx.move_to(ww/2-centerpos(ctx,ss),wh/2);
 			ctx.show_text(ss);
 			ctx.set_font_size(size);
 		}
