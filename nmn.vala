@@ -77,6 +77,7 @@ public class DrawOnWindow : Gtk.Window {
 		destroy.connect (Gtk.main_quit);
 		ww=700;
 		wh=600;
+		loadfile("Sample");
 		fconf=Environment.get_variable("HOME")+"/.config/nmn.conf";
 		try{
 			if(FileUtils.test(fconf,FileTest.IS_REGULAR)){
@@ -256,6 +257,19 @@ public class DrawOnWindow : Gtk.Window {
 				try{
 					FileUtils.set_contents(fconf, "font="+fontname+"\nsize="+size.to_string()+"\n", -1);
 				} catch (GLib.Error e) {error ("%s", e.message);}
+				break;
+			case 'L':
+				Gtk.FileChooserDialog chooser = new Gtk.FileChooserDialog ( "Select your favorite file", this, Gtk.FileChooserAction.OPEN, "_Cancel", Gtk.ResponseType.CANCEL, "_Open", Gtk.ResponseType.ACCEPT);
+				chooser.select_multiple = false;
+				Gtk.FileFilter filter = new Gtk.FileFilter ();
+				chooser.set_filter (filter);
+				filter.add_mime_type ("text/plain");
+				if (chooser.run () == Gtk.ResponseType.ACCEPT) {
+					string fn = Uri.unescape_string(chooser.get_uri().replace("file://",""));
+					stdout.printf ("Selection:%s\n",fn);
+					loadfile(fn);
+				}
+				chooser.close ();
 				break;
 			case 'w':
 				try{
@@ -649,25 +663,22 @@ public class DrawOnWindow : Gtk.Window {
 		ctx.text_extents(s,out ex);
 		return ex.width/2 + ex.x_bearing;
 	}
-	
-	static int main (string[] args) {
-		Gtk.init (ref args);
-		filename="Sample";
-		if(args[1]==null) notation=instr;
-		else{
-			try{
-				if(FileUtils.test(args[1],FileTest.IS_REGULAR)){
-					FileUtils.get_contents(args[1], out notation);
-					filename=args[1];
-					int k=filename.last_index_of("/",0);
-					filename=filename.substring(k+1,-1);
-					k=filename.index_of(".",0);
-					filename=filename.slice(0,k);
-				}else{
-					notation=instr;
-				}
-			} catch (GLib.Error e) {error ("%s", e.message);}
-		}
+
+	public bool loadfile(string fn){
+		if(fn=="")return false;
+		try{
+			if(FileUtils.test(fn,FileTest.IS_REGULAR)){
+				FileUtils.get_contents(fn, out notation);
+				filename=fn;
+				int k=filename.last_index_of("/",0);
+				filename=filename.substring(k+1,-1);
+				k=filename.index_of(".",0);
+				filename=filename.slice(0,k);
+			}else{
+				notation=instr;
+				filename="Sample";
+			}
+		} catch (GLib.Error e) {error ("%s", e.message);}
 		if(notation.contains("*")){
 			string[] s=notation.split("*",3);
 			notation=s[0]; lyric0=s[1]; lyric1=s[2];
@@ -675,6 +686,11 @@ public class DrawOnWindow : Gtk.Window {
 		if(lyric0==null)lyric0="";
 		if(lyric1==null)lyric1="";
 		old0=""; old1=""; old2="";
+		return true;
+	}
+	
+	static int main (string[] args) {
+		Gtk.init (ref args);
 		var DW = new DrawOnWindow ();
 		DW.show_all ();
 		Gtk.main ();
