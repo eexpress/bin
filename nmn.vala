@@ -27,7 +27,7 @@ const string help="""输入：z0d1r2m3f4s5l6x7t7 输入音符  + - 输入增时�
 p 截图到 /tmp/nmn.png。 P 截图到 /tmp/nmn.pdf。 S 截图到 /tmp/nmn.svg。 
 q 产生/tmp/nmn.wav并播放当前乐曲。Q 播放当前位置至少10个音节，直到遇到分段。
 w 保存文本到 /tmp/nmn.txt。 F 选择显示字体。 歌词使用*开头的行录入，空格控制对齐。
-[ ] 调整第一行当前歌词位置，{ } 第二行。
+[ ] 调整第一行当前歌词位置，{ } 第二行。 L 加载文件。
 """;
 
 const string[] strtone={"","Do","Re","Mi","Fa","Sol","La","Si"};
@@ -71,6 +71,22 @@ public class DrawOnWindow : Gtk.Window {
 		double lyh=0;
 		int pagex;
 		int pagey;
+	private const Gtk.TargetEntry[] targets={{"text/uri-list",0,0}};
+	DrawingArea drawing_area;
+
+	private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y, Gtk.SelectionData data, uint info, uint time){
+		foreach(string uri in data.get_uris ()){
+			File file = File.new_for_uri(uri);
+			string str=file.query_info ("standard::content-type", 0, null).get_content_type ();
+			if(str=="text/plain"){
+				str=Uri.unescape_string(uri.replace("file://",""));
+				loadfile(str);
+				drawing_area.queue_draw_area(0,0,ww,wh);
+				break;
+			}
+		}
+		Gtk.drag_finish (drag_context, true, false, time);
+	}
 
 	public DrawOnWindow() {
 		title = "numbered musical notation - eexpress - v 1.3";
@@ -90,11 +106,12 @@ public class DrawOnWindow : Gtk.Window {
 			}
 		} catch (GLib.Error e) {error ("%s", e.message);}
 		set_default_size(ww,wh);
-		var drawing_area = new DrawingArea ();
+		drawing_area = new DrawingArea ();
 		drawing_area.draw.connect (on_draw);
 		add (drawing_area);
 		add_events(Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.KEY_PRESS_MASK);
-		setarraycnt(); showdata();
+		Gtk.drag_dest_set (this,Gtk.DestDefaults.ALL, targets, Gdk.DragAction.COPY);
+		drag_data_received.connect(on_drag_data_received);
 		button_press_event.connect ((e) => {
 			if(e.x<pagex || e.y<pagey-fixheight-lyh || e.x>pagex+arraycnt[arraycnt.length-1]*bw || e.y>pagey-fixheight-lyh+(arraycnt.length)*bh){
 				begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
@@ -205,7 +222,6 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			case GDK_KEY_Return:
 				ccol=arraycnt[crow];
-				showdata();
 				changedate("\n"+nmn);
 				crow++; ccol=0;
 				break;
@@ -470,6 +486,15 @@ public class DrawOnWindow : Gtk.Window {
 		pagey=(int)(fixheight*10);
 		if(lyric1!=""){bh+=lyh;}
 		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*3+(arraycnt.length-1)*bh));
+		this.get_size(out ww,out wh);
+		if(filename=="Sample"){
+			string ss="Drag File Here.";
+			ctx.set_source_rgba (0, 0, 1, 0.4);
+			ctx.set_font_size(size*3);
+			ctx.move_to(ww/2-centerpos(ctx,ss),wh/2+size*3);
+			ctx.show_text(ss);
+			ctx.set_font_size(size);
+		}
 
 		ctx.set_source_rgba (0.8, 0.8, 0.8, 0.4);
 		ctx.paint();
@@ -686,6 +711,7 @@ public class DrawOnWindow : Gtk.Window {
 		if(lyric0==null)lyric0="";
 		if(lyric1==null)lyric1="";
 		old0=""; old1=""; old2="";
+		setarraycnt(); showdata();
 		return true;
 	}
 	
