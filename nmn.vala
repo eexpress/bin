@@ -73,6 +73,8 @@ public class DrawOnWindow : Gtk.Window {
 		int pagey;
 	private const Gtk.TargetEntry[] targets={{"text/uri-list",0,0}};
 	DrawingArea drawing_area;
+	int step=20;
+	string animate="";
 
 	private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y, Gtk.SelectionData data, uint info, uint time){
 		foreach(string uri in data.get_uris ()){
@@ -165,14 +167,17 @@ public class DrawOnWindow : Gtk.Window {
 			case 'S':
 				screensvg();
 				stdout.printf("screen save as svg to /tmp/nmn.svg\n");
+				startanimate("SVG");
 				break;
 			case 'P':
 				screenpdf();
 				stdout.printf("screen save as pdf to /tmp/nmn.png\n");
+				startanimate("PDF");
 				break;
 			case 'p':
 				screenshot();
 				stdout.printf("screen save as png to /tmp/nmn.png\n");
+				startanimate("PNG");
 				break;
 			case '-':
 			case ',':
@@ -229,9 +234,11 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			case 'q':
 				create_wav(0,0,1000);
+				startanimate("WAV");
 				break;
 			case 'Q':
 				create_wav(crow,ccol,8);
+				startanimate("WAV");
 				break;
 			case '+':
 			case '|':
@@ -682,8 +689,24 @@ public class DrawOnWindow : Gtk.Window {
 			ctx.show_text(s);
 			vh+=fixheight*1.5;
 		}
-		ctx.set_font_size(size);
+/*        显示动画*/
+		if(step<20){
+			ctx.set_font_size(size*step);
+			ctx.move_to(ww/2-centerpos(ctx,animate),wh/2);
+			ctx.set_source_rgba (1, 0, 0, 0.99/(step/5));
+			ctx.show_text(animate);
+		}
 		return true;
+	}
+
+	private void startanimate(string s){
+		step=0;
+		animate=s;
+		GLib.Timeout.add(30,()=>{
+			step++;
+			queue_draw();
+			if(step<20)return true; else return false;
+		});
 	}
 
 	private double centerpos(Context ctx, string s){
