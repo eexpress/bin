@@ -24,9 +24,9 @@ const string instr="""
 const string help="""输入：z0d1r2m3f4s5l6x7t7 输入音符  + - 输入增时线和切换减时线  ' 附点 | 小节符
 # b 升降符  ( ) 连音符  ; : 左右重复标记  = 输入结束符 , . 高低音点 空格快速清除 
 编辑：u 恢复最后三次。 i a X 插入/追加/删除音符。回车/j 新行和合并行。
-p 截图到 /tmp/nmn.png。 P 截图到 /tmp/nmn.pdf。 S 截图到 /tmp/nmn.svg。 
-q 产生/tmp/nmn.wav并播放当前乐曲。Q 播放当前位置至少10个音节，直到遇到分段。
-w 保存文本到 /tmp/nmn.txt。 F 选择显示字体。 歌词使用*开头的行录入，空格控制对齐。
+p 截图到 ~/nmn.png。 P 截图到 ~/nmn.pdf。 S 截图到 ~/nmn.svg。 
+q 产生~/nmn.wav并播放当前乐曲。Q 播放当前位置至少10个音节，直到遇到分段。
+w 保存文本到 ~/nmn.txt。 F 选择显示字体。 歌词使用*开头的行录入，空格控制对齐。
 [ ] 调整第一行当前歌词位置，{ } 第二行。 L 加载文件。
 """;
 
@@ -40,6 +40,7 @@ const string[] tone={
 	"0","c5","d5","e5","f5","g5","a5","b5"
 };
 const string seg="01234567+|\'=;:";
+const int maxstep=20;
 string notation;
 string old0;
 string old1;
@@ -73,7 +74,8 @@ public class DrawOnWindow : Gtk.Window {
 		int pagey;
 	private const Gtk.TargetEntry[] targets={{"text/uri-list",0,0}};
 	DrawingArea drawing_area;
-	int step=20;
+	string exportpath=Environment.get_variable("HOME")+"/";
+	int step=maxstep;
 	string animate="";
 
 	private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y, Gtk.SelectionData data, uint info, uint time){
@@ -84,7 +86,7 @@ public class DrawOnWindow : Gtk.Window {
 				if(str=="text/plain"){
 					str=Uri.unescape_string(uri.replace("file://",""));
 					loadfile(str);
-					drawing_area.queue_draw_area(0,0,ww,wh);
+					queue_draw();
 					break;
 				}
 			} catch (GLib.Error e) {error ("%s", e.message);}
@@ -98,7 +100,7 @@ public class DrawOnWindow : Gtk.Window {
 		ww=700;
 		wh=600;
 		loadfile("Sample");
-		fconf=Environment.get_variable("HOME")+"/.config/nmn.conf";
+		fconf=exportpath+".config/nmn.conf";
 		try{
 			if(FileUtils.test(fconf,FileTest.IS_REGULAR)){
 				FileUtils.get_contents(fconf, out tmp);
@@ -132,7 +134,7 @@ public class DrawOnWindow : Gtk.Window {
 					if(crow>arraycnt.length-1)crow=arraycnt.length-1;
 					if(ccol<0)ccol=0;
 					if(ccol>arraycnt[crow]-1)ccol=arraycnt[crow]-1;
-					drawing_area.queue_draw_area(0,0,ww,wh);
+					queue_draw();
 				}
 			}
 			showdata();
@@ -166,17 +168,17 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			case 'S':
 				screensvg();
-				stdout.printf("screen save as svg to /tmp/nmn.svg\n");
+				stdout.printf("screen save as svg to ~/nmn.svg\n");
 				startanimate("SVG");
 				break;
 			case 'P':
 				screenpdf();
-				stdout.printf("screen save as pdf to /tmp/nmn.png\n");
+				stdout.printf("screen save as pdf to ~/nmn.png\n");
 				startanimate("PDF");
 				break;
 			case 'p':
 				screenshot();
-				stdout.printf("screen save as png to /tmp/nmn.png\n");
+				stdout.printf("screen save as png to ~/nmn.png\n");
 				startanimate("PNG");
 				break;
 			case '-':
@@ -299,9 +301,9 @@ public class DrawOnWindow : Gtk.Window {
 			case 'w':
 				try{
 					string s=notation+"\n*"+lyric0+"\n*"+lyric1;
-					FileUtils.set_contents("/tmp/nmn.txt", s, -1);
+					FileUtils.set_contents(exportpath+"nmn.txt", s, -1);
 				} catch (GLib.Error e) {error ("%s", e.message);}
-				stdout.printf("notation save to /tmp/nmn.txt\n");
+				stdout.printf("notation save to ~/nmn.txt\n");
 				startanimate("TXT");
 				break;
 			case '[':
@@ -330,7 +332,7 @@ public class DrawOnWindow : Gtk.Window {
 				break;
 			}
 			setarraycnt(); showdata();
-			drawing_area.queue_draw_area(0,0,ww,wh);
+			queue_draw();
 			return false;
 		});
 	}
@@ -397,18 +399,18 @@ public class DrawOnWindow : Gtk.Window {
 		var ctx = new Cairo.Context (surface);
 		shoting=true;
 		on_draw(ctx);
-		surface.write_to_png ("/tmp/nmn.png");
+		surface.write_to_png (exportpath+"nmn.png");
 	}
 
 	private void screensvg(){
-		var surface = new SvgSurface("/tmp/nmn.svg", ww, wh);
+		var surface = new SvgSurface(exportpath+"nmn.svg", ww, wh);
 		var ctx = new Cairo.Context (surface);
 		shoting=true;
 		on_draw(ctx);
 	}
 
 	private void screenpdf(){
-		var surface = new PdfSurface("/tmp/nmn.pdf", ww, wh);
+		var surface = new PdfSurface(exportpath+"nmn.pdf", ww, wh);
 		var ctx = new Cairo.Context (surface);
 		shoting=true;
 		on_draw(ctx);
@@ -468,10 +470,10 @@ public class DrawOnWindow : Gtk.Window {
 		crow=oldr; ccol=oldc;
 		if(FileUtils.test("/usr/bin/tones",FileTest.IS_EXECUTABLE)){
 			try{
-				FileUtils.unlink("/tmp/nmn.wav");
+				FileUtils.unlink(exportpath+"nmn.wav");
 				FileUtils.set_contents("/tmp/nmn.tones",wav,-1);
-				spawn_command_line_async("tones -w /tmp/nmn.wav "+wav);
-				spawn_command_line_async("aplay /tmp/nmn.wav");
+				spawn_command_line_async("tones -w "+exportpath+"nmn.wav "+wav);
+				spawn_command_line_async("aplay "+exportpath+"nmn.wav");
 			} catch (GLib.Error e) {error ("%s", e.message);}
 		}else stdout.printf("CAUTION: play wav need external command \"tones\", please install \"siggen\" package.\n");
 	}
@@ -691,7 +693,7 @@ public class DrawOnWindow : Gtk.Window {
 			vh+=fixheight*1.5;
 		}
 /*        显示动画*/
-		if(step<20){
+		if(step<maxstep){
 			ctx.set_font_size(size*step);
 			ctx.move_to(ww/2-centerpos(ctx,animate),wh/2);
 			ctx.set_source_rgba (1, 0, 0, 0.99/(step/5));
@@ -706,7 +708,7 @@ public class DrawOnWindow : Gtk.Window {
 		GLib.Timeout.add(30,()=>{
 			step++;
 			queue_draw();
-			if(step<20)return true; else return false;
+			if(step<maxstep)return true; else return false;
 		});
 	}
 
