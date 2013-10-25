@@ -302,6 +302,7 @@ public class DrawOnWindow : Gtk.Window {
 					FileUtils.set_contents("/tmp/nmn.txt", s, -1);
 				} catch (GLib.Error e) {error ("%s", e.message);}
 				stdout.printf("notation save to /tmp/nmn.txt\n");
+				startanimate("TXT");
 				break;
 			case '[':
 				if(!alphatable.contains(nmn[0].to_string()))break;
