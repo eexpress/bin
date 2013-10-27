@@ -681,7 +681,7 @@ Array<string> history=new Array<string>();
 		}
 		shoting=false;
 /*        显示帮助*/
-		vh=wh-bh*1.5;
+		vh=wh-pagey;
 		ctx.set_font_size(size*3/4);
 		foreach(string s in help.split("\n")){
 			ctx.move_to(bw*2,vh);
