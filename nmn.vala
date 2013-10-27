@@ -23,7 +23,7 @@ const string instr="""
 
 const string help="""输入：z0d1r2m3f4s5l6x7t7 输入音符  + - 输入增时线和切换减时线  ' 附点 | 小节符
 # b 升降符  ( ) 连音符  ; : 左右重复标记  = 输入结束符 , . 高低音点 空格快速清除 
-编辑：u 恢复最后三次。 i a X 插入/追加/删除音符。回车/j 新行和合并行。
+编辑：u 无限恢复。 i a X 插入/追加/删除音符。回车/j 新行和合并行。
 p 截图到 ~/nmn.png。 P 截图到 ~/nmn.pdf。 S 截图到 ~/nmn.svg。 
 q 产生~/nmn.wav并播放当前乐曲。Q 播放当前位置至少10个音节，直到遇到分段。
 w 保存文本到 ~/nmn.txt。 F 选择显示字体。 歌词使用*开头的行录入，空格控制对齐。
@@ -42,9 +42,6 @@ const string[] tone={
 const string seg="01234567+|\'=;:";
 const int maxstep=20;
 string notation;
-string old0;
-string old1;
-string old2;
 string lyric0;
 string lyric1;
 string filename;
@@ -66,6 +63,7 @@ public class DrawOnWindow : Gtk.Window {
 	int lyp1c=-1;
 	string tmp;
 	string fconf;
+Array<string> history=new Array<string>();
 		double bw;
 		double bh;		//单元格尺寸
 		double fixheight=0;		//初始的固定高度，字宽度变化大。
@@ -263,9 +261,9 @@ public class DrawOnWindow : Gtk.Window {
 				changedate(t);
 				break;
 			case 'u':
-				if(old0!=""){
-					notation=old0;
-					old0=old1; old1=old2; old2="";
+				if(history.length!=0){
+					notation=history.index(0);
+					history.remove_index(0);
 				}
 				break;
 			case 'F':
@@ -339,9 +337,7 @@ public class DrawOnWindow : Gtk.Window {
 
 	private void changedate(string s){
 		string t0,t1;
-		old2=old1;
-		old1=old0;
-		old0=notation;
+		history.insert_val(0,notation);
 		t0=notation.slice(0,pos);
 		t1=notation.substring(pos+nmn.length,-1);
 		notation=t0+s+t1;
@@ -738,7 +734,7 @@ public class DrawOnWindow : Gtk.Window {
 		}
 		if(lyric0==null)lyric0="";
 		if(lyric1==null)lyric1="";
-		old0=""; old1=""; old2="";
+		history.set_size(0);
 		setarraycnt(); showdata();
 		return true;
 	}
