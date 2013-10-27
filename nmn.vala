@@ -468,7 +468,7 @@ Array<string> history=new Array<string>();
 			try{
 				FileUtils.unlink(exportpath+"nmn.wav");
 				FileUtils.set_contents("/tmp/nmn.tones",wav,-1);
-				spawn_command_line_async("tones -w "+exportpath+"nmn.wav "+wav);
+				spawn_command_line_sync("tones -w "+exportpath+"nmn.wav "+wav);
 				spawn_command_line_async("aplay "+exportpath+"nmn.wav");
 			} catch (GLib.Error e) {error ("%s", e.message);}
 		}else stdout.printf("CAUTION: play wav need external command \"tones\", please install \"siggen\" package.\n");
