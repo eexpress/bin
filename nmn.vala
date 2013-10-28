@@ -367,6 +367,29 @@ Array<string> history=new Array<string>();
 		}
 	}
 
+	private void outputnotation(){
+		string s=notation;
+		string str;
+		string cur="";
+		int p;
+		for(p=0;p<s.length;p++){
+			str=s.get_char(p).to_string();
+			if(cur==""){cur=str;continue;}
+			if(str in seg+"\n"){
+				if(cur!=""){
+					stdout.printf("%d->%s\t",p,cur.replace("\n","<CR>"));
+					cur=str;
+/*                    note.append_val(cur);*/
+				}
+			}else{
+				cur+=str;
+			}
+		}
+		stdout.printf("%d->%s\n",p,cur.replace("\n","<CR>"));
+		stdout.printf ("----------------------------\n");
+/*        note.append_val(cur);*/
+	}
+
 	void setarraycnt(){
 		string tmp="";
 		arraycnt={};
@@ -736,6 +759,7 @@ Array<string> history=new Array<string>();
 		if(lyric1==null)lyric1="";
 		history.set_size(0);
 		setarraycnt(); showdata();
+/*        outputnotation();*/
 		return true;
 	}
 	
