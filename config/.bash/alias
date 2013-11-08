@@ -19,7 +19,7 @@ alias aw='aptitude show'
 #alias cam='mplayer tv://'
 #alias rd='recordmydesktop --overwrite --fps 15 --on-the-fly-encoding'
 #alias lnsf='sudo ln -sf'
-alias o='xdg-open "${*:-`xsel -o|sed "s/\ /\\\ /g"|sed "s/\n.*//"`}"'
+#alias o='xdg-open "${*:-`xsel -o|sed "s/\ /\\\ /g"|sed "s/\n.*//"`}"'
 #alias cal='cal -3'
 alias ce='crontab -e'
 alias cl='crontab -l'
@@ -111,6 +111,7 @@ cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 nmap(){ /usr/bin/nmap ${1:-localhost}; }
 p(){ ping -c 5 ${1:-www.163.com}; }
 du(){ /usr/bin/du -sh "$@"|sort -rh; }
+o(){ xdg-open ${1:-"`xsel -o|sed "s/\ /\\\ /g"|sed "s/\n.*//"`"}; }
 #xargs(){
 #/usr/bin/xargs -I{} $* {}
 #}
