@@ -57,10 +57,10 @@ Mouse 4 W M ResizeMove w-10 w-10 w+5 w+5
 Mouse 5 W M ResizeMove w+10 w+10 w-5 w-5
 
 Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 2 2 98 98
-Mouse 2 R N Exec synapse
-Key Escape A C Exec synapse
+Mouse 3 R N Exec synapse
+#Key Escape A C Exec synapse
 Key F3 A N Exec synapse
-PointerKey Escape R N Exec synapse
+#PointerKey Escape R N Exec synapse
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
@@ -76,12 +76,12 @@ Stroke 654 3 R N Exec exec bash -c 'mocp -r || rhythmbox-client --previous'
 Stroke 258 3 R N Exec exec bash -c 'mocp -P || rhythmbox-client --pause'
 Stroke 852 3 R N Exec exec bash -c 'mocp -p || rhythmbox-client --play'
 
-# 方向按键，排列窗口，占半屏幕
+# 方向按键，排列窗口，占半屏幕，下部留空隙
 #keyname in /usr/include/X11/keysymdef.h
 Key Up W C ResizeMove 100 50 0 0
-Key Left W C ResizeMove 50 100 0 0
-Key Right W C ResizeMove 50 100 50 0
-Key Down W C ResizeMove 100 50 0 50
+Key Down W C ResizeMove 100 49 0 49
+Key Left W C ResizeMove 50 97 0 0
+Key Right W C ResizeMove 50 97 50 0
 
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
@@ -175,7 +175,7 @@ AddToFunc    StartFunction
 #+ I Test (Init) Exec exec opera
 #+ I Test (Init) Exec bash -c '~/bin/msg git pull; cd bin; git pull;~/bin/msg git finished'
 #+ I ExecOnce volumeicon
-+ I Schedule 800 ExecOnce trayer --transparent true --tint green
++ I Schedule 800 ExecOnce trayer --transparent true --tint green --widthtype request --align left --edge top
 #+ I Schedule 800 ExecOnce stalonetray
 #+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
 #+ I Module FvwmCommandS
