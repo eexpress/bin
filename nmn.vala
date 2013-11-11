@@ -27,7 +27,7 @@ const string help="""输入：z0d1r2m3f4s5l6x7t7 输入音符  + - 输入增时�
 p 截图到 ~/nmn.png。 P 截图到 ~/nmn.pdf。 S 截图到 ~/nmn.svg。 
 q 产生~/nmn.wav并播放当前乐曲。Q 播放当前位置至少10个音节，直到遇到分段。
 w 保存文本到 ~/nmn.txt。 F 选择显示字体。 歌词使用*开头的行录入，空格控制对齐。
-[ ] 调整第一行当前歌词位置，{ } 第二行。 L 加载文件。
+[ ] 调整第一行当前歌词位置，{ } 第二行，e 编辑歌词。L 加载文件。
 """;
 
 const string[] strtone={"","Do","Re","Mi","Fa","Sol","La","Si"};
@@ -93,7 +93,8 @@ Array<string> history=new Array<string>();
 	}
 
 	public DrawOnWindow() {
-		title = "numbered musical notation - eexpress - v 1.3";
+		title = "numbered musical notation - eexpress - v 1.4";
+		window_position=Gtk.WindowPosition.CENTER_ALWAYS;
 		destroy.connect (Gtk.main_quit);
 		ww=700;
 		wh=600;
@@ -296,11 +297,12 @@ Array<string> history=new Array<string>();
 				}
 				chooser.close ();
 				break;
-			case 'l':
+			case 'e':
 				Gtk.Window win=new Gtk.Window ();
 				win.title="编辑歌词";
-				win.set_default_size (ww*2/3, ww/2);
-				win.window_position=Gtk.WindowPosition.CENTER_ON_PARENT;
+				win.set_default_size (ww*2/3, 100);
+/*                win.window_position=Gtk.WindowPosition.CENTER_ON_PARENT;*/
+				win.window_position=Gtk.WindowPosition.CENTER;
 				Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 1);
 				box.border_width=10;
 				box.spacing=10;
@@ -313,10 +315,19 @@ Array<string> history=new Array<string>();
 				view1.set_wrap_mode (Gtk.WrapMode.WORD);
 				view1.buffer.text = lyric1;
 				box.pack_start (view1, false, true, 0);
+				Gtk.Box bbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 1);
+				bbox.border_width=10;
+				bbox.spacing=20;
+				box.add(bbox);
 
-				Gtk.Button button = new Gtk.Button.with_label ("确定修改");
-				box.pack_end (button, false, true, 0);
-				button.clicked.connect (() => {
+				Gtk.Button bcancel=new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
+				bbox.pack_start (bcancel, false, true, 0);
+				bcancel.clicked.connect (() => {
+					win.destroy();
+				});
+				Gtk.Button bok=new Gtk.Button.from_stock(Gtk.Stock.OK);
+				bbox.pack_end (bok, false, true, 0);
+				bok.clicked.connect (() => {
 					lyric0=view0.buffer.text; lyric1=view1.buffer.text;
 					queue_draw();
 					win.destroy();
@@ -394,7 +405,7 @@ Array<string> history=new Array<string>();
 		}
 	}
 
-	private void outputnotation(){
+	/* private void outputnotation(){
 		string s=notation;
 		string str;
 		string cur="";
@@ -406,7 +417,7 @@ Array<string> history=new Array<string>();
 				if(cur!=""){
 					stdout.printf("%d->%s\t",p,cur.replace("\n","<CR>"));
 					cur=str;
-/*                    note.append_val(cur);*/
+					//note.append_val(cur);
 				}
 			}else{
 				cur+=str;
@@ -414,8 +425,8 @@ Array<string> history=new Array<string>();
 		}
 		stdout.printf("%d->%s\n",p,cur.replace("\n","<CR>"));
 		stdout.printf ("----------------------------\n");
-/*        note.append_val(cur);*/
-	}
+		//note.append_val(cur);
+	} */
 
 	void setarraycnt(){
 		string tmp="";
