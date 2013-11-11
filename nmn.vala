@@ -296,6 +296,33 @@ Array<string> history=new Array<string>();
 				}
 				chooser.close ();
 				break;
+			case 'l':
+				Gtk.Window win=new Gtk.Window ();
+				win.title="编辑歌词";
+				win.set_default_size (ww*2/3, ww/2);
+				win.window_position=Gtk.WindowPosition.CENTER_ON_PARENT;
+				Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 1);
+				box.border_width=10;
+				box.spacing=10;
+				win.add(box);
+				Gtk.TextView view0 = new Gtk.TextView ();
+				view0.set_wrap_mode (Gtk.WrapMode.WORD);
+				view0.buffer.text = lyric0;
+				box.pack_start (view0, false, true, 0);
+				Gtk.TextView view1 = new Gtk.TextView ();
+				view1.set_wrap_mode (Gtk.WrapMode.WORD);
+				view1.buffer.text = lyric1;
+				box.pack_start (view1, false, true, 0);
+
+				Gtk.Button button = new Gtk.Button.with_label ("确定修改");
+				box.pack_end (button, false, true, 0);
+				button.clicked.connect (() => {
+					lyric0=view0.buffer.text; lyric1=view1.buffer.text;
+					queue_draw();
+					win.destroy();
+				});
+				win.show_all();
+				break;
 			case 'w':
 				try{
 					string s=notation+"\n*"+lyric0+"\n*"+lyric1;
