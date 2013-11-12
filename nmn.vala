@@ -172,7 +172,7 @@ Array<string> history=new Array<string>();
 				break;
 			case 'P':
 				screenpdf();
-				stdout.printf("screen save as pdf to ~/nmn.png\n");
+				stdout.printf("screen save as pdf to ~/nmn.pdf\n");
 				startanimate("PDF");
 				break;
 			case 'p':
