@@ -327,7 +327,7 @@ Array<string> history=new Array<string>();
 					queue_draw();
 				});
 
-				Gtk.Button bok=new Gtk.Button.from_stock(Gtk.Stock.OK);
+				Gtk.Button bok=new Gtk.Button.from_stock(Gtk.Stock.CLOSE);
 				box.pack_end (bok, false, true, 0);
 				bok.clicked.connect (() => {
 					win.destroy();
