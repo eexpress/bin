@@ -311,25 +311,25 @@ Array<string> history=new Array<string>();
 				view0.set_wrap_mode (Gtk.WrapMode.WORD);
 				view0.buffer.text = lyric0;
 				box.pack_start (view0, false, true, 0);
+				Gtk.TextBuffer buf0=view0.get_buffer ();
+				buf0.changed.connect (() => {
+					lyric0=buf0.text;
+					queue_draw();
+				});
+
 				Gtk.TextView view1 = new Gtk.TextView ();
 				view1.set_wrap_mode (Gtk.WrapMode.WORD);
 				view1.buffer.text = lyric1;
 				box.pack_start (view1, false, true, 0);
-				Gtk.Box bbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 1);
-				bbox.border_width=10;
-				bbox.spacing=20;
-				box.add(bbox);
-
-				Gtk.Button bcancel=new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
-				bbox.pack_start (bcancel, false, true, 0);
-				bcancel.clicked.connect (() => {
-					win.destroy();
-				});
-				Gtk.Button bok=new Gtk.Button.from_stock(Gtk.Stock.OK);
-				bbox.pack_end (bok, false, true, 0);
-				bok.clicked.connect (() => {
-					lyric0=view0.buffer.text; lyric1=view1.buffer.text;
+				Gtk.TextBuffer buf1=view1.get_buffer ();
+				buf1.changed.connect (() => {
+					lyric1=buf1.text;
 					queue_draw();
+				});
+
+				Gtk.Button bok=new Gtk.Button.from_stock(Gtk.Stock.OK);
+				box.pack_end (bok, false, true, 0);
+				bok.clicked.connect (() => {
 					win.destroy();
 				});
 				win.show_all();
