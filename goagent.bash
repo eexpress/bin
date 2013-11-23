@@ -1,5 +1,6 @@
 #!/bin/bash
 
-cd ~/bin/goagent/local
-./proxy.py
+cd ~/Ubuntu\ One/goagent-local/
+#cd ~/bin/goagent/local
+python ./proxy.py
 
