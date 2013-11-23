@@ -32,10 +32,13 @@ GetOptions("select=s"=>\$select, "list"=>\$list, "help"=>\$help, "name=s"=>\$nam
 if($help){pod2usage(-verbose => 2); exit;}
 #----------------------------------
 if($list){
+	print "Supported image pastebins:\n";
 foreach (keys %web){
 	if(/^file/){ s'.*/''; }else{ s'http://'';s'/.*''; }
-	$_.="\t\e[30;42m*\e[0m" if /$select/;
-	print "$_\n";}
+#    $_.="\t\e[30;42m*\e[0m" if /$select/;
+	print /$select/?"\e[30;42m\t* $_\t\e[0m\n":"\t- $_\n";
+#    print "$_\n";
+}
 exit;
 }
 #`echo $ARGV[0]>>/tmp/pi-file`;
