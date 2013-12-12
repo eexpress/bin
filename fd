@@ -12,13 +12,14 @@ color="|sed 'h;s:.*/::;"
 for p in $*; do
 if [[ "$p" == "-"* ]]; then
 x=${p:1:9}
-cmd=$cmd"! -iname \"*$x*\" "
+cmd+="! -iname \"*$x*\" "
 else
-cmd=$cmd"-iname \"*$p*\" "
+cmd+="-iname \"*$p*\" "
 fi
 color=$color"s/$p/$redB&$end/Ig;"
 done
 color=$color"x;s:[^/]\+$::g;G;s/\n//'"
 #echo -e "$blueB>>>> $cmd\n$end"
+cmd+=" 2>/dev/null"
 echo $cmd$color>/tmp/fd
 eval $cmd$color
