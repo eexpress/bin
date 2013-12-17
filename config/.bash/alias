@@ -101,6 +101,7 @@ netname(){ ip route|head -n 1|cut -d' ' -f 5; }
 #alias mp3info='mutagen-inspect'
 #alias mp3enca='mid3iconv --remove-v1 -d -e GBK'
 alias pl='perl -e'
+alias plp='perl -pe'
 pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 #fd(){ [ $1 ] && find . -iname "*$1*" || echo "need parameter."; }
 #tree(){ /usr/bin/tree $*|/usr/bin/ascii2uni -a K;}
