@@ -9,7 +9,7 @@ print <<STREND;
 	use adb, access photos by date.
 	default action is pull, default date is today.
 	eg:
-	$0 -a rm 2000-01-01
+	$0 -a 'shell rm' 2000-01-01
 	this will rm all sdcard/DCIM/100MEDIA/IMAG*.jpg with date by 2000-01-01.
 STREND
 exit;
