@@ -1,6 +1,6 @@
 [alias]
 	ci = commit
-	st = !sh -c 'git status|grep \":\"'
+	st = status
 	co = checkout
 	df = diff
 	df1= diff HEAD^
@@ -23,3 +23,5 @@
 	main-window-geometry = 1017x771+666+171
 	file-view-vpane-position = 440
 	main-window-view = FileView
+[push]
+	default = simple
