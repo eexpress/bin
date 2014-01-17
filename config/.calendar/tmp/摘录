@@ -1,9 +1,0 @@
-# ● 2010-10-11_19:51:51
-wget ical.mac.com/ical/China32Public32Holidays.ics
-
-# ● 2010-10-11_19:55:10
-ai libtie-ical-perl
-
-# ● 2010-10-11_19:55:22
-./ical.pl China32Public32Holidays.ics >calendar.china
-
