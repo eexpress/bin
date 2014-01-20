@@ -1,5 +1,7 @@
 resources/*
 adb
+deb
+deb/*
 cdnproxy
 chs/*
 gappproxy/*
