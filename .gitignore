@@ -6,6 +6,7 @@ cdnproxy
 chs/*
 gappproxy/*
 Hold-Script-Dir/*
+old.script/*
 slimrat*
 *.png
 *.jpg
@@ -22,3 +23,4 @@ chsdir
 .encfs*
 Quake*
 *.mo
+*.wav
