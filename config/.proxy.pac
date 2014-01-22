@@ -6,10 +6,13 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.wordpress.com') ||
 		dnsDomainIs(host, '.youtube.com') ||
 		dnsDomainIs(host, '.blogspot.com') ||
+		dnsDomainIs(host, '.yting.com') ||
+		dnsDomainIs(host, '.ggpht.com') ||
 		dnsDomainIs(host, '.wikipedia.org') ||
 		dnsDomainIs(host, '.sf.net') ||
 		dnsDomainIs(host, '.sourceforge.net') ||
 		dnsDomainIs(host, '.twitter.com') ||
+		dnsDomainIs(host, '.twimg.com') ||
 		dnsDomainIs(host, '.facebook.com') ||
 		shExpMatch(host, "*thepiratebay.*") ||
 		shExpMatch(host, "*twitter.com*") ||
