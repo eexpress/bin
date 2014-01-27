@@ -18,6 +18,9 @@ chsdir
 *ssh
 *xmodmaprc
 *.swp
+*/weather-icon/*
+*/calendar/*
+config
 *.deb
 .DirIcon
 .encfs*
