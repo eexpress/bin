@@ -1,8 +1,0 @@
-{
-    "server":"192.241.195.100",
-    "server_port":15719,
-    "local_port":9050,
-    "password":"imtxc",
-    "timeout":60,
-    "method":"rc4"
-}
