@@ -1,0 +1,8 @@
+{
+    "server":"192.241.156.133",
+    "server_port":8388,
+    "local_port":1080,
+    "password":"foxfox123",
+    "timeout":60,
+    "method":"rc4"
+}
