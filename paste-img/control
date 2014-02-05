@@ -6,4 +6,4 @@ Priority:
 Maintainer: eexpress@163.com
 Installed-Size: 26k
 Architecture: all
-Depends: perl, libnet-dbus-perl, libwww-mechanize-perl, xsel, libgtk2-perl, libgtk2-gladexml-perl, scrot, perl-doc, imagemagick
+Depends: perl, libnet-dbus-perl, libwww-mechanize-perl, xsel, libgtk2-perl, libgtk2-gladexml-perl, perl-doc, imagemagick

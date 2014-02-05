@@ -51,8 +51,9 @@ my $fp='/tmp/pi.png';
 	print "after cursor changed, use mouse to take screenshot...\n";
 	$bus->Notify("paste-img", 0, "info", "准备截图", "光标改变后，使用鼠标截图。。。", [], { }, -1);
 	unlink $fp;
-	if(-f '/usr/bin/scrot'){`/usr/bin/scrot -sb $fp`;}
-	elsif(-f '/usr/bin/import'){`/usr/bin/import -frame $fp`;}
+	`/usr/bin/gnome-screenshot -af $fp`;
+#    if(-f '/usr/bin/scrot'){`/usr/bin/scrot -sb $fp`;}
+#    elsif(-f '/usr/bin/import'){`/usr/bin/import -frame $fp`;}
 	$ARGV[0]=$fp; 
 }
 $ARGV[0]=~s'file://'';

@@ -5,7 +5,7 @@ use Encode qw(encode decode);
 sub ip_138{
 $i=shift;
 $url="http://www.ip138.com/ips138.asp?ip=".$i;
-use LWP::Simple; $_=get($url); $_=encode("utf8",$_);
+use LWP::Simple; $_=get($url); $_=encode("utf8",decode("gbk",$_));
 /本站主数据.*\<\/ul\>/m;
 $_=$&; s'</li>'\\n'g; s'<.*?>''g;
 print; `$ENV{HOME}/bin/msg "IP地址查询 $i" "$_"`;
