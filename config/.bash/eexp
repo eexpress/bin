@@ -15,7 +15,8 @@ export PATH=$HOME/bin:$PATH
 export CDPATH=:~:~/bin
 export RES=$HOME/bin/resources
 
-thiscolor=`expr $(printf "%d" "'$(hostname|cut -b 6)") % 7 + 1`
+#thiscolor=`expr $(printf "%d" "'$(hostname|cut -b 6)") % 7 + 1`
+thiscolor=`date +%u`
 #PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n● '
 PS1="\[\e[3$thiscolor;40m\]\D{%Y-%m-%d %a} \t \H \w \[\e[m\] \n● "
 #PS1='\[\e[32;40m\]\D{%Y-%m-%d %a} \t \H \w \[\e[m\] \n● '

@@ -154,5 +154,5 @@ _show_all()
 complete -F _show_all $default aw ai as
 complete -F _show_installed $default ap ar
 #complete -F _show_installed $default ar
-complete -W "$(echo $(grep '^ssh ' .bash_history | sort -u | sed 's/^ssh //'))" ssh
+complete -W "$(echo $(grep '^ssh ' ~/.bash_history | sort -u | sed 's/^ssh //'))" ssh
 
