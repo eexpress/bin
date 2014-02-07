@@ -5,7 +5,7 @@
 #2014-01M	->	1803.1
 #2014Y		->	1803.1
 foreach(@ARGV){
-	if (/\.csv/){
+	if (/\.csv$/){
 		open IN,"<$_"; while(<IN>){
 			next if ! /-.*-/;	#跳过无日期的行
 			s/"//g;				#过滤掉引号
@@ -13,7 +13,7 @@ foreach(@ARGV){
 			$d=""; $m="";
 			foreach(@seg){
 				next if ! /\d/; $d=$_,next if /-.*-/;
-				$m=$_,next if /^[\d\.]+$/;	#全数字或者带小数点的
+				$m=$_,next if /^[\d\.]+$/ && ! /\d{7,}/;	#全数字或者带小数点的
 			}
 			next if $d eq "";
 			$hash{$d}+=$m;
