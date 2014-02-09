@@ -135,25 +135,17 @@ loc(){
 locate -eLin $(($LINES-4)) "`pwd`/*/$1"
 }
 #--------TAB COMPLETION ADD------------------------
+#        local cur; COMPREPLY=(); cur=`_get_cword`
 _show_installed()
-{
-        local cur
-        COMPREPLY=()
-        cur=`_get_cword`
-#        COMPREPLY=( $( _comp_dpkg_installed_packages $cur ) )
-        COMPREPLY=( $( _xfunc dpkg _comp_dpkg_installed_packages "$cur" ) )
-        return 0
-}
+{ COMPREPLY=($(_xfunc dpkg _comp_dpkg_installed_packages `_get_cword`)); return 0; }
 _show_all()
-{
-        local cur
-        COMPREPLY=()
-        cur=`_get_cword`
-        COMPREPLY=( $( apt-cache pkgnames $cur 2> /dev/null ) )
-        return 0
-}
+{ COMPREPLY=($(apt-cache pkgnames `_get_cword` 2> /dev/null)); return 0; }
+
+_grep_history()
+{ COMPREPLY=($(grep '^cd ' ~/.bash_history|sed 's/^cd\s*//'|grep '^[/~]'|grep `_get_cword` 2> /dev/null)); return 0; }
+complete -F _grep_history t
+
 complete -F _show_all $default aw ai as
 complete -F _show_installed $default ap ar
-#complete -F _show_installed $default ar
 complete -W "$(echo $(grep '^ssh ' ~/.bash_history | sort -u | sed 's/^ssh //'))" ssh
 
