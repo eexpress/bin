@@ -143,6 +143,7 @@ _show_all()
 
 _grep_history()
 { COMPREPLY=($(grep '^cd ' ~/.bash_history|sed 's/^cd\s*//'|grep '^[/~]'|grep `_get_cword` 2> /dev/null)); return 0; }
+alias t='cd'
 complete -F _grep_history t
 
 complete -F _show_all $default aw ai as
