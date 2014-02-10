@@ -132,7 +132,7 @@ o(){ xdg-open ${1:-"`xsel -o|sed "s/\ /\\\ /g"|sed "s/\n.*//"`"}; }
 #locate -eLin $(($LINES-4)) -r "`pwd`/.*$1"
 #}
 loc(){
-locate -eLin $(($LINES-4)) "`pwd`/*/$1"
+locate -eLin $(($LINES-4)) -r "^`pwd`.*$1[^\/]*$"
 }
 #--------TAB COMPLETION ADD------------------------
 #        local cur; COMPREPLY=(); cur=`_get_cword`
