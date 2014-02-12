@@ -7,7 +7,7 @@ if [ ! $1 ]; then
 	echo "Find filename in current directory. multi keyword, use prefix - to exclude word."; exit
 fi
 #不搜索隐藏文件夹
-cmd='find . ! -path "*/.*" '
+cmd='find . -type f ! -path "*/.*" '
 color="|sed 'h;s:.*/::;"
 for p in $*; do
 if [[ "$p" == "-"* ]]; then
@@ -20,6 +20,8 @@ color=$color"s/$p/$redB&$end/Ig;"
 done
 color=$color"x;s:[^/]\+$::g;G;s/\n//'"
 #echo -e "$blueB>>>> $cmd\n$end"
+#cmd+="-printf \"\t%p\t► %Cr\t► %kK\n\""
+cmd+="-exec du -h {} \; "
 cmd+=" 2>/dev/null"
 echo $cmd$color>/tmp/fd
 eval $cmd$color
