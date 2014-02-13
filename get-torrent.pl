@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+
+use utf8;
+use LWP::Simple;
+#输入编号
+$s=$ARGV[0];
+#--------------------------------------------
+$url="http://thepiratebay.ee/s/?q=$s&page=0&orderby=99";
+print "1 ->\t$url\n"; $_ = get($url);
+die "Couldn't get it!" unless defined $_;
+#<a href="/torrent/9278096/IPZ-260 Erika Shibasaki JAV CENSORED"
+/href=\"\/torrent.*?\"/; $_=$&; s/href=//; s/\"//g; s/\ /%20/g;
+if($_){
+	$url="http://thepiratebay.ee$_";
+	print "2 ->\t$url\n"; $_ = get($url);
+	/magnet:[^"]*/; $_=$&; $_.="\n";
+open OUT,">>$ENV{HOME}/magnet.list"; print OUT "--\t$s\n$_"; close OUT;
+	print;
+	exit;
+}
+#--------------------------------------------
+$url="http://blog.jav4you.com/?s=$s";
+print "1 ->\t$url\n"; $content = get($url);
+#http://blog.jav4you.com/?s=MDYD-866&x=0&y=0
+#Read the rest of this entry »
+die "Couldn't get it!" unless defined $content;
+$content=~/href=.*?Read the rest of this entry/;
+#<a href="http://blog.jav4you.com/2014/02/mdyd-866-real-wives-only-non-fictional-trip-of-cheating-3/#more-36500" class="more-link">Read the rest of this entry »</a>
+$_=$&; m'http://[^"]*';
+$url=$&; print "2 ->\t$url\n"; $content = get($url);
+die "Couldn't get it!" unless defined $content;
+#<p><b>BitTorrent File</b><br><a href="http://l.jav4you.com/1eQ2eLT" target="_blank" rel="nofollow">ishrhndug.html</a><br><br><br></p>
+$content=~/BitTorrent File.*html/;
+$_=$&; s/.*>//;
+$url="http://www.21stp.com/$_";
+print "3 ->\t$url\n"; $content = get($url);
+die "Couldn't get it!" unless defined $content;
+#<a href="http://www.21stp.com/save/857470376/dd82969aa8">ダウンロード</a>
+$content=~/href=.*?ダウンロード/;
+$_=$&; m'http://[^"]*';
+$url=$&; print "4 ->\t$url\n";
+`gnome-open $url`;
+
+#$s="$ENV{HOME}/$s.torrent";
+#if(is_success(getstore($url,$s))){ print "5 ->\tsave to $s\n"; }
+
+#$content = get($url);
+#die "Couldn't get it!" unless defined $content;
+#open OUT,">>$s"; print OUT $content; close OUT;
+
