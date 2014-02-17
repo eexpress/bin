@@ -41,18 +41,18 @@ $content=~/href=.*?ダウンロード/;
 $_=$&; m'http://[^"]*';
 $url=$&; print "4 ->\t$url\n";
 
-#`gnome-open $url`;
+`gnome-open $url`;
 
-$s="$ENV{HOME}/$s.torrent";
+#$s="$ENV{HOME}/$s.torrent";
 #if(is_success(getstore($url,$s))){ print "5 ->\tsave to $s\n"; }
 
 #$content = get($url);
 #die "Couldn't get it!" unless defined $content;
 #open OUT,">>$s"; print OUT $content; close OUT;
 
-use WWW::Mechanize;
-my $mech = WWW::Mechanize->new(agent=>'Opera/9.80 (X11; Linux i686; U; en) Presto/2.6.30 Version/10.60');
-$mech -> get($_);
-if ($mech->success()) { $mech->save_content($s); print "5 ->\tsave to $s\n"; }
-`transmission-remote -a "$_"`;
-if($?>0){print "Add to transmission retrun error: $?.\n";}
+#use WWW::Mechanize;
+#my $mech = WWW::Mechanize->new(agent=>'Opera/9.80 (X11; Linux i686; U; en) Presto/2.6.30 Version/10.60');
+#$mech -> get($url);
+#if ($mech->success()) { $mech->save_content($s); print "5 ->\tsave to $s\n"; }
+#`transmission-remote -a "$_"`;
+#if($?>0){print "Add to transmission retrun error: $?.\n";}
