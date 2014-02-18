@@ -1,9 +1,10 @@
 #!/usr/bin/perl
 
 # 使用脚本目录的图标
-use Cwd qw(abs_path);
-$0=~s/[^\/]*?$//;
-$icon=abs_path $0."stardict.png";
+#use Cwd qw(abs_path);
+#$0=~s/[^\/]*?$//;
+#$icon=abs_path $0."stardict.png";
+@_=`locate stardict.png`; $icon=$_[0]; chomp $icon;
 
 use Getopt::Long;
 # 参数：单行输出选择。屏幕提示输出选择。
@@ -11,7 +12,7 @@ GetOptions('1' => \$oneline, 'n'=>\$notify);
 
 my $out,$in;
 # 无参数时，使用剪贴板内容。
-$in=$ARGV[0]; if(!$in){$in=`xsel -o`;} if(!$in){exit;}
+$in=$ARGV[0]//`xsel -o`; if(!$in){exit;}
 open(SDCV,"sdcv -n $in|");
 #my $r;
 while(<SDCV>){
