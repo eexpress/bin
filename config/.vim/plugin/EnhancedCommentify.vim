@@ -714,7 +714,7 @@ function s:GetFileTypeSettings(ft)
 	let b:ECcommentClose =
 		    \ substitute(&commentstring, '.*%s', "", "")
     " Multipart comments:
-    elseif fileType =~ '^\(c\|b\|css\|csc\|cupl\|indent\|jam\|lex\|lifelines\|'.
+    elseif fileType =~ '^\(c\|vala\|b\|css\|csc\|cupl\|indent\|jam\|lex\|lifelines\|'.
 		\ 'lite\|nqc\|phtml\|progress\|rexx\|rpl\|sas\|sdl\|sl\|'.
 		\ 'strace\|xpm\|yacc\)$'
 	let b:ECcommentOpen = '/*'

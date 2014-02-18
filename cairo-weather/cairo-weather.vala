@@ -1,6 +1,6 @@
 using Gtk;
 using Cairo;
-using Rsvg;
+/*using Rsvg;*/
 	
 string city;
 string weather;
@@ -156,7 +156,8 @@ public class DrawWeather : Gtk.Window {
 						if(l.contains("月")) lmonth=l.split("\t",0)[1];
 						if(l.contains("春节")) lmonth="正月";
 						if(l.contains("%s/%s".printf(month.to_string(),day.to_string()))){
-							lunar=l.split("\t",0)[1];
+							lunar=Regex.split_simple("\\s+",l)[1];
+/*                            lunar=l.split("\t",0)[1];*/
 							if(!date.contains("月") && oldlmonth!=lmonth && !lunar.contains("月")) {
 								date=date+"-"+lmonth+lunar;oldlmonth=lmonth;}
 							else date=date+"-"+lunar;

@@ -1,0 +1,12 @@
+#You may copy this file to ~/.config/cairo-weather/config
+
+# 缺省圆体。“fc-list :lang=zh-cn|sed s/:.*//” 的中文字体结果。
+#font=汉仪萝卜体简
+#font=Vera Sans YuanTi
+
+# 缩放比率
+#scale=0.6
+
+# 支持ip138网站的天气格式。缺省长沙。http://qq.ip138.com/weather/index.html 去查询自己的城市。需要使用wml替换html的后缀，否则没有城市名称。
+#url="http://qq.ip138.com/weather/hunan/ChangSha.wml"
+
