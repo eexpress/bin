@@ -16,7 +16,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.sourceforge.net') ||
 		dnsDomainIs(host, '.twitter.com') ||
 		dnsDomainIs(host, '.twimg.com') ||
-		dnsDomainIs(host, '.jav4you.com') || dnsDomainIs(host, '.dmm.co.jp') ||
+		dnsDomainIs(host, '.jav4you.com') || dnsDomainIs(host, '.dmm.co.jp') || dnsDomainIs(host, '.21stp.com') ||
 		shExpMatch(host, "*thepiratebay.*") ||
 		shExpMatch(host, "*twitter.com*") ||
 		host == 'ow.ly' ||
