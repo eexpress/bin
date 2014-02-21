@@ -28,5 +28,5 @@ function FindProxyForURL(url, host) {
 		host == 'connect.facebook.net' ||
 		/^https?:\/\/[^\/]+facebook\.com/i.test(url)
 		) return autoproxy;
-
+	return "DIRECT";
 }
