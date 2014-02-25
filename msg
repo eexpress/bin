@@ -1,9 +1,9 @@
 #!/bin/bash
 
 title="计划任务提醒"
-icon="/usr/share/pixmaps/ubuntu-screensaver.svg"
-sound="/home/eexp/bin/resources/sound/kongas.ogg"
-[ -f $sound ] || sound="/usr/share/sounds/gnome/default/alerts/drip.ogg"
+icon="/usr/share/icons/gnome/48x48/actions/system-search.png"
+#sound="/home/eexp/bin/resources/sound/kongas.ogg"
+#[ -f $sound ] || sound="/usr/share/sounds/gnome/default/alerts/drip.ogg"
 case $# in
 1)
 	msg=$1;;
@@ -18,4 +18,5 @@ case $# in
 esac
 msg=`echo $msg|ascii2uni -a J -q`
 export DISPLAY=:0.0 && notify-send -i $icon "$title" "$msg" &
-paplay $sound &
+#/usr/share/sounds/ubuntu/stereo
+[ -f "$sound" ] && paplay $sound || canberra-gtk-play -i window-slide
