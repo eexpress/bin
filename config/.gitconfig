@@ -3,15 +3,16 @@
 	st = status
 	co = checkout
 	df = diff
-	df1= diff HEAD^
-	df2= diff HEAD^^
-	df3= diff HEAD^^^
-	df4= diff HEAD^^^^
-	d  = diff master@{"yesterday"}
+#	df1= diff HEAD^
+#	df2= diff HEAD^^
+#	df3= diff master~3
+#	df4= diff master~4
+	d1d  = diff master@{"yesterday"}
 	dflog = log -p
 	ls = !sh -c 'git ls-files|ascii2uni -a K'
 	lg = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr)%Creset %s'
 	ll = reflog
+	web = instaweb
 
 [color]
 	diff = always
@@ -21,10 +22,5 @@
 [http]
 	sslVerify = false
 	proxy=http://localhost:8087
-[giggle]
-	main-window-maximized = false
-	main-window-geometry = 1017x771+666+171
-	file-view-vpane-position = 440
-	main-window-view = FileView
-[push]
-	default = simple
+#[push]
+#	default = simple
