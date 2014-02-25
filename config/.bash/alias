@@ -68,15 +68,17 @@ loc(){ locate -eLin $(($LINES-4)) -r "^`pwd`.*$1[^\/]*$"; }
 #        local cur; COMPREPLY=(); cur=`_get_cword`
 _show_installed()
 { COMPREPLY=($(_xfunc dpkg _comp_dpkg_installed_packages `_get_cword`)); return 0; }
+complete -F _show_installed $default ap ar
+
 _show_all()
 { COMPREPLY=($(apt-cache pkgnames `_get_cword` 2> /dev/null)); return 0; }
-
-_grep_history()
-{ COMPREPLY=($(grep '^cd ' ~/.bash_history|sed 's/^cd\s*//'|grep '^[/~]'|grep `_get_cword` 2> /dev/null)); return 0; }
-alias t='cd'
-complete -F _grep_history t
-
 complete -F _show_all $default aw ai as
-complete -F _show_installed $default ap ar
-complete -W "$(echo $(grep '^ssh ' ~/.bash_history | sort -u | sed 's/^ssh //'))" ssh
+
+#_grep_history()
+#{ COMPREPLY=($(grep '^cd ' ~/.bash_history|sed 's/^cd\s*//'|grep '^[/~]'|grep `_get_cword` 2> /dev/null)); return 0; }
+#alias t='cd'
+#complete -F _grep_history t
+
+complete -W "$(echo 'eexp@'$(avahi-browse -at|grep -v `hostname`|grep v4|cut -d' ' -f 5)'.local:')" ssh
+#complete -W "$(echo $(grep '^ssh ' ~/.bash_history | sort -u | sed 's/^ssh //'))" ssh
 
