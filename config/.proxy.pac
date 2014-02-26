@@ -14,6 +14,8 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.wikipedia.org') ||
 		dnsDomainIs(host, '.sf.net') ||
 		dnsDomainIs(host, '.sourceforge.net') ||
+		dnsDomainIs(host, '.stackoverflow.com') ||
+		dnsDomainIs(host, '.sstatic.net') ||
 		dnsDomainIs(host, '.twitter.com') ||
 		dnsDomainIs(host, '.twimg.com') ||
 		dnsDomainIs(host, '.jav4you.com') || dnsDomainIs(host, '.dmm.co.jp') || dnsDomainIs(host, '.21stp.com') ||
