@@ -24,11 +24,15 @@ foreach(@ARGV){
 		}
 	} else {$select=$_;}
 }
-print "---------------------------------\n";
 foreach(sort keys %hash){
-	$total+=$hash{$_},print "$_\t->\t$hash{$_}\n" if /$select/;
+#    $total+=$hash{$_},print "$_\t->\t$hash{$_}\n" if /$select/;
+	if(/$select/){
+		/^..../;$c=$&;
+		if($c!=$d){print (("-"x32)."\n");$d=$c;}
+		$total+=$hash{$_},print "$_\t->\t$hash{$_}\n";
+	}
 }
-print "---------------------------------\n";
+print (("-"x32)."\n");
 print "total:\t\t\t$total\n";
 
 #▶ ./csv统计.pl wacai_\(2010-03~2014-02\).csv 2014.*M toshl_export.csv 
