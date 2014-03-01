@@ -12,7 +12,7 @@ foreach(@ARGV){
 			@seg=split /,/;
 			$d=""; $m="";
 			foreach(@seg){
-				next if ! /\d/; $d=$_,next if /-.*-/;
+				next if ! /\d/; $d=$_,next if /\d+-\d+-\d+/;
 				$m=$_,next if /^[\d\.]+$/ && ! /\d{7,}/;	#全数字或者带小数点的
 			}
 			next if $d eq "";
