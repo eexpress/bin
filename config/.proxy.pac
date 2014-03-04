@@ -20,6 +20,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.twimg.com') ||
 		dnsDomainIs(host, '.jav4you.com') || dnsDomainIs(host, '.dmm.co.jp') || dnsDomainIs(host, '.21stp.com') ||
 		dnsDomainIs(host, '.bit.ly') || host == 'bit.ly' ||
+		dnsDomainIs(host, '.t.co') || host == 't.co' ||
 		shExpMatch(host, "*thepiratebay.*") ||
 		shExpMatch(host, "*twitter.com*") ||
 		host == 'ow.ly' ||

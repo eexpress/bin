@@ -8,7 +8,7 @@ Notification vol;
 MatchInfo info;
 string stdoutstr;
 DateTime starttime;
-Menu menuSystem;
+Gtk.Menu menuSystem;
 bool rightmode;
 string svol;
 ImageMenuItem menuApp;
@@ -27,7 +27,7 @@ void exec_sync(string cmd){
 }
 
 void create_menuSystem() {
-	menuSystem = new Menu();
+	menuSystem = new Gtk.Menu();
 	iconpath="/usr/share/icons/Humanity/apps/24/";
 
 	try{
