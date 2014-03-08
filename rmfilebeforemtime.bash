@@ -19,7 +19,5 @@ read -s -n 1 y
 if [[ $y == '' ]]; then
 	echo "开始删除。。。"
 	find . -maxdepth 1 ! -cnewer $file -exec rm {} \;
-elif
-	echo "取消。"
-fi
+else echo "取消。"; fi
 
