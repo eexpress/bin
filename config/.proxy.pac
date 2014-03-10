@@ -6,6 +6,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.google.com') ||
 		dnsDomainIs(host, '.google.com.hk') ||
 		dnsDomainIs(host, '.googleusercontent.com') || 
+		dnsDomainIs(host, '.gstatic.com') || host == 'gstatic.com' ||
 		dnsDomainIs(host, '.wordpress.com') ||
 		dnsDomainIs(host, '.youtube.com') ||
 		dnsDomainIs(host, '.blogspot.com') ||
