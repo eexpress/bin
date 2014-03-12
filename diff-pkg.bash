@@ -2,8 +2,8 @@
 
 #dest='eexp@eexp-desktop.local'
 dest=$(echo 'eexp@'$(avahi-browse -at|grep -v `hostname`|grep v4|cut -d' ' -f 5)'.local')
-aptitude search '~i!~n^lib' | cut -b 5- | sed 's/\ .*//' >/tmp/pkg-`hostname`
-ssh $dest aptitude search '~i!~n^lib' | cut -b 5- | sed 's/\ .*//' >/tmp/pkg-$dest
+aptitude search '~i!~n^lib!~ndev$' | cut -b 5- | sed 's/\ .*//' >/tmp/pkg-`hostname`
+ssh $dest aptitude search '~i!~n^lib!~ndev$' | cut -b 5- | sed 's/\ .*//' >/tmp/pkg-$dest
 echo -e "-----------------\t\t\t--------------------"
 echo -e "<`hostname`\t\t\t\t>$dest"
 echo -e "-----------------\t\t\t--------------------"
