@@ -8,4 +8,5 @@ echo -e "-----------------\t\t\t--------------------"
 echo -e "<`hostname`\t\t\t\t>$dest"
 echo -e "-----------------\t\t\t--------------------"
 diff /tmp/pkg-`hostname` /tmp/pkg-$dest | sed '/^[^<>]/d' | sed 's/^>/\t\t\t\t\t>/'
+#diff /tmp/pkg-`hostname` /tmp/pkg-$dest | sed '/^[^<>]/d' | sed 's/^>/\t\t\t\t\t>/' |perl -pe 'if(/[<>]\ (.*)/){$p=`aptitude search ~i~D$1 -F %p`;if($p){$p=~s/\n/,/g;$p=~s/\s*//g;chomp;$_.="($p)\n";}}'
 
