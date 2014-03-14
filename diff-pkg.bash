@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #dest='eexp@eexp-desktop.local'
-dest=$(echo 'eexp@'$(avahi-browse -at|grep -v `hostname`|grep v4|cut -d' ' -f 5)'.local')
+dest=$(echo 'eexp@'$(avahi-browse -at|grep -v `hostname`|grep v4|awk '{print $4;}')'.local')
 aptitude search '~i!~n^lib!~ndev$' | cut -b 5- | sed 's/\ .*//' >/tmp/pkg-`hostname`
 ssh $dest aptitude search '~i!~n^lib!~ndev$' | cut -b 5- | sed 's/\ .*//' >/tmp/pkg-$dest
 echo -e "-----------------\t\t\t--------------------"
