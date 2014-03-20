@@ -27,3 +27,9 @@ config
 Quake*
 *.mo
 *.wav
+*.txt
+*.tar
+*.gz
+*.svg
+*.json
+
