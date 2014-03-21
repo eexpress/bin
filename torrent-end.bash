@@ -8,7 +8,8 @@ cd $dir
 mv *.avi *.mp4 *.wmv $dest
 [ $? != 0 ] && exit
 cd ..
-rm -r $TR_TORRENT_NAME
+#rm -r $TR_TORRENT_NAME
+gvfs-trash $TR_TORRENT_NAME
 cd $dest
 for i in *.avi *.mp4 *.wmv; do
 rename 's/3xplanet_//;s/^[\d\.]*-//' $i
