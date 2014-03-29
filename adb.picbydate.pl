@@ -32,10 +32,14 @@ if($_){
 }
 print "use: $today\n";
 
-$dir='sdcard/DCIM/100MEDIA';
-@_=map {s/.*\ //;$_} grep /$today/,`adb shell ls -l $dir/IMAG*`;
-foreach(@_){
-	chomp;
-	print " $action -> $_.\n";
-	`adb $action $dir/$_`;
+#$dir='sdcard/DCIM/100MEDIA';
+@DIR=('sdcard/DCIM/100MEDIA','sdcard/AliveShare/photo','sdcard/AliveShare');
+foreach $dir (@DIR){
+	print "=====>  $dir  <=====\n";
+	@_=map {s/.*\ //;$_} grep /$today/,`adb shell ls -l $dir/*.jpg`;
+	foreach(@_){
+		chomp;
+		print " $action -> $_.\n";
+		`adb $action $dir/$_`;
+	}
 }
