@@ -32,4 +32,9 @@ Quake*
 *.gz
 *.svg
 *.json
+note
+*/old/*
+*/tmp/*
+tags
+*.db
 
