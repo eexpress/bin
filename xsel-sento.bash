@@ -1,6 +1,6 @@
 #!/bin/bash
 
-f=`xsel -o|tr '\n' ' '`
+f=`xsel -o|tr '\n' ' '|sed 's/\ */ /g'`
 cmd=$*" "$f
 echo $cmd
 echo "-----------------------"
