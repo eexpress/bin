@@ -12,8 +12,6 @@ if [[ -f '/usr/bin/aptitude' && apt -eq 1 ]]; then
 	alias ar='sudo aptitude remove'
 	alias au='sudo aptitude update && msg 列表已经刷新 || msg 刷新失败'
 	alias ag='sudo aptitude upgrade'
-	alias as='aptitude search'
-	alias aw='aptitude show'
 else
 	alias ai='sudo apt-get install'
 	alias ap='sudo apt-get purge'
@@ -22,6 +20,9 @@ else
 	alias au='sudo apt-get update && msg 列表已经刷新 || msg 刷新失败'
 	alias ag='sudo apt-get upgrade'
 fi
+	alias as='aptitude search'
+	alias aw='aptitude show'
+
 alias cal='cal -3'
 alias calendar='calendar -A 7'
 alias ce='crontab -e'
