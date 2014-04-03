@@ -4,7 +4,9 @@ alias gcc='/usr/bin/gcc `pkg-config --cflags --libs gtk+-3.0 gmodule-2.0`'
 alias valac='/usr/bin/valac --pkg gtk+-3.0'
 alias fc-zh='fc-list :lang=zh-cn|sed 's/:.*//''
 
-if [ -f '/usr/bin/aptitude' ]; then
+#if [ -f '/usr/bin/aptitude' ]; then
+apt=0
+if [[ -f '/usr/bin/aptitude' && apt -eq 1 ]]; then
 	alias ai='sudo aptitude install'
 	alias ap='sudo aptitude purge'
 	alias ar='sudo aptitude remove'
@@ -16,6 +18,7 @@ else
 	alias ai='sudo apt-get install'
 	alias ap='sudo apt-get purge'
 	alias ar='sudo apt-get remove'
+	alias aa='sudo apt-get autoremove'
 	alias au='sudo apt-get update && msg 列表已经刷新 || msg 刷新失败'
 	alias ag='sudo apt-get upgrade'
 fi
