@@ -4,21 +4,25 @@ alias gcc='/usr/bin/gcc `pkg-config --cflags --libs gtk+-3.0 gmodule-2.0`'
 alias valac='/usr/bin/valac --pkg gtk+-3.0'
 alias fc-zh='fc-list :lang=zh-cn|sed 's/:.*//''
 
-if [ -f '/usr/bin/aptitude' ]; then
+#if [ -f '/usr/bin/aptitude' ]; then
+apt=0
+if [[ -f '/usr/bin/aptitude' && apt -eq 1 ]]; then
 	alias ai='sudo aptitude install'
 	alias ap='sudo aptitude purge'
 	alias ar='sudo aptitude remove'
 	alias au='sudo aptitude update && msg 列表已经刷新 || msg 刷新失败'
 	alias ag='sudo aptitude upgrade'
-	alias as='aptitude search'
-	alias aw='aptitude show'
 else
 	alias ai='sudo apt-get install'
 	alias ap='sudo apt-get purge'
 	alias ar='sudo apt-get remove'
+	alias aa='sudo apt-get autoremove'
 	alias au='sudo apt-get update && msg 列表已经刷新 || msg 刷新失败'
 	alias ag='sudo apt-get upgrade'
 fi
+	alias as='aptitude search'
+	alias aw='aptitude show'
+
 alias cal='cal -3'
 alias calendar='calendar -A 7'
 alias ce='crontab -e'
@@ -61,7 +65,7 @@ c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 nmap(){ /usr/bin/nmap ${1:-localhost}; }
 p(){ ping -c 5 ${1:-www.163.com}; }
-du(){ /usr/bin/du -sh "$@"|sort -rh; }
+du(){ /usr/bin/du -sch "$@"|sort -rh; }
 o(){ xdg-open ${1:-"`xsel -o|sed "s/\ /\\\ /g"|sed "s/\n.*//"`"}; }
 loc(){ locate -eLin $(($LINES-4)) -r "^`pwd`.*$1[^\/]*$"; }
 fcnt(){ n=`ls --color=none -1 $*|wc -l`; echo "一共有 "$n" 个文件。"; }
