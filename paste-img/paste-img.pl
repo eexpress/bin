@@ -26,8 +26,11 @@ $button = Gtk2::RadioButton->new(undef, "null");
 @group = $button->get_group;
 @web=`$cli -l`;
 foreach (@web){
+next if /:/;
 chomp;
-s/\s.*$//,$select=$_ if /\*/;
+s/\e\[.*?m//g;
+s/\s*//g; s/-//;
+s/\*//,$select=$_ if /\*/;
 $button = Gtk2::RadioButton->new_with_label(@group, "$_");
 $button->signal_connect('toggled'=>\&radio_clicked);
 $button->set_active(TRUE) if /$select/;
