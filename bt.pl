@@ -4,6 +4,7 @@ use utf8;
 use LWP::Simple;
 #输入编号
 $s=$ARGV[0];
+print "> $s <\n";
 #--------------------------------------------
 $url="http://thepiratebay.ee/s/?q=$s&page=0&orderby=99";
 print "1 ->\t$url\n"; $_ = get($url);
