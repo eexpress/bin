@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rdesktop -u exp -p exp -g 1000x600 192.168.100.190
+rdesktop -u exp -p 123456 -g 1000x600 58.20.51.237:8989
