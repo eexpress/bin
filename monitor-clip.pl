@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
 use Encode qw(encode decode);
-$sound='/usr/share/sounds/gnome/default/alerts/drip.ogg';
 
 sub ip_138{
 $in=shift;
@@ -10,7 +9,7 @@ $url="http://www.ip138.com/ips138.asp?ip=".$in;
 use LWP::Simple; $_=get($url); $_=encode("utf8",decode("gbk",$_));
 /本站主数据.*\<\/ul\>/m;
 $_=$&; s'</li>'\\n'g; s'<.*?>''g;
-print; `$ENV{HOME}/bin/msg $sound $icon "IP地址查询 $in" "$_"`;
+`notify-send -i $icon "IP地址查询 $in" "$_"`;
 }
 
 sub sdcv{
@@ -21,7 +20,7 @@ while(<SDCV>){
 	if (! ((1 .. /^$/) || (/相关/||/^$/ .. eof))){ $out.=" ► $_\\n"; }
 }
 close(SDCV);
-print; `$ENV{HOME}/bin/msg $sound $icon "sdcv翻译 $in" "$out"`;
+`notify-send -i $icon "sdcv翻译 $in" "$out"`;
 }
 
 sub web_translate{
@@ -35,8 +34,16 @@ print $out;
 `gnome-open \'$out\'`;
 }
 
-$_=`xsel -o`;
 #----------------------------------
+$sound='/usr/share/sounds/gnome/default/alerts/drip.ogg';
+$_=`pacmd list-sinks`;
+/volume: 0:\s*(\d*)%/;
+$oldv=$1;
+`pactl set-sink-volume 0 90%`;
+`paplay $sound &`;
+`pactl set-sink-volume 0 $oldv%`;
+#----------------------------------
+$_=`xsel -o`;
 #/和~开头的存在的文件，打开
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`gnome-open \"$_\"`;exit;}}
 #ip格式的数字，域名，查询
