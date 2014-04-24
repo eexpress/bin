@@ -39,9 +39,9 @@ alias dog='grep -v -E "(^$|^#|^!)"'
 alias free='free -m'
 alias g='grep --color -in'
 
-alias v='/usr/bin/gvim -f --remote-silent-tab'
+alias v='/usr/bin/gvim --remote-silent-tab'
 #v() { /usr/bin/gvim -f  --remote-silent-tab \"$@\" &; }
-alias sv='sudo /usr/bin/gvim -f --remote-silent-tab'
+alias sv='sudo /usr/bin/gvim --remote-silent-tab'
 alias iftop.启动='sudo iftop -i `netname`'
 alias k='pkill -9'
 alias sk='sudo pkill -9'
