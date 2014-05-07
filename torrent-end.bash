@@ -12,6 +12,6 @@ cd ..
 gvfs-trash $TR_TORRENT_NAME
 cd $dest
 for i in *.avi *.mp4 *.wmv; do
-rename 's/3xplanet_//;s/^[\d\.]*-//' $i
+rename 's/.*\..*\.cc-//; s/3xplanet_//; s/^[\d\.]*-//' $i
 done
 

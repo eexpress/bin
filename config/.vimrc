@@ -60,6 +60,7 @@ au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 " Vala
 autocmd BufRead *.vala set efm=%f:%l.%c-%[%^:]%#:\ %t%[%^:]%#:\ %m
 au BufRead,BufNewFile *.vala setfiletype vala
+
 let vala_comment_strings = 1
 let vala_space_errors = 1
 let vala_no_tab_space_error = 1
