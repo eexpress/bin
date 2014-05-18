@@ -6,8 +6,8 @@ alias valac='/usr/bin/valac --pkg gtk+-3.0'
 alias fc-zh='fc-list :lang=zh-cn family file|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
 
 #if [ -f '/usr/bin/aptitude' ]; then
-apt=0
-if [[ -f '/usr/bin/aptitude' && apt -eq 1 ]]; then
+apt=1
+if [[ -f '/usr/bin/aptitude' && $apt -eq 1 ]]; then
 	alias ai='sudo aptitude install'
 	alias ap='sudo aptitude purge'
 	alias ar='sudo aptitude remove'
