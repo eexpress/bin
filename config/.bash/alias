@@ -17,10 +17,10 @@ else
 	alias ai='sudo apt-get install'
 	alias ap='sudo apt-get purge'
 	alias ar='sudo apt-get remove'
-	alias aa='sudo apt-get autoremove'
 	alias au='sudo apt-get update && msg 列表已经刷新 || msg 刷新失败'
 	alias ag='sudo apt-get upgrade'
 fi
+	alias aa='sudo apt-get autoremove'
 	alias as='aptitude search'
 	alias aw='aptitude show'
 

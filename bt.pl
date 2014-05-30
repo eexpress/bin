@@ -5,6 +5,7 @@ use LWP::Simple;
 #输入编号
 $s=$ARGV[0];
 print "> $s <\n";
+open OUT,">>/tmp/bt.log"; print OUT ".$s.\n"; close OUT;
 #--------------------------------------------
 $url="http://thepiratebay.ee/s/?q=$s&page=0&orderby=99";
 print "1 ->\t$url\n"; $_ = get($url);
@@ -32,9 +33,11 @@ $_=$&; m'http://[^"]*';
 $url=$&; print "2 ->\t$url\n"; $content = get($url);
 die "Couldn't get it!" unless defined $content;
 #<p><b>BitTorrent File</b><br><a href="http://l.jav4you.com/1eQ2eLT" target="_blank" rel="nofollow">ishrhndug.html</a><br><br><br></p>
+open OUT,">>$ENV{HOME}/bt.log"; print OUT $content; close OUT;
 $content=~/BitTorrent File.*html/;
 $_=$&; s/.*>//;
-$url="http://www.21stp.com/$_";
+#$url="http://www.21stp.com/$_";
+$url="http://www.2121.club/$_";
 print "3 ->\t$url\n"; $content = get($url);
 die "Couldn't get it!" unless defined $content;
 #<a href="http://www.21stp.com/save/857470376/dd82969aa8">ダウンロード</a>
