@@ -38,6 +38,7 @@ alias dmesg='/bin/dmesg|tail|cut -b -$COLUMNS'
 alias dog='grep -v -E "(^$|^#|^!)"'
 alias free='free -m'
 alias g='grep --color -in'
+alias s='mplayer'
 
 alias v='/usr/bin/gvim --remote-silent-tab'
 #v() { /usr/bin/gvim -f  --remote-silent-tab \"$@\" &; }
