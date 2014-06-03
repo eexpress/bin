@@ -39,6 +39,7 @@ alias dog='grep -v -E "(^$|^#|^!)"'
 alias free='free -m'
 alias g='grep --color -in'
 alias s='mplayer'
+alias rm='gvfs-trash'
 
 alias v='/usr/bin/gvim --remote-silent-tab'
 #v() { /usr/bin/gvim -f  --remote-silent-tab \"$@\" &; }
