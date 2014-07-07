@@ -129,6 +129,7 @@ set foldenable!
 
 "============= Ctags && Cscope ============
 "ctags 主要用于补全 CTRL-]/T。 cscope 主要用于阅读调用关系。
+set tags=tags;		" 递归查找ctags
 nm <silent> ct :!ctags -R --fields=+lS .<CR>
 "cscope的路径里面不能有空格。
 nm <silent> cs :!cscope -Rbkq<CR><CR>:cs add cscope.out<CR>
