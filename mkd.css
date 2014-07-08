@@ -17,6 +17,14 @@ h1 {
     line-height:1.5em;
 	text-align:center
 }
+em {
+	text-decoration:underline;
+	font-weight:bold;
+	padding: 0 3px 0 3px;
+}
+strong {
+	padding: 0 3px 0 3px;
+}
 ol li {
 	padding: 0 20px;
     border-left: 3px solid #ddd;
