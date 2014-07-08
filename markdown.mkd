@@ -1,0 +1,26 @@
+<head>
+<title>MarkDown File</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link href="bin/mkd.css" rel="stylesheet" type="text/css">
+</head>
+
+使用 Markdown 语法写文档
+========================
+
+说明事项
+--------
+
+* 新建文件的时候，使用**文件模板**，包含如本文开头的html部分，以设置*样式*和*编码*。
+* 编辑时，在*~/.vimrc*里面，可以设置热键，直接转换成html并预览。
+
+		map <F9> :call CompileRun()<CR>
+		func CompileRun() 
+			if &filetype == 'markdown'
+			exec "!markdown \'%\'>\'%.html\'; [ $? == 0 ] && nohup xdg-open \'%.html\' &"
+			endif 
+		endfunc
+ 
+需要安装的软件
+-------------
+	sudo apt-get install markdown
+
