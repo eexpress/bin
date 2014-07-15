@@ -88,7 +88,8 @@ endfunc
 map avr :!./avr.sh main.c<CR>
 map dot :!~/bin/flow.pl %<CR>
 
-map <expr> rw Replace_Current_Word()
+map <expr> rcw Replace_Current_Word()
+map <expr> <C-w> Replace_Current_Word()
 func Replace_Current_Word()
 	let w = expand("<cword>")
 	return "\<ESC>:%s/\\<".w."\\>/".w."/g\<Left>\<Left>"
@@ -130,9 +131,9 @@ set foldenable!
 "============= Ctags && Cscope ============
 "ctags 主要用于补全 CTRL-]/T。 cscope 主要用于阅读调用关系。
 set tags=tags;		" 递归查找ctags
-nm <silent> ct :!ctags -R --fields=+lS .<CR>
+nm <silent> ctag :!ctags -R --fields=+lS .<CR>
 "cscope的路径里面不能有空格。
-nm <silent> cs :!cscope -Rbkq<CR><CR>:cs add cscope.out<CR>
+nm <silent> cscope :!cscope -Rbkq<CR><CR>:cs add cscope.out<CR>
 " cscope setting
 "● cscope -Rbkq
 if has("cscope")
