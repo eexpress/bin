@@ -27,16 +27,15 @@ em {
 strong {
 	padding: 0 3px 0 3px;
 }
-ol li {
-	padding: 0 20px;
-    border-left: 3px solid #ddd;
-	color: #955800;
+li {
+	padding: 2px 5px 2px 5px;
+    border-left: 3px solid #080;
+	color: #666;
 }
-ul li {
-    padding: 0 20px;
-    border-left: 3px solid #ddd;
-    color: #955800;
+li:nth-child(2n-1) {
+	background: #ddd;
 }
+
 pre {
     margin-left: 10;
     margin-right: 10;
