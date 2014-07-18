@@ -19,6 +19,9 @@ h1 {
 	margin-top: 50px;
 	margin-bottom: 50px;
 }
+h1,h2,h3,em,strong {
+	text-shadow: 1px 1px 1px #888;
+}
 em {
 	text-decoration:underline;
 	font-weight:bold;
