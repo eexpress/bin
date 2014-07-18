@@ -9,7 +9,7 @@ if($_[-1] =~ /nothing added to commit|提交为空/){
 	`git pull`;
 	exit;
 }
-@_=grep /modified:|new file:|修改:/,@_;
+@_=grep /modified:|new file:|修改:|新文件:/,@_;
 if(@_){
 	print "文件:\n @_";
 	@_=grep /\d+m[-+]/,`git diff`;
