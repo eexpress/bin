@@ -75,9 +75,9 @@ func CompileRun()
 	elseif &filetype == 'perl' 
 	exec "!perl %" 
 	elseif &filetype == 'tex' 
-	exec "!xelatex \'%\'; [ $? == 0 ] && nohup evince %:r.pdf &"
+	exec "!xelatex \'%\'; [ $? == 0 ] && nohup evince %:r.pdf >/dev/null 2>&1 &"
 	elseif &filetype == 'markdown'
-	exec "!markdown \'%\'>\'%.html\'; [ $? == 0 ] && nohup xdg-open \'%.html\' &"
+	exec "!markdown \'%\'>\'%.html\'; [ $? == 0 ] && nohup xdg-open \'%.html\' >/dev/null 2>&1 &"
 	elseif &filetype == 'dot'
 	exec "!dot -Tsvg % -o %.svg; eog %.svg"
 	elseif &filetype == 'vala'
