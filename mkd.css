@@ -27,10 +27,17 @@ em {
 strong {
 	padding: 0 3px 0 3px;
 }
+ol {
+	list-style-image:url("Checkmark.png");
+/*    list-style:inside url("Checkmark.png");*/
+}
 li {
-	padding: 2px 5px 2px 5px;
+	padding: 2px 2px 2px 8px;
     border-left: 3px solid #080;
 	color: #666;
+}
+li:nth-child(2n) {
+	background: #eee;
 }
 li:nth-child(2n-1) {
 	background: #ddd;
