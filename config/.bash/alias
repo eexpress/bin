@@ -37,7 +37,7 @@ alias head='/usr/bin/head -n $(($LINES-4))'
 alias dmesg='/bin/dmesg|tail|cut -b -$COLUMNS'
 alias dog='grep -v -E "(^$|^#|^!)"'
 alias free='free -m'
-alias g='grep --color -in 2>/dev/null'
+alias g='grep --color -inTZ 2>/dev/null'
 alias s='mplayer'
 alias rm='gvfs-trash'
 
