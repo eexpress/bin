@@ -57,9 +57,9 @@ blockquote {
 	margin-left: 10;
 	margin-right: 10;
 	width: 90%;
-	padding: 0 20px;
-	border-left: 3px solid #ddd;
-	color: #955800;
+	padding: 0 10px 0 30px;
+	border-left: 25px solid #ddd;
+	color: #666;
 	font-style: italic;
 }
 
