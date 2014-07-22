@@ -60,15 +60,15 @@ Err-201		|		储器读写出错
 修改02号设置卡数据地址为0x10地址
 
 * ###用户卡
- * 卡号00000001(**A**)、01000000(**B**)、09999999(**C**) &emsp;&emsp;&emsp;&emsp;*数据0x20地址*
- * 卡号05123456(**D**) 卡号05123456(**H**) 卡号06987654(**J**) &emsp;&emsp;*数据0x10地址*
+ * 卡号00000001(**A**)、01000000(**B**)、09999999(**C**)。*数据0x20地址*
+ * 卡号05123456(**D**) 卡号05123456(**H**) 卡号06987654(**J**)。*数据0x10地址*
 * ###异常卡
  1. 芯片损坏或卡非153卡(P)。
  2. 铁片。
- 3. 卡号00000001(**E**) &emsp;&emsp;*数据BCD格式错卡。*
- 4. 卡号01000000(**F**) &emsp;&emsp;*数据校验和错。*
- 5. 卡号05123456(**G**) &emsp;&emsp;*1位小数位数,用途民用。*
- 6. 卡号09999999(**I**) &emsp;&emsp;*软码0xFF 数据为空。*
+ 3. 卡号00000001(**E**)。 *数据BCD格式错卡。*
+ 4. 卡号01000000(**F**)。 *数据校验和错。*
+ 5. 卡号05123456(**G**)。 *1位小数位数,用途民用。*
+ 6. 卡号09999999(**I**)。 *软码0xFF 数据为空。*
 
 * ###控制器
 编号A、B、C、D默认插**2号**设置卡
@@ -194,12 +194,14 @@ Err-201		|		储器读写出错
 
 1. ###ID号设置卡
 > 表具设置初始表号，需要开户卡才能更换表号。
+
   1. <input type="checkbox"/>&emsp;设置表号
   1. <input type="checkbox"/>&emsp;开户卡能更换表号
   1. <input type="checkbox"/>&emsp;已有表号不能重新设置
 
 1. ###临时卡
 > 临时卡主要用于试气点火、维修、测试等。
+
   1. <input type="checkbox"/>&emsp;临时数据是否累加
   1. <input type="checkbox"/>&emsp;临时卡7次机会
   1. <input type="checkbox"/>&emsp;有用户气量时 临时卡不读
@@ -207,6 +209,7 @@ Err-201		|		储器读写出错
 
 1. ###设置卡
 > 设置机器地区、密码等信息。分别测试1/2号设置卡。
+
   1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;设置地址
   1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;是否常显
   1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;小数位数
@@ -221,11 +224,13 @@ Err-201		|		储器读写出错
 
 1. ###异常卡
 > 异常情况，或者破坏性测试。
+
   1. <input type="checkbox"/>&emsp;A、B对应编号控制器，插入铁片，控制器报ERR-09
   1. <input type="checkbox"/>&emsp;C、D对应编号控制器，插入异常卡P，控制器报ERR-09
 
 1. ###用户卡测试
 > 卡类型的详细说明参见[这里](#tools)。根据测试结果，选择是否在**◻**打勾![](Checkmark.png)。
+
   1. <input type="checkbox"/>&emsp;A、B、C、D卡插入全新（插02设置卡）对应编号控制器(无绑定用户卡)，数据可读。
   1. <input type="checkbox"/>&emsp;A、B卡写气量29.99后插入对应控制器，数据能累加。
   1. <input type="checkbox"/>&emsp;C、D卡写气量10000.99后插入对应控制器，数据不能累加，此时报ERR-08。
@@ -320,6 +325,6 @@ Err-201		|		储器读写出错
 ---
 
 ------------|----------|----------
-测试员：<input style="width:50%" type="text"/>|审核：<input style="width:50%" type="text"/>|审批：<input style="width:50%" type="text"/>
-日期：&emsp;<input style="width:50%" type="text"/>|版本：<input style="width:50%" type="text"/>|编号：<input style="width:50%" type="text"/>
+测试：<input style="width:50%" type="text"/>|审核：<input style="width:50%" type="text"/>|审批：<input style="width:50%" type="text"/>
+日期：<input style="width:50%" type="text"/>|版本：<input style="width:50%" type="text"/>|编号：<input style="width:50%" type="text"/>
 

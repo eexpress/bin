@@ -33,8 +33,10 @@ strong {
 	padding: 0 3px 0 3px;
 }
 ol {
-	list-style-image:url("Checkmark.png");
-/*    list-style:inside url("Checkmark.png");*/
+	list-style-image:url("c.png");
+}
+ul {
+	list-style-image:url("r.png");
 }
 li {
 	padding: 2px 2px 2px 8px;
