@@ -2,8 +2,8 @@ html {
 /*    font-size: 90%; |+ 整体缩放 +|*/
 }
 body {
-	margin-left: 5%;
-	margin-right: 5%;
+/*    margin-left: 5%;*/
+/*    margin-right: 5%;*/
 	background-color: #eee;
 }
 a {
@@ -63,3 +63,19 @@ blockquote {
 	font-style: italic;
 }
 
+table,th,td {
+	padding: 5px 30px 5px 30px;
+}
+table th {
+	background-color:#080;
+	color: #fff;
+}
+table td:nth-child(2n-1) {
+	font-weight:bold;
+}
+table tr:nth-child(2n) {
+	background: #eee;
+}
+table tr:nth-child(2n-1) {
+	background: #ddd;
+}
