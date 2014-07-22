@@ -1,0 +1,324 @@
+<head>
+<title>MarkDown File</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link href="mkd.css" rel="stylesheet" type="text/css">
+</head>
+
+合泰芯片IC卡表功能测试方案
+========================
+
+## 错误提示说明
+显示		|		说明
+----------------- | ------------------:
+NO DATA		|		无有效气量
+Err—01		|		电压低时插卡
+Err—02		|		同NO		DATA（用户卡中不会出现err02）
+Err—03		|		拔卡过快
+Err—04		|		插卡时数据保存出错
+Err—05		|		密码错误
+Err—06		|		软码错误
+Err—07		|		控制器已被绑定，一户一卡
+Err—08		|		数据溢出
+Err—09		|		不是153卡
+Err—10		|		非银通公司表具用卡
+Err—11		|		卡片版本错误
+Err—16		|		表与卡中的小数位数不对应
+Err—17		|		卡片已被绑定，一户一卡
+Err—18		|		过时的管理卡
+Err—19		|		卡片认证错
+Err—20		|		卡片数据校验和错
+Err-100		|		临时卡使用次数到八
+Err-102		|		设置卡参数错误
+Err-103		|		全清卡数据格式错误
+Err-105		|		卡中有表号，ID设置无效
+Err-200		|		参数错误
+Err-201		|		储器读写出错
+
+---
+
+测试工具.tools
+--------
+
+* ###设置卡
+ 1. **1号设置卡**：CF917520AD01000115
+**地址0x10**、常显、1位小数、阀门动作75、自动开关0天、检查12天、无过流、50.0方下限关阀、未拔卡不关阀、软码1；
+ 2. **2号设置卡**：CFF603855B010001DB
+**地址0x20**、5s关闭显示、2位小数、阀门动作3、自动开关8天、检查0天、过流5秒、0.30方报警、未拔卡关阀、软码D；
+
+* ###银卡
+测试检查功能CE
+
+* ###全清卡
+通用
+
+* ###临时卡
+编写成多功能生产卡，方便测试不同地址。
+
+* ###开通卡
+修改02号设置卡数据地址为0x10地址
+
+* ###用户卡
+ * 卡号00000001(**A**)、01000000(**B**)、09999999(**C**) &emsp;&emsp;&emsp;&emsp;*数据0x20地址*
+ * 卡号05123456(**D**) 卡号05123456(**H**) 卡号06987654(**J**) &emsp;&emsp;*数据0x10地址*
+* ###异常卡
+ 1. 芯片损坏或卡非153卡(P)。
+ 2. 铁片。
+ 3. 卡号00000001(**E**) &emsp;&emsp;*数据BCD格式错卡。*
+ 4. 卡号01000000(**F**) &emsp;&emsp;*数据校验和错。*
+ 5. 卡号05123456(**G**) &emsp;&emsp;*1位小数位数,用途民用。*
+ 6. 卡号09999999(**I**) &emsp;&emsp;*软码0xFF 数据为空。*
+
+* ###控制器
+编号A、B、C、D默认插**2号**设置卡
+
+---
+
+
+功能测试
+----------
+
+1. ###上电复位自检功能
+  1. <input type="checkbox"/>&emsp;正常上电后依次发生鸣叫、全屏显示、程序版本、走8字、地址软码、表号、剩余量
+  1. <input type="checkbox"/>&emsp;存储器不正常时，鸣叫3声提示
+  1. <input type="checkbox"/>&emsp;没电池上电应显示8b
+  1. <input type="checkbox"/>&emsp;电池电量不够应显示8V
+  1. <input type="checkbox"/>&emsp;防磁显示8L
+  1. <input type="checkbox"/>&emsp;上电后有无数据是否开关阀
+
+1. ###断电关阀功能
+  1. <input type="checkbox"/>&emsp;断电后无条件关阀;
+  1. <input type="checkbox"/>&emsp;断电时是否减数;
+  1. <input type="checkbox"/>&emsp;断电时读数据是否开阀;
+  1. <input type="checkbox"/>&emsp;临时数据掉电是否清除;
+  1. <input type="checkbox"/>&emsp;用户编号掉电时是否保存;
+  1. <input type="checkbox"/>&emsp;正在开阀时断电能否关阀;
+
+1. ###计数功能
+  1. <input type="checkbox"/>&emsp;减数时液晶屏显示剩余量5秒
+  1. <input type="checkbox"/>&emsp;10个计数能否自动保存
+  1. <input type="checkbox"/>&emsp;正常断电复位是否保存
+  1. <input type="checkbox"/>&emsp;脉冲的最小间隔小于1秒
+  1. <input type="checkbox"/>&emsp;剩余量为0时是否关阀
+
+1. ###负计数功能
+  1. <input type="checkbox"/>&emsp;输入气量时后来一个脉冲将扣除负计数
+  1. <input type="checkbox"/>&emsp;负计数断电是否保存
+
+1. ###购气下限报警关阀功能
+  1. <input type="checkbox"/>&emsp;低于购气下限时液晶屏整屏闪烁并关阀
+  1. <input type="checkbox"/>&emsp;按键、插卡均能开阀,未清除购气标志
+  1. <input type="checkbox"/>&emsp;阀门打开后购气标志闪烁,剩余量常显
+  1. <input type="checkbox"/>&emsp;每减一个脉冲鸣叫一次
+  1. <input type="checkbox"/>&emsp;进入报警状态时再输入气量应清除购气标志
+
+1. ###防磁报警功能
+  1. <input type="checkbox"/>&emsp;出现“L+剩余量”闪烁并关阀
+  1. <input type="checkbox"/>&emsp;正常后按键、插卡清除标志并开阀
+  1. <input type="checkbox"/>&emsp;防磁管未恢复按键、插卡不能开阀
+
+1. ###三重关阀功能
+  1. <input type="checkbox"/>&emsp;阀门没关到位时来一个脉冲关1次最多关3次
+  1. <input type="checkbox"/>&emsp;3次仍没有关到位,将不在进行再次关阀
+
+1. ###自动开关阀功能
+  1. <input type="checkbox"/>&emsp;阀门开启状态：关阀量是否小于总开阀的1/3
+  1. <input type="checkbox"/>&emsp;阀门关闭状态:开阀量是否小于总总关阀的1/3
+  1. <input type="checkbox"/>&emsp;最后一次动作时间加长2倍
+  1. <input type="checkbox"/>&emsp;动作时脉冲中断是否进入
+  1. <input type="checkbox"/>&emsp;阀门自动开关时间是否准点
+  1. <input type="checkbox"/>&emsp;（测试第8天、4天、12天自动开关）
+  1. <input type="checkbox"/>&emsp;阀门有开、关阀动作时，是否以此为起始点
+
+1. ###检查功能
+  1. <input type="checkbox"/>&emsp;累计用气量低于0.08无检查功能
+  1. <input type="checkbox"/>&emsp;关阀后无检查功能
+  1. <input type="checkbox"/>&emsp;100个负计数出检查
+  1. <input type="checkbox"/>&emsp;到设置值整屏闪烁关阀，按键开阀
+  1. <input type="checkbox"/>&emsp;开阀后“检查”标志闪烁
+  1. <input type="checkbox"/>&emsp;有脉冲进入后标志消失
+
+1. ###低电压检测功能
+> **一级电压检测**:每分钟检测一次电压，阀门动作结束后10秒内不检测。当检测到芯片电压值在3.0到3.3V时，液晶屏整屏闪烁阀门关闭，按键可开阀，但是“欠压”闪烁，机器进入二级电压检测。
+> **二级电压检测**: 每分钟检测一次电压，阀门动作结束后10秒内不检测。如果发现电压值小于3.0V后，阀门将被锁死，电压低常显不闪烁，按键、插卡均不能打开阀门。
+
+ - **测试内容（一级检测）**
+     1. <input type="checkbox"/>&emsp;检测值小于3.3V,大于3.0V液晶屏整屏
+     1. <input type="checkbox"/>&emsp;闪烁：出“剩余量+欠压”关阀
+     1. <input type="checkbox"/>&emsp;按键开阀，开阀后“欠压”标志闪烁
+     1. <input type="checkbox"/>&emsp;检测值直接小于3.0V,阀门关死
+
+ - **测试内容（二级检测）**
+     1. <input type="checkbox"/>&emsp;小于3.0V,阀门关死
+     1. <input type="checkbox"/>&emsp;机器能否正常工作(读卡,减数等)
+     1. <input type="checkbox"/>&emsp;低于2.0V时查看机器是否停止一切工作
+
+
+1. ###警告关阀
+> 警告关阀可分成三级：整屏闪烁、标志闪烁、标志常显不闪烁；
+> 整屏闪烁：机器检测到警告信息后，液晶屏整屏闪烁并关阀，所有的整屏警告标志按键均可开阀；
+> 标志闪烁：出现整屏闪烁按键可开阀，整屏闪烁转为只有标志闪烁。
+> 标志常显：说明机器已有故障或必须更换电池或必须购气，阀门将自动关闭，按键、插卡均不能开阀。
+
+ - **测试内容（整屏闪烁）**
+     1. <input type="checkbox"/>&emsp;过流报警：出“0+剩余量”闪烁且关阀
+     1. <input type="checkbox"/>&emsp;防磁报警：出“L+剩余量”闪烁且关阀
+     1. <input type="checkbox"/>&emsp;购气报警：出“剩余量+购气＂闪烁且关阀
+     1. <input type="checkbox"/>&emsp;检查报警：出“剩余量+检查”闪烁且关阀
+     1. <input type="checkbox"/>&emsp;电压低报警：出“剩余量+电压低”闪烁且关阀
+     1. <input type="checkbox"/>&emsp;拔卡报警：出“剩余量＋读卡错”闪烁且关阀
+
+ - **测试内容（标志闪烁）**
+     1. <input type="checkbox"/>&emsp;购气标志：阀门打开后，只有购气标志闪烁
+     1. <input type="checkbox"/>&emsp;检查标志：阀门打开后，只有检查标志闪烁
+     1. <input type="checkbox"/>&emsp;电压低标志：阀门打开后，只有电压低标志闪烁
+
+ - **测试内容（标志常显）**
+     1. <input type="checkbox"/>&emsp;购气标志：剩余量为0时标志常显
+     1. <input type="checkbox"/>&emsp;检查标志：二级检查后标志常显
+     1. <input type="checkbox"/>&emsp;电压低标志：二级电压低后标志常显
+
+---
+
+卡片测试
+--------
+> 此部分主要测试各种功能卡、设置卡以及卡片的读写操作。
+
+1. ###全清卡
+> **说明**：当插了全清卡后，机器将自动复位重新上电，上电后设置恢复出厂值。全清卡主要测试以下内容：能否清除每一台机器内所有用户数据和所有设置信息。需要测试以下数据*是否被清除*。
+	------|------|------|------|------
+	<input type="checkbox"/>&emsp;累计量|<input type="checkbox"/>&emsp;剩余量|<input type="checkbox"/>&emsp;负计数|<input type="checkbox"/>&emsp;设置信息|<input type="checkbox"/>&emsp;重新复位
+	<input type="checkbox"/>&emsp;临时卡次数|<input type="checkbox"/>&emsp;维修记录|<input type="checkbox"/>&emsp;用户编号|<input type="checkbox"/>&emsp;标志信息
+
+1. ###ID号设置卡
+> 表具设置初始表号，需要开户卡才能更换表号。
+  1. <input type="checkbox"/>&emsp;设置表号
+  1. <input type="checkbox"/>&emsp;开户卡能更换表号
+  1. <input type="checkbox"/>&emsp;已有表号不能重新设置
+
+1. ###临时卡
+> 临时卡主要用于试气点火、维修、测试等。
+  1. <input type="checkbox"/>&emsp;临时数据是否累加
+  1. <input type="checkbox"/>&emsp;临时卡7次机会
+  1. <input type="checkbox"/>&emsp;有用户气量时 临时卡不读
+  1. <input type="checkbox"/>&emsp;临时卡次数掉电要保存
+
+1. ###设置卡
+> 设置机器地区、密码等信息。分别测试1/2号设置卡。
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;设置地址
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;是否常显
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;小数位数
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;阀门动作时间（秒）
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;阀门自动开关（天）
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;检查时间（天）
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;过流延时（秒）
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;购气下限值
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;低于购气下限值是否关阀
+  1. <input type="checkbox"/>&emsp;<input type="checkbox"/>&emsp;未拔卡是否关阀
+  
+
+1. ###异常卡
+> 异常情况，或者破坏性测试。
+  1. <input type="checkbox"/>&emsp;A、B对应编号控制器，插入铁片，控制器报ERR-09
+  1. <input type="checkbox"/>&emsp;C、D对应编号控制器，插入异常卡P，控制器报ERR-09
+
+1. ###用户卡测试
+> 卡类型的详细说明参见[这里](#tools)。根据测试结果，选择是否在**◻**打勾![](Checkmark.png)。
+  1. <input type="checkbox"/>&emsp;A、B、C、D卡插入全新（插02设置卡）对应编号控制器(无绑定用户卡)，数据可读。
+  1. <input type="checkbox"/>&emsp;A、B卡写气量29.99后插入对应控制器，数据能累加。
+  1. <input type="checkbox"/>&emsp;C、D卡写气量10000.99后插入对应控制器，数据不能累加，此时报ERR-08。
+  1. <input type="checkbox"/>&emsp;A控制器(已插过A卡)插开通卡后，插J卡读数据。
+  1. <input type="checkbox"/>&emsp;B控制器插C卡，不同编号应不读，此时报ERR-07，重新上电后，控制器查看是否存在卡号（上电后第4屏的数据应为B卡号）。
+  1. <input type="checkbox"/>&emsp;C控制器插I卡，不同软码不读，此时报ERR-06。
+  1. <input type="checkbox"/>&emsp;D控制器插G卡，不同小数位数不读，此时报ERR-16。
+  1. <input type="checkbox"/>&emsp;E卡片(数据BCD格式错)插A控制器,报ERR-20错，并清除数据，重新插卡报NO-Data。
+  1. <input type="checkbox"/>&emsp;F卡片(数据校验和错) 插B控制器,报NO-Data错，并清除数据，到读卡工具读卡检查数据是否被清除。
+  1. <input type="checkbox"/>&emsp;C编号控制器(已插过C卡)插开通卡后，插J卡可读数据。
+  1. <input type="checkbox"/>&emsp;插全清卡，再插02号设置卡，重新对各控制器插A、B、C、D卡（此卡已经插过一次控制器卡）此时报ERR-17。
+  1. <input type="checkbox"/>&emsp;插全清卡，再插01号设置卡，重新对各控制器插A、B、C、D卡（此卡已经插过一次控制器卡）此时报ERR-07，同时控制器上的剩余气量小数位为1位。
+
+---
+
+中断处理
+--------
+
+1. <input type="checkbox"/>&emsp;自动开关与插卡
+1. <input type="checkbox"/>&emsp;插卡与警告关阀
+1. <input type="checkbox"/>&emsp;插卡与减数,警告与减数
+1. <input type="checkbox"/>&emsp;插卡与窃气
+1. <input type="checkbox"/>&emsp;窃气与减数
+1. <input type="checkbox"/>&emsp;按键与减数
+1. <input type="checkbox"/>&emsp;出现警告关阀后,中断进入(电压低中断,脉冲中断,查询中断等)
+
+电流测试
+--------
+
+###整机测试电流(mA)-- 驱动电路检测
+1. <input type="checkbox"/>&emsp;4.5V供电 0欧负载最大输出电流，允许范围在300-600mA。&emsp;&emsp;&emsp;<input type="text" />
+1. <input type="checkbox"/>&emsp;4.5V供电10欧负载最大输出电流，允许范围在 90-273mA。&emsp;&emsp;&emsp;<input type="text" />
+1. <input type="checkbox"/>&emsp;3.9V供电 0欧负载最大输出电流，允许范围在200-450mA。&emsp;&emsp;&emsp;<input type="text" />
+1. <input type="checkbox"/>&emsp;3.9V供电10欧负载最大输出电流，允许范围在128-215mA。&emsp;&emsp;&emsp;<input type="text" />
+1. <input type="checkbox"/>&emsp;3.6V供电 0欧负载最大输出电流，允许范围在180-380mA。&emsp;&emsp;&emsp;<input type="text" />
+1. <input type="checkbox"/>&emsp;3.6V供电10欧负载最大输出电流，允许范围在112-188mA。&emsp;&emsp;&emsp;<input type="text" />
+1. <input type="checkbox"/>&emsp;3.3V供电 0欧负载最大输出电流，允许范围在 75-320mA。&emsp;&emsp;&emsp;<input type="text" />
+1. <input type="checkbox"/>&emsp;3.3V供电10欧负载最大输出电流，允许范围在 90-160mA。&emsp;&emsp;&emsp;<input type="text" />
+
+&emsp;&emsp;&emsp;*异常说明*&emsp;<input style="width:70%" type="text" />
+
+###整机测试电流(uA) --部件闭合
+
+1. <input type="checkbox"/>&emsp;鸣叫，允许范围在120uA。
+1. <input type="checkbox"/>&emsp;计数管常闭，允许范围在65uA。
+1. <input type="checkbox"/>&emsp;防磁管常闭，允许范围在70uA。
+1. <input type="checkbox"/>&emsp;卡片不拔出，允许范围在75uA。
+1. <input type="checkbox"/>&emsp;按键常闭，允许范围在52uA。
+
+###整机测试电流(uA)-- 整机
+
+1. <input type="checkbox"/>&emsp;静态电流，允许范围在45-70uA。
+1. <input type="checkbox"/>&emsp;静态开显示电流，允许范围在50-70uA。
+1. <input type="checkbox"/>&emsp;工作电流(除开马达)，允许范围在80uA。
+
+抗攻击能力
+----------
+- 静电放电部位:*整机外壳连续放电*
+
+&emsp;&emsp;&emsp;&emsp;&emsp;
+<input type="checkbox"/>&emsp;4KV&emsp;
+<input type="checkbox"/>&emsp;6KV&emsp;
+<input type="checkbox"/>&emsp;15KV&emsp;
+<input type="checkbox"/>&emsp;20KV&emsp;
+
+- 静电放电部位:*电池正负极，单次放电*
+
+&emsp;&emsp;&emsp;&emsp;&emsp;
+<input type="checkbox"/>&emsp;4KV&emsp;
+<input type="checkbox"/>&emsp;6KV&emsp;
+<input type="checkbox"/>&emsp;15KV&emsp;
+<input type="checkbox"/>&emsp;20KV&emsp;
+
+- 静电放电部位:*铁片插入卡座内，攻击铁片，单次放电*
+
+&emsp;&emsp;&emsp;&emsp;&emsp;
+<input type="checkbox"/>&emsp;4KV&emsp;
+<input type="checkbox"/>&emsp;6KV&emsp;
+<input type="checkbox"/>&emsp;15KV&emsp;
+<input type="checkbox"/>&emsp;20KV&emsp;
+
+---
+
+法拉电容可靠性
+----------------
+1. <input type="checkbox"/>&emsp;电压4.2V是否正常关阀
+1. <input type="checkbox"/>&emsp;电压3.6V是否正常关阀
+1. <input type="checkbox"/>&emsp;电压3.3V是否正常关阀
+
+---
+
+``````
+▶ ai libtext-multimarkdown-perl
+``````
+
+------------|----------|----------
+测试员：<input type="text"/>|审核：<input type="text"/>|审批：<input type="text"/>
+日期：&emsp;<input type="text"/>|版本：<input type="text"/>|编号：<input type="text"/>
+
