@@ -7,6 +7,8 @@
 合泰芯片IC卡表功能测试方案
 ========================
 
+---
+
 ## 错误提示说明
 显示		|		说明
 ----------------- | ------------------:
@@ -185,9 +187,10 @@ Err-201		|		储器读写出错
 
 1. ###全清卡
 > **说明**：当插了全清卡后，机器将自动复位重新上电，上电后设置恢复出厂值。全清卡主要测试以下内容：能否清除每一台机器内所有用户数据和所有设置信息。需要测试以下数据*是否被清除*。
-	------|------|------|------|------
-	<input type="checkbox"/>&emsp;累计量|<input type="checkbox"/>&emsp;剩余量|<input type="checkbox"/>&emsp;负计数|<input type="checkbox"/>&emsp;设置信息|<input type="checkbox"/>&emsp;重新复位
-	<input type="checkbox"/>&emsp;临时卡次数|<input type="checkbox"/>&emsp;维修记录|<input type="checkbox"/>&emsp;用户编号|<input type="checkbox"/>&emsp;标志信息
+	------|------|------|------
+	<input type="checkbox"/>累计量|<input type="checkbox"/>剩余量|<input type="checkbox"/>负计数|<input type="checkbox"/>设置信息
+	<input type="checkbox"/>临时卡次数|<input type="checkbox"/>维修记录|<input type="checkbox"/>用户编号|<input type="checkbox"/>标志信息
+	<input type="checkbox"/>重新复位|
 
 1. ###ID号设置卡
 > 表具设置初始表号，需要开户卡才能更换表号。
@@ -253,16 +256,18 @@ Err-201		|		储器读写出错
 --------
 
 ###整机测试电流(mA)-- 驱动电路检测
-1. <input type="checkbox"/>&emsp;4.5V供电 0欧负载最大输出电流，允许范围在300-600mA。&emsp;&emsp;&emsp;<input type="text" />
-1. <input type="checkbox"/>&emsp;4.5V供电10欧负载最大输出电流，允许范围在 90-273mA。&emsp;&emsp;&emsp;<input type="text" />
-1. <input type="checkbox"/>&emsp;3.9V供电 0欧负载最大输出电流，允许范围在200-450mA。&emsp;&emsp;&emsp;<input type="text" />
-1. <input type="checkbox"/>&emsp;3.9V供电10欧负载最大输出电流，允许范围在128-215mA。&emsp;&emsp;&emsp;<input type="text" />
-1. <input type="checkbox"/>&emsp;3.6V供电 0欧负载最大输出电流，允许范围在180-380mA。&emsp;&emsp;&emsp;<input type="text" />
-1. <input type="checkbox"/>&emsp;3.6V供电10欧负载最大输出电流，允许范围在112-188mA。&emsp;&emsp;&emsp;<input type="text" />
-1. <input type="checkbox"/>&emsp;3.3V供电 0欧负载最大输出电流，允许范围在 75-320mA。&emsp;&emsp;&emsp;<input type="text" />
-1. <input type="checkbox"/>&emsp;3.3V供电10欧负载最大输出电流，允许范围在 90-160mA。&emsp;&emsp;&emsp;<input type="text" />
 
-&emsp;&emsp;&emsp;*异常说明*&emsp;<input style="width:70%" type="text" />
+结果|测试|记录值
+:---:|---------------------|:------------------------:
+<input type="checkbox"/>|4.5V供电 0欧负载最大输出电流，允许范围在300-600mA。|<input type="text" />
+<input type="checkbox"/>|4.5V供电10欧负载最大输出电流，允许范围在 90-273mA。|<input type="text" />
+<input type="checkbox"/>|3.9V供电 0欧负载最大输出电流，允许范围在200-450mA。|<input type="text" />
+<input type="checkbox"/>|3.9V供电10欧负载最大输出电流，允许范围在128-215mA。|<input type="text" />
+<input type="checkbox"/>|3.6V供电 0欧负载最大输出电流，允许范围在180-380mA。|<input type="text" />
+<input type="checkbox"/>|3.6V供电10欧负载最大输出电流，允许范围在112-188mA。|<input type="text" />
+<input type="checkbox"/>|3.3V供电 0欧负载最大输出电流，允许范围在 75-320mA。|<input type="text" />
+<input type="checkbox"/>|3.3V供电10欧负载最大输出电流，允许范围在 90-160mA。|<input type="text" />
+*异常说明*|<input style="width:100%" type="text" />||
 
 ###整机测试电流(uA) --部件闭合
 
@@ -314,11 +319,7 @@ Err-201		|		储器读写出错
 
 ---
 
-``````
-▶ ai libtext-multimarkdown-perl
-``````
-
 ------------|----------|----------
-测试员：<input type="text"/>|审核：<input type="text"/>|审批：<input type="text"/>
-日期：&emsp;<input type="text"/>|版本：<input type="text"/>|编号：<input type="text"/>
+测试员：<input style="width:50%" type="text"/>|审核：<input style="width:50%" type="text"/>|审批：<input style="width:50%" type="text"/>
+日期：&emsp;<input style="width:50%" type="text"/>|版本：<input style="width:50%" type="text"/>|编号：<input style="width:50%" type="text"/>
 

@@ -63,8 +63,14 @@ blockquote {
 	font-style: italic;
 }
 
+div{
+	text-align: center;
+}
+table {
+	margin: auto;
+}
 table,th,td {
-	padding: 5px 30px 5px 30px;
+	padding: 5px 10px 5px 10px;
 }
 table th {
 	background-color:#080;
