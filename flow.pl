@@ -60,13 +60,11 @@ for $j (0 .. $#contents){
 	my $next=(/\d+\ >/ || $_ eq "")?$q:fetch01seg($_);
 
 	if($byes ne ""){
-		$goto=fetch01seg("$line $byes");
-		normal_segment($byes); if($bno){ saveout($next); }
+		$goto=normal_segment($byes);
 	}else{ $goto=$next; }
 	push @output,"$judge:s->$goto".'[label="Yes"];'."\n";
 	if($bno ne ""){
-		$goto=fetch01seg("$line $bno");
-		normal_segment($bno);
+		$goto=normal_segment($bno);
 	}else{ $goto=$next; }
 	push @output,"$judge:e->$goto".'[label="No" style=dotted];'."\n";
 }
@@ -100,17 +98,18 @@ sub normal_segment(){
 			$_.="_$line"; $_="\"$_\"" if /[- .]/;
 			$out.="$_->"; next;}
 		if($_ eq "0"){
-			push @output,$out.$q.$end if $out=~/->/;
-			$out='';
+#            push @output,$out.$q.$end if $out=~/->/;
+#            $out='';
+			return $q;
 		}else{
 			$d=0; $d=$_;
-			for $line (@contents){
-				$_=$line; s/\ .*//;
+			for $sline (@contents){
+				$_=$sline; s/\ .*//;
 				if($d>$_){next;}
-				$_=fetch01seg($line);
+				$_=fetch01seg($sline);
 #            print "fetch....$_....\n";
-				saveout($_);
-				return;
+#                saveout($_);
+				return $_;
 			}
 		}
 		break;
