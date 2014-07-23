@@ -1,7 +1,7 @@
 <head>
 <title>MarkDown File</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link href="bin/mkd.css" rel="stylesheet" type="text/css">
+<link href="mkd.css" rel="stylesheet" type="text/css">
 </head>
 
 使用 Markdown 语法写文档

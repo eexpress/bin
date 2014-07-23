@@ -79,7 +79,7 @@ saveout($q); setshape($q,$EXIT);
 #--------------------------------
 unshift @output,"
 digraph G {
-node [peripheries=2 shape=box style=\"rounded,filled\" fontname=$font] label=\"$ARGV[0]\"
+node [peripheries=2 shape=box style=\"rounded,filled\" fontname=\"$font\"] label=\"$ARGV[0]\"
 ";
 push @output,"}\n}\n";
 open OUT,">$base.dot"; print OUT @output;close OUT;
