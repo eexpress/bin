@@ -24,7 +24,16 @@ int main(void)
 	DDRB=0b10111111;
 	DDRB=0x3f;
 	cntDelay=60; cntW=0;
+//	Internal 128 kHz Oscillator, CKSEL[1:0]=11, fuses unprogrammed. SUT[1:0]=00?
+//	The device is shipped with CKSEL = “10”, SUT = “10”, and CKDIV8 programmed.
+//	If CKDIV8 Fuse is unprogrammed, the CLKPS bits will be reset to “0000”.Clock Division Factor=1.
 	///启动秒中断
+	///CSn[2:0]=6 T0 Prescaler /1024
+	///COM0A[1:0] 0 1 Toggle OC0A on Compare Match
+	///WGM02 = 1: Toggle OC0A on Compare Match.
+	//Figure 11-11. Timer/Counter Timing Diagram, Clear Timer on Compare Match mode, with Prescaler (f clk_I/O /8)
+	///CTC Mode WGM0[2:0] = 2, OCR0A=TOP 128?
+	//TIFR0:OCF0A 中断 TIM0_COMPA
 
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	cli();
