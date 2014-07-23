@@ -24,6 +24,10 @@ h1,h2,h3,strong {
 	color: 0;
 	text-shadow: 1px 1px 1px #888;
 }
+input {
+	margin-left: 10px;
+	margin-right: 10px;
+}
 em {
 	text-decoration:underline;
 	font-weight:bold;
