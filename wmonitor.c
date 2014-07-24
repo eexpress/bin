@@ -6,6 +6,8 @@
 #include <avr/io.h>
 /*#include <avr/iotn13a.h>*/
 #include <avr/interrupt.h>
+#include <avr/sleep.h>
+#include <avr/sfr_defs.h>
 
 #define F_CPU	8000000UL
 
@@ -66,8 +68,11 @@ void starttimer(void){
 
 ISR(ANA_COMP_vect){
 	//6 0x0005 ANA_COMP 模拟比较器
+/*    (ACSR,ACO);*/
+/*    loop_until_bit_is_clear(ACSR,ACO);*/
+	set(PINB,MainSupply);
 }
-ISR(TIMER0_COMPA_vect){		///秒中断
+ISR(TIM0_COMPA_vect){		///秒中断
 	//7 0x0006 TIM0_COMPA 定时器 / 计数器比较匹配 A
 	if(cntDelay){cntDelay--;}else{
 		///监测呼吸灯数据
@@ -77,6 +82,7 @@ ISR(TIMER0_COMPA_vect){		///秒中断
 }
 ISR(PCINT0_vect){
 	//3 0x0002 PCINT0 外部中断请求 1
+	set(PINB,WirelessPin);
 }
 
 void Reset_Wireless(void){	///重启无线模块
@@ -104,11 +110,28 @@ int main(void)
 	starttimer();	///启动秒中断
 	startint();
 
-	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+	set_sleep_mode(SLEEP_MODE_IDLE);
+	//CPU 停止运行,而模拟比较器、 ADC、定时器 / 计数器、看门狗和中断系统继续工作。这个休眠模式只停止了 clk CPU 和 clk FLASH ,其他时钟则继续工作。
 	cli();
 	while(1){sleep_enable();sei();}
 	return 0;
 
 }
-/*▶ avr-gcc -c bin/wmonitor.c -o wm -mmcu=attiny13a -g -O1 -Wall*/
+/*▶ avr-gcc bin/wmonitor.c -mmcu=attiny13a -g -O1 -Wall -Wextra -c 生成obj*/
+/*▶ avr-gcc bin/wmonitor.c -mmcu=attiny13a -g -O1 -Wall -Wextra -S 生成asm*/
+/*▶ avr-gcc bin/wmonitor.c -mmcu=attiny13a -g -O1 -Wall -Wextra -c -Wa,-adlhn>xx.lst 生成带源码的汇编*/
+/*▶ avr-objdump -dS a.out>a.lst 生成带源码的汇编*/
+/*▶ avr-objcopy -j .text -j .data -O ihex a.out a.hex */
+/*▶ avr-size --mcu=attiny13a -C*/
+/*AVR Memory Usage*/
+/*----------------*/
+/*Device: attiny13a*/
+
+/*Program:     262 bytes (25.6% Full)*/
+/*(.text + .data + .bootloader)*/
+
+/*Data:          2 bytes (3.1% Full)*/
+/*(.data + .bss + .noinit)*/
+
+
 
