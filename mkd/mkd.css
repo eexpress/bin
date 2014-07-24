@@ -5,6 +5,7 @@ body {
 /*    margin-left: 5%;*/
 /*    margin-right: 5%;*/
 	background-color: #eee;
+	font-family: 'URW Gothic L', 'Vera Sans YuanTi', Sans-serif;
 }
 a {
 	color: blue;
@@ -20,7 +21,7 @@ h1 {
 	margin-top: 50px;
 	margin-bottom: 50px;
 }
-h1,h2,h3,strong {
+h1,h2,h3,strong,td {
 	color: 0;
 	text-shadow: 1px 1px 1px #888;
 }
