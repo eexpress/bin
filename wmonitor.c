@@ -14,9 +14,19 @@
 #define set(a,b)		a|=(1<<b)
 #define setn(a,b,c)		a|=(c<<b)
 #define clr(a,b)		a&=~(1<<b)
+#define tst(a,b)		a&(1<<b)
 
-#define WirelessPin PB3
-#define MainSupply PB4
+/*#define WirelessPin 3*/
+/*#define MainSupplyPin 4*/
+
+/*#define Woff PORTB&=~(1<<3)*/
+/*#define Won PORTB|=(1<<3)*/
+/*#define Moff PORTB&=~(1<<4)*/
+/*#define Mon PORTB|=(1<<4)*/
+#define Woff	clr(PORTB,3)
+#define Won		set(PORTB,3)
+#define Moff	clr(PORTB,4)
+#define Mon		set(PORTB,4)
 
 unsigned char cntW;
 unsigned char cntDelay;
@@ -68,9 +78,8 @@ void starttimer(void){
 
 ISR(ANA_COMP_vect){
 	//6 0x0005 ANA_COMP 模拟比较器
-/*    (ACSR,ACO);*/
+	if(tst(ACSR,ACO)) Moff; else Mon;
 /*    loop_until_bit_is_clear(ACSR,ACO);*/
-	set(PINB,MainSupply);
 }
 ISR(TIM0_COMPA_vect){		///秒中断
 	//7 0x0006 TIM0_COMPA 定时器 / 计数器比较匹配 A
@@ -78,15 +87,15 @@ ISR(TIM0_COMPA_vect){		///秒中断
 		///监测呼吸灯数据
 	}
 	cntW--;
-	if(!cntW){set(PORTB,WirelessPin);cntDelay=60;}
+	if(!cntW){Won;cntDelay=60;}
 }
 ISR(PCINT0_vect){
 	//3 0x0002 PCINT0 外部中断请求 1
-	set(PINB,WirelessPin);
+	Won;
 }
 
 void Reset_Wireless(void){	///重启无线模块
-	clr(PORTB,WirelessPin);
+	Woff;
 	cntW=3;
 }
 
@@ -105,7 +114,6 @@ int main(void)
 	WDTCR=0;		//关闭 WDT。
 	//0 1 1 0 128K (131072) 周期 1.0 s
 	//WDT的中断，其实也可以作RTC。
-/*    set(PINB,WirelessPin); set(PINB,MainSupply);*/
 	cntDelay=60; cntW=0;
 	starttimer();	///启动秒中断
 	startint();
@@ -117,21 +125,8 @@ int main(void)
 	return 0;
 
 }
-/*▶ avr-gcc bin/wmonitor.c -mmcu=attiny13a -g -O1 -Wall -Wextra -c 生成obj*/
-/*▶ avr-gcc bin/wmonitor.c -mmcu=attiny13a -g -O1 -Wall -Wextra -S 生成asm*/
-/*▶ avr-gcc bin/wmonitor.c -mmcu=attiny13a -g -O1 -Wall -Wextra -c -Wa,-adlhn>xx.lst 生成带源码的汇编*/
-/*▶ avr-objdump -dS a.out>a.lst 生成带源码的汇编*/
+/*▶ avr-gcc bin/wmonitor.c -mmcu=attiny13a -g -O1 -Wall -Wextra*/
+/* -c 生成obj; -S 生成asm*/
+/*▶ avr-objdump -dS >a.lst			//生成带源码的汇编*/
 /*▶ avr-objcopy -j .text -j .data -O ihex a.out a.hex */
-/*▶ avr-size --mcu=attiny13a -C*/
-/*AVR Memory Usage*/
-/*----------------*/
-/*Device: attiny13a*/
-
-/*Program:     262 bytes (25.6% Full)*/
-/*(.text + .data + .bootloader)*/
-
-/*Data:          2 bytes (3.1% Full)*/
-/*(.data + .bss + .noinit)*/
-
-
-
+/*▶ avr-size --mcu=attiny13a -C		//AVR Memory Usage*/
