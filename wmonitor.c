@@ -3,6 +3,8 @@
 /*AD检测到外电掉电，就检查呼吸灯，如果呼吸灯失效，表示无线模块停止，这时候继续等外电稳定上电，5s后，然后发3s的低脉冲，重启无线模块。*/
 /*平时检查呼吸灯，如果无线模块死机，切断主电源5s，再上电，3s后，重启无线模块。等待60秒，才能再测呼吸灯。*/
 
+#include <avr/io.h>
+/*#include <avr/iotn13a.h>*/
 #include <avr/interrupt.h>
 
 #define F_CPU	8000000UL
@@ -108,3 +110,5 @@ int main(void)
 	return 0;
 
 }
+/*▶ avr-gcc -c bin/wmonitor.c -o wm -mmcu=attiny13a -g -O1 -Wall*/
+
