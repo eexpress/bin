@@ -123,6 +123,8 @@ ERR-201		|		储器读写出错
   1. <input type="checkbox"/>3次仍没有关到位,将不在进行再次关阀
 
 1. ###自动开关阀功能
+> 设计验证测试的情况，才进行此部分测试。常规测试，可跳过此步骤。
+
   1. <input type="checkbox"/>阀门开启状态：关阀量是否小于总开阀的1/3
   1. <input type="checkbox"/>阀门关闭状态:开阀量是否小于总总关阀的1/3
   1. <input type="checkbox"/>最后一次动作时间加长2倍
@@ -132,6 +134,8 @@ ERR-201		|		储器读写出错
   1. <input type="checkbox"/>阀门有开、关阀动作时，是否以此为起始点
 
 1. ###检查功能
+> 设计验证测试的情况，才进行此部分测试。常规测试，可跳过此步骤。
+
   1. <input type="checkbox"/>累计用气量低于0.08无检查功能
   1. <input type="checkbox"/>关阀后无检查功能
   1. <input type="checkbox"/>100个负计数出检查
@@ -238,24 +242,26 @@ ERR-201		|		储器读写出错
   1. <input type="checkbox"/>B控制器插C卡，不同编号应不读，此时报ERR-07，重新上电后，控制器查看是否存在卡号（上电后第4屏的数据应为B卡号）。
   1. <input type="checkbox"/>C控制器插I卡，不同软码不读，此时报ERR-06。
   1. <input type="checkbox"/>D控制器插G卡，不同小数位数不读，此时报ERR-16。
-  1. <input type="checkbox"/>E卡片(数据BCD格式错)插A控制器,报ERR-20错，并清除数据，重新插卡报NO-Data。
-  1. <input type="checkbox"/>F卡片(数据校验和错) 插B控制器,报NO-Data错，并清除数据，到读卡工具读卡检查数据是否被清除。
+  1. <input type="checkbox"/>A控制器插入开通卡，再插E卡片(数据BCD格式错)，报ERR-20错，并清除数据，重新插卡报NO-Data。
+  1. <input type="checkbox"/>F卡片(数据校验和错) 插B控制器,报ERR-20错，并清除数据，到读卡工具读卡检查数据是否被清除。
   1. <input type="checkbox"/>C编号控制器(已插过C卡)插开通卡后，插J卡可读数据。
   1. <input type="checkbox"/>插全清卡，再插02号设置卡，重新对各控制器插A、B、C、D卡（此卡已经插过一次控制器卡）此时报ERR-17。
-  1. <input type="checkbox"/>插全清卡，再插01号设置卡，重新对各控制器插A、B、C、D卡（此卡已经插过一次控制器卡）此时报ERR-07，同时控制器上的剩余气量小数位为1位。
+  1. <input type="checkbox"/>插全清卡，再插01号设置卡，重新对各控制器插A、B、C、D卡（此卡已经插过一次控制器卡）此时报ERR-06，同时控制器上的剩余气量小数位为1位。
 
 ---
 
 中断处理
 --------
 
-1. <input type="checkbox"/>自动开关与插卡
-1. <input type="checkbox"/>插卡与警告关阀
-1. <input type="checkbox"/>插卡与减数,警告与减数
-1. <input type="checkbox"/>插卡与窃气
-1. <input type="checkbox"/>窃气与减数
-1. <input type="checkbox"/>按键与减数
-1. <input type="checkbox"/>出现警告关阀后,中断进入(电压低中断,脉冲中断,查询中断等)
+1. <input type="checkbox"/>**自动开关与插卡:** 在自动开关阀门的情况下，做插卡操作，看读写卡与开关阀门的操作是否有冲突。
+1. <input type="checkbox"/>**插卡与警告关阀:** 在插卡操作的情况下，出现警告关阀的条件，比如有防磁警告时，看读写卡操作与关阀操作是否有冲突。在读卡不拔出的情况下，15秒后会鸣叫警告，超过30秒将警告性关阀，屏幕闪烁，提示“卡错”。
+1. <input type="checkbox"/>**插卡与减数,警告与减数:** 在插卡操作的情况下，又出现减数（采样板有计数脉冲输出时）的条件，看读写卡操作与气量减数的操作是否有冲突。
+1. <input type="checkbox"/>**插卡与窃气:** 在插卡的条件下，又出现了窃气的条件（可以简单的认为是有防磁警告时）,看读写卡操作与防窃气功能（有防磁警告时关阀的动作）是否有正常。
+1. <input type="checkbox"/>**窃气与减数:** 在防磁等警告性关闭阀门的时候，若继续有计数脉冲输入，看计数功能是否正常。
+1. <input type="checkbox"/>**按键与减数:** 在连续按键和单次按键的情况下，若继续有计数脉冲输出，看计数功能是否正常。
+1. <input type="checkbox"/>**警告关阀后的中断:** 出现警告关阀后,中断进入(电压低中断,脉冲中断,查询中断等)，看系统能不能正确反应。
+
+异常情况：<textarea rows="2" cols="50"></textarea>
 
 电流测试
 --------
@@ -266,8 +272,6 @@ ERR-201		|		储器读写出错
 :---:|---------------------|:------------------------:
 <input type="checkbox"/>|4.5V供电 0欧负载最大输出电流，允许范围在300-600mA。|<input type="text" />
 <input type="checkbox"/>|4.5V供电10欧负载最大输出电流，允许范围在 90-273mA。|<input type="text" />
-<input type="checkbox"/>|3.9V供电 0欧负载最大输出电流，允许范围在200-450mA。|<input type="text" />
-<input type="checkbox"/>|3.9V供电10欧负载最大输出电流，允许范围在128-215mA。|<input type="text" />
 <input type="checkbox"/>|3.6V供电 0欧负载最大输出电流，允许范围在180-380mA。|<input type="text" />
 <input type="checkbox"/>|3.6V供电10欧负载最大输出电流，允许范围在112-188mA。|<input type="text" />
 <input type="checkbox"/>|3.3V供电 0欧负载最大输出电流，允许范围在 75-320mA。|<input type="text" />
@@ -276,40 +280,66 @@ ERR-201		|		储器读写出错
 
 ###整机测试电流(uA) --部件闭合
 
-1. <input type="checkbox"/>鸣叫，允许范围在120uA。
-1. <input type="checkbox"/>计数管常闭，允许范围在65uA。
-1. <input type="checkbox"/>防磁管常闭，允许范围在70uA。
-1. <input type="checkbox"/>卡片不拔出，允许范围在75uA。
-1. <input type="checkbox"/>按键常闭，允许范围在52uA。
+结果|测试|记录值
+:---:|---------------------|:------------------------:
+<input type="checkbox"/>|鸣叫，允许范围在约2mA。|<input type="text" />
+<input type="checkbox"/>|计数管常闭，允许范围在约65uA。|<input type="text" />
+<input type="checkbox"/>|防磁管常闭，允许范围在约70uA。|<input type="text" />
+<input type="checkbox"/>|卡片不拔出，允许范围在约100uA。|<input type="text" />
+<input type="checkbox"/>|按键常闭，允许范围在约100uA。|<input type="text" />
 
 ###整机测试电流(uA)-- 整机
 
-1. <input type="checkbox"/>静态电流，允许范围在45-70uA。
-1. <input type="checkbox"/>静态开显示电流，允许范围在50-70uA。
-1. <input type="checkbox"/>工作电流(除开马达)，允许范围在80uA。
+结果|测试|记录值
+:---:|---------------------|:------------------------:
+<input type="checkbox"/>|静态电流，允许范围在45-70uA。|<input type="text" />
+<input type="checkbox"/>|静态开显示电流，允许范围在50-70uA。|<input type="text" />
+<input type="checkbox"/>|工作电流(除开马达)，允许范围在80uA。|<input type="text" />
 
 抗攻击能力
 ----------
-- 静电放电部位:*整机外壳连续放电*
+> 需要记录的异常情况，比如：计数/防磁/欠压 等误动作；显示模糊/缺笔/无显示。
 
- - <input type="checkbox"/>4KV
-<input type="checkbox"/>6KV
-<input type="checkbox"/>15KV
-<input type="checkbox"/>20KV
+- 样机编号:A  <input type="text"/>
 
-- 静电放电部位:*电池正负次放电*
 
- - <input type="checkbox"/>4KV
-<input type="checkbox"/>6KV
-<input type="checkbox"/>15KV
-<input type="checkbox"/>20KV
+测试次数|4KV|6KV|15KV|20KV|放电部位
+-----------|-----|-----|-----|-----|------------------
+1|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|整机外壳连续放电
+2|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+3|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+异常情况：<textarea rows="2" cols="50"></textarea>||||||
 
-- 静电放电部位:*铁片插入，攻击铁片，单次放电*
+1|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|电池正负次放电
+2|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+3|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+异常情况：<textarea rows="2" cols="50"></textarea>||||||
 
- - <input type="checkbox"/>4KV
-<input type="checkbox"/>6KV
-<input type="checkbox"/>15KV
-<input type="checkbox"/>20KV
+1|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|铁片插入，攻击铁片，单次放电
+2|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+3|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+异常情况：<textarea rows="2" cols="50"></textarea>||||||
+
+
+- 样机编号:B  <input type="text"/>
+
+
+测试次数|4KV|6KV|15KV|20KV|放电部位
+-----------|-----|-----|-----|-----|------------------
+1|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|整机外壳连续放电
+2|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+3|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+异常情况：<textarea rows="2" cols="50"></textarea>||||||
+
+1|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|电池正负次放电
+2|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+3|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+异常情况：<textarea rows="2" cols="50"></textarea>||||||
+
+1|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|铁片插入，攻击铁片，单次放电
+2|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+3|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|<input type="checkbox"/>|
+异常情况：<textarea rows="2" cols="50"></textarea>||||||
 
 ---
 
