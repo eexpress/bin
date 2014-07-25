@@ -1,6 +1,5 @@
-/*无线模块启动后，需要60秒，才可以确定呼吸灯有效。*/
-/*上电后，等待60秒，才检测呼吸灯。*/
-/*AD检测到外电掉电，就检查呼吸灯，如果呼吸灯失效，表示无线模块停止，这时候继续等外电稳定上电，5s后，然后发3s的低脉冲，重启无线模块。*/
+/*上电/无线模块启动后，等待60秒，才检测呼吸灯。waitWireless*/
+/*检测到外电掉电，就检查呼吸灯，如果呼吸灯失效，表示无线模块停止，这时候继续等外电稳定上电，5s后，然后发3s的低脉冲，重启无线模块。*/
 /*平时检查呼吸灯，如果无线模块死机，切断主电源5s，再上电，3s后，重启无线模块。等待60秒，才能再测呼吸灯。*/
 
 #include <avr/io.h>
@@ -29,7 +28,7 @@
 #define Mon		set(PORTB,4)
 
 unsigned char cntW;
-unsigned char cntDelay;
+unsigned char waitWireless;
 
 void startint(void){
 	//PB2 (SCK/ADC1/T0/PCINT2)
@@ -83,11 +82,11 @@ ISR(ANA_COMP_vect){
 }
 ISR(TIM0_COMPA_vect){		///秒中断
 	//7 0x0006 TIM0_COMPA 定时器 / 计数器比较匹配 A
-	if(cntDelay){cntDelay--;}else{
+	if(waitWireless){waitWireless--;}else{
 		///监测呼吸灯数据
 	}
 	cntW--;
-	if(!cntW){Won;cntDelay=60;}
+	if(!cntW){Won;waitWireless=60;}
 }
 ISR(PCINT0_vect){
 	//3 0x0002 PCINT0 外部中断请求 1
@@ -114,7 +113,7 @@ int main(void)
 	WDTCR=0;		//关闭 WDT。
 	//0 1 1 0 128K (131072) 周期 1.0 s
 	//WDT的中断，其实也可以作RTC。
-	cntDelay=60; cntW=0;
+	waitWireless=60; cntW=0;
 	starttimer();	///启动秒中断
 	startint();
 
