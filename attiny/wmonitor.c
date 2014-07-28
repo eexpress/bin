@@ -8,7 +8,7 @@
 #include <avr/sleep.h>
 #include <avr/sfr_defs.h>
 
-#define F_CPU	8000000UL
+/*#define F_CPU	8000000UL*/
 
 #define set(a,b)		a|=(1<<b)
 #define setn(a,b,c)		a|=(c<<b)
@@ -29,7 +29,56 @@
 
 unsigned char cntW;
 unsigned char waitWireless;
+unsigned char loop;
 
+//------------------------------------------
+void startcomp(void){
+	clr(ACSR,ACIE);		//关cmp中断
+	set(ACSR,ACD);		//模拟器断电
+	set(DIDR0,AIN1D);	//AIN1的数字输入缓冲禁用
+	clr(ADCSRB,ACME);	//负极选 AIN1
+	//PB1 (MISO/AIN1/OC0B/INT0/PCINT1)
+	set(ACSR,ACBG);		//正极选基准源1.1V
+	//ACIS1 ACIS0 比较器输出变化即可触发中断。
+	//直接读取ACO，获得比较结果。
+	clr(ACSR,ACD);		//模拟器上电
+	set(ACSR,ACIE);		//开cmp中断
+
+}
+
+// 中断向量名在 /usr/lib/avr/include/avr/iotn13a.h
+ISR(ANA_COMP_vect){
+	//6 0x0005 ANA_COMP 模拟比较器
+	if(tst(ACSR,ACO)) Moff; else Mon;
+/*    loop_until_bit_is_clear(ACSR,ACO);*/
+}
+//------------------------------------------
+void starttimer(void){
+	TCCR0A=0b01000010;
+	//COM0A1 COM0A0 COM0B1 COM0B0 – – WGM01 WGM00
+	//A通道匹配时翻转OC0A引脚，B通道禁止，CTC模式
+	//PB0 (MOSI/AIN0/OC0A/PCINT0)
+/*    OCR0A=125;*/
+	//选择128k主频时，记125次为1秒，OC中断一次
+	OCR0A=293;
+	//选择300k主频时，300k/1024=292.9次为1秒，OC中断一次
+	set(TIMSK0,OCIE0A);
+	//开启输出比较的A通道中断
+	//– – – – OCIE0B OCIE0A TOIE0 –
+	TCCR0B=0b00000101;
+	//FOC0A FOC0B – – WGM02 CS02 CS01 CS00
+	//选择1024分频，并启动
+}
+
+ISR(TIM0_COMPA_vect){		///秒中断
+	//7 0x0006 TIM0_COMPA 定时器 / 计数器比较匹配 A
+	if(waitWireless){waitWireless--;}else{
+		///监测呼吸灯数据
+	}
+	cntW--;
+	if(!cntW){Won;waitWireless=60;}
+}
+//------------------------------------------
 void startint(void){
 	//PB2 (SCK/ADC1/T0/PCINT2)
 	PCMSK=0b100;
@@ -46,53 +95,39 @@ void startint(void){
 */
 }
 
-void startcomp(void){
-	clr(ACSR,ACIE);		//关cmp中断
-	set(ACSR,ACD);		//模拟器断电
-	set(DIDR0,AIN1D);	//AIN1的数字输入缓冲禁用
-	clr(ADCSRB,ACME);	//负极选 AIN1
-	//PB1 (MISO/AIN1/OC0B/INT0/PCINT1)
-	set(ACSR,ACBG);		//正极选基准源1.1V
-	//ACIS1 ACIS0 比较器输出变化即可触发中断。
-	//直接读取ACO，获得比较结果。
-	clr(ACSR,ACD);		//模拟器上电
-	set(ACSR,ACIE);		//开cmp中断
-
-}
-
-void starttimer(void){
-	TCCR0A=0b01000010;
-	//COM0A1 COM0A0 COM0B1 COM0B0 – – WGM01 WGM00
-	//A通道匹配时翻转OC0A引脚，B通道禁止，CTC模式
-	//PB0 (MOSI/AIN0/OC0A/PCINT0)
-	OCR0A=125;
-	//选择128k主频时，记125次为1秒，OC中断一次
-	set(TIMSK0,OCIE0A);
-	//开启输出比较的A通道中断
-	//– – – – OCIE0B OCIE0A TOIE0 –
-	TCCR0B=0b00000101;
-	//FOC0A FOC0B – – WGM02 CS02 CS01 CS00
-	//选择1024分频，并启动
-}
-
-ISR(ANA_COMP_vect){
-	//6 0x0005 ANA_COMP 模拟比较器
-	if(tst(ACSR,ACO)) Moff; else Mon;
-/*    loop_until_bit_is_clear(ACSR,ACO);*/
-}
-ISR(TIM0_COMPA_vect){		///秒中断
-	//7 0x0006 TIM0_COMPA 定时器 / 计数器比较匹配 A
-	if(waitWireless){waitWireless--;}else{
-		///监测呼吸灯数据
-	}
-	cntW--;
-	if(!cntW){Won;waitWireless=60;}
-}
 ISR(PCINT0_vect){
 	//3 0x0002 PCINT0 外部中断请求 1
 	Won;
 }
 
+//------------------------------------------
+void startwdt(void){
+	clr(MCUSR,WDRF); clr(WDTCR,WDE);	//禁止复位使能
+/*    WDTCR = 0b01000110;		//中断使能 1.0s*/
+	WDTCR = 0b00100001;		//中断禁止 8.0s
+	//WDTIF WDTIE **WDP3** WDCE WDE WDP2 WDP1 WDP0
+	//WDTON 熔丝位
+	loop=0;
+}
+
+ISR(WDT_vect){
+	//9 0x0008 WDT 看门狗暂停
+	/*
+	__disable_interrupt();
+	__watchdog_reset();
+	// 清除 MCUSR 寄存器中 WDRF
+	MCUSR &= ~(1<<WDRF);
+	// 在 WDCE 与 WDE 中写逻辑 1
+	// 保持旧预分频器设置防止无意暂停
+	WDTCR |= (1<<WDCE) | (1<<WDE);
+	// 关闭 WDT
+	WDTCR = 0x00;
+	__enable_interrupt();
+	*/
+	loop++;
+	if(loop&1){Won;}else{Woff;}
+}
+//------------------------------------------
 void Reset_Wireless(void){	///重启无线模块
 	Woff;
 	cntW=3;
@@ -101,16 +136,24 @@ void Reset_Wireless(void){	///重启无线模块
 //BODLEVEL [1..0] 熔丝位 01 2.7V
 //CKDIV8 要改1，不编程。
 //CKSEL[1:0]=11，改，选128k主频。
+/*CKSEL1..0  01 4.8 MHz*/
+/*SUT1..0 10 6 CK 14CK + 64 ms 电源缓慢上升*/
+
+//时钟方案：Fuse全不动。修改 时钟预分频寄存器- CLKPR
 
 //MCUSR 状态寄存器提供了有关引起 MCU 复位的复位源的信息。
 //– – – – WDRF BORF EXTRF PORF
 int main(void)
 {
+	cli();
+	startwdt();
+	CLKPR=0x80;		//CKDIV8熔丝位决定CLKPS位的初始值，不管。
+	CLKPR=0b0101;	//9.6M用32分配，主频300K。
 	//初始化端口
 	DDRB=	0b00011001;
 	PORTB=	0b11111000;		//未用引脚具有确定电平的方法是使能内部上拉电阻
 	PINB=	0xff;
-	WDTCR=0;		//关闭 WDT。
+/*    WDTCR=0;		//关闭 WDT。*/
 	//0 1 1 0 128K (131072) 周期 1.0 s
 	//WDT的中断，其实也可以作RTC。
 	waitWireless=60; cntW=0;
@@ -124,8 +167,3 @@ int main(void)
 	return 0;
 
 }
-/*▶ avr-gcc bin/wmonitor.c -mmcu=attiny13a -g -O1 -Wall -Wextra*/
-/* -c 生成obj; -S 生成asm*/
-/*▶ avr-objdump -dS >a.lst			//生成带源码的汇编*/
-/*▶ avr-objcopy -j .text -j .data -O ihex a.out a.hex */
-/*▶ avr-size --mcu=attiny13a -C		//AVR Memory Usage*/
