@@ -103,8 +103,8 @@ ISR(PCINT0_vect){
 //------------------------------------------
 void startwdt(void){
 	clr(MCUSR,WDRF); clr(WDTCR,WDE);	//禁止复位使能
-/*    WDTCR = 0b01000110;		//中断使能 1.0s*/
-	WDTCR = 0b00100001;		//中断禁止 8.0s
+	WDTCR = 0b01000110;		//中断使能 1.0s
+/*    WDTCR = 0b00100001;		//中断禁止 8.0s*/
 	//WDTIF WDTIE **WDP3** WDCE WDE WDP2 WDP1 WDP0
 	//WDTON 熔丝位
 	loop=0;
