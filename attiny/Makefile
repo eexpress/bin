@@ -15,9 +15,12 @@ all :
 #------------------------------------------
 fuse9.6M:
 	$(AVRDUDE) -U lfuse:w:0x6a:m
-#------------------------------------------
+fuse4.8M:
+	$(AVRDUDE) -U lfuse:w:0x69:m
 fuse128K:
 	$(AVRDUDE) -U lfuse:w:0x6b:m
+fuseOscExt:
+	$(AVRDUDE) -U lfuse:w:0x68:m
 #------------------------------------------
 download:
 	$(AVRDUDE) -e -U flash:w:$(OUTPUT).hex
