@@ -18,7 +18,7 @@
 
 [color]
 	diff = always
-	ui = true
+#	ui = true
 #git config --global core.pager 'less -r'
 #[core]
 #	pager = less -r
