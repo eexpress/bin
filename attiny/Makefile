@@ -1,6 +1,6 @@
 CC=avr-gcc
 MCU=attiny13a
-OUTPUT=wmonitor
+OUTPUT=$(shell grep -l -m 1  main *.c|sed 's/\.c//')
 CFLAGS=-Wall -Wextra -mmcu=$(MCU) -O1 -g -I./src
 AVRDUDE=avrdude -p t13 -c usbasp
 OBJCOPY=avr-objcopy -j .text -j .data -O ihex
@@ -11,6 +11,7 @@ SIZE=avr-size
 all :: compile download
 #------------------------------------------
 compile :
+	@echo "=====> $(OUTPUT) <====="
 	$(CC) $(CFLAGS) $(OUTPUT).c -o $(OUTPUT).out
 	$(OBJDUMP) -dS $(OUTPUT).out >$(OUTPUT).asm
 	$(OBJCOPY) $(OUTPUT).out $(OUTPUT).hex
