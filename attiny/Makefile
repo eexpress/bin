@@ -7,7 +7,10 @@ OBJCOPY=avr-objcopy -j .text -j .data -O ihex
 OBJDUMP=avr-objdump
 SIZE=avr-size
 #------------------------------------------
-all :
+#make 缺省执行目标是 makefile 中的第一个目标
+all :: compile download
+#------------------------------------------
+compile :
 	$(CC) $(CFLAGS) $(OUTPUT).c -o $(OUTPUT).out
 	$(OBJDUMP) -dS $(OUTPUT).out >$(OUTPUT).asm
 	$(OBJCOPY) $(OUTPUT).out $(OUTPUT).hex

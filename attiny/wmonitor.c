@@ -1,14 +1,14 @@
-/*上电/无线模块启动后，等待60秒，才检测呼吸灯。waitWireless*/
+
 /*检测到外电掉电，就检查呼吸灯，如果呼吸灯失效，表示无线模块停止，这时候继续等外电稳定上电，5s后，然后发3s的低脉冲，重启无线模块。*/
 /*平时检查呼吸灯，如果无线模块死机，切断主电源5s，再上电，3s后，重启无线模块。等待60秒，才能再测呼吸灯。*/
 
+#define F_CPU	9600000UL
 #include <avr/io.h>
 /*#include <avr/iotn13a.h>*/
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <avr/sfr_defs.h>
-
-/*#define F_CPU	8000000UL*/
+#include <util/delay.h>
 
 #define set(a,b)		a|=(1<<b)
 #define setn(a,b,c)		a|=(c<<b)
@@ -22,14 +22,27 @@
 /*#define Won PORTB|=(1<<3)*/
 /*#define Moff PORTB&=~(1<<4)*/
 /*#define Mon PORTB|=(1<<4)*/
+
+/*all in TIM0_COMPA_vect*/
 #define Woff	clr(PORTB,3)
 #define Won		set(PORTB,3)
 #define Moff	clr(PORTB,4)
 #define Mon		set(PORTB,4)
 
-unsigned char cntW;
+
+/*上电/无线模块启动后，等待60秒，才检测呼吸灯。*/
 unsigned char waitWireless;
+#define waitS 60
+/*计数到5次，表示呼吸灯失效。*/
+unsigned char cntWoff=0;
+#define cntS 5
+
+/*主电源掉电计时间，大于5秒认为真掉电？*/
+/*0为不动作，没掉电。1为启动，计数到10为5秒*/
+unsigned char cntMoff=0;
+
 unsigned char loop;
+/*unsigned char FPoweroff;*/
 
 //------------------------------------------
 void startcomp(void){
@@ -39,6 +52,8 @@ void startcomp(void){
 	clr(ADCSRB,ACME);	//负极选 AIN1
 	//PB1 (MISO/AIN1/OC0B/INT0/PCINT1)
 	set(ACSR,ACBG);		//正极选基准源1.1V
+/*    clr(ACSR,ACIS1);*/
+/*    clr(ACSR,ACIS0);*/
 	//ACIS1 ACIS0 比较器输出变化即可触发中断。
 	//直接读取ACO，获得比较结果。
 	clr(ACSR,ACD);		//模拟器上电
@@ -49,8 +64,16 @@ void startcomp(void){
 // 中断向量名在 /usr/lib/avr/include/avr/iotn13a.h
 ISR(ANA_COMP_vect){
 	//6 0x0005 ANA_COMP 模拟比较器
-	if(tst(ACSR,ACO)) Moff; else Mon;
-/*    loop_until_bit_is_clear(ACSR,ACO);*/
+	if(tst(ACSR,ACO)){			//主电源掉电
+		waitWireless=0;
+		cntMoff=1;		//启动掉电计数
+/*        cntWoff=0;*/
+	}else{			//主电源上电
+		cntMoff=0;
+	}
+/*    else Mon;*/
+/*    loop++; if(loop&1){Mon;}else{Moff;}*/
+/*    FPoweroff=tst(ACSR,ACO);*/
 }
 //------------------------------------------
 void starttimer(void){
@@ -60,8 +83,8 @@ void starttimer(void){
 	//PB0 (MOSI/AIN0/OC0A/PCINT0)
 /*    OCR0A=125;*/
 	//选择128k主频时，记125次为1秒，OC中断一次
-	OCR0A=293;
-	//选择300k主频时，300k/1024=292.9次为1秒，OC中断一次
+	OCR0A=147;
+	//选择150k主频时，150k/1024=146.5次为1秒，OC中断一次
 	set(TIMSK0,OCIE0A);
 	//开启输出比较的A通道中断
 	//– – – – OCIE0B OCIE0A TOIE0 –
@@ -72,11 +95,29 @@ void starttimer(void){
 
 ISR(TIM0_COMPA_vect){		///秒中断
 	//7 0x0006 TIM0_COMPA 定时器 / 计数器比较匹配 A
-	if(waitWireless){waitWireless--;}else{
-		///监测呼吸灯数据
+	if(cntMoff>0 && cntMoff<10){cntMoff++;}
+/*    if(FPoweroff){*/
+		//外电掉电后，检查呼吸灯干嘛 ??????????
+/*    }*/
+	if(cntWoff>cntS){		///无线模块死机
+		if(cntMoff==0){		//主电源有电
+			///关闭中断，并清除标志！！！
+			cli();
+			//切断主电源5s，再上电，3s后，重启无线模块。
+			Moff;
+			_delay_ms(3000);
+/*            主电源不需要5秒的延时*/
+			Mon; Woff;
+			_delay_ms(3000);
+			Won;
+			///开中断。
+			waitWireless=waitS; cntWoff=0;
+		}
 	}
-	cntW--;
-	if(!cntW){Won;waitWireless=60;}
+	else{
+		if(waitWireless){waitWireless--;}	//不监测
+		else cntWoff++;
+	}
 }
 //------------------------------------------
 void startint(void){
@@ -97,7 +138,7 @@ void startint(void){
 
 ISR(PCINT0_vect){
 	//3 0x0002 PCINT0 外部中断请求 1
-	Won;
+	cntWoff=0;
 }
 
 //------------------------------------------
@@ -124,14 +165,14 @@ ISR(WDT_vect){
 	WDTCR = 0x00;
 	__enable_interrupt();
 	*/
-	loop++;
-	if(loop&1){Won;}else{Woff;}
+/*    loop++; if(loop&1){Mon;}else{Moff;}*/
 }
 //------------------------------------------
-void Reset_Wireless(void){	///重启无线模块
-	Woff;
-	cntW=3;
-}
+/*void Reset_Wireless(void){	///重启无线模块*/
+/*    Woff;*/
+/*    cntWoff=0;*/
+/*    waitWireless=waitS;*/
+/*}*/
 
 //BODLEVEL [1..0] 熔丝位 01 2.7V
 //CKDIV8 要改1，不编程。
@@ -145,10 +186,11 @@ void Reset_Wireless(void){	///重启无线模块
 //– – – – WDRF BORF EXTRF PORF
 int main(void)
 {
-	cli();
-	startwdt();
+/*    cli();*/
+	//fuse4.8M
 	CLKPR=0x80;		//CKDIV8熔丝位决定CLKPS位的初始值，不管。
-	CLKPR=0b0101;	//9.6M用32分配，主频300K。
+	CLKPR=0b0101;	//4.8M用32分配，主频150K。
+/*    CLKPR=0b1000;	//4.8M用256分配，主频300K。*/
 	//初始化端口
 	DDRB=	0b00011001;
 	PORTB=	0b11111000;		//未用引脚具有确定电平的方法是使能内部上拉电阻
@@ -156,13 +198,18 @@ int main(void)
 /*    WDTCR=0;		//关闭 WDT。*/
 	//0 1 1 0 128K (131072) 周期 1.0 s
 	//WDT的中断，其实也可以作RTC。
-	waitWireless=60; cntW=0;
+	waitWireless=waitS; cntWoff=0;
+/*    startwdt();*/
 	starttimer();	///启动秒中断
 	startint();
+	startcomp();
+/*    FPoweroff=0;*/
+	cntMoff=0;
+/*    Mon;*/
 
 	set_sleep_mode(SLEEP_MODE_IDLE);
 	//CPU 停止运行,而模拟比较器、 ADC、定时器 / 计数器、看门狗和中断系统继续工作。这个休眠模式只停止了 clk CPU 和 clk FLASH ,其他时钟则继续工作。
-	cli();
+/*    cli();*/
 	while(1){sleep_enable();sei();}
 	return 0;
 
