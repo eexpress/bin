@@ -37,9 +37,15 @@ alias head='/usr/bin/head -n $(($LINES-4))'
 alias dmesg='/bin/dmesg|tail|cut -b -$COLUMNS'
 alias dog='grep -v -E "(^$|^#|^!)"'
 alias free='free -m'
-alias g='grep --color -inTZ 2>/dev/null'
+alias g='grep --color=always -inTZ 2>/dev/null'
+#grep 结果的文件名后面跟的：或者null，需要处理
 alias s='mplayer'
 alias rm='gvfs-trash'
+#alias less='less -R'
+export LESS="--RAW-CONTROL-CHARS"
+#alias less='/usr/share/vim/vim74/macros/less.sh'
+alias hexdump='hexdump -C'
+#export GREP_COLOR='1;37;42'
 
 alias v='/usr/bin/gvim --remote-silent-tab'
 #v() { /usr/bin/gvim -f  --remote-silent-tab \"$@\" &; }

@@ -2,13 +2,28 @@
 
 #bind -x '"\C-l":ls -l'
 #-------LESS TERMCAP-------------------------------
-export LESS_TERMCAP_mb=$'\033[01;31m' 
-export LESS_TERMCAP_md=$'\033[01;31m' 
-export LESS_TERMCAP_me=$'\033[0m' 
-export LESS_TERMCAP_se=$'\033[0m' 
-export LESS_TERMCAP_so=$'\033[01;44m' 
-export LESS_TERMCAP_ue=$'\033[0m' 
-export LESS_TERMCAP_us=$'\033[01;32m'
+#The default pager for man is less. 
+#this part effect only man. not for less.
+#export LESS_TERMCAP_mb=$'\033[01;31m' 
+#export LESS_TERMCAP_md=$'\033[01;31m' 
+#export LESS_TERMCAP_me=$'\033[0m' 
+#export LESS_TERMCAP_se=$'\033[0m' 
+#export LESS_TERMCAP_so=$'\033[01;44m' 
+#export LESS_TERMCAP_ue=$'\033[0m' 
+#export LESS_TERMCAP_us=$'\033[01;32m'
+
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 1)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 1)
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
+export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 2)
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+export LESS_TERMCAP_mr=$(tput rev)
+export LESS_TERMCAP_mh=$(tput dim)
+#smul 下划线
+#use vim as pager
+#export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
 
 #-------ENVIROMENT SET-----------------------------
 export PATH=$HOME/bin:$PATH

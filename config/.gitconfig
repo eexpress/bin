@@ -18,6 +18,10 @@
 
 [color]
 	diff = always
+	ui = true
+#git config --global core.pager 'less -r'
+#[core]
+#	pager = less -r
 [user]
 	name = eexpress
 	email = eexpress@163.com
