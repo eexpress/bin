@@ -3,16 +3,19 @@
 use utf8;
 use LWP::Simple;
 #输入编号
-$s=$ARGV[0];
+$_=$ARGV[0];
+$_=`xsel -o` if !$_;
+m/\w{2,4}-\d{3,4}/; $s=$&;
+die "not correct id." if !$s;
 print "> $s <\n";
-open OUT,">>/tmp/bt.log"; print OUT ".$s.\n"; close OUT;
+open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
 #--------------------------------------------
 $url="http://thepiratebay.ee/s/?q=$s&page=0&orderby=99";
 print "1 ->\t$url\n"; $_ = get($url);
 die "Couldn't get it!" unless defined $_;
 #<a href="/torrent/9278096/IPZ-260 Erika Shibasaki JAV CENSORED"
 /href=\"\/torrent.*?\"/; $_=$&; s/href=//; s/\"//g; s/\ /%20/g;
-if($_){
+if($_=~m'/'){
 	$url="http://thepiratebay.ee$_";
 	print "2 ->\t$url\n"; $_ = get($url);
 	/magnet:[^"]*/; $_=$&; $_.="\n";
@@ -33,19 +36,25 @@ $_=$&; m'http://[^"]*';
 $url=$&; print "2 ->\t$url\n"; $content = get($url);
 die "Couldn't get it!" unless defined $content;
 #<p><b>BitTorrent File</b><br><a href="http://l.jav4you.com/1eQ2eLT" target="_blank" rel="nofollow">ishrhndug.html</a><br><br><br></p>
-open OUT,">>$ENV{HOME}/bt.log"; print OUT $content; close OUT;
+#open OUT,">>$ENV{HOME}/bt.log"; print OUT $content; close OUT;
 $content=~/BitTorrent File.*html/;
 $_=$&; s/.*>//;
 #$url="http://www.21stp.com/$_";
 $url="http://www.2121.club/$_";
-print "3 ->\t$url\n"; $content = get($url);
+print "3 ->\t$url\n";
+`gnome-open \'$url\'`; exit;
+
+$content = get($url);
 die "Couldn't get it!" unless defined $content;
 #<a href="http://www.21stp.com/save/857470376/dd82969aa8">ダウンロード</a>
 $content=~/href=.*?ダウンロード/;
-$_=$&; m'http://[^"]*';
-$url=$&; print "4 ->\t$url\n";
+$_=$&;
+#网站修改了简单的js
+#m'http://[^"]*';
+m'/save[^\']*';
+$url="http://www.2121.club$&"; print "4 ->\t$url\n";
 
-`gnome-open $url`;
+`gnome-open \'$url\'`;
 
 #$s="$ENV{HOME}/$s.torrent";
 #if(is_success(getstore($url,$s))){ print "5 ->\tsave to $s\n"; }
