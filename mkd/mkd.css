@@ -6,6 +6,7 @@ body {
 /*    margin-right: 5%;*/
 	background-color: #eee;
 	font-family: 'URW Gothic L', 'Vera Sans YuanTi', Sans-serif;
+	color: #444;
 }
 a {
 	color: blue;
@@ -31,8 +32,8 @@ input {
 }
 em {
 	text-decoration:underline;
-	font-weight:bold;
 	padding: 0 3px 0 3px;
+	font-weight:normal;
 }
 strong {
 	padding: 0 3px 0 3px;
@@ -46,7 +47,8 @@ ul {
 li {
 	padding: 2px 2px 2px 8px;
 	border-left: 3px solid #080;
-	color: #666;
+	font-weight:bold;
+/*    color: #666;*/
 }
 li:nth-child(2n) {
 	background: #eee;
@@ -55,9 +57,17 @@ li:nth-child(2n-1) {
 	background: #ddd;
 }
 code {
-	font-size: 1.2em;
-	font-weight: bold;
-	color: #088300;
+	display:block;
+	overflow:auto;
+	width: 80%;
+	margin-left: 5%;
+	font-size: 1.1em;
+	font-weight: normal;
+	color: #6d6;
+/*    background-color:#414;*/
+	background-color:#300A24;
+	border-left:solid #080 5px;
+	padding: 2px 20px 2px 20px;
 	font-family: 'Courier 10 Pitch',"Courier New",Monospace;
 }
 blockquote {
@@ -66,7 +76,7 @@ blockquote {
 	width: 90%;
 	padding: 0 10px 0 30px;
 	border-left: 25px solid #ddd;
-	color: #666;
+/*    color: #666;*/
 	font-style: italic;
 }
 

@@ -40,12 +40,16 @@ unsigned char cntWoff=0;
 /*主电源掉电计时间，大于5秒认为真掉电？*/
 /*0为不动作，没掉电。1为启动，计数到10为5秒*/
 unsigned char cntMoff=0;
+/*内置电池计时间，大于5秒认为真掉电？*/
+/*0为不动作，没掉电。1为启动，计数到10为5秒*/
+unsigned char cntBoff=0;
 
+unsigned char func_cmp;
 unsigned char loop;
 /*unsigned char FPoweroff;*/
 
 //------------------------------------------
-void startcomp(void){
+void startcomp_AIN1(void){
 	clr(ACSR,ACIE);		//关cmp中断
 	set(ACSR,ACD);		//模拟器断电
 	set(DIDR0,AIN1D);	//AIN1的数字输入缓冲禁用
@@ -58,18 +62,35 @@ void startcomp(void){
 	//直接读取ACO，获得比较结果。
 	clr(ACSR,ACD);		//模拟器上电
 	set(ACSR,ACIE);		//开cmp中断
+	func_cmp=0;
+}
 
+void startcomp_ADC0(void){
+	clr(ACSR,ACIE);		//关cmp中断
+	set(ACSR,ACD);		//模拟器断电
+	set(DIDR0,AIN1D);	//AIN1的数字输入缓冲禁用
+	set(ADCSRB,ACME);	//负极选 ADC
+	clr(ADCSRA,ADEN);	//ADMUX:MUX1 MUX0缺省为0，即ADC0
+	//B5 RESET/dW/ADC0/PCINT5
+	set(ACSR,ACBG);		//正极选基准源1.1V
+/*    clr(ACSR,ACIS1);*/
+/*    clr(ACSR,ACIS0);*/
+	//ACIS1 ACIS0 比较器输出变化即可触发中断。
+	//直接读取ACO，获得比较结果。
+	clr(ACSR,ACD);		//模拟器上电
+	set(ACSR,ACIE);		//开cmp中断
+	func_cmp=1;
 }
 
 // 中断向量名在 /usr/lib/avr/include/avr/iotn13a.h
 ISR(ANA_COMP_vect){
 	//6 0x0005 ANA_COMP 模拟比较器
-	if(tst(ACSR,ACO)){			//主电源掉电
+	if(tst(ACSR,ACO)){			//主电源/内置电池掉电
 		waitWireless=0;
-		cntMoff=1;		//启动掉电计数
+		if(func_cmp){cntBoff=1;}else{cntMoff=1;}		//启动掉电计数
 /*        cntWoff=0;*/
 	}else{			//主电源上电
-		cntMoff=0;
+		if(func_cmp){cntBoff=0;}else{cntMoff=0;}
 	}
 /*    else Mon;*/
 /*    loop++; if(loop&1){Mon;}else{Moff;}*/
@@ -96,6 +117,7 @@ void starttimer(void){
 ISR(TIM0_COMPA_vect){		///秒中断
 	//7 0x0006 TIM0_COMPA 定时器 / 计数器比较匹配 A
 	if(cntMoff>0 && cntMoff<10){cntMoff++;}
+	if(cntBoff>0 && cntBoff<10){cntBoff++;}
 /*    if(FPoweroff){*/
 		//外电掉电后，检查呼吸灯干嘛 ??????????
 /*    }*/
@@ -104,14 +126,13 @@ ISR(TIM0_COMPA_vect){		///秒中断
 			///关闭中断，并清除标志！！！
 			cli();
 			//切断主电源5s，再上电，3s后，重启无线模块。
-			Moff;
-			_delay_ms(3000);
 /*            主电源不需要5秒的延时*/
-			Mon; Woff;
-			_delay_ms(3000);
-			Won;
+			Moff; _delay_ms(5000); Mon;
+			Woff; _delay_ms(3000); Won;
 			///开中断。
 			waitWireless=waitS; cntWoff=0;
+		}else{
+			startcomp_ADC0();	//外电源掉电后，开始检查内置电池。
 		}
 	}
 	else{
@@ -168,6 +189,26 @@ ISR(WDT_vect){
 /*    loop++; if(loop&1){Mon;}else{Moff;}*/
 }
 //------------------------------------------
+/*
+void adc_init(void){
+	set(DIDR0,ADC0D);		//禁用数字输入缓冲
+//	ADCSRA = 0x00;
+	set(ADMUX,REFS0);		//片内1.1V基准电压。缺省ADC0(PB5)右对齐。
+	set(ADCSRA,ADIE);		//预分频2，约150k采样。不自动触发。
+//ADSC启动转换，抑制,在睡眠模式下进行转换
+}
+
+void startadc(void){
+	ADCSRA = (1<<ADEN)|(1<<ADSC);	//使能ADC,开始转换
+}
+
+ISR(ADC_vect){		///AD中断
+unsigned char adl,adh;
+	adl=ADCL;
+	adh=ADCH;
+}
+*/
+//------------------------------------------
 /*void Reset_Wireless(void){	///重启无线模块*/
 /*    Woff;*/
 /*    cntWoff=0;*/
@@ -192,7 +233,7 @@ int main(void)
 	CLKPR=0b0101;	//4.8M用32分配，主频150K。
 /*    CLKPR=0b1000;	//4.8M用256分配，主频300K。*/
 	//初始化端口
-	DDRB=	0b00011001;
+	DDRB=	0b00011001;		//只3、4输出。
 	PORTB=	0b11111000;		//未用引脚具有确定电平的方法是使能内部上拉电阻
 	PINB=	0xff;
 /*    WDTCR=0;		//关闭 WDT。*/
@@ -202,14 +243,18 @@ int main(void)
 /*    startwdt();*/
 	starttimer();	///启动秒中断
 	startint();
-	startcomp();
+	startcomp_AIN1();
 /*    FPoweroff=0;*/
 	cntMoff=0;
+	cntBoff=0;
 /*    Mon;*/
 
 	set_sleep_mode(SLEEP_MODE_IDLE);
+/*    set(MCUCR,SE);*/
+		//SLEEP_MODE_IDLE模式，SM1 SM0为0
 	//CPU 停止运行,而模拟比较器、 ADC、定时器 / 计数器、看门狗和中断系统继续工作。这个休眠模式只停止了 clk CPU 和 clk FLASH ,其他时钟则继续工作。
 /*    cli();*/
+/*进入休眠模式前对 ADEN 写 "0”,以降低功耗。*/
 	while(1){sleep_enable();sei();}
 	return 0;
 
