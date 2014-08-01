@@ -1,0 +1,128 @@
+<head>
+<title>gitolite搭建git服务器</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link href="mkd.css" rel="stylesheet" type="text/css">
+</head>
+
+gitolite搭建git服务器
+=======================
+
+### 准备好要提交的帐号名，后面用gl-setup添加。
+	▶ cp .ssh/id_rsa.pub /tmp/eexp.pub
+
+### 建立git用户
+	▶ sudo adduser git
+	▶ g git /etc/passwd
+	  41   :git:x:1001:1001:,,,:/home/git:/bin/bash
+*可能需要修改此处的bash，禁止ssh用户使用bash*
+
+### 安装gitolite软件
+	▶ ai gitolite
+	[sudo] password for eexp: 
+	下列“新”软件包将被安装。         
+	  gitolite libck-connector0{a} ncurses-term{a} openssh-server{a} 
+	  openssh-sftp-server{a} python-requests{a} python-urllib3{a} 
+	  ssh-import-id{a} 
+
+### 服务端设置
+- 建立目录
+
+	*如果先建立用户，后安装服务端软件，可能会自动建立此目录？*
+
+		▶ sudo su git
+		git@eexp-V580:/home/eexp$ cd
+		git@eexp-V580:~$ pwd
+		/home/git
+		git@eexp-V580:~$ mkdir repositories
+
+- 生成git全局配置
+
+		git config --global user.name "myname"
+		git config --global user.email "myname@server"
+		git@eexp-V580:~$ cat .gitconfig 
+		[user]
+		name = eexpress
+		email = eexpress@163.com
+
+- 加入ssh公钥，建立git帐号
+
+	*以后每次增加帐号，都需要使用 gl-setup 加入pub文件。*
+
+		git@eexp-V580:~$ gl-setup /tmp/eexp.pub 
+		The default settings in the rc file (/home/git/.gitolite.rc) are fine for most
+		people but if you wish to make any changes, you can do so now.
+		hit enter...
+		Select an editor.  To change later, run 'select-editor'.
+		1. /bin/ed
+		2. /bin/nano        <---- easiest
+		3. /usr/bin/vim.gnome
+		4. /usr/bin/vim.tiny
+		Choose 1-4 [2]: 3
+	*这里开始修改 /home/git/.gitolite.rc，一般直接退出。*
+
+		No protocol specified
+		creating gitolite-admin...
+		初始化空的 Git 版本库于 /home/git/repositories/gitolite-admin.git/
+		creating testing...
+		初始化空的 Git 版本库于 /home/git/repositories/testing.git/
+		[master （根提交） d39b242] start
+		 2 files changed, 6 insertions(+)
+		 create mode 100644 conf/gitolite.conf
+		 create mode 100644 keydir/eexp.pub
+
+- 自动生成的缺省仓库
+
+		git@eexp-V580:~$ l repositories/
+		gitolite-admin.git/  testing.git/
+
+### 客户端操作 gitolite-admin 仓库，进行远程调整
+
+- 克隆
+
+		▶ git clone git@localhost:gitolite-admin.git
+		正克隆到 'gitolite-admin'...
+		The authenticity of host 'localhost (127.0.0.1)' can't be established.
+		ECDSA key fingerprint is a5:93:a9:5d:09:99:6a:f3:64:2a:61:fb:17:12:cb:8e.
+		Are you sure you want to continue connecting (yes/no)? yes
+		Warning: Permanently added 'localhost' (ECDSA) to the list of known hosts.
+		remote: Counting objects: 6, done.
+		remote: Compressing objects: 100% (4/4), done.
+		remote: Total 6 (delta 0), reused 0 (delta 0)
+		接收对象中: 100% (6/6), done.
+		检查连接... 完成。
+		▶ cd gitolite-admin/
+		▶ l
+		conf/  keydir/
+		▶ cat conf/gitolite.conf 
+		repo    gitolite-admin
+				RW+     =   eexp
+		repo    testing
+				RW+     =   @all
+
+- 编辑conf，增加新库
+
+		▶ cat conf/gitolite.conf 
+		repo    gitolite-admin
+				RW+     =   eexp
+		repo    testing
+				RW+     =   @all
+		repo 	iccard
+		RW+		=	@all
+		▶ git push
+
+- 服务端查看新增加的仓库**iccard**
+
+		git@eexp-V580:~/repositories$ l
+		gitolite-admin.git/  iccard.git/  testing.git/
+
+### 客户端操作普通仓库
+
+- 克隆
+
+		▶ git clone git@localhost:iccard.git
+		正克隆到 'iccard'...
+		warning: 您似乎克隆了一个空版本库。
+		检查连接... 完成。
+
+- 后期就是正常使用，touch/add/ci/push。
+
