@@ -4,10 +4,12 @@ use strict;
 use CGI;
 use CGI::Carp qw ( fatalsToBrowser );
 use File::Basename;
+use utf8;
+
 
 $CGI::POST_MAX = 1024 * 5000;
 my $safe_filename_characters = "a-zA-Z0-9_.-";
-my $upload_dir = "/home/eexp/upload";
+my $upload_dir = "./upload/";
 
 my $query = new CGI;
 my $filename = $query->param("photo");
@@ -46,22 +48,23 @@ print UPLOADFILE;
 
 close UPLOADFILE;
 
+#my $f=`pwd`."$upload_dir/$filename";
+#`ls -l "$upload_dir/$filename">/tmp/t.log`;
+`/home/eexp/bin/flow.pl "$upload_dir/$filename"`;
+
+binmode STDOUT, ':utf8';
+
 print $query->header ( );
 print <<END_HTML;
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Thanks!</title>
+<title>FlowChat</title>
+#<title>流程图</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <style type="text/css">
 img {border: none;}
 </style>
 </head>
 <body>
-<p>Thanks for uploading your photo!</p>
-<p>Your email address: $email_address</p>
-<p>Your photo:</p>
-<p><img src="/upload/$filename" alt="Photo" /></p>
+<p><img src=".dot.svg" width="80%" /></p>
 </body>
 </html>
 END_HTML

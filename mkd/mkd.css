@@ -56,11 +56,13 @@ li:nth-child(2n) {
 li:nth-child(2n-1) {
 	background: #ddd;
 }
-code {
+pre {
 	display:block;
 	overflow:auto;
 	width: 80%;
 	margin-left: 5%;
+}
+code {
 	font-size: 1.1em;
 	font-weight: normal;
 	color: #6d6;

@@ -1,0 +1,31 @@
+<head>
+<title>git repo</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link href="mkd.css" rel="stylesheet" type="text/css">
+</head>
+
+## git repo
+
+- 使用 `git clone git@192.168.100.7:*xxxxx*.git` ，可以克隆仓库到本地。
+
+	1. 当前共用仓库， *iccard*
+	2. 需要新建仓库，可以邮件申请。
+	3. 目前私有仓库， *fg* *lpd*
+
+
+- 本地基本操作：
+
+ 1. 进入目录，新建文件。
+ 1. 增加文件到索引。 `git add yyy`
+ 1. 本地提交。 `git commit yyy -m "注释"`
+ 1. 提交到仓库。 `git push`
+
+## git web
+
+项目名称|URL
+--|---
+iccard|[当前web浏览](http://192.168.100.7:1234)
+testing|
+
+## 自动流程图生成
+根据源码里面的注释///，自动生成流程图。进入此页面：[flow](http://192.168.100.7:1111/upload.html)

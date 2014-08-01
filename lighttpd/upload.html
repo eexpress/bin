@@ -7,9 +7,17 @@
 <body>
 <form action="upload.cgi" method="post"
 enctype="multipart/form-data">
-<p>Photo to Upload: <input type="file" name="photo" /></p>
-<p>Your Email Address: <input type="text" name="email_address" /></p>
-<p><input type="submit" name="Submit" value="Submit Form" /></p>
+<h3>上传需要自动生成流程图的源码</h3>
+<p>自动根据注释里面的///后面的内容，生成流程图。依赖graphviz。</br>
+flow.pl 文件【各类语法的源码，只要注释不和///冲突】</br>
+语法说明：</br>
+	函数入口：用 >xxx 表示。通常是函数名。第一行缺省为入口。</br>
+	条件判断：用 xxx?yyy:zzz 表示，yyy/zzz为跳转的行号，使用0表示退出。yyy为真，zzz为假。可省略其一，如：xxx?yyy 或者 xxx?:zzz。省略的直接接下一句；都不省略的短语，2个条件都接下一句。</br>
+	普通行：可以使用;连接多句。判断行和函数入口不能带多句。</br>
+</p>
+<p>选择文件上传：<input type="file" name="photo" /></p>
+<p>你的邮件地址：<input type="text" name="email_address" /></p>
+<p><input type="submit" name="Submit" value="生成流程图" /></p>
 </form>
 </body>
 </html>
