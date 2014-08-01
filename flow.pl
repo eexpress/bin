@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+use utf8;
+use Encode qw/_utf8_on decode/;
+use Encode::Guess;
 #--------------------------------
 $ext="svg"; $sep='/'; $font='Vera Sans YuanTi';
 @color=qw(#eecc80 #6495ED #ccee80 #80ccee #eecc80 #80eecc);
@@ -30,6 +33,9 @@ exit 0;
 open IN,"<$ARGV[0]"; while(<IN>){
 	next if ! /$sep{3}/;
 	s/.*$sep{3}\s*//; s/\s*$//;	#去掉首尾空格
+	my $enc = guess_encoding($_, qw/utf8 cp936 gbk/);
+	if (ref($enc)){$_=decode($enc->name, $_);}
+	_utf8_on($_);
 	push @contents, "$. $_"; }
 close IN;
 #for(@contents){print "$_\n";} exit;

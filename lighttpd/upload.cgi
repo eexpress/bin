@@ -13,12 +13,12 @@ my $upload_dir = "./upload/";
 
 my $query = new CGI;
 my $filename = $query->param("photo");
-my $email_address = $query->param("email_address");
+#my $email_address = $query->param("email_address");
 
 if ( !$filename )
 {
 print $query->header ( );
-print "There was a problem uploading your photo (try a smaller file).";
+print "Error: Upload File.";
 exit;
 }
 
@@ -48,11 +48,7 @@ print UPLOADFILE;
 
 close UPLOADFILE;
 
-#my $f=`pwd`."$upload_dir/$filename";
-#`ls -l "$upload_dir/$filename">/tmp/t.log`;
 `/home/eexp/bin/flow.pl "$upload_dir/$filename"`;
-`/usr/bin/convert ".dot.svg" "f.png"`;
-binmode STDOUT, ':utf8';
 
 print $query->header ( );
 print <<END_HTML;
@@ -64,7 +60,7 @@ img {border: none;}
 </style>
 </head>
 <body>
-<p><img src="f.png" width="80%" /></p>
+<p><img src=".dot.svg" width="80%" /></p>
 </body>
 </html>
 END_HTML
