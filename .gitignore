@@ -22,4 +22,8 @@ config
 *.txt
 *.db
 *.html
-
+*.dot
+*.out
+*.hex
+*.asm
+*.pdf
