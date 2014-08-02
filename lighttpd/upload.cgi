@@ -6,21 +6,15 @@ use CGI::Carp qw ( fatalsToBrowser );
 use File::Basename;
 use utf8;
 
-
 $CGI::POST_MAX = 1024 * 5000;
 my $safe_filename_characters = "a-zA-Z0-9_.-";
 my $upload_dir = "./upload/";
 
 my $query = new CGI;
 my $filename = $query->param("photo");
-#my $email_address = $query->param("email_address");
 
 if ( !$filename )
-{
-print $query->header ( );
-print "Error: Upload File.";
-exit;
-}
+{ print $query->header ( ); print "Error: Upload File."; exit; }
 
 my ( $name, $path, $extension ) = fileparse ( $filename, '..*' );
 $filename = $name . $extension;
@@ -28,24 +22,12 @@ $filename =~ tr/ /_/;
 $filename =~ s/[^$safe_filename_characters]//g;
 
 if ( $filename =~ /^([$safe_filename_characters]+)$/ )
-{
-$filename = $1;
-}
-else
-{
-die "Filename contains invalid characters";
-}
+{ $filename = $1; } else { die "Filename contains invalid characters"; }
 
 my $upload_filehandle = $query->upload("photo");
-
 open ( UPLOADFILE, ">$upload_dir/$filename" ) or die "$!";
 binmode UPLOADFILE;
-
-while ( <$upload_filehandle> )
-{
-print UPLOADFILE;
-}
-
+while (<$upload_filehandle>){ print UPLOADFILE; }
 close UPLOADFILE;
 
 `/home/eexp/bin/flow.pl "$upload_dir/$filename"`;
