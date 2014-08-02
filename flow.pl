@@ -82,6 +82,7 @@ saveout($q); setshape($q,$EXIT);
 #--------------------------------
 unshift @output,"
 digraph G {
+bgcolor=transparent
 node [peripheries=2 shape=box style=\"rounded,filled\" fontname=\"$font\"] label=\"$ARGV[0]\"
 ";
 push @output,"}\n}\n";
