@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT
+#!/usr/bin/perl -w
 
 use strict;
 use CGI;
@@ -16,7 +16,7 @@ my $filename = $query->param("photo");
 if ( !$filename )
 { print $query->header ( ); print "Error: Upload File."; exit; }
 
-my ( $name, $path, $extension ) = fileparse ( $filename, '..*' );
+my ( $name, $path, $extension ) = fileparse ( $filename, qr/\.[^.]*/ );
 $filename = $name . $extension;
 $filename =~ tr/ /_/;
 $filename =~ s/[^$safe_filename_characters]//g;
@@ -42,7 +42,7 @@ img {border: none;}
 </style>
 </head>
 <body>
-<p><img src=".dot.svg" width="80%" /></p>
+<p><img src="$upload_dir/$name.dot.svg" width="80%" /></p>
 </body>
 </html>
 END_HTML

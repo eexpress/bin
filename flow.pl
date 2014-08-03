@@ -12,7 +12,7 @@ $FUNC='[shape=ellipse]'.$end; $JUDGE='[shape=diamond]'.$end;
 $QUIT='[shape=egg]'.$end; $EXIT='[shape=house]'.$end;
 #http://www.graphviz.org/content/node-shapes
 
-$base=$ARGV[0];$base=~s/\..*//;
+$base=$ARGV[0]; $base=~s/(.+)\.[^.]*/\1/;
 #--------------------------------
 if(($#ARGV==-1) || ($ARGV[0]=~/--help|-h/i) || ! -f "$ARGV[0]"){
 print <<HELP;

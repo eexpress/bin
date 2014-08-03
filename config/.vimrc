@@ -11,7 +11,7 @@ set smartcase
 " 设置文字编码自动识别
 set encoding=utf-8
 set fencs=utf-8,gb18030,gbk
-set guifont=Courier\ 10\ Pitch\ 11,Courier\ New\ 11,Vera\ Sans\ YuanTi\ Mono\ 11
+set guifont=Courier\ 10\ Pitch\ 12,Courier\ New\ 12,Vera\ Sans\ YuanTi\ Mono\ 12
 " 设置高亮搜索
 set hlsearch
 set incsearch		" 输入字符串就显示匹配点
