@@ -20,7 +20,8 @@
 	diff = always
 #	ui = true
 #git config --global core.pager 'less -r'
-#[core]
+[core]
+	pager = cat
 #	pager = less -r
 [user]
 	name = eexpress
