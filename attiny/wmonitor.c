@@ -160,6 +160,7 @@ void startint(void){
 ISR(PCINT0_vect){
 	//3 0x0002 PCINT0 外部中断请求 1
 	cntWoff=0;
+	loop++; if(loop&1){Mon;}else{Moff;}
 }
 
 //------------------------------------------

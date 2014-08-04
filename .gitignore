@@ -3,6 +3,7 @@ old*
 cairo*
 paste*
 nmn*
+mkd.*
 
 adb
 tags
@@ -28,3 +29,4 @@ config
 *.asm
 *.pdf
 *.json
+*.mkd
