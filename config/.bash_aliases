@@ -100,3 +100,59 @@ complete -F _avahi_host $default ssh
 #complete -W "$(echo 'eexp@'$(avahi-browse -at|grep -v `hostname`|grep v4|cut -d' ' -f 5)'.local:')" ssh
 #complete -W "$(echo $(grep '^ssh ' ~/.bash_history | sort -u | sed 's/^ssh //'))" ssh
 
+#bind -x '"\C-l":ls -l'
+#-------LESS TERMCAP-------------------------------
+#The default pager for man is less. 
+#this part effect only man. not for less.
+#export LESS_TERMCAP_mb=$'\033[01;31m' 
+#export LESS_TERMCAP_md=$'\033[01;31m' 
+#export LESS_TERMCAP_me=$'\033[0m' 
+#export LESS_TERMCAP_se=$'\033[0m' 
+#export LESS_TERMCAP_so=$'\033[01;44m' 
+#export LESS_TERMCAP_ue=$'\033[0m' 
+#export LESS_TERMCAP_us=$'\033[01;32m'
+
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 1)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 1)
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
+export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 2)
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+export LESS_TERMCAP_mr=$(tput rev)
+export LESS_TERMCAP_mh=$(tput dim)
+#smul 下划线
+#use vim as pager
+#export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
+
+#-------ENVIROMENT SET-----------------------------
+export PATH=$HOME/bin:$PATH
+export CDPATH=:~:~/bin
+export RES=$HOME/bin/resources
+
+#thiscolor=`expr $(printf "%d" "'$(hostname|cut -b 8)") % 3 + 1`
+#thiscolor=`date +%u`
+#PS1='\[\e[31;40m\]\D{%Y-%m-%d %H:%M:%S %a}\[\e[32;40m\] \w \[\e[m\]\n● '
+pc0='\[\e[1;32;40m\]'
+pc1='\[\e[1;37;42m\]'
+PS1="$pc0\D{%Y-%m-%d %A} \t \H $pc1 \w \[\e[m\] \n▶ "
+#PS1="\[\e[3$thiscolor;40m\]\D{%Y-%m-%d %a} \t \H \w \[\e[m\] \n▶ "
+#PS1='\[\e[32;40m\]\D{%Y-%m-%d %a} \t \H \w \[\e[m\] \n● '
+
+#-------HISTORY------------------------------------
+shopt -s histappend
+PROMPT_COMMAND='history -a'
+
+PS4='+{$LINENO:${FUNCNAME[0]}} '
+HISTFILESIZE=2000
+HISTSIZE=2000
+HISTTIMEFORMAT='%F %T '
+HISTCONTROL=erasedups
+HISTIGNORE="pwd:ls:cd:"
+
+bind 'set completion-ignore-case on'
+bind 'set show-all-if-ambiguous on'
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+. /usr/share/autojump/autojump.bash
