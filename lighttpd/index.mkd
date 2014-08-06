@@ -28,3 +28,4 @@
 --|---
 git的公用测试仓库iccard|[git web](http://127.0.0.1:1234)
 自动流程图生成flow.pl|[flow chat](http://127.0.0.1:1111/upload.html)
+矢量幻灯演示|[enn sozi](enn新奥sozi.svg)
