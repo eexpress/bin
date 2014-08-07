@@ -250,13 +250,15 @@ int main(void)
 	cntBoff=0;
 /*    Mon;*/
 
+	power_adc_disable();	//PRR，adc关时钟
 	set_sleep_mode(SLEEP_MODE_IDLE);
 /*    set(MCUCR,SE);*/
 		//SLEEP_MODE_IDLE模式，SM1 SM0为0
 	//CPU 停止运行,而模拟比较器、 ADC、定时器 / 计数器、看门狗和中断系统继续工作。这个休眠模式只停止了 clk CPU 和 clk FLASH ,其他时钟则继续工作。
 /*    cli();*/
 /*进入休眠模式前对 ADEN 写 "0”,以降低功耗。*/
-	while(1){sleep_enable();sei();}
+	sei(); for(;;){sleep_mode();}
+/*    while(1){sleep_enable();}*/
 	return 0;
 
 }
