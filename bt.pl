@@ -24,7 +24,7 @@ if($_=~m'/'){
 	`transmission-remote -a "$_"`;
 if($?>0){open OUT,">>$ENV{HOME}/magnet.list"; print OUT "--\t$s\n$_"; close OUT; print "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n";}
 	print;
-$bus->Notify("bt", 0, "sunny", "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n", "", [], { }, -1);
+if($?>0){$bus->Notify("bt", 0, "sunny", "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n", "", [], { }, -1);}
 	exit;
 }
 #--------------------------------------------
