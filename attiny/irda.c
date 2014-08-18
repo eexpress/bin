@@ -1,7 +1,9 @@
 /*ATtiny13*/
 /*缺省9.6MHz*/
 #include <avr/power.h>
-#include <avr/eeprom.h>
+#include <avr/interrupt.h>
+/*#include <avr/eeprom.h>*/
+#include <avr/sleep.h>
 #define set(a,b)		a|=(1<<b)
 #define setn(a,b,c)		a|=(c<<b)
 #define clr(a,b)		a&=~(1<<b)
@@ -19,9 +21,11 @@ unsigned long ir_data=0;
 #define C1MS7 16
 #define LEDon		clr(PORTB,4)
 #define LEDoff		set(PORTB,4)
-uint8_t EEMEM eeircode[2];
+/*uint8_t EEMEM eeircode[2];*/
 
-ISR(INT1_vect){
+void ir_stop(void){ ir_cnt=0; TCCR0B=0x00; power_timer0_disable(); }
+
+ISR(INT0_vect){
 	unsigned char i;
 	//普通模式 (TCCR0B,WGM02,TCCR0A,WGM01:0 = 0)
 	if(ir_cnt==0){
@@ -38,12 +42,19 @@ ISR(INT1_vect){
 	ir_stop();
 	//fetch data here.
 	//设备，反码，数据，反码
+	//5次重复的输入，设置新码？
 /*    eeprom_read_byte(&eeircode[0])*/
+	// 小遥控器
+/*    {0x00, 0xfd, 0x30, 0x08, 0x88, 0x48, 0x28, 0xA8, 0x68, 0x18, 0x98, 0x58, 0xC0, 0x40, 0x00, 0xff},*/
+	//先固定小遥控器测试？
+	// 万能遥控器/机顶盒
+/*    {0x00, 0xff,	//device encode*/
+/*    0x48, 0x90, 0xB8, 0xF8, 0xB0, 0x98, 0xD8, 0x88, 0xA8, 0xE8,		//0-9*/
+/*    0x4A, 0xCA, 0x28, 0xe0},	//+ - esc ok*/
+
 }
 
-ISR(TIMER0_OVF_vect){ ir_stop(); }
-
-void ir_stop(void){ ir_cnt=0; TCCR0B=0x00; power_timer0_disable(); }
+ISR(TIM0_OVF_vect){ ir_stop(); }
 
 int main(void)
 {
