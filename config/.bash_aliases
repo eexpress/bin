@@ -41,6 +41,7 @@ alias g='grep --color=always -inTZ 2>/dev/null'
 #grep 结果的文件名后面跟的：或者null，需要处理
 alias s='mplayer'
 alias rm='gvfs-trash'
+alias rmm='/bin/rm'
 #alias less='less -R'
 export LESS="--RAW-CONTROL-CHARS"
 #alias less='/usr/share/vim/vim74/macros/less.sh'
