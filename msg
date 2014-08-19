@@ -20,3 +20,6 @@ msg=`echo $msg|ascii2uni -a J -q`
 export DISPLAY=:0.0 && notify-send -i $icon "$title" "$msg" &
 #/usr/share/sounds/ubuntu/stereo
 [ -f "$sound" ] && paplay $sound || canberra-gtk-play -i window-slide
+# stock icon locate at:
+# /usr/share/notify-osd/icons/gnome/
+# /usr/share/icons/gnome/
