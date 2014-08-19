@@ -65,11 +65,13 @@ pre {
 code {
 	font-size: 1.1em;
 	font-weight: normal;
-	color: #6d6;
+/*    color: #6d6;*/
+/*    background-color:#300A24;*/
+	color: #ccc;
+	background-color:#333;
 /*    background-color:#414;*/
-	background-color:#300A24;
-	border-left:solid #080 5px;
-	padding: 2px 20px 2px 20px;
+	border-left:dashed #080 0.4em;
+	padding: 2px 10px 2px 10px;
 	font-family: 'Courier 10 Pitch',"Courier New",Monospace;
 }
 blockquote {
