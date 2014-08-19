@@ -9,6 +9,8 @@ adb
 tags
 note
 config
+doc
+upload
 
 *.png
 *.jpg
