@@ -1,0 +1,36 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=Swap-Mouse
+Icon=/home/eexp/bin/resources/icon/left.png
+
+# multi menu items
+X-Ayatana-Desktop-Shortcuts=s1;s2
+
+[s1 Shortcut Group]
+Name=左手鼠标
+#Icon=/home/eexp/bin/resources/icon/left.png
+Exec=bash -c "gsettings set org.gnome.settings-daemon.peripherals.mouse left-handed true; gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:'"
+TargetEnvironment=Unity
+
+[s2 Shortcut Group]
+Name=右手鼠标
+#Icon=/home/eexp/bin/resources/icon/right.png
+Exec=bash -c "gsettings set org.gnome.settings-daemon.peripherals.mouse left-handed false; gsettings set org.gnome.desktop.wm.preferences button-layout ':maximize,minimize,close'"
+TargetEnvironment=Unity
+
+#● gsettings list-schemas|grep mouse|while read i; do gsettings list-recursively $i; done|grep left
+#org.gnome.desktop.a11y.mouse dwell-gesture-single 'left'
+#org.gnome.settings-daemon.peripherals.mouse left-handed true
+
+#● gsettings list-schemas|while read i; do gsettings list-recursively $i; done|grep button-layout
+#org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:'
+#● gconftool -g /apps/compiz-1/plugins/shift/screen0/options/initiate_all_edge
+#TopRight
+#● gconftool -g /apps/compiz-1/plugins/expo/screen0/options/expo_edge
+#TopLeft
+#● gconftool -g /apps/compiz-1/plugins/scale/screen0/options/initiate_all_edge
+#BottomRight
+

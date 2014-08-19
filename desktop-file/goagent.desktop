@@ -1,0 +1,21 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=GoAgent
+Icon=/home/eexp/图片/icon/info.png
+
+# multi menu items
+X-Ayatana-Desktop-Shortcuts=s1;s2
+
+[s1 Shortcut Group]
+Name=Start GoAgent
+Exec=/bin/bash -c "~/bin/msg info.png goagent start; cd ~/bin/goagent/local/; ./proxy.py"
+TargetEnvironment=Unity
+
+[s2 Shortcut Group]
+Name=Stop GoAgent
+Exec=/bin/bash -c "~/bin/msg info-grey.png goagent stop; lsof -i :8087|sed -n 2p|cut -d' ' -f 3|xargs kill"
+TargetEnvironment=Unity
+

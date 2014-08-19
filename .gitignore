@@ -1,8 +1,8 @@
-goagent*
+goagent-local
 old*
-cairo*
-paste*
-nmn*
+cairo-weather
+paste-img
+nmn
 mkd.*
 
 adb
