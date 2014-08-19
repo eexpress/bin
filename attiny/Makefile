@@ -18,16 +18,27 @@ compile :
 	$(SIZE) $(OUTPUT).out -C --mcu=$(MCU)
 #------------------------------------------
 fuse9.6M:
-	$(AVRDUDE) -U lfuse:w:0x6a:m
+	$(AVRDUDE) -U lfuse:w:0x6a:h
 fuse4.8M:
-	$(AVRDUDE) -U lfuse:w:0x69:m
+	$(AVRDUDE) -U lfuse:w:0x69:h
 fuse128K:
-	$(AVRDUDE) -U lfuse:w:0x6b:m
+	$(AVRDUDE) -U lfuse:w:0x6b:h
 fuseOscExt:
-	$(AVRDUDE) -U lfuse:w:0x68:m
+	$(AVRDUDE) -U lfuse:w:0x68:h
+#------------------------------------------
+readflash:
+	$(AVRDUDE) -U flash:r:-:h
+readeeprom:
+	$(AVRDUDE) -U eeprom:r:-:h
+readfuse:
+	$(AVRDUDE) -U hfuse:r:-:h -U lfuse:r:-:h
+readlock:
+	$(AVRDUDE) -U lock:r:-:h
+#    hex format output to stdout, normally is 0x3F
 #------------------------------------------
 download:
-	$(AVRDUDE) -e -U flash:w:$(OUTPUT).hex
+	$(AVRDUDE) -e -U flash:w:$(OUTPUT).out:e
+#    $(AVRDUDE) -e -U flash:w:$(OUTPUT).hex
 #------------------------------------------
 monitor:
 	stty -F /dev/ttyUSB0 9600 cs8 -parenb -cstopb
