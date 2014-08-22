@@ -21,5 +21,5 @@ echo "-----------------------"
 echo "复制当前目录新增的文件到远程相同目录($dest:$dir)，确认执行，请按空格键/回车键。其他键取消。"
 read -s -n 1 y
 if [[ $y == '' ]]; then
-	cat /tmp/scp.list |while read i ; do scp $i $dest:$dir; done
+	cat /tmp/scp.list |while read i ; do scp "$i" $dest:$dir; done
 fi
