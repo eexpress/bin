@@ -100,7 +100,7 @@ au BufRead *.pl,*.perl,*.c,*.h,*.bash map <expr> <C-f> Search_Word_In_Dir()
 func Search_Word_In_Dir()
 	let w = expand("<cword>")      " 在当前光标位置抓词
 	let e = expand("%:p:e")      " 取得当前文件的类型
-	return ":vimgrep ".w." *.".e."\<CR>:copen\<CR>"
+	return ":vimgrep /\\<".w."\\>/ *.".e."\<CR>:copen\<CR>"
 endfun
 
 inoremap <expr> <Tab> MyTab()
