@@ -136,12 +136,10 @@ ERR-201		|		储器读写出错
 1. ###检查功能
 > 设计验证测试的情况，才进行此部分测试。常规测试，可跳过此步骤。
 
-  1. <input type="checkbox"/>累计用气量低于0.08时，无检查功能
-  1. <input type="checkbox"/>关阀后，无检查功能
-  1. <input type="checkbox"/>100个负计数出检查
-  1. <input type="checkbox"/>出检查时，整屏闪烁关阀，按键开阀
-  1. <input type="checkbox"/>开阀后“检查”标志闪烁
-  1. <input type="checkbox"/>有脉冲进入后，标志消失
+  1. <input type="checkbox"/>101个负计数出检查
+  1. <input type="checkbox"/>出检查时，整屏闪烁关阀
+  1. <input type="checkbox"/>按键后，检查标志保留
+  1. <input type="checkbox"/>重新上电后，检查标志保留
 
 1. ###低电压检测功能
 > **一级电压检测**:每分钟检测一次电压，阀门动作结束后10秒内不检测。当检测到芯片电压值在3.0到3.3V时，液晶屏整屏闪烁阀门关闭，按键可开阀，但是“欠压”闪烁，机器进入二级电压检测。
