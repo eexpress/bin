@@ -54,6 +54,8 @@ ISR(INT0_vect){
 
 }
 
+/*三色：绿色认到；红色不认；黄色重复；重复5次，设置；*/
+
 ISR(TIM0_OVF_vect){ ir_stop(); }
 
 int main(void)
