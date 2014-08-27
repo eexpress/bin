@@ -58,9 +58,11 @@ li:nth-child(2n-1) {
 }
 pre {
 	display:block;
-	overflow:auto;
+/*    overflow:auto;*/
 	width: 80%;
 	margin-left: 5%;
+	background-color:#333;
+	padding: 2px 0px 2px 0px;
 }
 code {
 	font-size: 1.1em;

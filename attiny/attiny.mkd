@@ -1,0 +1,129 @@
+<head>
+<title>MarkDown File</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link href="mkd.css" rel="stylesheet" type="text/css">
+</head>
+
+AVR® 8-Bit RISC 单片机选型列表
+===========================
+
+Devices |Flash (Kbytes) |EEPROM (Bytes) |SRAM (Bytes) |I/O |F.max (MHz) |16bit Timers |8bit Timers 
+----|------|-------|-------|---|---|----|-----|-----
+ATtiny13A			|1	|64		|64B+32reg	|6		|20	|-	|1 
+ATtiny13　ATtiny13V	|1	|64		|64B+32reg	|6		|20	|-	|1
+ATtiny2313A			|2	|128	|128		|18		|20	|1	|1
+ATtiny2313　ATtiny2313V	|2		|128		|128	|18	|20	|1	|1
+ATtiny24A			|2	|128	|128		|12		|20	|1	|1
+ATtiny24　ATtiny24V	|2	|128	|128		|12		|20	|1	|1
+ATtiny25　ATtiny25V	|2	|128	|128		|6		|20	|-	|2
+ATtiny26　ATtiny26L	|2	|128	|128		|16		|16	|-	|2
+ATtiny44　ATtiny44V	|4	|256	|256		|12		|20	|1	|1
+ATtiny45　ATtiny45V	|4	|256	|256		|6		|20	|-	|2
+ATtiny48			|4	|64		|256		|24/28	|12	|1	|1
+ATtiny84　ATtiny84V	|8	|512	|512		|12		|20	|1	|1
+ATtiny88			|8	|64		|512		|24/28	|12	|1	|1
+
+
+1. Vcc: 1.8-5.5, exclusion ATtiny26 serial.
+
+1. all with ISP/WDT
+
+
+##型号命名规则
+
+ATmega64|L|-|8|A|U
+---------|-------|-----|------|--------|---------
+主型号|低电压，宽电压|-|最高主频|- A TOFP|- C商业级 - I工业级 - U无铅工业级
+
+
+ATtiny24|V|-|8|SS|U
+---------|-------|-----|------|--------|---------
+主型号|V:1.8-5.5V,其他2.7-5.5V|-|最高主频|“P”：DIP封装，“S”：SOP封装，“SS”：SSOP(SOIC)封装,“M”：MLF封装。|C商业级 I工业级 U无铅工业级
+
+##USBASP编程器
+
+
+ATTINY13A   |	USBASP
+------------|-------------
+MOSI(PIN5)	|	MOSI
+RESET(PIN1)	|	REST
+SCK(PIN7)	|	SCK
+MISO(PIN6)	|	MISO
+VCC(PIN8)	|	VCC
+GND(PIN4)	|	GND
+
+ATtiny13A-SSU
+========================
+
+##dmesg
+
+	[21992.399497] usb 3-2: new low-speed USB device number 4 using xhci_hcd
+	[21992.421968] usb 3-2: New USB device found, idVendor=16c0, idProduct=05dc
+	[21992.421975] usb 3-2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+	[21992.421979] usb 3-2: Product: USBasp
+	[21992.421982] usb 3-2: Manufacturer: www.fischl.de
+
+
+
+##让系统udev识别USBasp
+
+	▶ cd /etc/udev/rules.d/
+	▶ sudo ln -sf '/home/eexp/文档/atmega/99-usbasp.rules' .
+
+*重新插入USBasp*
+
+	▶ avrdude -p t13 -c usbasp -U lfuse:w:0x6A:m -F
+
+##avrdude
+
+###first time
+
+	▶ make download 
+	avrdude -p t13 -c usbasp -e -U flash:w:wmonitor.hex
+
+	avrdude: warning: cannot set sck period. please check for usbasp firmware update.
+	avrdude: AVR device initialized and ready to accept instructions
+
+	Reading | ################################################## | 100% 0.00s
+
+	avrdude: Device signature = 0x1e9007
+	avrdude: erasing chip
+	avrdude: warning: cannot set sck period. please check for usbasp firmware update.
+	avrdude: reading input file "wmonitor.hex"
+	avrdude: input file wmonitor.hex auto detected as Intel Hex
+	avrdude: writing flash (346 bytes):
+
+	Writing | ################################################## | 100% 0.26s
+
+	avrdude: 346 bytes of flash written
+	avrdude: verifying flash memory against wmonitor.hex:
+	avrdude: load data flash data from input file wmonitor.hex:
+	avrdude: input file wmonitor.hex auto detected as Intel Hex
+	avrdude: input file wmonitor.hex contains 346 bytes
+	avrdude: reading on-chip flash data:
+
+	Reading | ################################################## | 100% 0.19s
+
+	avrdude: verifying ...
+	avrdude: 346 bytes of flash verified
+
+	avrdude: safemode: Fuses OK (H:FF, E:FF, L:6A)
+
+	avrdude done.  Thank you.
+
+###seconde time
+
+	▶ make download 
+	avrdude -p t13 -c usbasp -e -U flash:w:wmonitor.hex
+
+	avrdude: warning: cannot set sck period. please check for usbasp firmware update.
+	avrdude: error: programm enable: target doesn't answer. 1 
+	avrdude: initialization failed, rc=-1
+			 Double check connections and try again, or use -F to override
+			 this check.
+
+
+	avrdude done.  Thank you.
+
+	make: *** [download] 错误 1
+

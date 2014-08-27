@@ -17,8 +17,8 @@ set hlsearch
 set incsearch		" 输入字符串就显示匹配点
 set tabstop=4
 set shiftwidth=4
-set list
-set listchars=tab:\|\ 
+"set list
+"set listchars=tab:\|\ 
 "状态栏
 set laststatus=2
 set statusline=
