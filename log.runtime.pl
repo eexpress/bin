@@ -1,5 +1,17 @@
 #!/usr/bin/perl
 
+$_=`last|grep reboot|cut -d" " -f 8-`;
+s/Aug\ */08-/g;
+s/Mon/周一/g;
+s/Tue/周二/g;
+s/Wed/周三/g;
+s/Thu/周四/g;
+s/Fri/周五/g;
+s/Sat/周六/g;
+s/Sun/周日/g;
+print $_;
+exit;
+
 $log='/var/log/kern.log';
 $re='proc\b';
 
