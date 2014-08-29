@@ -21,8 +21,12 @@ else
 	alias ag='sudo apt-get upgrade'
 fi
 	alias aa='sudo apt-get autoremove'
-	alias as='aptitude search'
 	alias aw='aptitude show'
+#    alias as='aptitude search'
+#▶ aptitude search '!~nlib!~ri386!~v dock tool'
+#p   autodocktools                        - GUI to help set up, launch and analyze AutoDock
+#p   mgltools-pyautodock                  - Python implementation of autodock
+as(){ aptitude search "!~nlib!~ri386!~v $*";}
 
 alias cal='cal -3'
 alias calendar='calendar -A 7'
