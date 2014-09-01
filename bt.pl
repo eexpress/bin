@@ -12,13 +12,13 @@ die "not correct id." if !$s;
 print "> $s <\n";
 open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
 #--------------------------------------------
-$url="http://thepiratebay.ee/s/?q=$s&page=0&orderby=99";
+$url="http://thepiratebay.se/s/?q=$s&page=0&orderby=99";
 print "1 ->\t$url\n"; $_ = get($url);
 die "Couldn't get it!" unless defined $_;
 #<a href="/torrent/9278096/IPZ-260 Erika Shibasaki JAV CENSORED"
 /href=\"\/torrent.*?\"/; $_=$&; s/href=//; s/\"//g; s/\ /%20/g;
 if($_=~m'/'){
-	$url="http://thepiratebay.ee$_";
+	$url="http://thepiratebay.se$_";
 	print "2 ->\t$url\n"; $_ = get($url);
 	/magnet:[^"]*/; $_=$&; $_.="\n";
 	`transmission-remote -a "$_"`;
