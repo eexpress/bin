@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #find and rm files before special time
+#新下载的，复制的文件，应该看ctime。只是节点变化了，内容mtime没变化。
 if [[ ${#1} -eq 8 || ${#1} -eq 12 ]]; then time=$1;
 elif [ ${#1} -eq 4 ]; then time=`date +%m%d`$1;
 else echo "need time: [[YYYY]MMDD]hhmm"; exit; fi
