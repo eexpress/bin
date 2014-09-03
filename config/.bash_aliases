@@ -61,6 +61,7 @@ alias sk='sudo pkill -9'
 alias l='ls -CF --color'
 alias la='ls -AF --color'
 alias ll='ls -lFht --color'
+alias lc='ls -lFhtc --color'
 
 alias ps='/bin/ps -e -o pid,command'
 alias rm_empty_dir='find -type d -empty -exec rmdir {} \;'
