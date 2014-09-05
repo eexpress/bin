@@ -6,10 +6,10 @@ dest="/home/eexp/视频/restricted"
 dest1="/media/eexp/32G/restricted/"
 if [ -d $dest1 ]; then dest=$dest1; fi
 echo $dir>>/tmp/bt_dir.log
-cd $dir
+#cd $dir
+cd $TR_TORRENT_DIR
 mv *.avi *.mp4 *.wmv $dest
 #[ $? != 0 ] && exit
-cd $TR_TORRENT_DIR
 #rm -r $TR_TORRENT_NAME
 gvfs-trash $TR_TORRENT_NAME
 cd $dest
