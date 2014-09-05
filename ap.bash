@@ -4,6 +4,8 @@
 iw list|grep '* AP'
 [ $? -ne 0 ] && echo "No device support AP mode." && exit
 
+sudo nmcli nm wifi off
+sudo rfkill unblock wlan
 sudo ifconfig wlan0 192.168.0.1 netmask 255.255.255.0
 sudo sysctl -w net.ipv4.ip_forward=1
 sudo iptables -t nat -F
