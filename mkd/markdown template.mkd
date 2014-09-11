@@ -24,3 +24,9 @@
 -------------
 	sudo apt-get install markdown
 
+
+##表格居中
+6KV|8KV|10KV|16KV
+--|--|:--:|--|--
+隔离|正常|MR|MR|MR不恢复
+接地|MR|MR不恢复|||
