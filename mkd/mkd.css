@@ -7,6 +7,8 @@ body {
 	background-color: #eee;
 	font-family: 'URW Gothic L', 'Vera Sans YuanTi', Sans-serif;
 	color: #444;
+	width:900;
+	margin:auto;
 }
 a {
 	color: blue;
