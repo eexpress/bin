@@ -4,7 +4,7 @@
 Type=Application
 Terminal=false
 Name=Swap-Mouse
-Icon=/home/eexp/bin/resources/icon/left.png
+Icon=/home/eexp/图片/图标/redhand.png
 
 # multi menu items
 X-Ayatana-Desktop-Shortcuts=s1;s2
