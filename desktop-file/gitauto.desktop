@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=Git Auto Push/Pull
+Icon=/home/eexp/图片/icon/github-color.svg
+Exec=/home/eexp/bin/git.pl
+
