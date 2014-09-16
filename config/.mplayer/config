@@ -11,4 +11,4 @@ sub-fuzziness=2
 #设置按什么方法来进行自动缩放字幕，0－不自动缩放，1－按电影高度缩放，2－按电影宽度缩放，3－按电影对角线缩放(默认值)
 subfont-autoscale=1
 #设置字幕文本的自动缩放系数(屏幕尺寸的百分比)，值范围为0～100，默认值为5。
-subfont-text-scale=5
+subfont-text-scale=10
