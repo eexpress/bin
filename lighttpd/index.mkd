@@ -5,7 +5,7 @@
 </head>
 
 ---
-## git repo
+## Git Repo
 
 - 使用 `git clone git@192.168.100.7:xxx.git` ，可以克隆仓库到本地。
 
@@ -21,7 +21,7 @@
 
 ---
 
-## web resources
+## Web Resources
 
 项目名称|URL|项目名称|URL
 --|---|--|---
