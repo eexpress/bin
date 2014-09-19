@@ -11,7 +11,7 @@
 	d2d	= diff master@{'2 days ago'}
 	d3d	= diff master@{'3 days ago'}
 	dflog = log -p
-	ls = !sh -c 'git ls-files|ascii2uni -a K'
+	ls = ls-files
 	lg = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr)%Creset %s'
 	ll = reflog
 	web = instaweb
@@ -31,3 +31,5 @@
 	proxy=http://localhost:8087
 [push]
 	default = simple
+[core]
+	quotepath = false
