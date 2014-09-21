@@ -52,9 +52,11 @@ li {
 }
 li:nth-child(2n) {
 	background: #eee;
+	text-shadow: 1px 1px 1px #bbb;
 }
 li:nth-child(2n-1) {
 	background: #ddd;
+	text-shadow: 1px 1px 1px #fff;
 }
 pre {
 	display:block;
