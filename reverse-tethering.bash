@@ -1,23 +1,7 @@
-# Linux <-> Android Reverse Tethering Script
-# This script tether the internet from your PC *to* the phone
-# Some apps will not recognize the connection
+#!/bin/bash
 
-echo "Enabling NAT on `hostname`..."
-#enable IPV4 Forwarding.
-sudo sysctl -w net.ipv4.ip_forward=1
-#Flush the selected chain. deleting all the rules.
-sudo iptables -t nat -F
-#-A Append. -j Jump to the target. -o eth0 is Name  of an interface via which a packet is going to be sent.
-#sudo iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
-sudo iptables -t nat -A POSTROUTING -j MASQUERADE
-#set DNS using 8.8.8.8 through udp.
-#sudo iptables -t nat -A PREROUTING -i usb0 -p udp -m udp --dport 53 -j DNAT --to-destination 8.8.8.8:53
-#get active interface
-ip route|grep default|cut -d' ' -f 5|grep wlan0
-#force setup DNS
-if [ $? -eq 0 ]; then sudo iptables -t nat -A PREROUTING -i usb0 -p udp -m udp --dport 53 -j DNAT --to-destination 8.8.8.8:53; fi
-
-#echo "Connecting to the phone via 'adb ppp'..."
-#/usr/bin/adb ppp "shell:pppd nodetach noauth noipdefault defaultroute /dev/tty" nodetach noauth noipdefault notty 10.0.0.1:10.0.0.2
-
-echo "Done."
+adb root
+adb shell busybox ifconfig
+adb shell netcfg rndis0 dhcp
+adb shell ifconfig rndis0 10.42.0.2 netmask 255.255.255.0
+adb shell route add default gw 10.42.0.1 dev rndis0
