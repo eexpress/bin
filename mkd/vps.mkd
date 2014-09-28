@@ -7,49 +7,46 @@
 VPS
 ========================
 
-1. ssh-copy-id root@128.199.153.182
+
+准备工作
+-------
+
+1. ▶ ssh-copy-id root@128.199.153.182
+
+1. ▶ scp ~/.bash_aliases root@128.199.153.182:~
 
 
-
-SSH的反向隧道
-========================
-
-本机
+本机开启ssh反向隧道
 ------
 
 1. 建立SSH的反向隧道
 
-	▶ ssh -NfR 2222:localhost:22 root@128.199.153.182
 
--N：不执行任何指令
--f：背景执行
--R：主要建立reverse tunnel的参数
+		▶ ssh -NfR 2222:localhost:22 root@128.199.153.182
 
-root@eexp:~# nmap localhost
+	> -N：不执行任何指令
+	> -f：背景执行
+	> -R：主要建立reverse tunnel的参数
 
-Starting Nmap 6.40 ( http://nmap.org ) at 2014-09-27 22:47 EDT
-Nmap scan report for localhost (127.0.0.1)
-Host is up (0.000014s latency).
-Not shown: 998 closed ports
-PORT     STATE SERVICE
-22/tcp   open  ssh
-2222/tcp open  EtherNet/IP-1
+	`root@eexp:~# nmap localhost` 可以看到： 
+	> 2222/tcp open  EtherNet/IP-1
 
 1. 远程可以访问本机了。
 
-	root@eexp:~# ssh eexp@localhost -p 2222
+		root@eexp:~# ssh eexp@localhost -p 2222
 
 
-远程
+远程开启dns服务
 -----
 
 1. 安装dns服务，启用53端口
 
-	root@eexp:~# apt-get install bind9
+		root@eexp:~# apt-get install bind9
 
-`nmap localhost` 可以看到： 
-> 53/tcp open  domain
+	`root@eexp:~# nmap localhost` 可以看到： 
+	> 53/tcp open  domain
 
 
 1. NM里面连接，编辑，IPV4的DNS由 50.20.127.238, 50.20.127.170 改为 128.199.153.182。重新连接。
 
+------
