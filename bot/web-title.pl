@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 use LWP::Simple;
-sub cv {
-	open(CV, "|/usr/bin/enconv") or die("没有命令：enconv。\n");
-	print CV $_[0];
-	close CV;
-}
+#sub cv {
+#    open(CV, "|/usr/bin/enconv") or die("没有命令：enconv。\n");
+#    print CV $_[0];
+#    close CV;
+#}
 use LWP;
 use LWP::UserAgent;
 my $ua = LWP::UserAgent->new();
@@ -16,9 +16,9 @@ if ( $reply->is_success ) {
 
 $html=~/<title>.*?<\/title>/is;my $t=$&;$t=~s/\xa//sg;$t=~s/<.*?>//g;
 $t=~s/&\w*;//g;
-cv($t);print "\n";
+#cv($t);print "\n";
 #`echo -n $t|enconv`;
-#use Encode qw/encode decode/;
-#my $utf8=decode("cp936", $t);print $utf8;
+use Encode qw/encode decode/;
+my $utf8=decode("cp936", $t);print $utf8;
 }
 else {die "无法获取的地址。";}
