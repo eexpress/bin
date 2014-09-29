@@ -11,29 +11,42 @@ VPS
 准备工作
 -------
 
-1. ▶ ssh-copy-id root@128.199.153.182
+1. 复制公钥到远程
 
-1. ▶ scp ~/.bash_aliases root@128.199.153.182:~
+		▶ ssh-copy-id root@128.199.153.182
+
+1. 复制shell习惯到远程
+
+		▶ scp ~/.bash_aliases root@128.199.153.182:~
+		▶ scp ~/.vimrc root@128.199.153.182:~
+
+1. 摧毁密码
+
+		▶ ssh root@128.199.153.182
+		root@eexp:~# passwd
+		Enter new UNIX password: 
+		Retype new UNIX password: 
+		passwd: password updated successfully
 
 
-本机开启ssh反向隧道
+远程开启ssh反向隧道
 ------
 
-1. 建立SSH的反向隧道
+1. 建立SSH的反向隧道，映射本地8000端口到远程80端口。
 
-
-		▶ ssh -NfR 2222:localhost:22 root@128.199.153.182
+		▶ ssh root@128.199.153.182
+		root@eexp:~# ssh -NfR 8000:localhost:80 eexp@58.20.53.238
 
 	> -N：不执行任何指令
+
 	> -f：背景执行
+	
 	> -R：主要建立reverse tunnel的参数
+	
+	> 8000 是本地端口，58.20.53.238 是本地外网ip。
 
-	`root@eexp:~# nmap localhost` 可以看到： 
-	> 2222/tcp open  EtherNet/IP-1
 
-1. 远程可以访问本机了。
-
-		root@eexp:~# ssh eexp@localhost -p 2222
+1. 本地pac出口设置成8000端口，就可以通过远程出去了。
 
 
 远程开启dns服务
@@ -49,4 +62,9 @@ VPS
 
 1. NM里面连接，编辑，IPV4的DNS由 50.20.127.238, 50.20.127.170 改为 128.199.153.182。重新连接。
 
+1. 验证下，别被dnsmasq 欺骗了。
+
+		▶ dig www.163.com|g SERVER
+
 ------
+
