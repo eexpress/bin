@@ -89,4 +89,14 @@ ssh开启socks代理
 
 ![fx设置](fx设置.png)
 
+
+▶ groupadd ssh_group
+▶ useradd -d /home/eexp -m -g ssh_group -s /bin/false eexp
+eexp:x:1000:1000::/home/eexp:/bin/false
+▶ passwd eexp
+▶ ssh-copy-id eexp@128.199.153.182
+▶ useradd -s /bin/false icep
+▶ passwd icep
+
+
 ---
