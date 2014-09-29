@@ -56,7 +56,8 @@ VPS
 
 		root@eexp:~# apt-get install bind9
 
-	`root@eexp:~# nmap localhost` 可以看到： 
+	> `root@eexp:~# nmap localhost` 可以看到： 
+
 	> 53/tcp open  domain
 
 
@@ -66,5 +67,26 @@ VPS
 
 		▶ dig www.163.com|g SERVER
 
+
+ssh开启socks代理		
 ------
 
+	▶ ssh -qTfnN -D 7070 root@128.199.153.182
+	▶ nmap|g 7070
+	  10   :7070/tcp open  realserver
+
+> -q 安静模式。把所有的警告和讯息抑制，只有严重的错误才会被显示。
+
+> -T 禁用虚拟终端
+
+> -f 要求ssh 在背景执行命令
+
+> -n 重导 stdin 到 /dev/null
+
+> -N：不执行任何指令
+
+> -D 绑定的【本级地址】和端口
+
+![fx设置](fx设置.png)
+
+---
