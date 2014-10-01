@@ -89,14 +89,36 @@ ssh开启socks代理
 
 ![fx设置](fx设置.png)
 
+	▶ groupadd ssh_group
+	▶ useradd -d /home/eexp -m -g ssh_group -s /bin/false eexp
+	eexp:x:1000:1000::/home/eexp:/bin/false
+	▶ passwd eexp
+	▶ ssh-copy-id eexp@128.199.153.182
+	▶ useradd -s /bin/false icep
+	▶ passwd icep
 
-▶ groupadd ssh_group
-▶ useradd -d /home/eexp -m -g ssh_group -s /bin/false eexp
-eexp:x:1000:1000::/home/eexp:/bin/false
-▶ passwd eexp
-▶ ssh-copy-id eexp@128.199.153.182
-▶ useradd -s /bin/false icep
-▶ passwd icep
+家里的ISP没有外网出口
+--------
+
+	▶ myip.pl 
+	58.20.50.250
+
+---
+	▶ /usr/bin/nmap 58.20.50.250
+
+	Starting Nmap 6.40 ( http://nmap.org ) at 2014-10-01 19:00 CST
+	Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
+	Nmap done: 1 IP address (0 hosts up) scanned in 3.04 seconds
+
+---
+	▶ /usr/bin/nmap -Pn 58.20.50.250
+
+	Starting Nmap 6.40 ( http://nmap.org ) at 2014-10-01 18:37 CST
+	Nmap scan report for 58.20.50.250
+	Host is up.
+	All 1000 scanned ports on 58.20.50.250 are filtered
+
+	Nmap done: 1 IP address (1 host up) scanned in 201.31 seconds
 
 
 ---
