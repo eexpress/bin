@@ -1,4 +1,5 @@
 function FindProxyForURL(url, host) {
+	var autosocks = 'SOCKS5 127.0.0.1:7070';
 	var autoproxy = 'PROXY 127.0.0.1:8087';
 	var blackhole = 'PROXY 127.0.0.1:8086';
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
@@ -26,14 +27,12 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.t.co') || host == 't.co' ||
 		shExpMatch(host, "*thepiratebay.*") ||
 		shExpMatch(host, "*twitter.com*") ||
-		host == 'ow.ly' ||
-		host == 'goo.gl') return autoproxy;
-	if (
 		shExpMatch(host, "*facebook.com*") ||
 		dnsDomainIs(host, '.facebook.com') || host == 'facebook.com' ||
 		dnsDomainIs(host, '.connect.facebook.net') ||
 		host == 'connect.facebook.net' ||
-		/^https?:\/\/[^\/]+facebook\.com/i.test(url)
-		) return autoproxy;
+		/^https?:\/\/[^\/]+facebook\.com/i.test(url) ||
+		host == 'ow.ly' ||
+		host == 'goo.gl') { return autosocks; }
 	return "DIRECT";
 }
