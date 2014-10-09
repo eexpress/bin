@@ -7,6 +7,7 @@ chdir "$ENV{HOME}/bin";
 if($_[-1] =~ /nothing added to commit|提交为空/){
 	print "本地无更新，自动获取远程更新。\n";
 	`git pull`;
+#    `echo 'finish'; read -n 1`;
 	exit;
 }
 @_=grep /modified:|new file:|deleted:|修改:|删除:|新文件:|重命名:/,@_;
