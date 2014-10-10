@@ -23,7 +23,7 @@ max-lease-time 7200;
 subnet 192.168.0.0 netmask 255.255.255.0
 {
  range 192.168.0.2 192.168.0.250;
- option domain-name-servers 8.8.8.8;
+ option domain-name-servers 128.199.153.182;
  option routers 192.168.0.1;
 }
 EOF
