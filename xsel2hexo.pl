@@ -37,7 +37,8 @@ foreach (@t){
 	print OUT "- $_\n" if /\S/;
 }
 print OUT "---\n";
-print OUT "@text\n";
+foreach(@text){print OUT $_;}
+#print OUT "@text\n";
 close OUT;
 #print "--------";
 #print @text;
