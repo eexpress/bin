@@ -26,9 +26,6 @@
 [user]
 	name = eexpress
 	email = eexpress@163.com
-[http]
-	sslVerify = false
-	proxy=http://localhost:8087
 [push]
 	default = simple
 [core]
