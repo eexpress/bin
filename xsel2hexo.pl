@@ -5,7 +5,7 @@ foreach (@_){
 	if(/^20\d\d-\d/){$date=$_;}
 	elsif(/^#/){$tag=$_;}
 	else{
-		if(/图片/){push @text,"![](/img/)\n";}
+		if(/^图片$/){push @text,"![](/img/)\n";}
 		else{
 			push @text,$_ if /\S/;
 		}
