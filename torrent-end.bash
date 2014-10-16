@@ -9,6 +9,7 @@ echo $dir>>/tmp/bt_dir.log
 #cd $dir
 cd $TR_TORRENT_DIR
 mv *.avi *.mp4 *.wmv $dest
+mv */*.avi */*.mp4 */*.wmv $dest
 #[ $? != 0 ] && exit
 #rm -r $TR_TORRENT_NAME
 gvfs-trash $TR_TORRENT_NAME
