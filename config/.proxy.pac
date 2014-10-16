@@ -15,6 +15,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.wordpress.com') ||
 		dnsDomainIs(host, '.youtube.com') ||
 		dnsDomainIs(host, '.blogspot.com') ||
+		dnsDomainIs(host, '.blogspot.hk') ||
 		dnsDomainIs(host, '.yting.com') ||
 		dnsDomainIs(host, '.ggpht.com') ||
 		dnsDomainIs(host, '.wikipedia.org') ||
