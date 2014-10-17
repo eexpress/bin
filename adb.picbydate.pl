@@ -33,7 +33,7 @@ if($_){
 print "use: $today\n";
 
 #$dir='sdcard/DCIM/100MEDIA';
-@DIR=('sdcard/DCIM/100MEDIA','sdcard/AliveShare/photo','sdcard/AliveShare','sdcard/Pictures/Screenshots');
+@DIR=('sdcard/DCIM/100MEDIA','sdcard/AliveShare/photo','sdcard/AliveShare','sdcard/Pictures/Screenshots','sdcard/DCIM/Camera');
 foreach $dir (@DIR){
 	print "=====>  $dir  <=====\n";
 	@_=map {s/.*\ //;$_} grep /$today/,`adb shell ls -l $dir/*.jpg $dir/*.png`;
