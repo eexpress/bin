@@ -8,13 +8,13 @@ if [ -d $dest1 ]; then dest=$dest1; fi
 echo $dir>>/tmp/bt_dir.log
 #cd $dir
 cd $TR_TORRENT_DIR
-mv *.avi *.mp4 *.wmv $dest
-mv */*.avi */*.mp4 */*.wmv $dest
+mv *.avi *.mp4 *.wmv *.mkv $dest
+mv */*.avi */*.mp4 */*.wmv */*.mkv $dest
 #[ $? != 0 ] && exit
 #rm -r $TR_TORRENT_NAME
 gvfs-trash $TR_TORRENT_NAME
 cd $dest
-for i in *.avi *.mp4 *.wmv; do
+for i in *.avi *.mp4 *.wmv *.mkv; do
 rename 's/.*\..*\.cc-//; s/.*3xplanet_//; s/^[\d\.]*-//' $i
 done
 
