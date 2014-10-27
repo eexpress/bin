@@ -5,6 +5,7 @@ function FindProxyForURL(url, host) {
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
 	if (
 		dnsDomainIs(host, '.google.com') ||
+		dnsDomainIs(host, 'plus.google.com') ||
 		dnsDomainIs(host, '.googleapis.com') ||
 		dnsDomainIs(host, '.toshl.com') ||
 		dnsDomainIs(host, '.cloudfront.net') ||
