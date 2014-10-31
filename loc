@@ -1,0 +1,4 @@
+#!/bin/bash
+
+r=`echo $*|sed 's/\ /|/g'`
+locate -AbeLi $*|grep "^`pwd`"|grep --color=always -iE "$r"
