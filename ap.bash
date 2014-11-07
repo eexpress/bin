@@ -1,10 +1,31 @@
 #!/bin/bash
 
+pgrep hostapd
+s=$?
+if [ $s -eq 0 ]; then
+	t=启动; o=关闭; i='warning'
+else
+	t=关闭; o=开启; i='error'
+fi
+
+zenity --question --window-icon=$i --title="AP热点状态 - $t" --text=选择启动或关闭无线热点 --ok-label=$o --cancel-label="保持$t"
+[ $? -eq 1 ] && exit
+
+#切换模式
+if [ $s -eq 0 ]; then
+	msg AP热点 关闭
+	gksudo pkill hostapd
+	exit
+fi
+
+msg AP热点 开启
+#exit
+
 #● ai hostapd dhcp3-server 
 iw list|grep '* AP'
 [ $? -ne 0 ] && echo "No device support AP mode." && exit
 
-sudo nmcli nm wifi off
+zenity --password --title=输入sudo密码|sudo -S nmcli nm wifi off
 sudo rfkill unblock wlan
 sudo ifconfig wlan0 192.168.0.1 netmask 255.255.255.0
 sudo sysctl -w net.ipv4.ip_forward=1

@@ -3,14 +3,4 @@ Type=Application
 Terminal=false
 Name=AP 热点
 Icon=/home/eexp/图片/inkscape/单色图标/wifi.svg
-Actions=Start;Stop
-
-[Desktop Action Start]
-Name=Start AP
-Exec=gksudo /home/eexp/bin/ap.bash
-OnlyShowIn=Unity;
-
-[Desktop Action Stop]
-Name=Stop AP
-Exec=gksudo pkill hostapd
-OnlyShowIn=Unity;
+Exec=/home/eexp/bin/ap.bash
