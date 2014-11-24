@@ -26,6 +26,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.sourceforge.net') ||
 		dnsDomainIs(host, '.stackoverflow.com') ||
 		dnsDomainIs(host, '.sstatic.net') ||
+		dnsDomainIs(host, '.instagram.net') ||
 		dnsDomainIs(host, '.twitter.com') ||
 		dnsDomainIs(host, '.twimg.com') ||
 		dnsDomainIs(host, '.opera.com') ||
