@@ -20,6 +20,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.blogspot.tw') ||
 		dnsDomainIs(host, '.blogspot.hk') ||
 		dnsDomainIs(host, '.yting.com') ||
+		dnsDomainIs(host, '.ytimg.com') ||
 		dnsDomainIs(host, '.ggpht.com') ||
 		dnsDomainIs(host, '.wikipedia.org') ||
 		dnsDomainIs(host, '.sf.net') ||
