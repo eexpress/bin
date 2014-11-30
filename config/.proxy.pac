@@ -7,6 +7,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.google.com') ||
 		dnsDomainIs(host, 'plus.google.com') ||
 		dnsDomainIs(host, '.googleapis.com') ||
+		dnsDomainIs(host, '.google-analytics.com') ||
 		dnsDomainIs(host, '.gigacircle.com') ||
 		dnsDomainIs(host, '.toshl.com') ||
 		dnsDomainIs(host, '.opera.com') ||
