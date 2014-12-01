@@ -29,6 +29,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.xda-developers.com') ||
 		dnsDomainIs(host, '.sstatic.net') ||
 		dnsDomainIs(host, '.instagram.net') ||
+		dnsDomainIs(host, '.instagram.com') ||
 		dnsDomainIs(host, '.twitter.com') ||
 		dnsDomainIs(host, '.twimg.com') ||
 		dnsDomainIs(host, '.opera.com') ||
