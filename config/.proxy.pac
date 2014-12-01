@@ -7,8 +7,10 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.google.com') ||
 		dnsDomainIs(host, 'plus.google.com') ||
 		dnsDomainIs(host, '.googleapis.com') ||
+		dnsDomainIs(host, '.google-analytics.com') ||
 		dnsDomainIs(host, '.gigacircle.com') ||
 		dnsDomainIs(host, '.toshl.com') ||
+		dnsDomainIs(host, '.opera.com') ||
 		dnsDomainIs(host, '.cloudfront.net') ||
 		dnsDomainIs(host, '.google.com.hk') ||
 		dnsDomainIs(host, '.googlecode.com') ||
@@ -19,7 +21,6 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.blogspot.com') ||
 		dnsDomainIs(host, '.blogspot.tw') ||
 		dnsDomainIs(host, '.blogspot.hk') ||
-		dnsDomainIs(host, '.yting.com') ||
 		dnsDomainIs(host, '.ytimg.com') ||
 		dnsDomainIs(host, '.ggpht.com') ||
 		dnsDomainIs(host, '.wikipedia.org') ||
