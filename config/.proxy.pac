@@ -13,6 +13,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.opera.com') ||
 		dnsDomainIs(host, '.cloudfront.net') ||
 		dnsDomainIs(host, '.google.com.hk') ||
+		dnsDomainIs(host, '.google.com.sg') ||
 		dnsDomainIs(host, '.googlecode.com') ||
 		dnsDomainIs(host, '.googleusercontent.com') || 
 		dnsDomainIs(host, '.gstatic.com') || host == 'gstatic.com' ||
