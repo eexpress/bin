@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use utf8;
-use LWP::Simple;
+use LWP::Simple qw($ua get);
 use Net::DBus;
 my $bus = Net::DBus->session->get_service('org.freedesktop.Notifications')->get_object('/org/freedesktop/Notifications','org.freedesktop.Notifications');
 #输入编号
@@ -12,20 +12,23 @@ die "not correct id." if !$s;
 print "> $s <\n";
 open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
 #--------------------------------------------
+$ua->timeout(10);
 $url="http://thepiratebay.se/s/?q=$s&page=0&orderby=99";
 print "1 ->\t$url\n"; $_ = get($url);
-die "Couldn't get it!" unless defined $_;
+#die "Couldn't get it!" unless defined $_;
+if(defined $_){
 #<a href="/torrent/9278096/IPZ-260 Erika Shibasaki JAV CENSORED"
-/href=\"\/torrent.*?\"/; $_=$&; s/href=//; s/\"//g; s/\ /%20/g;
-if($_=~m'/'){
-	$url="http://thepiratebay.se$_";
-	print "2 ->\t$url\n"; $_ = get($url);
-	/magnet:[^"]*/; $_=$&; $_.="\n";
-	`transmission-remote -a "$_"`;
-if($?>0){open OUT,">>$ENV{HOME}/magnet.list"; print OUT "--\t$s\n$_"; close OUT; print "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n";}
-	print;
-if($?>0){$bus->Notify("bt", 0, "sunny", "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n", "", [], { }, -1);}
-	exit;
+	/href=\"\/torrent.*?\"/; $_=$&; s/href=//; s/\"//g; s/\ /%20/g;
+	if($_=~m'/'){
+		$url="http://thepiratebay.se$_";
+		print "2 ->\t$url\n"; $_ = get($url);
+		/magnet:[^"]*/; $_=$&; $_.="\n";
+		`transmission-remote -a "$_"`;
+	if($?>0){open OUT,">>$ENV{HOME}/magnet.list"; print OUT "--\t$s\n$_"; close OUT; print "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n";}
+		print;
+	if($?>0){$bus->Notify("bt", 0, "sunny", "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n", "", [], { }, -1);}
+		exit;
+	}
 }
 #--------------------------------------------
 $url="http://blog.jav4you.com/?s=$s";
