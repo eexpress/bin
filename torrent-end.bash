@@ -18,3 +18,8 @@ for i in *.avi *.mp4 *.wmv *.mkv; do
 rename 's/.*\..*\.cc-//; s/.*3xplanet_//; s/^[\d\.]*-//' $i
 done
 
+#第一列为id，第二列为百分比。
+transmission-remote -l|awk '$2=="100%" {print $1}'|while read i
+do echo "remove torrent. id: $i">>/tmp/bt_dir.log
+transmission-remote -t$i -r
+done
