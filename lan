@@ -1,9 +1,9 @@
 #!/bin/bash
 
 greenB='\x1b[1;32m'; end='\x1b[0m'; redB='\x1b[1;31m'; blueB='\x1b[1;34m'
-info=`routel|grep -m 1 '\<24\>'|sed 'sm/mmg'`
-echo -e "本机IP是：$greenB`echo $info|awk '{print $3}'`$end"
-ip=`echo $info|awk '{print $1"/"$2}'`
+info=`ip route|grep -m 1 '0/24'`
+echo -e "本机IP是：$greenB`echo $info|awk '{print $9}'`$end"
+ip=`echo $info|awk '{print $1}'`
 echo "扫描 $ip 段"
 if [ $1 ]; then
 	# 端口，MAC地址
