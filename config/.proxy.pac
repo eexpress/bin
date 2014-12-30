@@ -42,6 +42,7 @@ function FindProxyForURL(url, host) {
 		shExpMatch(host, "*thepiratebay.*") ||
 		shExpMatch(host, "*twitter.com*") ||
 		shExpMatch(host, "*facebook.com*") ||
+		shExpMatch(host, "*instagram.com*") ||
 		dnsDomainIs(host, '.facebook.com') || host == 'facebook.com' ||
 		dnsDomainIs(host, '.connect.facebook.net') ||
 		host == 'connect.facebook.net' ||
