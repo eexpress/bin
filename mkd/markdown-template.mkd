@@ -3,6 +3,12 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <link href="mkd.css" rel="stylesheet" type="text/css">
 </head>
+<style type="text/css">
+table {
+	width: 90%;
+}
+</style> 
+
 
 使用 Markdown 语法写文档
 ========================
@@ -20,9 +26,6 @@
 			endif 
 		endfunc
  
-需要安装的软件
--------------
-	sudo apt-get install markdown
 
 
 ##表格居中
