@@ -79,7 +79,7 @@ pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 #gitup(){ git ci -a -m "${*:-`date`}"; git remote|grep .; [ $? == 1 ] && return; git push; [ $? == 0 ] || git push httpsgithub; }
 c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
-nmap(){ /usr/bin/nmap ${1:-localhost}; }
+nmap(){ /usr/bin/nmap ${1:-localhost}|grep open; }
 p(){ ping -c 5 ${1:-www.163.com}; }
 du(){ /usr/bin/du -sch "$@"|sort -rh; }
 o(){ xdg-open ${1:-"`xsel -o|sed "s/\ /\\\ /g"|sed "s/\n.*//"`"}; }
