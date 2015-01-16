@@ -1,5 +1,12 @@
 #!/bin/bash
 
+while : ; do
+	ip route|grep default
+	[[ $? ]] && break
+	echo waiting net...
+	sleep 2
+done
+
 #oneleaf
 #ssh -qTfnN -D 7070 root@198.71.90.209
 
