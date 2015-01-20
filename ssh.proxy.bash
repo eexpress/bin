@@ -7,6 +7,9 @@ while : ; do
 	sleep 2
 done
 
+p=`pgrep -x -d ' ' ssh -u $(whoami)`
+[[ -n $p ]] && kill $p && echo kill $p
+
 #oneleaf
 #ssh -qTfnN -D 7070 root@198.71.90.209
 
