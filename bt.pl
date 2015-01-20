@@ -13,14 +13,14 @@ print "> $s <\n";
 open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
 #--------------------------------------------
 $ua->timeout(10);
-$url="http://thepiratebay.se/s/?q=$s&page=0&orderby=99";
+$url="http://thepiratebay.ee/s/?q=$s&page=0&orderby=99";
 print "1 ->\t$url\n"; $_ = get($url);
 #die "Couldn't get it!" unless defined $_;
 if(defined $_){
 #<a href="/torrent/9278096/IPZ-260 Erika Shibasaki JAV CENSORED"
 	/href=\"\/torrent.*?\"/; $_=$&; s/href=//; s/\"//g; s/\ /%20/g;
 	if($_=~m'/'){
-		$url="http://thepiratebay.se$_";
+		$url="http://thepiratebay.ee$_";
 		print "2 ->\t$url\n"; $_ = get($url);
 		/magnet:[^"]*/; $_=$&; $_.="\n";
 		`transmission-remote -a "$_"`;
