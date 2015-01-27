@@ -11,8 +11,9 @@ m/\w{2,4}-\d{3,4}/; $s=$&;
 die "not correct id." if !$s;
 print "> $s <\n";
 open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
-#--------------------------------------------
 $ua->timeout(10);
+goto JUMP;
+#--------------------------------------------
 $url="http://thepiratebay.ee/s/?q=$s&page=0&orderby=99";
 print "1 ->\t$url\n"; $_ = get($url);
 #die "Couldn't get it!" unless defined $_;
@@ -22,6 +23,7 @@ if(defined $_){
 	if($_=~m'/'){
 		$url="http://thepiratebay.ee$_";
 		print "2 ->\t$url\n"; $_ = get($url);
+#        Only registered users can use the tracker.
 		/magnet:[^"]*/; $_=$&; $_.="\n";
 		`transmission-remote -a "$_"`;
 	if($?>0){open OUT,">>$ENV{HOME}/magnet.list"; print OUT "--\t$s\n$_"; close OUT; print "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n";}
@@ -31,6 +33,7 @@ if(defined $_){
 	}
 }
 #--------------------------------------------
+JUMP:
 $url="http://blog.jav4you.com/?s=$s";
 print "1 ->\t$url\n"; $content = get($url);
 #http://blog.jav4you.com/?s=MDYD-866&x=0&y=0
