@@ -12,18 +12,18 @@ die "not correct id." if !$s;
 print "> $s <\n";
 open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
 $ua->timeout(10);
-goto JUMP;
 #--------------------------------------------
-$url="http://thepiratebay.ee/s/?q=$s&page=0&orderby=99";
+$web="http://thepiratebay.to";
+$url="$web/search/?FilterStr=$s&ID=&Limit=800&Letter=&Sorting=DDate";
 print "1 ->\t$url\n"; $_ = get($url);
 #die "Couldn't get it!" unless defined $_;
 if(defined $_){
 #<a href="/torrent/9278096/IPZ-260 Erika Shibasaki JAV CENSORED"
-	/href=\"\/torrent.*?\"/; $_=$&; s/href=//; s/\"//g; s/\ /%20/g;
+#<a href="http://thepiratebay.to/torrent/1594775/MOND-013%20amateur%20JAV%20CENSORED/" onclick=
+	/href=\"$web\/torrent\/.*?\"/; $_=$&; s/href=//; s/\"//g; s/\ /%20/g;
 	if($_=~m'/'){
-		$url="http://thepiratebay.ee$_";
+		$url=$_;
 		print "2 ->\t$url\n"; $_ = get($url);
-#        Only registered users can use the tracker.
 		/magnet:[^"]*/; $_=$&; $_.="\n";
 		`transmission-remote -a "$_"`;
 	if($?>0){open OUT,">>$ENV{HOME}/magnet.list"; print OUT "--\t$s\n$_"; close OUT; print "Add to transmission retrun error: $?. Save magnet to ~/magnet.list.\n";}
@@ -33,7 +33,6 @@ if(defined $_){
 	}
 }
 #--------------------------------------------
-JUMP:
 $url="http://blog.jav4you.com/?s=$s";
 print "1 ->\t$url\n"; $content = get($url);
 #http://blog.jav4you.com/?s=MDYD-866&x=0&y=0
