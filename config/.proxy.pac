@@ -12,6 +12,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.gigacircle.com') ||
 		dnsDomainIs(host, '.toshl.com') ||
 		dnsDomainIs(host, '.opera.com') ||
+		dnsDomainIs(host, '.digicert.com') ||
 		dnsDomainIs(host, '.cloudfront.net') ||
 		dnsDomainIs(host, '.google.com.hk') ||
 		dnsDomainIs(host, '.google.com.sg') ||
@@ -35,7 +36,6 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.instagram.com') ||
 		dnsDomainIs(host, '.twitter.com') ||
 		dnsDomainIs(host, '.twimg.com') ||
-		dnsDomainIs(host, '.opera.com') ||
 		dnsDomainIs(host, '.jav4you.com') || dnsDomainIs(host, '.dmm.co.jp') || dnsDomainIs(host, '.21stp.com') ||
 		dnsDomainIs(host, '.bit.ly') || host == 'bit.ly' ||
 		dnsDomainIs(host, '.t.co') || host == 't.co' ||

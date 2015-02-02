@@ -45,9 +45,11 @@ $url=$&; print "2 ->\t$url\n"; $content = get($url);
 die "Couldn't get it!" unless defined $content;
 #<p><b>BitTorrent File</b><br><a href="http://l.jav4you.com/1eQ2eLT" target="_blank" rel="nofollow">ishrhndug.html</a><br><br><br></p>
 #open OUT,">>$ENV{HOME}/bt.log"; print OUT $content; close OUT;
+$_="";
 $content=~/BitTorrent File.*html/;
 $_=$&; s/.*>//;
 #$url="http://www.21stp.com/$_";
+if($_==""){die "No BT link.";}
 $url="http://www.2121.club/$_";
 print "3 ->\t$url\n";
 `gnome-open \'$url\'`; exit;
@@ -61,7 +63,6 @@ $_=$&;
 #m'http://[^"]*';
 m'/save[^\']*';
 $url="http://www.2121.club$&"; print "4 ->\t$url\n";
-
 `gnome-open \'$url\'`;
 
 #$s="$ENV{HOME}/$s.torrent";
