@@ -44,16 +44,27 @@ my $mech = WWW::Mechanize->new(agent=>'Opera/9.80 (X11; Linux i686; U; en) Prest
 $mech -> get($_);
 if ($mech->success()) {
 	$_=$mech->content();
+	if(/网络限制/){
+		/网络限制.*\.\.\./; $_=$&; s/<br\/>.*$//; 
+		$bus->Notify("flash", 0, "error", "flash 解析失败", "$_\n:(", [], { }, -1);
+	} else {
 	if(/当前解析视频.*?<strong/s){
 	$_=$&; 
 	s/^.*?>//;s/<.*$//s;s/\s*//g;
 	print "$red$bold".$_."$normal==================\n";
 	my $name="$_";
-	my @link=$mech->find_all_links(text_regex => qr/http:\/\/.*[0-9a-fA-F]*/,);
+	my @alllink=$mech->find_all_links(text_regex => qr/http:\/\/.*[0-9a-fA-F]*/,);
+#    delete link with blog.flvcd.com
+#    foreach(@link){
+#        delete if /blog.flvcd.com/;
+#    }
+	my @link=grep(!/blog\.flvcd\.com/,@alllink);
 	my $size=@link;
 	$bus->Notify("flash", 0, "sunny", "$name", "共获取 $size 个地址。", [], { }, -1);
 	print "\e]2;flash-down.pl_下载_$name\a";
 	print map "=> $green".$_->url()."$normal\n",@link;
+print $alllink[0];
+	$pidfile->remove; exit;
 #    open(LINK,">link.log"); print LINK map $_->url()."\n",@link; close LINK;
 	my $cnt=1; my $proc="▭"x$size;
 #---------------------	
@@ -93,9 +104,7 @@ if($view){
 #    chdir '..';
 	`echo "$ARGV[0]\t《$_》\t结果：$proc">>/tmp/flash-down.log`;
 	`paplay "/usr/share/sounds/ubuntu/stereo/service-login.ogg"`;
-	} else {
-	/提示：.*/; $_=$&; s/<br\/>.*$//; 
-	$bus->Notify("flash", 0, "error", "flash 解析失败", "$_\n:(", [], { }, -1);
+	}
 	}
 } else {
 	$bus->Notify("flash", 0, "gtk-cancel", '网页无效', ':(', [], { }, -1);
