@@ -1,0 +1,29 @@
+<head>
+<title>Apache Hadoop</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link href="mkd.css" rel="stylesheet" type="text/css">
+</head>
+<style type="text/css">
+table {
+	width: 90%;
+}
+</style> 
+
+
+Apache Hadoop概念
+========================
+
+相关概念
+--------
+
+1. Apache 2.0许可
+1. 集群的高速运算和存储
+1. 组成
+	1. 分布式文件系统（Hadoop Distributed File System），简称HDFS。
+	1. 并行计算框架。MapReduce是Google提出的一个软件架构，大规模数据集（大于1TB）的并行运算。概念“Map（映射）”和“Reduce（归纳）”。
+	1. 分布式NoSQL列数据库。HBase。HBase是一个开源的非关系型分布式数据库（NoSQL），实现的编程语言为 Java。HBase 还不能直接取代SQL数据库。
+		1. NoSQL称作Not Only SQL的缩写。不使用SQL作为查询语言。数据存储可以不需要固定的表格模式。非关联型的，强调Key-Value储存。
+		1. 分类：键值(Key-Value)存储数据库（哈希表）；列存储数据库（同一列数据存在一起HBase）；文档型数据库（半结构化的文档JSON）；图形(Graph)数据库。
+	1. 类SQL构建于hadoop之上的数据仓库。Hive
+
+
