@@ -14,8 +14,11 @@ die "not correct id." if !$s;
 print "> $s <\n";
 open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
 #--------------------------------------------
-$web="https://thepiratebay.se";
-$url="$web/search/$s/";
+#$web="https://thepiratebay.se";
+#$url="$web/search/$s/";
+$web="https://kickass.to";
+$url="$web/usearch/$s/";
+
 print "1 ->\t$url\n"; $response = $ua->get($url);
 if ( $response->is_success ) {
 	$_=$response->decoded_content;
