@@ -20,5 +20,6 @@ p=`pgrep -x -d ' ' ssh -u $(whoami)`
 #ssh -qTfnN -D 7070 root@128.199.153.182
 #ssh -qTfnN -D 7070 eexp@104.236.176.123
 ssh -qTfnN -D 7070 eexp@128.199.153.182
+#ssh -qTfnN -D 7070 root@45.62.118.225
 
 [[ $? -eq 255 ]] && msg "ssh error." || msg "ssh established."
