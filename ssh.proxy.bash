@@ -13,6 +13,10 @@ done
 p=`pgrep -x -d ' ' ssh -u $(whoami)`
 [[ -n $p ]] && kill $p && echo kill $p
 
+if [ -n "$1" ]; then
+	msg "ssh killed."
+	exit
+fi
 #oneleaf
 #ssh -qTfnN -D 7070 root@198.71.90.209
 
