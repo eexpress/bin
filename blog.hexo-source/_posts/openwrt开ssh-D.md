@@ -15,6 +15,7 @@ root@OYE:~# df -h|grep rootfs
 rootfs                    2.6M    764.0K      1.8M  29% /
 root@OYE:~# ssh-keygen -b 1024 -t rsa
 >> 把id_rsa.pub追加到远程的authorized_keys里面。没有ssh-copy-id命令，只好手动吧。
+>> 其实也可以不要openssh-keygen，直接把本本上的id_rsa传到路由的/root/.ssh就可以了。反正服务器那边authorized_keys里面早就有了pub内容。
 root@OYE:~# ssh -qTfnN -D 7070 xxxx@yyy.yyy.yyy.yyy
 >> 草，不出端口。直接ssh验证登录没问题。千辛万苦，才发现问题，这货的ssh，必须指定本机ip，而且还不能使用127.0.0.1，真奇怪。
 root@OYE:~# cat /etc/init.d/ssh-d 
