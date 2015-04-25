@@ -33,6 +33,7 @@ root@OYE:~# /etc/init.d/ssh-d enable
 >> 设置成启动，LUCI界面可看到为开机启动状态。
 ```
 至此，本本上只需要设置全局的pac了，不再需要用脚本启用7070端口。
+无聊时候，看到 http://blog.csdn.net/xyyangkun/article/details/8631980，发现使用autossh 的确更好，不用担心断线，自己修改的地方更少，只需要改下/etc/config/autossh，可以全抄。
 ```
 function FindProxyForURL(url, host) {
 	var autosocks = 'SOCKS5 192.168.8.1:7070';
