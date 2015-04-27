@@ -26,6 +26,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.blogspot.com') ||
 		dnsDomainIs(host, '.blogspot.tw') ||
 		dnsDomainIs(host, '.blogspot.hk') ||
+		shExpMatch(host, "*.blogspot.*") ||
 		dnsDomainIs(host, '.ytimg.com') ||
 		dnsDomainIs(host, '.ggpht.com') ||
 		dnsDomainIs(host, '.wikipedia.org') ||
@@ -37,6 +38,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.instagram.net') ||
 		dnsDomainIs(host, '.instagram.com') ||
 		dnsDomainIs(host, '.twitter.com') ||
+		dnsDomainIs(host, '.linuxtoy.org') ||
 		dnsDomainIs(host, '.twimg.com') ||
 		dnsDomainIs(host, '.feedburner.com') ||
 		dnsDomainIs(host, '.jav4you.com') || dnsDomainIs(host, '.dmm.co.jp') || dnsDomainIs(host, '.21stp.com') ||
