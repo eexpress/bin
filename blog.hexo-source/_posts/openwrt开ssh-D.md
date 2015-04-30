@@ -9,33 +9,54 @@ tags:
 
 ```
 ▶ ssh root@192.168.8.1
-root@OYE:~# opkg update
-root@OYE:~# opkg install openssh-client openssh-keygen
-root@OYE:~# df -h|grep rootfs
-rootfs                    2.6M    764.0K      1.8M  29% /
-root@OYE:~# ssh-keygen -b 1024 -t rsa
->> 把id_rsa.pub追加到远程的authorized_keys里面。没有ssh-copy-id命令，只好手动吧。
->> 其实也可以不要openssh-keygen，直接把本本上的id_rsa传到路由的/root/.ssh就可以了。反正服务器那边authorized_keys里面早就有了pub内容。
-root@OYE:~# ssh -qTfnN -D 7070 xxxx@yyy.yyy.yyy.yyy
->> 草，不出端口。直接ssh验证登录没问题。千辛万苦，才发现问题，这货的ssh，必须指定本机ip，而且还不能使用127.0.0.1，真奇怪。
-root@OYE:~# cat /etc/init.d/ssh-d 
-#!/bin/sh /etc/rc.common
-START=99
+# rm /usr/bin/scp /usr/bin/ssh
+# opkg update
+# opkg install openssh-client autossh openssh-keygen
+# ssh-keygen
 
-start() {
-	ssh -qTfnN -D 192.168.8.1:7070 xxxx@yyy.yyy.yyy.yyy
-}
+▶ scp root@192.168.8.1:/root/.ssh/id_rsa.pub /tmp/
+▶ ssh-copy-id -i /tmp/id_rsa.pub -p 26489 root@45.62.xxx.xxx
+/usr/bin/ssh-copy-id: ERROR: failed to open ID file '/tmp/id_rsa': No such file
+>> -i 过不去。手动复制到远程的authorized_keys里面。
 
-stop() {
-	killall ssh
-}
-root@OYE:~# /etc/init.d/ssh-d enable
->> 设置成启动，LUCI界面可看到为开机启动状态。
+# opkg remove openssh-keygen
+# df -h|grep rootfs
+rootfs                    2.6M    596.0K      2.0M  23% /
+# vi /etc/config/autossh
+# grep 7070 /etc/config/autossh
+	option ssh	'-i /root/.ssh/id_rsa -N -T -D 0.0.0.0:7070 eexp@128.199.xxx.xxx'
+>> 这货的ssh，必须指定本机或者全0的ip，不能使用127.0.0.1，真奇怪。
+# ssh -qTfnN -D 0.0.0.0:7070 eexp@128.199.xxx.xxx
+>> 前期验证下登录。
+# /etc/init.d/autossh enable
+# /etc/init.d/autossh start
+# for i in vnstat samba ddns vsftpd telnet xunlei mjpg-streamer watchcat wifidog nodogsplash; do /etc/init.d/$i disable; /etc/init.d/$i stop; done
+>> 关闭一堆无用的服务。
+# /etc/init.d/minidlna enable
+# /etc/init.d/minidlna start
 ```
+
 至此，本本上只需要设置全局的pac了，不再需要用脚本启用7070端口。
-无聊时候，看到 http://blog.csdn.net/xyyangkun/article/details/8631980，发现使用autossh 的确更好，不用担心断线，自己修改的地方更少，只需要改下/etc/config/autossh，可以全抄。
 ```
 function FindProxyForURL(url, host) {
 	var autosocks = 'SOCKS5 192.168.8.1:7070';
 .......
 ```
+
+当然pac可以放到路由器自动分发，只是WPAD协议，不是所有设备都支持的。
+```
+▶ scp /home/eexp/.proxy.pac root@192.168.8.1:/www/
+# cat /etc/config/dhcp
+config dnsmasq
+...
+        option resolvfile '/tmp/resolv.conf.auto'
+        list dhcp_option '252,http://192.168.8.1/.proxy.pac' 
+                 
+config dhcp 'lan'             
+...
+▶ dnsmasq --help dhcp
+Known DHCP options:
+...
+>> 其实没看到252的说明。
+```
+---------------------------------
