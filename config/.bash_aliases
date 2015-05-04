@@ -51,7 +51,7 @@ export LESS="--RAW-CONTROL-CHARS"
 #alias less='/usr/share/vim/vim74/macros/less.sh'
 alias hexdump='hexdump -C'
 #export GREP_COLOR='1;37;42'
-alias rsync='/usr/bin/rsync -arhP'
+alias rsync='/usr/bin/rsync -Pau'
 
 alias v='/usr/bin/gvim --remote-silent-tab'
 #v() { /usr/bin/gvim -f  --remote-silent-tab \"$@\" &; }
