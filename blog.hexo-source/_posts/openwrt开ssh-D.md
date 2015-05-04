@@ -30,8 +30,8 @@ rootfs                    2.6M    596.0K      2.0M  23% /
 >> 前期验证下登录。
 # /etc/init.d/autossh enable
 # /etc/init.d/autossh start
-# for i in vnstat samba ddns vsftpd telnet xunlei mjpg-streamer watchcat wifidog nodogsplash; do /etc/init.d/$i disable; /etc/init.d/$i stop; done
->> 关闭一堆无用的服务。
+# for i in vnstat samba ddns vsftpd telnet xunlei mjpg-streamer watchcat nodogsplash; do /etc/init.d/$i disable; /etc/init.d/$i stop; done
+>> 关闭一堆无用的服务，就是 wifidog 好像不能关闭，否则会导致一段时间后，无线只有ipv6。
 # /etc/init.d/minidlna enable
 # /etc/init.d/minidlna start
 ```

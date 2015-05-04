@@ -6,6 +6,8 @@ function FindProxyForURL(url, host) {
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
 	if (
 		dnsDomainIs(host, '.telegram.org') ||
+		dnsDomainIs(host, '.appinn.com') ||
+		dnsDomainIs(host, '.github.io') ||
 		dnsDomainIs(host, '.google.com') ||
 		dnsDomainIs(host, '.ingress.com') ||
 		dnsDomainIs(host, 'plus.google.com') ||
@@ -23,6 +25,8 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.gstatic.com') || host == 'gstatic.com' ||
 		dnsDomainIs(host, '.wordpress.com') ||
 		dnsDomainIs(host, '.youtube.com') ||
+		dnsDomainIs(host, '.blogblog.com') ||
+		dnsDomainIs(host, '.blogger.com') ||
 		dnsDomainIs(host, '.blogspot.com') ||
 		dnsDomainIs(host, '.blogspot.tw') ||
 		dnsDomainIs(host, '.blogspot.hk') ||

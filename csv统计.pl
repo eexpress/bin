@@ -13,7 +13,8 @@ foreach(@ARGV){
 			@seg=split /,/;
 			$d=""; $m="";
 			foreach(@seg){
-				next if ! /\d/; $d=$_,next if /\d+-\d+-\d+/;
+# 过滤”2015-01-21 15:20:42 “这种格式。
+				next if ! /\d/; s/\ .*//;$d=$_,next if /\d+-\d+-\d+/;
 				$m=$_,next if /^[\d\.]+$/ && ! /\d{7,}/;	#全数字或者带小数点的
 			}
 			next if $d eq "";
@@ -30,9 +31,15 @@ foreach(sort keys %hash){
 	if(/$select/){
 		/^..../;$c=$&;
 		if($c!=$d){print (("-"x32)."\n");$d=$c;}
-		$total+=$hash{$_};printf "%-16s->%14.2f\n",$_,$hash{$_};
+# 统计重复，直接使用背景色标记年/月的统计。
+#        $total+=$hash{$_};
+		print "\e[42m" if /M/;
+		print "\e[41m" if /Y/;
+		printf "%-16s->%14.2f",$_,$hash{$_};
+		print "\e[0m" if /[MY]/;
+		print "\n";
 	}
 }
 print (("-"x32)."\n");
-print "total:\t\t\t$total\n";
+#print "total:\t\t\t$total\n";
 
