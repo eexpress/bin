@@ -46,11 +46,11 @@ $oldv=$1;
 $_=`xsel -o`;
 #/和~开头的存在的文件，打开
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`gnome-open \"$_\"`;exit;}}
-#视频
-if(/\.avi$/){$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;exit;}
+#终端选择的文件名，视频
+if(/\.(avi|mkv|mp4)$/){$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;exit;}
 #ip格式的数字，域名，查询
 if(/\d+\.\d+\.\d+\.\d+/){ip_138($&);exit;}
-if(/(\w+\.){1,3}\w+/ && !/:/){ip_138($&);exit;}
+if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/){ip_138($&);exit;}
 #单词，本地翻译
 if(/^\w+$/){sdcv($&); exit;}
 #番号下载
