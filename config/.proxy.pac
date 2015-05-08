@@ -6,6 +6,7 @@ function FindProxyForURL(url, host) {
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
 	if (
 		dnsDomainIs(host, '.telegram.org') ||
+		dnsDomainIs(host, '.apkmirror.com') ||
 		dnsDomainIs(host, '.appinn.com') ||
 		dnsDomainIs(host, '.github.io') ||
 		dnsDomainIs(host, '.google.com') ||
