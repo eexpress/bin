@@ -13,11 +13,8 @@ tags:
 # opkg update
 # opkg install openssh-client autossh openssh-keygen
 # ssh-keygen
-
-▶ scp root@192.168.8.1:/root/.ssh/id_rsa.pub /tmp/
-▶ ssh-copy-id -i /tmp/id_rsa.pub -p 26489 root@45.62.xxx.xxx
-/usr/bin/ssh-copy-id: ERROR: failed to open ID file '/tmp/id_rsa': No such file
->> -i 过不去。手动复制到远程的authorized_keys里面。
+# cat ~/.ssh/id_rsa.pub | ssh -p yyyy root@45.62.xxx.xxx "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
+>> 没有 ssh-copy-id 命令。
 
 # opkg remove openssh-keygen
 # df -h|grep rootfs
@@ -41,6 +38,7 @@ rootfs                    2.6M    596.0K      2.0M  23% /
 function FindProxyForURL(url, host) {
 	var autosocks = 'SOCKS5 192.168.8.1:7070';
 .......
+}
 ```
 
 当然pac可以放到路由器自动分发，只是WPAD协议，不是所有设备都支持的。
