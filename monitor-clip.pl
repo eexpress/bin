@@ -39,7 +39,7 @@ $sound='/usr/share/sounds/gnome/default/alerts/drip.ogg';
 $_=`pacmd list-sinks`;
 /volume: 0:\s*(\d*)%/;
 $oldv=$1;
-`pactl set-sink-volume 0 60%`;
+`pactl set-sink-volume 0 40%`;
 `paplay $sound &`;
 `pactl set-sink-volume 0 $oldv%`;
 #----------------------------------
