@@ -46,6 +46,7 @@ alias g='grep --color=always -inTZ 2>/dev/null'
 alias s='mplayer'
 alias rm='gvfs-trash'
 alias rmm='/bin/rm'
+alias unzip='unzip -O CP936'
 #alias less='less -R'
 export LESS="--RAW-CONTROL-CHARS"
 #alias less='/usr/share/vim/vim74/macros/less.sh'
