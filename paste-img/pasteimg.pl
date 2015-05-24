@@ -57,6 +57,7 @@ my $fp='/tmp/pi.png';
 	$ARGV[0]=$fp; 
 }
 $ARGV[0]=~s'file://'';
+#$ARGV[0]=~s/\%([A-Fa-f0-9]{2})/chr(hex($1))/seg;
 $ARGV[0]=~s/\%([A-Fa-f0-9]{2})/pack('C', hex($1))/seg;
 if(! -f $ARGV[0]){
 	`echo $ARGV[0]>/tmp/pasteimg.fail.log`;
