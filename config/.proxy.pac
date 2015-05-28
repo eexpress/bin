@@ -24,7 +24,9 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.google.com.hk') ||
 		dnsDomainIs(host, '.google.com.sg') ||
 		dnsDomainIs(host, '.googlecode.com') ||
+		dnsDomainIs(host, '.googletagmanager.com') ||
 		dnsDomainIs(host, '.googleusercontent.com') || 
+		dnsDomainIs(host, '.busuu.com') || 
 		dnsDomainIs(host, '.gstatic.com') || host == 'gstatic.com' ||
 		dnsDomainIs(host, '.wordpress.com') ||
 		dnsDomainIs(host, '.youtube.com') ||
@@ -34,6 +36,8 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.blogspot.tw') ||
 		dnsDomainIs(host, '.blogspot.hk') ||
 		shExpMatch(host, "*.blogspot.*") ||
+		shExpMatch(host, "*.google*.*") ||
+		dnsDomainIs(host, '.quantserve.com') ||
 		dnsDomainIs(host, '.ytimg.com') ||
 		dnsDomainIs(host, '.ggpht.com') ||
 		dnsDomainIs(host, '.wikipedia.org') ||
