@@ -13,6 +13,9 @@ tags:
 ```
 ▶ pandoc slides.md -o slides.html -t revealjs -s -V theme=beige -V transition=page
 ```
+
+> 由于pandoc转换出来的html，使用的是```reveal.js/js/reveal.min.js```这样的路径，所以html文件应该和reveal.js目录平行，并且不能使用目前官网克隆的版本。新版本的reveal.js，文件结构和命名规则都改动了一些，似乎使用scss代替了以前的min.css。2015-06-12
+
 reveal.js 支持的主题：
 1. default 默认 (深灰色背景，白色文字)
 1. beige 米色 (米色背景，深色文字)
