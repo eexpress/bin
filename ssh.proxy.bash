@@ -23,7 +23,9 @@ fi
 #imadper
 #ssh -qTfnN -D 7070 root@128.199.153.182
 #ssh -qTfnN -D 7070 eexp@104.236.176.123
-ssh -qTfnN -D 7070 eexp@128.199.153.182
+ssh -qTfnN -D :7070 eexp@128.199.153.182
+# share 7070 to all LAN users.
+#ssh -qTfnN -D 7070 eexp@128.199.153.182
 #ssh -qTfnN -D 7070 -p 26489 root@45.62.118.225
 
 [[ $? -eq 255 ]] && msg "ssh error." || msg "ssh established."
