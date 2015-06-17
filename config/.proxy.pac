@@ -5,6 +5,7 @@ function FindProxyForURL(url, host) {
 //    var blackhole = 'PROXY 127.0.0.1:8086';
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
 	if (
+		dnsDomainIs(host, '.taobao.com') ||
 		dnsDomainIs(host, '.telegram.org') ||
 		dnsDomainIs(host, '.disqus.com') ||
 		dnsDomainIs(host, '.disquscdn.com') ||
