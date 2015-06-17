@@ -53,6 +53,7 @@ export LESS="--RAW-CONTROL-CHARS"
 alias hexdump='hexdump -C'
 #export GREP_COLOR='1;37;42'
 alias rsync='/usr/bin/rsync -Pau'
+alias web='python -m SimpleHTTPServer'
 
 alias v='/usr/bin/gvim --remote-silent-tab'
 #v() { /usr/bin/gvim -f  --remote-silent-tab \"$@\" &; }
