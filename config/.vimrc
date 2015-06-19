@@ -60,6 +60,7 @@ au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 " Vala
 autocmd BufRead *.vala set efm=%f:%l.%c-%[%^:]%#:\ %t%[%^:]%#:\ %m
 au BufRead,BufNewFile *.vala setfiletype vala
+au BufRead,BufNewFile *.md se ft=slide
 
 let vala_comment_strings = 1
 let vala_space_errors = 1
@@ -83,6 +84,8 @@ func CompileRun()
 	exec "!dot -Tsvg % -o %.svg; eog %.svg"
 	elseif &filetype == 'vala'
 	exec "!valac --pkg gtk+-3.0 %; [ $? -eq 0 ] && ./%:t:r"
+	elseif &filetype == 'slide'
+	exec "!pandoc \'%\' -o \'%.html\' -t revealjs -s -V transition=cube -V theme=night; [ $? -eq 0 ] && nohup xdg-open \'%.html\' >/dev/null 2>&1 &"
 	endif 
 endfunc
 
