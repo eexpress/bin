@@ -85,7 +85,7 @@ func CompileRun()
 	elseif &filetype == 'vala'
 	exec "!valac --pkg gtk+-3.0 %; [ $? -eq 0 ] && ./%:t:r"
 	elseif &filetype == 'slide'
-	exec "!pandoc \'%\' -o \'%.html\' -t revealjs -s -V transition=cube -V theme=night; [ $? -eq 0 ] && nohup xdg-open \'%.html\' >/dev/null 2>&1 &"
+	exec "!pandoc \'%\' -o \'%.html\' -t revealjs -s -V transition=cube -V theme=default; [ $? -eq 0 ] && nohup xdg-open \'%.html\' >/dev/null 2>&1 &"
 	endif 
 endfunc
 
