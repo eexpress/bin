@@ -52,7 +52,7 @@ if(/\.(avi|mkv|mp4|wmv)$/){$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;exit;}
 if(/\d+\.\d+\.\d+\.\d+/){ip_138($&);exit;}
 if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/){ip_138($&);exit;}
 #单词，本地翻译
-if(/^\w+$/){sdcv($&); exit;}
+#if(/^\w+$/){sdcv($&); exit;}
 #番号下载
 if(/\w{2,4}-\d{3,4}/){`/home/eexp/bin/bt.pl $&`;exit;}
 #其他没://的，网页翻译
