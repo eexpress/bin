@@ -6,6 +6,7 @@ paste-img
 nmn
 mkd.*
 lighttpd
+*linux64*
 
 adb
 tags
@@ -34,3 +35,4 @@ upload
 *.pdf
 *.json
 *.mkd
+*.log
