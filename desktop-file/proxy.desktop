@@ -17,7 +17,7 @@ OnlyShowIn=Unity;
 
 [Desktop Action SS]
 Name=ShadowSocks on 1080
-Exec=/home/eexp/bin/shadowsocks-local-linux64-1.1.4 -c /home/eexp/bin/shadowsocks.json/ss3.json
+Exec=/home/eexp/bin/shadowsocks-local-linux64-1.1.4 -c /home/eexp/bin/shadowsocks.json/ss.json
 OnlyShowIn=Unity;
 
 [Desktop Action X-SS]
