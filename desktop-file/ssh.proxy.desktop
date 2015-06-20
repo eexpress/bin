@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Terminal=false
-Name=SSH Proxy Bash Script
-Icon=/usr/share/icons/HighContrast/256x256/apps/preferences-system-network-proxy.png
-Exec=/home/eexp/bin/ssh.proxy.bash
-#Exec=gnome-terminal -x /home/eexp/bin/ssh.proxy.bash
-

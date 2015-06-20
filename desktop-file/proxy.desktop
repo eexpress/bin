@@ -1,0 +1,27 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=Proxy Script
+Icon=/usr/share/icons/HighContrast/256x256/apps/preferences-system-network-proxy.png
+Actions=SSH;X-SSH;SS;X-SS
+
+[Desktop Action SSH]
+Name=Dynamic SSH on 7070
+Exec=/home/eexp/bin/ssh.proxy.bash
+OnlyShowIn=Unity;
+
+[Desktop Action X-SSH]
+Name=Kill Dynamic SSH
+Exec=/home/eexp/bin/ssh.proxy.bash x
+OnlyShowIn=Unity;
+
+[Desktop Action SS]
+Name=ShadowSocks on 1080
+Exec=/home/eexp/bin/shadowsocks-local-linux64-1.1.4 -c /home/eexp/bin/shadowsocks.json/ss3.json
+OnlyShowIn=Unity;
+
+[Desktop Action X-SS]
+Name=Kill ShadowSocks
+Exec=pkill -u eexp shadowsocks
+OnlyShowIn=Unity;
+
