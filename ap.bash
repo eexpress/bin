@@ -44,7 +44,8 @@ max-lease-time 7200;
 subnet 192.168.0.0 netmask 255.255.255.0
 {
  range 192.168.0.2 192.168.0.250;
- option domain-name-servers 128.199.153.182;
+ option domain-name-servers 208.67.222.222;
+ option domain-name-servers 208.67.222.220;
  option routers 192.168.0.1;
 }
 EOF
@@ -53,6 +54,7 @@ sudo dhcpd wlan0 -cf /tmp/dhcpd.conf -pf /var/run/dhcp-server/dhcpd.pid
 cat > /tmp/hostapd.conf << EOF
 interface=wlan0
 driver=nl80211
+# driver=rtl8723be
 ssid=`hostname`-hostapd
 hw_mode=g
 channel=11
