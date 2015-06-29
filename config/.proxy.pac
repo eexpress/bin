@@ -7,7 +7,9 @@ function FindProxyForURL(url, host) {
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
 	if (
 		dnsDomainIs(host, '.ironhidegames.com') ||
+		dnsDomainIs(host, '.cyanogenmod.org') ||
 		dnsDomainIs(host, '.0316366.com') ||
+		dnsDomainIs(host, '.mozilla.org') ||
 		dnsDomainIs(host, '.taobao.com') ||
 		dnsDomainIs(host, '.tmall.com') ||
 		dnsDomainIs(host, '.telegram.org') ||
