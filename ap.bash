@@ -57,14 +57,12 @@ msg AP热点 开启
 cat > /tmp/hostapd.conf << EOF
 interface=wlan0
 driver=nl80211
-# driver=rtl8723be
 ssid=`hostname`-hostapd
 hw_mode=g
-channel=11
+channel=10
 
-wpa=0
-# auth_algs=1
 # wpa=2
+# auth_algs=1
 # wpa_passphrase=1234567890
 # wpa_key_mgmt=WPA-PSK
 # wpa_pairwise=TKIP
