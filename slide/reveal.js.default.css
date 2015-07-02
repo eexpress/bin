@@ -66,6 +66,10 @@ body {
 .reveal strong {
 	color: #13daec;
 	text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+/*    outline-style:dotted;*/
+/*    text-decoration:underline;*/
+	border:1px dotted;
+	padding:0 .1em 0 .1em;
 }
 
 /*********************************************

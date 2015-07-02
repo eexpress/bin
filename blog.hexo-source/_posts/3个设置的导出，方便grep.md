@@ -9,4 +9,10 @@ tags:
 ▶ gconftool --dump /
 ▶ gsettings list-recursively
 ▶ dconf dump /
+
+▶ gsettings list-recursively|g auto-save
+▶ gsettings get org.gnome.gnome-screenshot auto-save-directory
+▶ gsettings set org.gnome.gnome-screenshot auto-save-directory '/home/eexp/桌面' 
+
 ```
+
