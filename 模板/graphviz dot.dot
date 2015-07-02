@@ -1,0 +1,16 @@
+digraph G {
+bgcolor=transparent
+fontname="Vera Sans YuanTi"
+edge [fontname="Vera Sans YuanTi"]
+node [peripheries=2 shape=box color="#6495ED" style="rounded,filled" fontname="Vera Sans YuanTi"]
+label=""
+
+//强制node形状[shape=ellipse/oval/star/diamond/egg/house]
+Start[shape=egg]
+Start -> {Item1; Item2}
+Item1:e-> End:e
+Item2->Item1[label="合格"]
+Item2-> End:w [label="不合格" style=dotted]
+{rank = same;Item1;Item2}
+
+}
