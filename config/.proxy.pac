@@ -1,12 +1,17 @@
 function FindProxyForURL(url, host) {
 //    var autosocks = 'SOCKS5 192.168.8.1:7070';
 //    var autosocks = 'SOCKS5 127.0.0.1:1080';
+//    var autosocks = 'SOCKS5 192.168.1.1:1080';
 	var autosocks = 'SOCKS5 127.0.0.1:7070';
 //    var autoproxy = 'PROXY 127.0.0.1:8087';
 //    var blackhole = 'PROXY 127.0.0.1:8086';
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
 	if (
 		dnsDomainIs(host, '.ironhidegames.com') ||
+		dnsDomainIs(host, '.tuicool.com') ||
+		dnsDomainIs(host, '.mi.com') ||
+		dnsDomainIs(host, '.xiaomi.net') ||
+		dnsDomainIs(host, '.xiaomi.com') ||
 		dnsDomainIs(host, '.cyanogenmod.org') ||
 		dnsDomainIs(host, '.0316366.com') ||
 		dnsDomainIs(host, '.mozilla.org') ||

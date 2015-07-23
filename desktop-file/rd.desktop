@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=远程桌面
+Exec=rdesktop -u 1 -p 123456 10.1.61.150
+Icon=/usr/share/app-install/icons/grdesktop.png
+Terminal=false
+Type=Application
+Categories=GTK;GNOME;
+
