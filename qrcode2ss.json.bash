@@ -18,11 +18,11 @@ for i in ${arr1[@]}; do echo $i; done
 
 cat > $1.json << EOF
 {
-"remarks"		:	$1
-"server"		:	${arr1[1]},
+"remarks"		:	"$1",
+"server"		:	"${arr1[1]}",
 "server_port"	:	${arr[2]},
 "local_port"	:	$lp,
-"password"		:	${arr1[0]},
-"method"		:	${arr[0]},
+"password"		:	"${arr1[0]}",
+"method"		:	"${arr[0]}"
 }
 EOF

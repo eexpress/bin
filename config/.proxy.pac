@@ -1,8 +1,8 @@
 function FindProxyForURL(url, host) {
 //    var autosocks = 'SOCKS5 192.168.8.1:7070';
-//    var autosocks = 'SOCKS5 127.0.0.1:1080';
+	var autosocks = 'SOCKS5 127.0.0.1:1080';
 //    var autosocks = 'SOCKS5 192.168.1.1:1080';
-	var autosocks = 'SOCKS5 127.0.0.1:7070';
+//    var autosocks = 'SOCKS5 127.0.0.1:7070';
 //    var autoproxy = 'PROXY 127.0.0.1:8087';
 //    var blackhole = 'PROXY 127.0.0.1:8086';
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
@@ -53,6 +53,7 @@ function FindProxyForURL(url, host) {
 		dnsDomainIs(host, '.ytimg.com') ||
 		dnsDomainIs(host, '.ggpht.com') ||
 		dnsDomainIs(host, '.wikipedia.org') ||
+		dnsDomainIs(host, '.wikimedia.org') ||
 		dnsDomainIs(host, '.sf.net') ||
 		dnsDomainIs(host, '.sourceforge.net') ||
 		dnsDomainIs(host, '.stackoverflow.com') ||
