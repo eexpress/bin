@@ -1,4 +1,6 @@
-///>Start
-///Initialization
-///Port Ready?:0
-///Launch
+
+///>模块上电，确保供电稳定
+///拉低 PWRKEY，2s 后释放置高
+///AT 通讯是否正常?重启流程:xxx
+///开机流程 结束
+///tttt

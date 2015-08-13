@@ -65,14 +65,14 @@ for $j (0 .. $#contents){
 	$_=$contents[$j+1];
 	my $next=(/\d+\ >/ || $_ eq "")?$q:fetch01seg($_);
 
-	if($byes ne ""){
-		$goto=normal_segment($byes);
-	}else{ $goto=$next; }
+	$goto=$byes?single_segment($byes):$next;
 	push @output,"$judge:s->$goto".'[label="Yes"];'."\n";
-	if($bno ne ""){
-		$goto=normal_segment($bno);
-	}else{ $goto=$next; }
+	$goto=$bno?single_segment($bno):$next;
 	push @output,"$judge:e->$goto".'[label="No" style=dotted];'."\n";
+	if($byes && $bno){
+		push @output,single_segment($byes)."->$next;\n";
+		$out=single_segment($bno)."->";
+	}
 }
 #--------------------------------
 for(@output){ # 判断的入口，全部顶部
@@ -87,7 +87,7 @@ bgcolor=transparent
 node [peripheries=2 shape=box style=\"rounded,filled\" fontname=\"$font\"] label=\"$ARGV[0]\"
 ";
 push @output,"}\n}\n";
-open OUT,">$base.dot"; print OUT @output;close OUT;
+open OUT,">$base.dot"; print OUT @output; close OUT;
 `dot -T$ext "$base.dot" -o $base.dot.$ext`;
 `eog $base.dot.$ext`;
 #--------------------------------
@@ -98,28 +98,23 @@ sub setshape(){ # 名称，形状
 }
 #--------------------------------
 sub normal_segment(){
-#    假设$out有数据
 	my @seg=split /;/, shift;
 	for(@seg){
-		if(/\D/){	#非跳转。附加行号，遇特殊字符，引号包括。
-#            $_.="_$line"; $_="\"$_\"" if /[-= ><.]/;
-			$out.= makeup($_)."->"; next;}
-		if($_ eq "0"){
-#            push @output,$out.$q.$end if $out=~/->/;
-#            $out='';
-			return $q;
-		}else{
-			$d=0; $d=$_;
-			for $sline (@contents){
-				$_=$sline; s/\ .*//;
-				if($d>$_){next;}
-				$_=fetch01seg($sline);
-#            print "fetch....$_....\n";
-#                saveout($_);
-				return $_;
-			}
+		$out.= single_segment($_)."->";
+	}
+}
+#--------------------------------
+sub single_segment(){
+	$_=shift;
+	return makeup($_) if /\D/;
+	if($_ eq "0"){ return $q; }else{
+		$d=0; $d=$_;
+		for $sline (@contents){
+			$_=$sline; s/\ .*//;
+			if($d>$_){next;}
+			$_=fetch01seg($sline);
+			return $_;
 		}
-		break;
 	}
 }
 #--------------------------------

@@ -9,6 +9,7 @@ function FindProxyForURL(url, host) {
 	if (
 		dnsDomainIs(host, '.ironhidegames.com') ||
 		dnsDomainIs(host, '.tuicool.com') ||
+		dnsDomainIs(host, '.clipartpanda.com') ||
 		dnsDomainIs(host, '.mi.com') ||
 		dnsDomainIs(host, '.xiaomi.net') ||
 		dnsDomainIs(host, '.xiaomi.com') ||
