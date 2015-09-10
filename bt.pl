@@ -5,6 +5,7 @@ use open qw(:std :utf8);
 use LWP::UserAgent;
 my $ua = LWP::UserAgent->new( agent => 'Opera/9.80', timeout => 10 );
 use Net::DBus;
+#▶ ai libnet-dbus-perl
 my $bus = Net::DBus->session->get_service('org.freedesktop.Notifications')->get_object('/org/freedesktop/Notifications','org.freedesktop.Notifications');
 #输入编号
 $_=$ARGV[0];

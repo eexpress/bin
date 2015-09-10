@@ -1,84 +1,99 @@
 function FindProxyForURL(url, host) {
-//    var autosocks = 'SOCKS5 192.168.8.1:7070';
-	var autosocks = 'SOCKS5 127.0.0.1:1080';
 //    var autosocks = 'SOCKS5 192.168.1.1:1080';
-//    var autosocks = 'SOCKS5 127.0.0.1:7070';
-//    var autoproxy = 'PROXY 127.0.0.1:8087';
-//    var blackhole = 'PROXY 127.0.0.1:8086';
+//    var autosocks = 'SOCKS5 127.0.0.1:1080';
+	var autosocks = 'SOCKS5 127.0.0.1:7070';
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
 	if (
-		dnsDomainIs(host, '.ironhidegames.com') ||
-		dnsDomainIs(host, '.tuicool.com') ||
-		dnsDomainIs(host, '.clipartpanda.com') ||
-		dnsDomainIs(host, '.mi.com') ||
-		dnsDomainIs(host, '.xiaomi.net') ||
-		dnsDomainIs(host, '.xiaomi.com') ||
-		dnsDomainIs(host, '.cyanogenmod.org') ||
-		dnsDomainIs(host, '.0316366.com') ||
-		dnsDomainIs(host, '.mozilla.org') ||
-		dnsDomainIs(host, '.taobao.com') ||
-		dnsDomainIs(host, '.tmall.com') ||
-		dnsDomainIs(host, '.telegram.org') ||
-		dnsDomainIs(host, '.disqus.com') ||
-		dnsDomainIs(host, '.disquscdn.com') ||
-		dnsDomainIs(host, '.apkmirror.com') ||
-		dnsDomainIs(host, '.appinn.com') ||
-		dnsDomainIs(host, '.github.io') ||
-		dnsDomainIs(host, '.google.com') ||
-		dnsDomainIs(host, '.ingress.com') ||
-		dnsDomainIs(host, 'plus.google.com') ||
-		dnsDomainIs(host, '.googleapis.com') ||
-		dnsDomainIs(host, '.google-analytics.com') ||
-		dnsDomainIs(host, '.gigacircle.com') ||
-		dnsDomainIs(host, '.toshl.com') ||
-		dnsDomainIs(host, '.opera.com') ||
-		dnsDomainIs(host, '.digicert.com') ||
-		dnsDomainIs(host, '.cloudfront.net') ||
-		dnsDomainIs(host, '.google.com.hk') ||
-		dnsDomainIs(host, '.google.com.sg') ||
-		dnsDomainIs(host, '.googlecode.com') ||
-		dnsDomainIs(host, '.googletagmanager.com') ||
-		dnsDomainIs(host, '.googleusercontent.com') || 
-		dnsDomainIs(host, '.busuu.com') || 
-		dnsDomainIs(host, '.gstatic.com') || host == 'gstatic.com' ||
-		dnsDomainIs(host, '.wordpress.com') ||
-		dnsDomainIs(host, '.youtube.com') ||
-		dnsDomainIs(host, '.blogblog.com') ||
-		dnsDomainIs(host, '.blogger.com') ||
-		dnsDomainIs(host, '.blogspot.com') ||
-		dnsDomainIs(host, '.blogspot.tw') ||
-		dnsDomainIs(host, '.blogspot.hk') ||
-		shExpMatch(host, "*.blogspot.*") ||
-		shExpMatch(host, "*.google*.*") ||
-		dnsDomainIs(host, '.quantserve.com') ||
-		dnsDomainIs(host, '.ytimg.com') ||
-		dnsDomainIs(host, '.ggpht.com') ||
-		dnsDomainIs(host, '.wikipedia.org') ||
-		dnsDomainIs(host, '.wikimedia.org') ||
-		dnsDomainIs(host, '.sf.net') ||
-		dnsDomainIs(host, '.sourceforge.net') ||
-		dnsDomainIs(host, '.stackoverflow.com') ||
-		dnsDomainIs(host, '.xda-developers.com') ||
-		dnsDomainIs(host, '.sstatic.net') ||
-		dnsDomainIs(host, '.instagram.net') ||
-		dnsDomainIs(host, '.instagram.com') ||
-		dnsDomainIs(host, '.twitter.com') ||
-		dnsDomainIs(host, '.linuxtoy.org') ||
-		dnsDomainIs(host, '.twimg.com') ||
-		dnsDomainIs(host, '.feedburner.com') ||
-		dnsDomainIs(host, '.jav4you.com') || dnsDomainIs(host, '.dmm.co.jp') || dnsDomainIs(host, '.21stp.com') ||
-		dnsDomainIs(host, '.bit.ly') || host == 'bit.ly' ||
-		dnsDomainIs(host, '.ift.tt') || host == 'ift.tt' ||
-		dnsDomainIs(host, '.t.co') || host == 't.co' ||
-		shExpMatch(host, "*thepiratebay.*") ||
-		shExpMatch(host, "*twitter.com*") ||
-		shExpMatch(host, "*facebook.com*") ||
-		shExpMatch(host, "*instagram.com*") ||
-		dnsDomainIs(host, '.facebook.com') || host == 'facebook.com' ||
-		dnsDomainIs(host, '.connect.facebook.net') ||
-		host == 'connect.facebook.net' ||
-		/^https?:\/\/[^\/]+facebook\.com/i.test(url) ||
-		host == 'ow.ly' ||
-		host == 'goo.gl') { return autosocks; }
+	dnsDomainIs(host, ".mi.com") ||
+	dnsDomainIs(host, ".xiaomi.net") ||
+	dnsDomainIs(host, ".xiaomi.com") ||
+	dnsDomainIs(host, ".0316366.com") ||
+	dnsDomainIs(host, ".taobao.com") ||
+	dnsDomainIs(host, ".tmall.com") ||
+	dnsDomainIs(host, ".googlesile.com") ||
+	dnsDomainIs(host, ".agoogleaday.com") ||
+	dnsDomainIs(host, ".googleapis.com") ||
+	dnsDomainIs(host, ".googleartproject.com") ||
+	dnsDomainIs(host, ".googlecode.com") ||
+	dnsDomainIs(host, ".googlecommerce.com") ||
+	dnsDomainIs(host, ".googledomains.com") ||
+	dnsDomainIs(host, ".googleearth.com") ||
+	dnsDomainIs(host, ".googledrive.com") ||
+	dnsDomainIs(host, ".googlegroups.com") ||
+	dnsDomainIs(host, ".googlehosted.com") ||
+	dnsDomainIs(host, ".googlelabs.com") ||
+	dnsDomainIs(host, ".googlemail.com") ||
+	dnsDomainIs(host, ".googleplus.com") ||
+	dnsDomainIs(host, ".googlesource.com") ||
+	dnsDomainIs(host, ".googleusercontent.com") ||
+	dnsDomainIs(host, ".googlevideo.com") ||
+	dnsDomainIs(host, ".groups.google.cn") ||
+	dnsDomainIs(host, ".google.com") ||
+	dnsDomainIs(host, ".google.com.hk") ||
+	dnsDomainIs(host, ".google.com.tw") ||
+	dnsDomainIs(host, ".google.com.sg") ||
+	dnsDomainIs(host, ".google.co.jp") ||
+	dnsDomainIs(host, ".google.co.kr") ||
+	dnsDomainIs(host, ".googletagmanager.com") ||
+	dnsDomainIs(host, ".gstatic.com") ||
+	dnsDomainIs(host, ".youtube.com") ||
+	dnsDomainIs(host, ".cloudfront.net") ||
+	dnsDomainIs(host, ".ingress.com") ||
+	dnsDomainIs(host, ".google-analytics.com") ||
+	dnsDomainIs(host, ".blogspot.com") ||
+	dnsDomainIs(host, ".blogspot.sg") ||
+	dnsDomainIs(host, ".blogspot.hk") ||
+	dnsDomainIs(host, ".blogspot.jp") ||
+	dnsDomainIs(host, ".blogspot.tw") ||
+	dnsDomainIs(host, ".twitter.com") ||
+	dnsDomainIs(host, ".twitter.jp") ||
+	dnsDomainIs(host, ".twittercounter.com") ||
+	dnsDomainIs(host, ".twitterfeed.com") ||
+	dnsDomainIs(host, ".twittergadget.com") ||
+	dnsDomainIs(host, ".twittermail.com") ||
+	dnsDomainIs(host, ".twimg.com") ||
+	dnsDomainIs(host, ".cdninstagram.com") ||
+	dnsDomainIs(host, ".instagram.com") ||
+	dnsDomainIs(host, ".blog.instagram.com") ||
+	dnsDomainIs(host, ".facebook.com") ||
+	dnsDomainIs(host, ".connect.facebook.net") ||
+	dnsDomainIs(host, ".facebookquotes4u.com") ||
+	dnsDomainIs(host, ".blogblog.com") ||
+	dnsDomainIs(host, ".blogger.com") ||
+	dnsDomainIs(host, ".wordpress.com") ||
+	dnsDomainIs(host, ".cyanogenmod.org") ||
+	dnsDomainIs(host, ".mozilla.org") ||
+	dnsDomainIs(host, ".telegram.org") ||
+	dnsDomainIs(host, ".disqus.com") ||
+	dnsDomainIs(host, ".disquscdn.com") ||
+	dnsDomainIs(host, ".apkmirror.com") ||
+	dnsDomainIs(host, ".github.io") ||
+	dnsDomainIs(host, ".ytimg.com") ||
+	dnsDomainIs(host, ".opera.com") ||
+	dnsDomainIs(host, ".digicert.com") ||
+	dnsDomainIs(host, ".wikipedia.org") ||
+	dnsDomainIs(host, ".wikimedia.org") ||
+	dnsDomainIs(host, ".sf.net") ||
+	dnsDomainIs(host, ".sourceforge.net") ||
+	dnsDomainIs(host, ".stackoverflow.com") ||
+	dnsDomainIs(host, ".xda-developers.com") ||
+	dnsDomainIs(host, ".sstatic.net") ||
+	dnsDomainIs(host, ".linuxtoy.org") ||
+	dnsDomainIs(host, ".feedburner.com") ||
+	dnsDomainIs(host, ".jav4you.com") ||
+	dnsDomainIs(host, ".dmm.co.jp") ||
+	dnsDomainIs(host, ".bit.ly") ||
+	dnsDomainIs(host, ".ift.tt") ||
+	dnsDomainIs(host, ".t.co") ||
+	dnsDomainIs(host, ".ow.ly") ||
+	dnsDomainIs(host, ".goo.gl") ||
+	dnsDomainIs(host, ".kickass.to") ||
+	dnsDomainIs(host, ".kat.cr") ||
+	dnsDomainIs(host, ".publicbt.com") ||
+	dnsDomainIs(host, ".demonii.com") ||
+	dnsDomainIs(host, ".nytimes.com") ||
+	dnsDomainIs(host, ".akamaihd.net") ||
+	dnsDomainIs(host, ".juesetuku.com") ||
+	host == 'goo.gl') { return autosocks; }
 	return "DIRECT";
 }
