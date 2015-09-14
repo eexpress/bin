@@ -1,13 +1,18 @@
 #!/bin/bash
 
-url="twitter.com"
+#url="twitter.com"
 url="google.com"
-re='\<IN\>.*[0-9]\{1,3\}'
-echo -e "===>\t SSH"
-dig @128.199.153.182 $url|grep "$re"
-echo -e "===>\t 114"
-dig @114.114.114.114 $url|grep "$re"
-echo -e "===>\t 8888"
-dig @8.8.8.8 $url|grep "$re"
-echo -e "===>\t hosts"
-grep "\s$url" /etc/hosts
+h=${1:-$url}
+#/usr/bin/dig $h |awk '/ANSWER SECTION:/,/SERVER:/'
+echo ----------dig $h---------
+echo -----------------------------------53----
+/usr/bin/dig $h +short
+if ! (nmap|grep 1053); then
+echo ---------------------------------1053----
+/usr/bin/dig $h -p 1053 +short
+fi
+echo --------------------------8.8.4.4+tcp----
+/usr/bin/dig $h +tcp @8.8.4.4 +short
+echo -------------------208.67.222.222+tcp----
+/usr/bin/dig $h +tcp @208.67.222.222 +short
+

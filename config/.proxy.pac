@@ -1,7 +1,7 @@
 function FindProxyForURL(url, host) {
 //    var autosocks = 'SOCKS5 192.168.1.1:1080';
-//    var autosocks = 'SOCKS5 127.0.0.1:1080';
-	var autosocks = 'SOCKS5 127.0.0.1:7070';
+	var autosocks = 'SOCKS5 127.0.0.1:1080';
+//    var autosocks = 'SOCKS5 127.0.0.1:7070';
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
 	if (
 	dnsDomainIs(host, ".mi.com") ||
