@@ -1,63 +1,28 @@
 function FindProxyForURL(url, host) {
-//    var autosocks = 'SOCKS5 192.168.1.1:1080';
 	var autosocks = 'SOCKS5 127.0.0.1:1080';
 //    var autosocks = 'SOCKS5 127.0.0.1:7070';
     if (host == '127.0.0.1' || isPlainHostName(host)) { return "DIRECT"; }
+	if (	shExpMatch(url,"*google*") ||
+			shExpMatch(url,"*twitter*") ||
+			shExpMatch(url,"*blogspot*") ||
+			shExpMatch(url,"*instagram*") ||
+			shExpMatch(url,"*facebook*") ||
+			){ return autosocks; }
+
 	if (
 	dnsDomainIs(host, ".mi.com") ||
 	dnsDomainIs(host, ".xiaomi.net") ||
 	dnsDomainIs(host, ".xiaomi.com") ||
 	dnsDomainIs(host, ".0316366.com") ||
+	dnsDomainIs(host, ".aitaotu.com") ||
 	dnsDomainIs(host, ".taobao.com") ||
+	dnsDomainIs(host, ".etao.com") ||
 	dnsDomainIs(host, ".tmall.com") ||
-	dnsDomainIs(host, ".googlesile.com") ||
-	dnsDomainIs(host, ".agoogleaday.com") ||
-	dnsDomainIs(host, ".googleapis.com") ||
-	dnsDomainIs(host, ".googleartproject.com") ||
-	dnsDomainIs(host, ".googlecode.com") ||
-	dnsDomainIs(host, ".googlecommerce.com") ||
-	dnsDomainIs(host, ".googledomains.com") ||
-	dnsDomainIs(host, ".googleearth.com") ||
-	dnsDomainIs(host, ".googledrive.com") ||
-	dnsDomainIs(host, ".googlegroups.com") ||
-	dnsDomainIs(host, ".googlehosted.com") ||
-	dnsDomainIs(host, ".googlelabs.com") ||
-	dnsDomainIs(host, ".googlemail.com") ||
-	dnsDomainIs(host, ".googleplus.com") ||
-	dnsDomainIs(host, ".googlesource.com") ||
-	dnsDomainIs(host, ".googleusercontent.com") ||
-	dnsDomainIs(host, ".googlevideo.com") ||
-	dnsDomainIs(host, ".groups.google.cn") ||
-	dnsDomainIs(host, ".google.com") ||
-	dnsDomainIs(host, ".google.com.hk") ||
-	dnsDomainIs(host, ".google.com.tw") ||
-	dnsDomainIs(host, ".google.com.sg") ||
-	dnsDomainIs(host, ".google.co.jp") ||
-	dnsDomainIs(host, ".google.co.kr") ||
-	dnsDomainIs(host, ".googletagmanager.com") ||
 	dnsDomainIs(host, ".gstatic.com") ||
+	dnsDomainIs(host, ".twimg.com") ||
 	dnsDomainIs(host, ".youtube.com") ||
 	dnsDomainIs(host, ".cloudfront.net") ||
 	dnsDomainIs(host, ".ingress.com") ||
-	dnsDomainIs(host, ".google-analytics.com") ||
-	dnsDomainIs(host, ".blogspot.com") ||
-	dnsDomainIs(host, ".blogspot.sg") ||
-	dnsDomainIs(host, ".blogspot.hk") ||
-	dnsDomainIs(host, ".blogspot.jp") ||
-	dnsDomainIs(host, ".blogspot.tw") ||
-	dnsDomainIs(host, ".twitter.com") ||
-	dnsDomainIs(host, ".twitter.jp") ||
-	dnsDomainIs(host, ".twittercounter.com") ||
-	dnsDomainIs(host, ".twitterfeed.com") ||
-	dnsDomainIs(host, ".twittergadget.com") ||
-	dnsDomainIs(host, ".twittermail.com") ||
-	dnsDomainIs(host, ".twimg.com") ||
-	dnsDomainIs(host, ".cdninstagram.com") ||
-	dnsDomainIs(host, ".instagram.com") ||
-	dnsDomainIs(host, ".blog.instagram.com") ||
-	dnsDomainIs(host, ".facebook.com") ||
-	dnsDomainIs(host, ".connect.facebook.net") ||
-	dnsDomainIs(host, ".facebookquotes4u.com") ||
 	dnsDomainIs(host, ".blogblog.com") ||
 	dnsDomainIs(host, ".blogger.com") ||
 	dnsDomainIs(host, ".wordpress.com") ||
@@ -94,6 +59,8 @@ function FindProxyForURL(url, host) {
 	dnsDomainIs(host, ".nytimes.com") ||
 	dnsDomainIs(host, ".akamaihd.net") ||
 	dnsDomainIs(host, ".juesetuku.com") ||
+	dnsDomainIs(host, ".askubuntu.com") ||
+	dnsDomainIs(host, ".scorecardresearch.com") ||
 	host == 'goo.gl') { return autosocks; }
 	return "DIRECT";
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#url="twitter.com"
-url="google.com"
+url="twitter.com"
+#url="google.com"
 h=${1:-$url}
 #/usr/bin/dig $h |awk '/ANSWER SECTION:/,/SERVER:/'
 echo ----------dig $h---------
