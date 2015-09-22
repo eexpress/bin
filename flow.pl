@@ -28,6 +28,7 @@ flow.pl 文件【各类语法的源码，只要注释不和///冲突】
 	条件判断：用 xxx?yyy:zzz 表示，yyy/zzz为跳转的行号，使用0表示退出。yyy为真，zzz为假。可省略其一，如：xxx?yyy 或者 xxx?:zzz。省略的直接接下一句；都不省略的短语，2个条件都接下一句。
 	普通行：可以使用;连接多句。判断行和函数入口不能带多句。
 	断开行：单独的<表示不继续连接下句。
+控制符号 >?:;< 支持中文符号。
 HELP
 exit 0;
 }
@@ -44,14 +45,14 @@ close IN;
 #--------------------------------
 for $j (0 .. $#contents){
 	$contents[$j]=~/ /; $line=$`; $_=$';
-	if(/^>/ || ! $j){	#入口。带>或者第一行。
+	if(/^[>》]/ || ! $j){	#入口。带>或者第一行。
 		if($j){
 		saveout($q); setshape($q,$EXIT);
 		push @output,"}\n";	#结束subgraph
 		}
 		push @output, "\nsubgraph{\t".'node [color="'.($color[$cc%$cnt]).'"]'.$end; $cc++;
 		$q=$quitstr."_$cc";
-		s/^>//g; normal_segment($_);
+		s/^[>》]//g; normal_segment($_);
 			$_.="_$line"; $_="\"$_\"" if /[- .]/;
 		setshape($_,$FUNC); next;
 	}
@@ -100,9 +101,9 @@ sub setshape(){ # 名称，形状
 }
 #--------------------------------
 sub normal_segment(){
-	my @seg=split /;/, shift;
+	my @seg=split /[;；]/, shift;
 	for(@seg){
-		if($_ eq "<"){saveout();next;}
+		if($_ eq "<" || $_ eq "《"){saveout();next;}
 		$out.= single_segment($_)."->";
 	}
 }
@@ -132,9 +133,9 @@ sub saveout(){
 sub fetch01seg(){
 # 正常行，取第一个字段，组合行号
 	$_=shift;
-	s/;.*//;	#去掉多句
+	s/[;；].*//;	#去掉多句
 	$append=/[?？]/?"？":"";
-	s/\?.*//; /\ /;
+	s/[?？].*//; /\ /;
 	if($' eq "0"){return $q;}
 	$_=$'.$append."_$`"; $_="\"$_\"" if /[-= ><.*?]/;
 	return $_;
