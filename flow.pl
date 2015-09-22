@@ -18,8 +18,8 @@ $base=$ARGV[0]; $base=~s/.\K\.[^.]*//;
 if(($#ARGV==-1) || ($ARGV[0]=~/--help|-h/i) || ! -f "$ARGV[0]"){
 print <<HELP;
 AUTHOR:		eexpress
-VERSION:	1.6
-USAGE:		flow.pl source_file
+VERSION:	1.7
+USAGE:		flow.pl source_text_file
 DESCRIPTION:
 自动根据注释里面的///后面的内容，生成流程图。依赖graphviz。
 flow.pl 文件【各类语法的源码，只要注释不和///冲突】
@@ -27,6 +27,7 @@ flow.pl 文件【各类语法的源码，只要注释不和///冲突】
 	函数入口：用 >xxx 表示。通常是函数名。第一行缺省为入口。
 	条件判断：用 xxx?yyy:zzz 表示，yyy/zzz为跳转的行号，使用0表示退出。yyy为真，zzz为假。可省略其一，如：xxx?yyy 或者 xxx?:zzz。省略的直接接下一句；都不省略的短语，2个条件都接下一句。
 	普通行：可以使用;连接多句。判断行和函数入口不能带多句。
+	断开行：单独的<表示不继续连接下句。
 HELP
 exit 0;
 }
@@ -54,10 +55,11 @@ for $j (0 .. $#contents){
 			$_.="_$line"; $_="\"$_\"" if /[- .]/;
 		setshape($_,$FUNC); next;
 	}
-	if (! /\?/){ normal_segment($_); next;}
+	if (! /[?？]/){ normal_segment($_); next;}
 #--------------------------------
 	# 条件判断
-	($judge,$byes,$bno)=split /[?:]/;
+	($judge,$byes,$bno)=split /[?？:：]/;
+	$judge.="？";
 	$judge=makeup($judge); saveout($judge);
 	setshape($judge,$JUDGE); push @isdia,$judge;
 
@@ -68,7 +70,7 @@ for $j (0 .. $#contents){
 	$goto=$byes?single_segment($byes):$next;
 	push @output,"$judge:s->$goto".'[label="Yes"];'."\n";
 	$goto=$bno?single_segment($bno):$next;
-	push @output,"$judge:e->$goto".'[label="No" style=dotted];'."\n";
+	push @output,"$judge:w->$goto".'[label="No" style=dotted];'."\n";
 	if($byes && $bno){
 		push @output,single_segment($byes)."->$next;\n";
 		$out=single_segment($bno)."->";
@@ -79,7 +81,7 @@ for(@output){ # 判断的入口，全部顶部
 	$in=$_; for(@isdia){$in=~s/->$_/->$_:n/;} $_=$in;
 	s/>>/>/;
 }
-saveout($q); setshape($q,$EXIT);
+#saveout($q); setshape($q,$EXIT);
 #--------------------------------
 unshift @output,"
 digraph G {
@@ -100,6 +102,7 @@ sub setshape(){ # 名称，形状
 sub normal_segment(){
 	my @seg=split /;/, shift;
 	for(@seg){
+		if($_ eq "<"){saveout();next;}
 		$out.= single_segment($_)."->";
 	}
 }
@@ -129,15 +132,17 @@ sub saveout(){
 sub fetch01seg(){
 # 正常行，取第一个字段，组合行号
 	$_=shift;
-	s/[?;].*//; /\ /;
+	s/;.*//;	#去掉多句
+	$append=/[?？]/?"？":"";
+	s/\?.*//; /\ /;
 	if($' eq "0"){return $q;}
-	$_=$'."_$`"; $_="\"$_\"" if /[-= ><.*]/;
+	$_=$'.$append."_$`"; $_="\"$_\"" if /[-= ><.*?]/;
 	return $_;
 }
 #--------------------------------
 sub makeup(){
 # 内容直接和当前行号组合
-	$_=shift; $_.="_$line"; $_="\"$_\"" if /[-= ><.*]/;
+	$_=shift; $_.="_$line"; $_="\"$_\"" if /[-= ><.*?]/;
 	return $_;
 }
 #--------------------------------
