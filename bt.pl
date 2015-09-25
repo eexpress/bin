@@ -17,7 +17,8 @@ open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
 #--------------------------------------------
 #$web="https://thepiratebay.se";
 #$url="$web/search/$s/";
-$web="https://kickass.to";
+#$web="https://kickass.to";
+$web="https://kat.cr/";
 $url="$web/usearch/$s/";
 
 print "1 ->\t$url\n"; $response = $ua->get($url);
