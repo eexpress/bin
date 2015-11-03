@@ -93,7 +93,7 @@ Array<string> history=new Array<string>();
 	}
 
 	public DrawOnWindow() {
-		title = "numbered musical notation - eexpress - v 1.4";
+		title = "numbered musical notation - eexpress - v 1.5";
 		window_position=Gtk.WindowPosition.CENTER_ALWAYS;
 		destroy.connect (Gtk.main_quit);
 		ww=700;
@@ -685,7 +685,7 @@ Array<string> history=new Array<string>();
 				break;
 			case '#':
 			case 'b':
-				ctx.move_to(x+bw/2,y-fixheight+vspace/4);
+				ctx.move_to(x-bw/2,y-fixheight+vspace/4);
 				ctx.set_font_size(size/2);
 				ctx.show_text(i.to_string());
 				ctx.set_font_size(size);
@@ -738,7 +738,7 @@ Array<string> history=new Array<string>();
 		ctx.set_source_rgba (0, 0, 1, 0.5);
 		if(! shoting){
 			ctx.move_to(bw*2,vh);
-			ctx.show_text("%d,%d <%s>".printf(crow,ccol,nmn));
+			ctx.show_text("@%d,%d [%s]".printf(crow,ccol,nmn));
 		}
 		shoting=false;
 /*        显示帮助*/

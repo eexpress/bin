@@ -18,7 +18,7 @@ open OUT,">>/tmp/bt.log"; print OUT ". $s .\n"; close OUT;
 #$web="https://thepiratebay.se";
 #$url="$web/search/$s/";
 #$web="https://kickass.to";
-$web="https://kat.cr/";
+$web="https://kat.cr";
 $url="$web/usearch/$s/";
 
 print "1 ->\t$url\n"; $response = $ua->get($url);
@@ -33,6 +33,7 @@ if ( $response->is_success ) {
 	}
 }
 #--------------------------------------------
+exit;
 #No BT link now
 $url="http://blog.jav4you.com/?s=$s";
 print "1 ->\t$url\n"; $response = $ua->get($url);
