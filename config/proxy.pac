@@ -1,22 +1,24 @@
 var darr = [
 'google', 'gstatic', 'google-analytics', 'googleapis', 'googleusercontent', 'youtube', 'gmail', 'sstatic.net',
-'twitter', 'twimg', 'cyanogenmod', 'github', 'ytimg',
+'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'github', 'ytimg',
 'ingress', 'appspot.com', 'telegram.org',
 'blogblog', 'blogger', 'wordpress', 'blogspot',
 'instagram', 'facebook', 'opera', 'wikipedia', 'sf.net',
 'sourceforge.net', 'stackoverflow.com', 'xda-developers.com',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl',
 'linuxtoy.org', 'askubuntu.com', 'igfw.cc',
-'doubleclick.net', 'disqus.com', 'jav4you',
+'doubleclick.net', 'disqus.com',
 'faqoverflow.com', 'systhread.net', 'gravatar.com',
-	'pasteasy', 'ggpht',
+'pasteasy', 'ggpht',
 ];
 
 function FindProxyForURL(url, host){
 	var autosocks = 'SOCKS5 localhost:1080';
 	for(var i=0;i<darr.length;i++){
-		var str0 = '*.' + darr[i] + '.*';
-		var str1 = '*://' + darr[i] + '.*';
+		var append = '.*';
+		if(darr[i].indexOf('.') != -1){ append = '/*'; }
+		var str0 = '*.' + darr[i] + append;
+		var str1 = '*://' + darr[i] + append;
 		if(shExpMatch(url,str0) || shExpMatch(url,str1))
 			return autosocks;
 	}
