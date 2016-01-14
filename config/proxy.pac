@@ -1,15 +1,17 @@
 var darr = [
-'google', 'gstatic', 'google-analytics', 'googleapis', 'googleusercontent', 'youtube', 'gmail', 'sstatic.net',
+'google', 'gstatic', 'google-analytics', 'googleapis', 'googleusercontent', 'googlecode.com', 'youtube', 'gmail', 'sstatic.net',
 'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'github', 'ytimg',
-'ingress', 'appspot.com', 'telegram.org',
+'ingress', 'appspot.com', 'telegram.org', 'reddit.com',
 'blogblog', 'blogger', 'wordpress', 'blogspot',
 'instagram', 'facebook', 'opera', 'wikipedia', 'sf.net',
 'sourceforge.net', 'stackoverflow.com', 'xda-developers.com',
-'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl',
+'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
 'linuxtoy.org', 'askubuntu.com', 'igfw.cc',
-'doubleclick.net', 'disqus.com',
+'doubleclick.net', 'disqus.com', 'linuxquestions.org',
 'faqoverflow.com', 'systhread.net', 'gravatar.com',
-'pasteasy', 'ggpht',
+'pasteasy', 'ggpht', 'ubuntubuzz.com', 'anitalink.com',
+'jav4you.com', 'publicbt.com', 'demonii.com', 'airvpn.org',
+'exceptionfound.com', 'pubzi.com',
 ];
 
 function FindProxyForURL(url, host){

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-f=${1:-note}
+f=${*:-note}
 echo $f
+#exit
 echo -n "# ●" >>"$f"
 date '+%Y-%m-%d_%H:%M:%S' >>"$f"
 xsel -o >>"$f"

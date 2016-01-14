@@ -35,7 +35,7 @@ alias cl='crontab -l'
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'
 
-alias d='df -hT -x tmpfs -x devtmpfs'
+alias d='df -hT -x tmpfs -x devtmpfs -x vfat'
 alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
 alias dmesg='/bin/dmesg|tail|cut -b -$COLUMNS'

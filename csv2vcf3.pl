@@ -7,10 +7,10 @@
 # 163自己导入导出的格式都乱。
 @VCard=(
 		["FN:","姓名",		"姓名",		"姓名",		"First Name",		],
-		["EMAIL;HOME:",		"电子邮箱",	"邮件地址",	"E-mail Address",	],
-		["EMAIL;WORK:",		"商务邮箱",	"工作邮箱",	"E-mail 2 Address",	],
-		["TEL;HOME;CELL:",	"手机号码",	"移动电话",	"Mobile Phone",		],
-		["TEL;WORK;CELL:",	"商务手机",	"商务手机",	"Business Phone",	],
+		["EMAIL;TYPE=INTERNET;TYPE=HOME:",		"电子邮箱",	"邮件地址",	"E-mail Address",	],
+		["EMAIL;TYPE=INTERNET;TYPE=WORK:",		"商务邮箱",	"工作邮箱",	"E-mail 2 Address",	],
+		["TEL;TYPE=CELL:",	"手机号码",	"移动电话",	"Mobile Phone",		],
+		["TEL;TYPE=WORK:",	"商务手机",	"商务手机",	"Business Phone",	],
 		["ORG:",			"公司名称",	"公司",		"Company",			],
 		["RELATED;TYPE:",	"组名",		"联系组",	"Categories",		],
 );
