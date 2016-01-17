@@ -1,8 +1,9 @@
-
 [Desktop Entry]
 Version=1.0
 Type=Application
 Terminal=false
-Exec=/home/eexp/game/QuakeWars/etqw.x86
+Exec=/home/eexp/bin/QuakeWars/etqw.x86
 Name=QuakeWars
-Icon=/home/eexp/game/QuakeWars/etqw_icon.png
+Icon=/home/eexp/bin/QuakeWars/etqw_icon.png
+Categories=Game;ActionGame;
+Keywords=fps;3d;etqw;
