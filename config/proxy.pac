@@ -13,7 +13,7 @@ var darr = [
 'pasteasy', 'ggpht', 'ubuntubuzz.com', 'anitalink.com',
 'jav4you.com', 'publicbt.com', 'demonii.com', 'airvpn.org',
 'exceptionfound.com', 'pubzi.com', 'etkey.org',
-	'openra.net', 'ubuntumaniac',
+	'openra.net', 'ubuntumaniac', 'damplips.com',
 ];
 
 function FindProxyForURL(url, host){
