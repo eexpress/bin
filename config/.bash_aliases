@@ -11,6 +11,8 @@ alias fc-zh='fc-list :lang=zh-cn family file|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b
 	alias au='sudo apt update && msg 列表已经刷新 || msg 刷新失败'
 	alias ag='sudo apt upgrade'
 	alias as='apt search'
+	alias aw='apt show'
+	alias aa='sudo apt autoremove'
 #as(){ aptitude search "!~nlib!~ri386!~v $*";}
 
 alias cal='cal -3'

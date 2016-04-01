@@ -1,7 +1,7 @@
 var darr = [
 'google', 'gstatic', 'google-analytics', 'googleapis', 'googleusercontent', 'googlecode.com', 'youtube', 'gmail', 'sstatic.net', 'googlevideo.com',
 'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'github', 'ytimg',
-'ingress', 'appspot.com', 'telegram.org', 'reddit.com',
+'ingress', 'appspot.com', 'telegram.org', 'reddit.com', 'webupd8.org',
 'blogblog', 'blogger', 'wordpress', 'blogspot',
 'instagram', 'facebook', 'opera', 'wikipedia', 'sf.net',
 'sourceforge.net', 'stackoverflow.com', 'xda-developers.com',
@@ -11,9 +11,9 @@ var darr = [
 'doubleclick.net', 'disqus.com', 'linuxquestions.org',
 'faqoverflow.com', 'systhread.net', 'gravatar.com',
 'pasteasy', 'ggpht', 'ubuntubuzz.com', 'anitalink.com',
-'jav4you.com', 'publicbt.com', 'demonii.com', 'airvpn.org',
 'exceptionfound.com', 'pubzi.com', 'etkey.org',
 	'openra.net', 'ubuntumaniac', 'damplips.com',
+	'btdigg.org',
 ];
 
 function FindProxyForURL(url, host){
