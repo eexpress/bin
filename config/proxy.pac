@@ -11,6 +11,7 @@ var darr = [
 'doubleclick.net', 'disqus.com', 'linuxquestions.org',
 'faqoverflow.com', 'systhread.net', 'gravatar.com',
 'pasteasy', 'ggpht', 'ubuntubuzz.com', 'anitalink.com',
+'jav4you.com', 'publicbt.com', 'demonii.com', 'airvpn.org',
 'exceptionfound.com', 'pubzi.com', 'etkey.org',
 	'openra.net', 'ubuntumaniac', 'damplips.com',
 	'btdigg.org',
