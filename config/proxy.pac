@@ -2,6 +2,7 @@ var darr = [
 'google', 'gstatic', 'google-analytics', 'googleapis', 'googleusercontent', 'googlecode.com', 'youtube', 'gmail', 'sstatic.net', 'googlevideo.com',
 'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'github', 'ytimg',
 'ingress', 'appspot.com', 'telegram.org', 'reddit.com', 'webupd8.org',
+	'pastebin.com',
 'blogblog', 'blogger', 'wordpress', 'blogspot',
 'instagram', 'facebook', 'opera', 'wikipedia', 'sf.net',
 'sourceforge.net', 'stackoverflow.com', 'xda-developers.com',
