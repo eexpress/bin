@@ -383,10 +383,14 @@ remote: Total 830 (delta 0), reused 0 (delta 0), pack-reused 829
 < # theme: landscape
 ---
 > theme: landscape
-72,73c71
+72,76c71
 <   repo: git@github.com:eexpress/eexpress.github.com.git
 <   type: git
+< 
+< duoshuo: eexpress
+< 
 ---
+>   type:
 ▶ diff themes/yilia/_config.yml*
 38c38
 < avatar: /eexpress-256.png
