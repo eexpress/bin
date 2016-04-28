@@ -15,7 +15,7 @@ var darr = [
 'jav4you.com', 'publicbt.com', 'demonii.com', 'airvpn.org',
 'exceptionfound.com', 'pubzi.com', 'etkey.org',
 	'openra.net', 'ubuntumaniac', 'damplips.com',
-	'btdigg.org',
+	'btdigg.org', 'dropbox.com', 'dropboxusercontent.com',
 'torrentsmd.com', 'opensharing.org',
 ];
 
