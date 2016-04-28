@@ -3,7 +3,7 @@ var darr = [
 'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'github', 'ytimg',
 'ingress', 'appspot.com', 'telegram.org', 'reddit.com', 'webupd8.org',
 	'pastebin.com',
-'blogblog', 'blogger', 'wordpress', 'blogspot',
+'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',
 'instagram', 'facebook', 'opera', 'wikipedia', 'sf.net',
 'sourceforge.net', 'stackoverflow.com', 'xda-developers.com',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
@@ -16,6 +16,7 @@ var darr = [
 'exceptionfound.com', 'pubzi.com', 'etkey.org',
 	'openra.net', 'ubuntumaniac', 'damplips.com',
 	'btdigg.org',
+'torrentsmd.com', 'opensharing.org',
 ];
 
 function FindProxyForURL(url, host){
