@@ -27,7 +27,7 @@ alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
 alias dmesg='/bin/dmesg|tail|cut -b -$COLUMNS'
 alias dog='grep -v -E "(^$|^#|^!)"'
-alias free='free -m'
+alias free='free -h'
 alias g='grep --color=always -inTZ 2>/dev/null'
 #grep 结果的文件名后面跟的：或者null，需要处理
 alias s='mplayer'
