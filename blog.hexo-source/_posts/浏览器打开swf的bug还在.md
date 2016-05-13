@@ -3,6 +3,7 @@ date: 2015-06-20 20:36:28
 tags:
 - swf
 - broswer
+- flashplugins
 ---
 包括opera, firefox都打不开本地swf，其实是一个老bug了。
 编辑/usr/share/mime/packages/freedesktop.org.xml
@@ -15,9 +16,9 @@ tags:
 ```
 然后更新下数据库
 ```
-update-mime-database /usr/share/mime
+sudo update-mime-database /usr/share/mime
 ```
-再重新安装一次flash插件。
+16.04似乎不需要这步骤。~~再重新安装一次flash插件。~~
 ```
 ▶ sudo apt-get install --reinstall pepperflashplugin-nonfree
 ```

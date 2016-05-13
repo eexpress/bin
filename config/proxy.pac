@@ -7,7 +7,7 @@ var darr = [
 'instagram', 'facebook', 'opera', 'wikipedia', 'sf.net',
 'sourceforge.net', 'stackoverflow.com', 'xda-developers.com',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
-'linuxtoy.org', 'askubuntu.com', 'igfw.cc',
+'linuxtoy.org', 'askubuntu.com', 'igfw.cc', 'getlantern.org','amazonaws.com',
 'feedburner.com', 'kat.cr', 'tineye.com',
 'doubleclick.net', 'disqus.com', 'linuxquestions.org',
 'faqoverflow.com', 'systhread.net', 'gravatar.com',
