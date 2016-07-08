@@ -1,23 +1,28 @@
 var darr = [
-'google', 'gstatic', 'google-analytics', 'googleapis', 'googleusercontent', 'googlecode.com', 'youtube', 'gmail', 'sstatic.net', 'googlevideo.com',
-'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'github', 'ytimg',
+'google', 'gstatic', 'google-analytics', 'googleapis',
+'googleusercontent', 'googlecode.com', 'youtube',
+'gmail', 'sstatic.net', 'github', 'googlevideo.com',
+'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'ytimg',
 'ingress', 'appspot.com', 'telegram.org', 'reddit.com', 'webupd8.org',
-	'pastebin.com', 'launchpad.net',
+'pastebin.com', 'disqus.com', 'launchpad.net',
 'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',
 'instagram', 'facebook', 'opera', 'wikipedia', 'sf.net',
 'sourceforge.net', 'stackoverflow.com', 'xda-developers.com',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp', 'youtu.be',
-'linuxtoy.org', 'askubuntu.com', 'igfw.cc', 'getlantern.org','amazonaws.com', 'tumblr.com', 'noobslab.com',
-'feedburner.com', 'kat.cr', 'tineye.com', 'insynchq.com',
-'doubleclick.net', 'disqus.com', 'linuxquestions.org', 'omgubuntu.co.uk',
+'linuxtoy.org', 'askubuntu.com', 'amazonaws.com', 'tumblr.com', 
+'feedburner.com', 'kat.cr', 'tineye.com', 'jav4you.com',
+'doubleclick.net', 'linuxquestions.org', 'omgubuntu.co.uk',
+'steamstatic.com',
+];
+/*
 'faqoverflow.com', 'systhread.net', 'gravatar.com',
 'pasteasy', 'ggpht', 'ubuntubuzz.com', 'anitalink.com',
-'jav4you.com', 'publicbt.com', 'demonii.com', 'airvpn.org',
-'exceptionfound.com', 'pubzi.com', 'etkey.org',
-	'openra.net', 'ubuntumaniac', 'damplips.com',
-	'btdigg.org', 'dropbox.com', 'dropboxusercontent.com',
+'exceptionfound.com', 'pubzi.com', 'insynchq.com','etkey.org',
+'publicbt.com', 'demonii.com', 'airvpn.org',
+'getlantern.org','igfw.cc', 'openra.net', 'ubuntumaniac', 'damplips.com',
+'noobslab.com','btdigg.org', 'dropbox.com', 'dropboxusercontent.com',
 'torrentsmd.com', 'opensharing.org',
-];
+*/
 
 function FindProxyForURL(url, host){
 	var autosocks = 'SOCKS5 localhost:1080';
