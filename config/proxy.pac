@@ -12,7 +12,7 @@ var darr = [
 'linuxtoy.org', 'askubuntu.com', 'amazonaws.com', 'tumblr.com', 
 'feedburner.com', 'kat.cr', 'tineye.com', 'jav4you.com',
 'doubleclick.net', 'linuxquestions.org', 'omgubuntu.co.uk',
-'steamstatic.com',
+'steamstatic.com', 'inoreader.com',
 ];
 /*
 'faqoverflow.com', 'systhread.net', 'gravatar.com',

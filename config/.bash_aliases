@@ -37,6 +37,8 @@ alias unzip='unzip -O CP936'
 alias hexdump='hexdump -C'
 alias rsync='/usr/bin/rsync -Pau'
 alias web='python -m SimpleHTTPServer'
+alias ffmpeg='/usr/bin/ffmpeg -hide_banner 2>&1'
+alias ffprobe='/usr/bin/ffprobe -hide_banner 2>&1'
 
 alias v='/usr/bin/gvim --remote-silent-tab'
 alias sv='sudo /usr/bin/gvim --remote-silent-tab'
