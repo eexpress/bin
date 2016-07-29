@@ -22,7 +22,11 @@ ls *.avi | perl -ne 'print "file $_"' | ffmpeg -f concat -i - -c copy Joined.mp4
 ```
 列出所有视频的编码和尺寸。
 ```
-▶ for i in *.avi *.mp4; do printf "%-30s\t" $i; ffprobe -hide_banner $i 2>&1|perl -ne '/Video: [^ ]*/ && print "$&\t"; /\s\d{3,}x\d*\s/ && print "Size:$&\t";/Audio: [^ ]*/ && print $&; END{print "\n"};'; done
+▶ for i in *.avi *.mp4; do printf "%-26s\t" $i; ffprobe -hide_banner $i 2>&1|perl -ne '/Video: [^ ]*/ && print "$&\t"; /\s\d{3,}x\d*\b/ && printf "Size:%-12s",$&;/Audio: [^ ]*/ && print $&; END{print "\n"};'; done
+```
+or
+```
+▶ for i in *.avi *.mp4; do ffprobe -hide_banner $i 2>&1|perl -ne '$f=$1 if /from (.*)/; $v=$1 if /Video: ([^ ]*)/; $s=$& if /\s\d{3,}x\d*\b/; $a=$1 if /Audio: ([^ ]*)/; END{printf "%-38s\t%-8s%-8s%s\n",$f,$v,$a,$s};'; done
 ```
 批量转换编码和尺寸。
 ```

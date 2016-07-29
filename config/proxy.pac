@@ -11,6 +11,7 @@ var darr = [
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp', 'youtu.be',
 'linuxtoy.org', 'askubuntu.com', 'amazonaws.com', 'tumblr.com', 
 'feedburner.com', 'kat.cr', 'tineye.com', 'jav4you.com',
+	'zff.co',
 'doubleclick.net', 'linuxquestions.org', 'omgubuntu.co.uk',
 'steamstatic.com', 'inoreader.com',
 ];
