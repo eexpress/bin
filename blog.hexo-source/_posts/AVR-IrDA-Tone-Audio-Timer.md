@@ -4,7 +4,7 @@ tags:
 - avr
 - tone
 - audio
-- irda 
+- IrDA
 ---
 功能说明：
 1。同时识别最多4个遥控器，2组编码固定在ROM，2组编码可随时录制到EEPROM。占用T0定时器。
