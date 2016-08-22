@@ -17,10 +17,10 @@ w=`echo $i|cut -dx -f1`
 h=`echo $i|cut -dx -f2`
 if [ $w -gt $h ]; then
 t=${aw[$#]}
-s=666
+s=800
 else
 t=${ah[$#]}
-s=400
+s=600
 fi
 echo -e "\e[34m输出：$f\t文件：$#\t缩放宽度：$s\t列数：$t\e[0m"
 

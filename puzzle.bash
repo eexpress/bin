@@ -1,0 +1,1 @@
+paste-img/puzzle.bash
