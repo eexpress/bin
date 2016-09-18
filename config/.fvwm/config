@@ -10,12 +10,12 @@ Key f A 4 JumpExec pcmanfm --no-desktop
 Key w A 4 JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
 #gnome-terminal的WM_CLASS名和执行名称不同
 #xprop |g 'WM_CLASS(STRING)'
-Key t A 4 Exec gnome-terminal
+Key t A 4 JumpExec xterm
 Key s A 4 Exec synapse
 
 Key F1 A N JumpOrExec gnome-terminal-server gnome-terminal
-Key F2 A A Exec exec $[script]monitor-clip.pl
 Key F3 A N Exec synapse
+Key F10 A A Exec exec $[script]monitor-clip.pl
 
 #切换触摸板
 Key F6 A A Exec xinput list-props "SynPS/2 Synaptics TouchPad"|grep "Device Enabled"|grep "1$" && xinput disable "SynPS/2 Synaptics TouchPad" || xinput enable "SynPS/2 Synaptics TouchPad"
@@ -56,7 +56,7 @@ Key XF86AudioLowerVolume A A Exec exec amixer set Master 5%-
 Key XF86AudioRaiseVolume A A Exec exec amixer set Master 5%+
 Key XF86AudioMute A A Exec exec amixer -D pulse set Master toggle
 
-Key Print A A Exec import ~/`date '+%Y-%m-%d_%H:%M:%S'`.jpg
+Key Print A A Exec import ~/`date '+%Y-%m-%d_%H:%M:%S'`.png
 
 # 方向按键，排列窗口，占半屏幕，下部留空隙
 #keyname in /usr/include/X11/keysymdef.h
