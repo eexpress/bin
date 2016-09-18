@@ -2,51 +2,34 @@
 SetEnv fvwm			$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
 DesktopSize			2x1
-SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=10:encoding=iso10646-1"
+#SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=12:encoding=iso10646-1"
 
 ######################### 热键
-Key F1 A N Quake gnome-terminal
-#Key v A 4 Jump gvim
-#Key f A 4 JumpExec pcmanfm
-Key f A 4 JumpExec nautilus --no-desktop
-Key o A 4 JumpExec opera
-Key z A 4 JumpExec zim
-Key c A 4 JumpExec gnome-control-center
-Key s A 4 JumpExec gnome-system-monitor
-Key x A 4 JumpExec xterm
-Key t A 4 Exec exec xterm
-Key m A 4 Exec exec bash -c 'type mocp && xterm -e mocp || rhythmbox'
+#Key f A 4 JumpExec nautilus --no-desktop
+Key f A 4 JumpExec pcmanfm --no-desktop
+Key w A 4 JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
+#gnome-terminal的WM_CLASS名和执行名称不同
+#xprop |g 'WM_CLASS(STRING)'
+Key t A 4 Exec gnome-terminal
+Key s A 4 Exec synapse
 
-Key p A 4 Exec exec pasteimg.pl -c
-Key Menu A A Exec exec $[script]monitor-clip.pl
+Key F1 A N JumpOrExec gnome-terminal-server gnome-terminal
 Key F2 A A Exec exec $[script]monitor-clip.pl
-Key Alt_R A A Exec exec $[script]monitor-clip.pl
-#Key Control_R A A Lower 
+Key F3 A N Exec synapse
+
+#切换触摸板
+Key F6 A A Exec xinput list-props "SynPS/2 Synaptics TouchPad"|grep "Device Enabled"|grep "1$" && xinput disable "SynPS/2 Synaptics TouchPad" || xinput enable "SynPS/2 Synaptics TouchPad"
 
 Key r A CM restart
 Key q A CM quit
-Key p A CM Exec bash -c 'dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
-Key s A CM Exec bash -c 'dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend'
-Key h A CM Exec bash -c 'dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Hibernate'
-Key x A CM Exec gksu kill `cat /tmp/.X0-lock`
 
 ######################### 窗口操作
-Style * IconBox 1000x100+40-120, IconGrid 20 20, IconFill right bottom, IconSize 64 64, !IconTitle
-#EdgeCommand Top WindowList SortByClass,NoGeometry,NoCurrentDeskTitle
-MenuStyle WindowList Font "$[RegularFont]"
-Key F10 A A WindowList Root c c SortByClass,NoGeometry,NoCurrentDeskTitle
-
-Mouse 1 T N Move
-Mouse 2 T N Lower
-Mouse 3 T N Close
-Mouse 4 T N Maximize
-Mouse 5 T N Iconify
+Style * IconBox 64x800-0-0, IconSize 64 64, !IconTitle
 
 Mouse 1 W C Move
 Mouse 2 W C Lower
 Mouse 3 W C Close
 Mouse 4 W C Maximize
-#Mouse 4 W C ResizeMove 95 95 2 2
 Mouse 5 W C Iconify
 
 Mouse 0 I N Iconify
@@ -56,32 +39,31 @@ Mouse 1 W M Resize
 Mouse 4 W M ResizeMove w-10 w-10 w+5 w+5
 Mouse 5 W M ResizeMove w+10 w+10 w-5 w-5
 
-Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 2 2 98 98
-Mouse 2 R N Exec synapse
-#Key Escape A C Exec synapse
-Key F3 A N Exec synapse
-#PointerKey Escape R N Exec synapse
+Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 0 0 96 100
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
-#Mouse 1 R C Exec exec amixer -D pulse set Master toggle
-#Mouse 4 R C Exec exec amixer set Master 5%+
-#Mouse 5 R C Exec exec amixer set Master 5%-
-Mouse 1 R C Exec exec $[script]volume.sh mute
-Mouse 4 R C Exec exec $[script]volume.sh up
-Mouse 5 R C Exec exec $[script]volume.sh down
+#Fn-F?
+Key XF86MonBrightnessDown A A Exec xbacklight -dec 10
+Key XF86MonBrightnessUp A A Exec xbacklight -inc 10
 
-Stroke 456 3 R N Exec exec bash -c 'mocp -f || rhythmbox-client --next'
-Stroke 654 3 R N Exec exec bash -c 'mocp -r || rhythmbox-client --previous'
-Stroke 258 3 R N Exec exec bash -c 'mocp -P || rhythmbox-client --pause'
-Stroke 852 3 R N Exec exec bash -c 'mocp -p || rhythmbox-client --play'
+Key XF86Eject A A Exec exec rhythmbox-client --quit
+Key XF86AudioPrev A A Exec exec rhythmbox-client --previous
+Key XF86AudioPlay A A Exec exec rhythmbox-client --play-pause
+Key XF86AudioNext A A Exec exec rhythmbox-client --next
+
+Key XF86AudioLowerVolume A A Exec exec amixer set Master 5%-
+Key XF86AudioRaiseVolume A A Exec exec amixer set Master 5%+
+Key XF86AudioMute A A Exec exec amixer -D pulse set Master toggle
+
+Key Print A A Exec import ~/`date '+%Y-%m-%d_%H:%M:%S'`.jpg
 
 # 方向按键，排列窗口，占半屏幕，下部留空隙
 #keyname in /usr/include/X11/keysymdef.h
-Key Up W C ResizeMove 100 50 0 0
-Key Down W C ResizeMove 100 49 0 49
-Key Left W C ResizeMove 50 97 0 0
-Key Right W C ResizeMove 50 97 50 0
+Key Up W C ResizeMove 96 50 0 0
+Key Down W C ResizeMove 96 50 0 50
+Key Left W C ResizeMove 48 100 0 0
+Key Right W C ResizeMove 48 100 48 0
 
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
@@ -91,91 +73,29 @@ AddToFunc WindowListFunc
 + I WarpToWindow 50 50
 
 ######################### 函数
-#DestroyFunc Jump
-#AddToFunc Jump
-#+ I All ($0) WindowListFunc
+DestroyFunc JumpOrExec
+AddToFunc JumpOrExec
++ I All ($0) WindowListFunc
++ I TestRc (NoMatch) Exec exec $1 &
 
 DestroyFunc JumpExec
 AddToFunc JumpExec
 + I All ($0) WindowListFunc
 + I None ($0) Exec exec $* &
 
-DestroyFunc ExecOnce
-AddToFunc ExecOnce
-#+ I PipeRead '/bin/ps -e -o command|grep $0|grep -v grep || echo Exec exec $*'
-+ I PipeRead 'echo $0|sed ss.*/ss|cut -b -15|xargs pgrep -u `id -u` || echo Exec exec $*'
-
-DestroyFunc Quake
-AddToFunc Quake
-+ I All ($0,Visible) Iconify
-+ I None ($0) Exec exec $0
-+ I Wait $0
-+ I All ($0) Style $0 Sticky
-+ I All ($0,!Iconic) WindowListFunc
-#+ I TestRc (NoMatch) Next (!Iconic,Iconifiable) WindowListFunc
-
 ######################### 样式设置
-Colorset 91 RootTransparent buffer
-#TitleStyle -- flat
-#● less /etc/X11/rgb.txt
-TitleStyle InActive HGradient 128 Black DimGrey -- flat
-TitleStyle Active HGradient 128 PaleGreen3 tomato3 -- flat
-#TitleStyle InActive Colorset 91 -- flat
-#TitleStyle Colorset 91 -- flat
-Style *		Font "$[RegularFont]"
-#Style *		!Title, !Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
 Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
-Style opera		StartsOnPage 1 0, SkipMapping	#后台启动
-Style MPlayer	StaysOnTop
-Style gnome-terminal WindowListSkip
-Style back		!Title, !Borders, Sticky, StaysOnBottom, !Iconifiable
-Style dock		!Title, !Borders, Sticky, StaysOnTop, !Iconifiable
-Style *panel	UseStyle dock
-Style *dock		UseStyle dock
-Style *tray		UseStyle dock
-Style *clock	UseStyle dock
-Style cairo-*	UseStyle back
-Style plank*	UseStyle dock
-Style tilda*	UseStyle dock
-Style tint2		UseStyle dock
-Style synapse	!Title
+Style *		!Title
 
-######################### 事件
+######################### 事件声音
 Module FvwmEvent
-DestroyFunc NewWindowFunc
-AddToFunc NewWindowFunc
-+ I ThisWindow (gvim) ResizeMove 45 100 55 0
-#+ I ThisWindow (show_png.pl) Move 170 187
-
-*FvwmEvent: add_window		NewWindowFunc
-*FvwmEvent: Cmd "Exec exec paplay"
-SetEnv sounddir		/usr/share/sounds/ubuntu/stereo/
-*FvwmEvent: iconify			$[sounddir]window-slide.ogg
-*FvwmEvent: deiconify		$[sounddir]dialog-information.ogg
-*FvwmEvent: destroy_window	$[sounddir]dialog-information.ogg
+*FvwmEvent: Cmd "Exec paplay"
+SetEnv soundpath		/usr/share/sounds/ubuntu/stereo/
+*FvwmEvent: iconify			$[soundpath]window-slide.ogg
+*FvwmEvent: deiconify		$[soundpath]message.ogg
+*FvwmEvent: destroy_window	$[soundpath]dialog-information.ogg
 
 ######################### 启动
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
-+ I Exec fvwm-root -r $[fvwm]desktop.png
-+ I Test (Init) Exec exec $[script]goagent.bash
-#+ I ExecOnce cairo-dock
-+ I Test (Init) Exec ubuntuone-launch
-#+ I ExecOnce tint2
-+ I ExecOnce nm-applet
-+ I ExecOnce $[script]traytool/traytool
-#+ I ExecOnce $[script]traynote
-#+ I ExecOnce xcompmgr -cf
-#+ I ExecOnce synapse
-#+ I ExecOnce cairo-weather
-#+ I Test (Init) Exec exec gnome-settings-daemon
-#+ I Test (Init) Exec exec plank
-#+ I Test (Init) Exec exec $[script]git.pl
-#+ I Test (Init) Exec exec yunio
-#+ I Test (Init) Exec exec opera
-#+ I Test (Init) Exec bash -c '~/bin/msg git pull; cd bin; git pull;~/bin/msg git finished'
-#+ I ExecOnce volumeicon
-+ I Schedule 800 ExecOnce trayer --transparent true --tint green --widthtype request --align left --edge top
-#+ I Schedule 800 ExecOnce stalonetray
-#+ I Test (Init) Exec exec xmodmap -e "pointer = 3 2 1"
-#+ I Module FvwmCommandS
++ I Exec fvwm-root -r $[fvwm]desktop.svg
