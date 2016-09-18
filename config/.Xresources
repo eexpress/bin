@@ -1,0 +1,9 @@
+!在fvwm里面，光标只能由X11控制
+Xcursor.theme:				Qetzal
+Xcursor.size:				64
+
+xterm*faceName:				Courier New:antialias=True:style=Bold
+xterm*faceNameDoublesize:	Vera Sans YuanTi Mono:antialias=True
+xterm*faceSize:				13
+xterm*VT100.geometry:		80x40
+xterm*background:			#300A24

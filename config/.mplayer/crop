@@ -1,0 +1,22 @@
+# ●2016-07-08_15:28:28
+#通过按键控制显示的白色方框，可以得到最终的坐标和尺寸。
+#mplayer -vf rectangle -input conf=crop xxxx.avi
+#A:  34.7 V:  34.7 A-V:  0.000 ct:  0.000 522/522  1%  0%  0.4% 0 0 
+#rectangle: -vf rectangle=222:158:280:60
+#crop=w:h:x:y
+RIGHT change_rectangle 2  10
+LEFT  change_rectangle 2 -10
+UP    change_rectangle 3 -10
+DOWN  change_rectangle 3  10
+
+#修改第0/1个参数，就是w/h
+= change_rectangle 0  10
+- change_rectangle 0 -10
+] change_rectangle 1  10
+[ change_rectangle 1 -10
+
+#KP6   change_rectangle 0  10
+#KP4   change_rectangle 0 -10
+#KP8   change_rectangle 1  10
+#KP2   change_rectangle 1 -10
+
