@@ -29,7 +29,7 @@ Key q A CM quit
 Style * IconBox 64x800-0-0, IconSize 64 64, !IconTitle
 
 Mouse 1 W C Move
-Mouse 2 W C Lower
+Mouse 2 W C Resize
 Mouse 3 W C Close
 Mouse 4 W C Maximize
 Mouse 5 W C Iconify
@@ -39,9 +39,9 @@ Mouse 3 I N Close
 Mouse 4 I N Exec pactl set-sink-volume 0 +10%; show-volume.bash
 Mouse 5 I N Exec pactl set-sink-volume 0 -10%; show-volume.bash
 
-Mouse 1 W M Resize
-Mouse 4 W M ResizeMove w-10 w-10 w w
-Mouse 5 W M ResizeMove w+10 w+10 w w
+#Mouse 1 W M Resize
+#Mouse 4 W M ResizeMove w-10 w-10 w w
+#Mouse 5 W M ResizeMove w+10 w+10 w w
 
 Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 0 0 96 100
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
