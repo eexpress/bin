@@ -43,8 +43,8 @@ Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
 #Fn-F?
-Key XF86MonBrightnessDown	A A Exec xbacklight -dec 10
-Key XF86MonBrightnessUp		A A Exec xbacklight -inc 10
+Key XF86MonBrightnessDown	A A Exec xbacklight -dec 10; show-brightness.bash
+Key XF86MonBrightnessUp		A A Exec xbacklight -inc 10; show-brightness.bash
 
 Key XF86Eject		A A	Exec rhythmbox-client --quit
 Key XF86AudioPrev	A A	Exec rhythmbox-client --previous
