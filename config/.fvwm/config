@@ -1,6 +1,5 @@
 # vim: filetype=fvwm
 SetEnv fvwm			$[HOME]/.fvwm/
-SetEnv script		$[HOME]/bin/
 DesktopSize			1x1
 SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=12:encoding=iso10646-1"
 
@@ -15,7 +14,7 @@ Key s A 4 Exec synapse
 
 Key F1 A N JumpOrExec gnome-terminal-server gnome-terminal
 Key F3 A N Exec synapse
-Key F10 A A Exec exec $[script]monitor-clip.pl
+Key F10 A A Exec exec monitor-clip.pl
 
 #切换触摸板
 Key F6 A A Exec xinput list-props "SynPS/2 Synaptics TouchPad"|grep "Device Enabled"|grep "1$" && xinput disable "SynPS/2 Synaptics TouchPad" || xinput enable "SynPS/2 Synaptics TouchPad"
@@ -44,17 +43,17 @@ Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
 #Fn-F?
-Key XF86MonBrightnessDown A A Exec xbacklight -dec 10
-Key XF86MonBrightnessUp A A Exec xbacklight -inc 10
+Key XF86MonBrightnessDown	A A Exec xbacklight -dec 10
+Key XF86MonBrightnessUp		A A Exec xbacklight -inc 10
 
-Key XF86Eject A A Exec exec rhythmbox-client --quit
-Key XF86AudioPrev A A Exec exec rhythmbox-client --previous
-Key XF86AudioPlay A A Exec exec rhythmbox-client --play-pause
-Key XF86AudioNext A A Exec exec rhythmbox-client --next
+Key XF86Eject		A A	Exec rhythmbox-client --quit
+Key XF86AudioPrev	A A	Exec rhythmbox-client --previous
+Key XF86AudioPlay	A A	Exec rhythmbox-client --play-pause
+Key XF86AudioNext	A A	Exec rhythmbox-client --next
 
-Key XF86AudioLowerVolume A A Exec exec amixer set Master 5%-
-Key XF86AudioRaiseVolume A A Exec exec amixer set Master 5%+
-Key XF86AudioMute A A Exec exec amixer -D pulse set Master toggle
+Key XF86AudioLowerVolume	A A	Exec pactl set-sink-volume 0 -10%; show-volume.bash
+Key XF86AudioRaiseVolume	A A	Exec pactl set-sink-volume 0 +10%; show-volume.bash
+Key XF86AudioMute			A A	Exec pactl set-sink-mute 0 toggle; show-volume.bash
 
 Key Print A A Exec import ~/`date '+%Y-%m-%d_%H:%M:%S'`.png
 
