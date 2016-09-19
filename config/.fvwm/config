@@ -1,8 +1,8 @@
 # vim: filetype=fvwm
 SetEnv fvwm			$[HOME]/.fvwm/
 SetEnv script		$[HOME]/bin/
-DesktopSize			2x1
-#SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=12:encoding=iso10646-1"
+DesktopSize			1x1
+SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=12:encoding=iso10646-1"
 
 ######################### 热键
 #Key f A 4 JumpExec nautilus --no-desktop
@@ -68,6 +68,9 @@ Key Right W C ResizeMove 48 100 48 0
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
 
+MenuStyle WindowList Font "$[RegularFont]"
+EdgeThickness 1
+EdgeCommand Bottom WindowList NoGeometry
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
 + I WarpToWindow 50 50
