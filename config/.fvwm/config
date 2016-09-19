@@ -7,13 +7,15 @@ SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=12:encodi
 #Key f A 4 JumpExec nautilus --no-desktop
 Key f A 4 JumpExec pcmanfm --no-desktop
 Key w A 4 JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
-#gnome-terminal的WM_CLASS名和执行名称不同
-#xprop |g 'WM_CLASS(STRING)'
 Key t A 4 JumpExec xterm
 Key s A 4 Exec synapse
 
+#gnome-terminal的WM_CLASS名和执行名称不同
+#xprop |g 'WM_CLASS(STRING)'
 Key F1 A N JumpOrExec gnome-terminal-server gnome-terminal
 Key F3 A N Exec synapse
+Key F5 A N JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
+Key F7 A N JumpExec pcmanfm --no-desktop
 
 #切换触摸板
 Key F6 A A Exec xinput list-props "SynPS/2 Synaptics TouchPad"|grep "Device Enabled"|grep "1$" && xinput disable "SynPS/2 Synaptics TouchPad" || xinput enable "SynPS/2 Synaptics TouchPad"
@@ -34,6 +36,8 @@ Mouse 5 W C Iconify
 
 Mouse 0 I N Iconify
 Mouse 3 I N Close
+Mouse 4 I N Exec pactl set-sink-volume 0 +10%; show-volume.bash
+Mouse 5 I N Exec pactl set-sink-volume 0 -10%; show-volume.bash
 
 Mouse 1 W M Resize
 Mouse 4 W M ResizeMove w-10 w-10 w w
@@ -71,6 +75,9 @@ Key Right W M MoveToPage +1p 0
 MenuStyle WindowList Font "$[RegularFont]"
 EdgeThickness 1
 EdgeCommand Bottom WindowList NoGeometry NoCurrentDeskTitle SortByResource
+#EdgeCommand Top FvwmRearrange -tile -u -mn 2 -resize -m 0 0 96 100
+EdgeCommand Left Prev (AcceptsFocus, CurrentPage, !Iconic) Raise
+EdgeCommand Right Next (AcceptsFocus, CurrentPage, !Iconic) Raise
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
 + I WarpToWindow 50 50
@@ -89,6 +96,8 @@ AddToFunc JumpExec
 ######################### 样式设置
 Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
 Style *		!Title
+Style gvim 	PositionPlacement 48 -8
+Style gnome-terminal-server 	PositionPlacement 0 -2
 
 ######################### 事件声音
 Module FvwmEvent
