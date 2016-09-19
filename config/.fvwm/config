@@ -36,8 +36,8 @@ Mouse 0 I N Iconify
 Mouse 3 I N Close
 
 Mouse 1 W M Resize
-Mouse 4 W M ResizeMove w-10 w-10 w+5 w+5
-Mouse 5 W M ResizeMove w+10 w+10 w-5 w-5
+Mouse 4 W M ResizeMove w-10 w-10 w w
+Mouse 5 W M ResizeMove w+10 w+10 w w
 
 Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 0 0 96 100
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
@@ -70,7 +70,7 @@ Key Right W M MoveToPage +1p 0
 
 MenuStyle WindowList Font "$[RegularFont]"
 EdgeThickness 1
-EdgeCommand Bottom WindowList NoGeometry
+EdgeCommand Bottom WindowList NoGeometry NoCurrentDeskTitle SortByResource
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
 + I WarpToWindow 50 50
