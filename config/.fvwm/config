@@ -14,10 +14,11 @@ Key s A 4 Exec synapse
 
 Key F1 A N JumpOrExec gnome-terminal-server gnome-terminal
 Key F3 A N Exec synapse
-Key F10 A A Exec exec monitor-clip.pl
 
 #切换触摸板
 Key F6 A A Exec xinput list-props "SynPS/2 Synaptics TouchPad"|grep "Device Enabled"|grep "1$" && xinput disable "SynPS/2 Synaptics TouchPad" || xinput enable "SynPS/2 Synaptics TouchPad"
+Key F10 A A Exec exec monitor-clip.pl
+Key F12 A A Exec notify-send -t 4000 "$(date)" "$(free -h|cut -b -43|sed 's/\ /./g')"
 
 Key r A CM restart
 Key q A CM quit
