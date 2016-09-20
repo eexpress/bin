@@ -4,26 +4,17 @@ DesktopSize			1x1
 SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=12:encoding=iso10646-1"
 
 ######################### 热键
-#Key f A 4 JumpExec nautilus --no-desktop
-Key f A 4 JumpExec pcmanfm --no-desktop
-Key w A 4 JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
-Key t A 4 JumpExec xterm
-Key s A 4 Exec synapse
+Key F1 A N		JumpOrExec gnome-terminal-server gnome-terminal
+Key F3 A N		Exec synapse
+Key F5 A N		JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
+Key F7 A N		JumpExec pcmanfm --no-desktop
 
-#gnome-terminal的WM_CLASS名和执行名称不同
-#xprop |g 'WM_CLASS(STRING)'
-Key F1 A N JumpOrExec gnome-terminal-server gnome-terminal
-Key F3 A N Exec synapse
-Key F5 A N JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
-Key F7 A N JumpExec pcmanfm --no-desktop
+Key F6 A A		Exec toggle-touchpad.bash
+Key F10 A A		Exec exec monitor-clip.pl
+Key F12 A A		Exec notify-send -t 4000 "$(date)" "$(free -h|cut -b -43|sed 's/\ /./g')"
 
-#切换触摸板
-Key F6 A A Exec toggle-touchpad.bash
-Key F10 A A Exec exec monitor-clip.pl
-Key F12 A A Exec notify-send -t 4000 "$(date)" "$(free -h|cut -b -43|sed 's/\ /./g')"
-
-Key r A CM restart
-Key q A CM quit
+Key r A CM		restart
+Key q A CM		quit
 
 ######################### 窗口操作
 Style * IconBox 64x800-0-0, IconSize 64 64, !IconTitle
@@ -39,50 +30,49 @@ Mouse 3 I N Close
 Mouse 4 I N Exec pactl set-sink-volume 0 +10%; show-volume.bash
 Mouse 5 I N Exec pactl set-sink-volume 0 -10%; show-volume.bash
 
-#Mouse 1 W M Resize
-#Mouse 4 W M ResizeMove w-10 w-10 w w
-#Mouse 5 W M ResizeMove w+10 w+10 w w
-
 Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 0 0 96 100
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
-#Fn-F?
+######################### 功能键 Fn-F?
 Key XF86MonBrightnessDown	A A Exec xbacklight -dec 10; show-brightness.bash
 Key XF86MonBrightnessUp		A A Exec xbacklight -inc 10; show-brightness.bash
-
+#
 Key XF86Eject		A A	Exec rhythmbox-client --quit
 Key XF86AudioPrev	A A	Exec rhythmbox-client --previous
 Key XF86AudioPlay	A A	Exec rhythmbox-client --play-pause
 Key XF86AudioNext	A A	Exec rhythmbox-client --next
-
+#
 Key XF86AudioLowerVolume	A A	Exec pactl set-sink-volume 0 -10%; show-volume.bash
 Key XF86AudioRaiseVolume	A A	Exec pactl set-sink-volume 0 +10%; show-volume.bash
 Key XF86AudioMute			A A	Exec pactl set-sink-mute 0 toggle; show-volume.bash
-
+#
 Key Print A A Exec import ~/`date '+%Y-%m-%d_%H:%M:%S'`.png
-
-# 方向按键，排列窗口，占半屏幕，下部留空隙
-#keyname in /usr/include/X11/keysymdef.h
+# Ctrl 方向按键，排列窗口，占半屏幕
 Key Up W C ResizeMove 96 50 0 0
 Key Down W C ResizeMove 96 50 0 50
 Key Left W C ResizeMove 48 100 0 0
 Key Right W C ResizeMove 48 100 48 0
-
+# Alt 方向按键，移动到桌面
+Key Up W M MoveToPage 0 -1p
+Key Down W M MoveToPage 0 +1p
 Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
 
+######################### 屏幕边缘触发，菜单和切换窗口
 MenuStyle WindowList Font "$[RegularFont]"
 EdgeThickness 1
 EdgeCommand Bottom WindowList NoGeometry NoCurrentDeskTitle SortByResource
-#EdgeCommand Top FvwmRearrange -tile -u -mn 2 -resize -m 0 0 96 100
 EdgeCommand Left Prev (AcceptsFocus, CurrentPage, !Iconic) Raise
 EdgeCommand Right Next (AcceptsFocus, CurrentPage, !Iconic) Raise
+
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
 + I WarpToWindow 50 50
 
 ######################### 函数
+#gnome-terminal的WM_CLASS名和执行名称不同
+#xprop |g 'WM_CLASS(STRING)'
 DestroyFunc JumpOrExec
 AddToFunc JumpOrExec
 + I All ($0) WindowListFunc
