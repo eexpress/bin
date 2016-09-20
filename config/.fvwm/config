@@ -11,7 +11,7 @@ Key F7 A N		JumpExec pcmanfm --no-desktop
 
 Key F6 A A		Exec toggle-touchpad.bash
 Key F10 A A		Exec exec monitor-clip.pl
-Key F12 A A		Exec notify-send -t 4000 "$(date)" "$(free -h|cut -b -43|sed 's/\ /./g')"
+Key F12 A A		Exec notify-send -t 4000 "$(date)" "$(free -h|cut -b -43|sed 's/\ /./g')" -i clock -h string:x-canonical-private-synchronous:date
 
 Key r A CM		restart
 Key q A CM		quit

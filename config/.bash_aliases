@@ -49,7 +49,7 @@ alias lsm='ls -oAh --time-style=iso -t'
 alias lsc='ls -oAh --time-style=iso -tc'
 alias lss='ls -oAh --time-style=iso -S'
 
-alias ps='/bin/ps -e -o pid,command'
+alias ps='/bin/ps -u `id -un` -o pid,command'
 alias rm_empty_dir='find -type d -empty -exec rmdir {} \;'
 alias ss5='gnome-screenshot --delay 5'
 #alias find-opera-1M='find ~/.opera/cache*/ -iname "opr*.tmp" -cmin -60 -size +1000k -printf "------\t%p\t► %Cr\t► %kK\t►" -exec file -b {} \;'
