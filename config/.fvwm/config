@@ -11,7 +11,7 @@ Key F7 A N		JumpExec pcmanfm --no-desktop
 
 Key F6 A A		Exec toggle-touchpad.bash
 Key F10 A A		Exec exec monitor-clip.pl
-Key F12 A A		Exec notify-send -t 4000 "$(date)" "$(free -h|cut -b -43|sed 's/\ /./g')" -i clock -h string:x-canonical-private-synchronous:date
+Key F12 A A		Exec notify-send -t 5000 "$(date '+%Y-%m-%d %p %l:%M:%S')" "$(free -h|cut -b -43|sed 's/\ /./g')" -i clock -h string:x-canonical-private-synchronous:date
 
 Key r A CM		restart
 Key q A CM		quit
@@ -30,7 +30,8 @@ Mouse 3 I N Close
 Mouse 4 I N Exec pactl set-sink-volume 0 +10%; show-volume.bash
 Mouse 5 I N Exec pactl set-sink-volume 0 -10%; show-volume.bash
 
-Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 0 0 96 100
+#Mouse 1 R N FvwmRearrange -tile -u -mn 2 -desk -m 1 1 96 99
+Mouse 1 R N
 Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
@@ -60,11 +61,12 @@ Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
 
 ######################### 屏幕边缘触发，菜单和切换窗口
-MenuStyle WindowList Font "$[RegularFont]"
+#MenuStyle WindowList Font "$[RegularFont]"
 EdgeThickness 1
-EdgeCommand Bottom WindowList NoGeometry NoCurrentDeskTitle SortByResource
+#EdgeCommand Bottom WindowList NoGeometry NoCurrentDeskTitle SortByResource
 EdgeCommand Left Prev (AcceptsFocus, CurrentPage, !Iconic) Raise
 EdgeCommand Right Next (AcceptsFocus, CurrentPage, !Iconic) Raise
+EdgeCommand Top FvwmRearrange -tile -u -mn 2 -desk -m 0 0 96 100
 
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
@@ -101,3 +103,4 @@ SetEnv soundpath		/usr/share/sounds/ubuntu/stereo/
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
 + I Exec fvwm-root -r $[fvwm]desktop.svg
+#+ I Exec xcompmgr -c
