@@ -10,8 +10,9 @@ Key F5 A N		JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
 Key F7 A N		JumpExec pcmanfm --no-desktop
 
 Key F6 A A		Exec toggle-touchpad.bash
+Key F8 A N		Exec xterm
 Key F10 A A		Exec exec monitor-clip.pl
-Key F12 A A		Exec notify-send -t 5000 "$(date '+%Y-%m-%d %p %l:%M:%S')" "$(free -h|cut -b -43|sed 's/\ /./g')" -i clock -h string:x-canonical-private-synchronous:date
+Key F12 A A		Exec notify-send "$(date '+%Y-%m-%d %p %l:%M:%S')" "$(free -h|cut -b -43|sed 's/\ /./g')" -i clock -h string:x-canonical-private-synchronous:date
 
 Key r A CM		restart
 Key q A CM		quit

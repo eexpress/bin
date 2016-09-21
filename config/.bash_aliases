@@ -31,6 +31,7 @@ alias head='/usr/bin/head -n $(($LINES-4))'
 alias dog='grep -v -E "(^$|^#|^!)"'
 alias f='free -h|cut -b -43'
 alias g='grep --color=always -inTZ 2>/dev/null'
+alias m='gnome-system-monitor'
 #grep 结果的文件名后面跟的：或者null，需要处理
 #alias s='mplayer'
 alias x='gvfs-trash'
