@@ -53,8 +53,8 @@ Key Print A A Exec import ~/`date '+%Y-%m-%d_%H:%M:%S'`.png
 # Ctrl 方向按键，排列窗口，占半屏幕
 Key Up W C ResizeMove 96 50 0 0
 Key Down W C ResizeMove 96 50 0 50
-Key Left W C ResizeMove 48 100 0 0
-Key Right W C ResizeMove 48 100 48 0
+Key Left W C ResizeMove 48 99 0 0
+Key Right W C ResizeMove 48 99 48 0
 # Alt 方向按键，移动到桌面
 Key Up W M MoveToPage 0 -1p
 Key Down W M MoveToPage 0 +1p
@@ -67,7 +67,7 @@ EdgeThickness 1
 #EdgeCommand Bottom WindowList NoGeometry NoCurrentDeskTitle SortByResource
 EdgeCommand Left Prev (AcceptsFocus, CurrentPage, !Iconic) Raise
 EdgeCommand Right Next (AcceptsFocus, CurrentPage, !Iconic) Raise
-EdgeCommand Top FvwmRearrange -tile -u -mn 2 -desk -m 0 0 96 100
+EdgeCommand Top FvwmRearrange -tile -u -mn 2 -desk -m 0 0 96 99
 
 ######################### 修正系统函数：恢复窗口时，鼠标居中
 AddToFunc WindowListFunc
