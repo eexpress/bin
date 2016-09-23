@@ -65,8 +65,8 @@ Key Right W M MoveToPage +1p 0
 #MenuStyle WindowList Font "$[RegularFont]"
 EdgeThickness 1
 #EdgeCommand Bottom WindowList NoGeometry NoCurrentDeskTitle SortByResource
-EdgeCommand Left Prev (AcceptsFocus, CurrentPage, !Iconic) Raise
-EdgeCommand Right Next (AcceptsFocus, CurrentPage, !Iconic) Raise
+EdgeCommand Left Prev (!Iconic, !Raised) Raise
+EdgeCommand Right Next (!Iconic, !Raised) Raise
 EdgeCommand Top FvwmRearrange -tile -u -mn 2 -desk -m 0 0 96 99
 
 ######################### 修正系统函数：恢复窗口时，鼠标居中
