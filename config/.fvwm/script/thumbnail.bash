@@ -12,6 +12,7 @@ xwd -silent -id $id | convert -scale 100 xwd:- png:$fthumb
 
 if [ ! -f "$ficon" ]; then
 	floc=`locate -AweLi -n 1 48x48 $name.png`
+#    floc=`locate -AweLi -n 1 usr/share/icons 48x48 $name.png`
 	if [ -f "$floc" ]; then
 		echo $floc>>/tmp/id+resource
 		cp "$floc" $ficon
@@ -26,6 +27,7 @@ fi
 
 if [ -f "$ficon" ]; then
 	composite -geometry +50+6 $ficon $fthumb $fout
+#    composite -geometry +50+6 -density 48 $ficon.svg $fthumb $fout
 else
 	cp $fthumb $fout
 fi

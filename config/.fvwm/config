@@ -28,10 +28,18 @@ Mouse 4 W C Maximize
 Mouse 5 W C Thumbnail
 #Mouse 5 W C Iconify
 
-Mouse 0 I N Iconify
+# 蛮多窗口可以通过菜单栏拖曳窗口
+#Mouse 3 T A WindowShade
+#Mouse 4 T A Maximize
+#Mouse 5 T A Thumbnail
+
+Mouse 1 I N Iconify
 Mouse 3 I N Close
+Mouse 2 I N Exec pactl set-sink-mute 0 toggle; $[fscript]show-volume.bash
 Mouse 4 I N Exec pactl set-sink-volume 0 +10%; $[fscript]show-volume.bash
 Mouse 5 I N Exec pactl set-sink-volume 0 -10%; $[fscript]show-volume.bash
+
+Mouse (rhythmbox) 2 I N Exec rhythmbox-client --play-pause
 Mouse (rhythmbox) 4 I N Exec rhythmbox-client --previous
 Mouse (rhythmbox) 5 I N Exec rhythmbox-client --next
 
