@@ -32,6 +32,8 @@ Mouse 0 I N Iconify
 Mouse 3 I N Close
 Mouse 4 I N Exec pactl set-sink-volume 0 +10%; $[fscript]show-volume.bash
 Mouse 5 I N Exec pactl set-sink-volume 0 -10%; $[fscript]show-volume.bash
+Mouse (rhythmbox) 4 I N Exec rhythmbox-client --previous
+Mouse (rhythmbox) 5 I N Exec rhythmbox-client --next
 
 #Mouse 1 R N FvwmRearrange -tile -u -mn 2 -desk -m 1 1 96 99
 Mouse 1 R N
