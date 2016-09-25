@@ -21,8 +21,6 @@ Key r A CM		restart
 Key q A CM		quit
 
 ######################### 窗口操作
-Style * IconBox 64x800-0-0, !IconTitle
-
 Mouse 1 W C Move
 Mouse 2 W C Resize
 Mouse 3 W C Close
@@ -37,8 +35,9 @@ Mouse 5 I N Exec pactl set-sink-volume 0 -10%; $[fscript]show-volume.bash
 
 #Mouse 1 R N FvwmRearrange -tile -u -mn 2 -desk -m 1 1 96 99
 Mouse 1 R N
-Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
-Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
+Mouse 4 R N All (CurrentPage,Iconifiable,Iconic) Iconify off
+Mouse 5 R N All (CurrentPage,Iconifiable,!Iconic) Thumbnail
+#Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
 ######################### 功能键 Fn-F?
 Key XF86MonBrightnessDown	A A Exec xbacklight -dec 10; $[fscript]show-brightness.bash
@@ -97,10 +96,11 @@ AddToFunc Thumbnail
 + I Iconify
 
 ######################### 样式设置
-Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
-Style *		!Title
-Style gvim 	PositionPlacement 48 -8
-Style gnome-terminal-server 	PositionPlacement 0 -2
+Style * IconBox 100x800-10-0, !IconTitle
+Style *		!Handles, !Borders, !Title, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
+Style gvim		PositionPlacement 48 -8
+Style *terminal* 	PositionPlacement 0 -2
+Style xterm		PositionPlacement 0 -2
 
 ######################### 事件声音
 Module FvwmEvent
