@@ -1,15 +1,18 @@
 # vim: filetype=fvwm
 SetEnv fvwm			$[HOME]/.fvwm/
+SetEnv ficon		$[HOME]/.fvwm/icon/
+SetEnv fscript		$[HOME]/.fvwm/script/
 DesktopSize			1x1
 SetEnv RegularFont	"StringEncoding=utf8:xft:Vera Sans YuanTi:Bold:size=12:encoding=iso10646-1"
 
 ######################### 热键
 Key F1 A N		JumpOrExec gnome-terminal-server gnome-terminal
+Key F2 A N		JumpExec xterm
 Key F3 A N		Exec synapse
 Key F5 A N		JumpExec opera --proxy-pac-url="file:///home/eexp/proxy.pac"
 Key F7 A N		JumpExec pcmanfm --no-desktop
 
-Key F6 A A		Exec toggle-touchpad.bash
+Key F6 A A		Exec $[fscript]toggle-touchpad.bash
 Key F8 A N		Exec xterm
 Key F10 A A		Exec exec monitor-clip.pl
 Key F12 A A		Exec notify-send "$(date '+%Y-%m-%d %p %l:%M:%S')" "$(free -h|cut -b -43|sed 's/\ /./g')" -i clock -h string:x-canonical-private-synchronous:date
@@ -18,18 +21,19 @@ Key r A CM		restart
 Key q A CM		quit
 
 ######################### 窗口操作
-Style * IconBox 64x800-0-0, IconSize 64 64, !IconTitle
+Style * IconBox 64x800-0-0, !IconTitle
 
 Mouse 1 W C Move
 Mouse 2 W C Resize
 Mouse 3 W C Close
 Mouse 4 W C Maximize
-Mouse 5 W C Iconify
+Mouse 5 W C Thumbnail
+#Mouse 5 W C Iconify
 
 Mouse 0 I N Iconify
 Mouse 3 I N Close
-Mouse 4 I N Exec pactl set-sink-volume 0 +10%; show-volume.bash
-Mouse 5 I N Exec pactl set-sink-volume 0 -10%; show-volume.bash
+Mouse 4 I N Exec pactl set-sink-volume 0 +10%; $[fscript]show-volume.bash
+Mouse 5 I N Exec pactl set-sink-volume 0 -10%; $[fscript]show-volume.bash
 
 #Mouse 1 R N FvwmRearrange -tile -u -mn 2 -desk -m 1 1 96 99
 Mouse 1 R N
@@ -37,17 +41,17 @@ Mouse 4 R N All (CurrentPage,Iconifiable) Iconify off
 Mouse 5 R N All (CurrentPage,Iconifiable) Iconify on
 
 ######################### 功能键 Fn-F?
-Key XF86MonBrightnessDown	A A Exec xbacklight -dec 10; show-brightness.bash
-Key XF86MonBrightnessUp		A A Exec xbacklight -inc 10; show-brightness.bash
+Key XF86MonBrightnessDown	A A Exec xbacklight -dec 10; $[fscript]show-brightness.bash
+Key XF86MonBrightnessUp		A A Exec xbacklight -inc 10; $[fscript]show-brightness.bash
 #
 Key XF86Eject		A A	Exec rhythmbox-client --quit
 Key XF86AudioPrev	A A	Exec rhythmbox-client --previous
 Key XF86AudioPlay	A A	Exec rhythmbox-client --play-pause
 Key XF86AudioNext	A A	Exec rhythmbox-client --next
 #
-Key XF86AudioLowerVolume	A A	Exec pactl set-sink-volume 0 -10%; show-volume.bash
-Key XF86AudioRaiseVolume	A A	Exec pactl set-sink-volume 0 +10%; show-volume.bash
-Key XF86AudioMute			A A	Exec pactl set-sink-mute 0 toggle; show-volume.bash
+Key XF86AudioLowerVolume	A A	Exec pactl set-sink-volume 0 -10%; $[fscript]show-volume.bash
+Key XF86AudioRaiseVolume	A A	Exec pactl set-sink-volume 0 +10%; $[fscript]show-volume.bash
+Key XF86AudioMute			A A	Exec pactl set-sink-mute 0 toggle; $[fscript]show-volume.bash
 #
 Key Print A A Exec import ~/`date '+%Y-%m-%d_%H:%M:%S'`.png
 # Ctrl 方向按键，排列窗口，占半屏幕
@@ -62,7 +66,7 @@ Key Left W M MoveToPage -1p 0
 Key Right W M MoveToPage +1p 0
 
 ######################### 屏幕边缘触发，菜单和切换窗口
-#MenuStyle WindowList Font "$[RegularFont]"
+MenuStyle WindowList Font "$[RegularFont]"
 EdgeThickness 1
 #EdgeCommand Bottom WindowList NoGeometry NoCurrentDeskTitle SortByResource
 EdgeCommand Left Prev (!Iconic, !Raised) Raise
@@ -85,6 +89,12 @@ DestroyFunc JumpExec
 AddToFunc JumpExec
 + I All ($0) WindowListFunc
 + I None ($0) Exec exec $* &
+
+DestroyFunc Thumbnail
+AddToFunc Thumbnail
++ I Raise
++ I ThisWindow (!Shaded Iconifiable !Iconic) PipeRead "$[fscript]thumbnail.bash $[w.id] $[w.resource]"
++ I Iconify
 
 ######################### 样式设置
 Style *		!Handles, !Borders, MouseFocusClickRaises, SloppyFocus, PositionPlacement Center
