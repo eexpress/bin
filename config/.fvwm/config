@@ -15,13 +15,15 @@ Key F7 A N		JumpExec pcmanfm --no-desktop
 Key F6 A A		Exec $[fscript]toggle-touchpad.bash
 Key F8 A N		Exec xterm
 Key F10 A A		Exec exec monitor-clip.pl
-Key F12 A A		Exec notify-send "$(date '+%Y-%m-%d %p %l:%M:%S')" "$(free -h|cut -b -43|sed 's/\ /./g')" -i clock -h string:x-canonical-private-synchronous:date
+Key F12 A A		Exec $[fscript]show-free.bash
+#Key F12 A A		Exec notify-send "$(date '+%Y-%m-%d %p %l:%M:%S')" "$(free -h|cut -b -43|sed 's/\ /./g')" -i clock -h string:x-canonical-private-synchronous:date
 
 Key r A CM		restart
 Key q A CM		quit
 
 ######################### 窗口操作
 Mouse 1 W C Move
+Mouse (hl2_linux) 1 W C
 Mouse 2 W C Resize
 Mouse 3 W C Close
 Mouse 4 W C Maximize
@@ -124,4 +126,5 @@ SetEnv soundpath		/usr/share/sounds/ubuntu/stereo/
 DestroyFunc  StartFunction
 AddToFunc    StartFunction
 + I Exec fvwm-root -r $[fvwm]desktop.svg
++ I Exec ss-qt5
 #+ I Exec xcompmgr -c

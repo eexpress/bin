@@ -3,6 +3,7 @@ var darr = [
 'googleusercontent', 'googlecode.com', 'youtube',
 'gmail', 'sstatic.net', 'github', 'googlevideo.com',
 'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'ytimg',
+	'tumblr.com', 'recaptcha.net',
 'ingress', 'appspot.com', 'telegram.org', 'reddit.com', 'webupd8.org',
 'pastebin.com', 'disqus.com', 'launchpad.net',
 'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',

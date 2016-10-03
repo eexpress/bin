@@ -59,7 +59,7 @@ alias ss5='gnome-screenshot --delay 5'
 #alias find-opera-1M='find ~/.opera/cache*/ -iname "opr*.tmp" -cmin -60 -size +1000k -printf "------\t%p\t► %Cr\t► %kK\t►" -exec file -b {} \;'
 #alias tar-opera='t.u ~/opera-setting-`hostname`-`date '+%Y-%m-%d-%H-%M-%S'`.tar `find ~/.opera -iname "*.adr" -or -iname "*.ini" -or -iname "wand.dat" -or -iname "eexp*" -or -iname "*user.js"`'
 netname(){ ip route|head -n 1|cut -d' ' -f 5; }
-alias pl='perl -e'
+alias pl='perl -pe'
 #alias plp='perl -pe'
 pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 #gitup(){ git ci -a -m "${*:-`date`}"; git remote|grep .; [ $? == 1 ] && return; git push; [ $? == 0 ] || git push httpsgithub; }
