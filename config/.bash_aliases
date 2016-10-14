@@ -45,7 +45,7 @@ alias hexdump='hexdump -C|cut -b 9-'
 
 alias v='/usr/bin/gvim --remote-silent-tab'
 alias sv='sudo /usr/bin/gvim --remote-silent-tab'
-alias n='speedometer -r `netname`'
+alias n='speedometer -r `netname` -k 256 -i 0.5'
 #alias iftop.启动='sudo iftop -i `netname`'
 alias k='pkill -9 -f'
 #alias sk='sudo pkill -9'

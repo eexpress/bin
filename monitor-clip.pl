@@ -35,9 +35,9 @@ print $out;
 }
 
 #----------------------------------
-$sound='/usr/share/sounds/gnome/default/alerts/drip.ogg';
+$sound='/usr/share/sounds/ubuntu/notifications/Mallet.ogg';
 $_=`pacmd list-sinks`;
-/volume: 0:\s*(\d*)%/;
+/\s*(\d*)%.*dB/;
 $oldv=$1;
 `pactl set-sink-volume 0 40%`;
 `paplay $sound &`;
@@ -47,12 +47,12 @@ $_=`xsel -o`;
 #/和~开头的存在的文件，打开
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`gnome-open \"$_\"`;exit;}}
 #终端选择的文件名，视频
-if(/\.(avi|mkv|mp4|wmv)$/){$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;exit;}
+if(/\.(avi|mkv|mp4|wmv|ogg)$/){$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;exit;}
 #ip格式的数字，域名，查询
 if(/\d+\.\d+\.\d+\.\d+/){ip_138($&);exit;}
 if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/){ip_138($&);exit;}
 #单词，本地翻译
-#if(/^\w+$/){sdcv($&); exit;}
+if(/^\w+$/ && -x '/usr/bin/sdcv'){sdcv($&); exit;}
 #番号下载
 if(/\w{2,4}-\d{3,4}/){`/home/eexp/bin/bt.pl $&`;exit;}
 #其他没://的，网页翻译
