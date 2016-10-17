@@ -1,6 +1,6 @@
 var darr = [
 'google', 'gstatic', 'google-analytics', 'googleapis',
-'googleusercontent', 'googlecode.com', 'youtube',
+'googleusercontent', 'googlecode.com', 'youtube', 'chrome.com',
 'gmail', 'sstatic.net', 'github', 'googlevideo.com',
 'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'ytimg',
 	'tumblr.com', 'recaptcha.net',
