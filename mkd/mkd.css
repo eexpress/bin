@@ -94,6 +94,7 @@ blockquote {
 	border-left: 25px solid #ddd;
 /*    font-style: italic;*/
 	text-shadow: none;
+	font-style: normal;
 }
 
 div{
