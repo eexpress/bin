@@ -14,7 +14,7 @@ var darr = [
 'feedburner.com', 'kat.cr', 'tineye.com', 'jav4you.com',
 	'zff.co', 'gnome-look.org',
 'doubleclick.net', 'linuxquestions.org', 'omgubuntu.co.uk',
-'steamstatic.com', 'inoreader.com', 'chromium.org',
+'inoreader.com', 'chromium.org',
 ];
 /*
 'faqoverflow.com', 'systhread.net', 'gravatar.com',

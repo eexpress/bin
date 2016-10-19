@@ -1,21 +1,19 @@
 html {
-/*    font-size: 90%; |+ 鏁翠綋缂╂斁 +|*/
+/*    font-size: 90%;*/
 }
 body {
-/*    margin-left: 5%;*/
-/*    margin-right: 5%;*/
 	background-color: #eee;
 	font-family: 'URW Bookman L', 'Vera Sans YuanTi', Sans-serif;
 	color: #444;
 	width:900;
-	margin:auto;
+	line-height:150%;
+	margin:0px 10px 0px 10px;
 }
 a {
 	color: green;
 	text-shadow: 1px 1px 1px #aaa;
 }
 a:hover {
-/*    text-decoration: overline;*/
 	text-shadow: 1px 1px 2px #0b0;
 }
 h1 {
@@ -23,6 +21,14 @@ h1 {
 	text-align:center;
 	margin-top: 50px;
 	margin-bottom: 50px;
+}
+h4 {
+	text-align:center;
+}
+h6 {
+	text-align:right;
+	color: #fff;
+	background-color:#666;
 }
 h1,h2,h3,strong {
 	color: 0;
@@ -33,9 +39,12 @@ input {
 	margin-right: 10px;
 }
 em {
-	text-decoration:underline;
 	padding: 0 3px 0 3px;
-	font-weight:normal;
+	font-weight:bold;
+	font-style: normal;
+/*    text-decoration:underline;*/
+	border-bottom-width:1px;   
+	border-bottom-style:solid;
 }
 strong {
 	padding: 0 3px 0 3px;
@@ -83,7 +92,7 @@ blockquote {
 	width: 90%;
 	padding: 0 10px 0 30px;
 	border-left: 25px solid #ddd;
-	font-style: italic;
+/*    font-style: italic;*/
 	text-shadow: none;
 }
 
