@@ -5,9 +5,8 @@ body {
 	background-color: #eee;
 	font-family: 'URW Bookman L', 'Vera Sans YuanTi', Sans-serif;
 	color: #444;
-	width:900;
 	line-height:150%;
-	margin:0px 10px 0px 10px;
+	margin:10px 50px 10px 30px;
 }
 a {
 	color: green;
@@ -17,13 +16,13 @@ a:hover {
 	text-shadow: 1px 1px 2px #0b0;
 }
 h1 {
-    line-height:1.5em;
-	text-align:center;
-	margin-top: 50px;
-	margin-bottom: 50px;
+	text-align:		center;
+	margin-top:		100px;
+	margin-bottom:	60px;
 }
 h4 {
 	text-align:center;
+	font-size:medium;
 }
 h6 {
 	text-align:right;
@@ -61,7 +60,7 @@ li {
 }
 li:nth-child(2n) {
 	background: #eee;
-	text-shadow: 1px 1px 1px #ccc;
+	text-shadow: 1px 1px 1px #bbb;
 }
 li:nth-child(2n-1) {
 	background: #ddd;
@@ -87,12 +86,8 @@ code {
 	text-shadow: none;
 }
 blockquote {
-	margin-left: 10;
-	margin-right: 10;
-	width: 90%;
-	padding: 0 10px 0 30px;
-	border-left: 25px solid #ddd;
-/*    font-style: italic;*/
+	padding: 0 0 0 1.5em;
+	border-left: 1em solid #ddd;
 	text-shadow: none;
 	font-style: normal;
 }
@@ -119,9 +114,9 @@ table td:nth-child(2n-1) {
 }
 table tr:nth-child(2n) {
 	background: #eee;
-	text-shadow: 1px 1px 1px #ccc;
+	text-shadow: 1px 1px 0px #bbb;
 }
 table tr:nth-child(2n-1) {
 	background: #ddd;
-	text-shadow: 1px 1px 1px #fff;
+	text-shadow: 1px 1px 0px #fff;
 }
