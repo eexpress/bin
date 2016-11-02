@@ -12,9 +12,9 @@ var darr = [
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp', 'youtu.be',
 'linuxtoy.org', 'askubuntu.com', 'amazonaws.com', 'tumblr.com', 
 'feedburner.com', 'kat.cr', 'tineye.com', 'jav4you.com',
-	'zff.co', 'gnome-look.org',
+	'zff.co', 'gnome-look.org', 'linuxinsider.com',
 'doubleclick.net', 'linuxquestions.org', 'omgubuntu.co.uk',
-'inoreader.com', 'chromium.org',
+'inoreader.com', 'chromium.org', 'linphone.org', 'vivaldi.com', 'opensuse.org',
 ];
 /*
 'faqoverflow.com', 'systhread.net', 'gravatar.com',
