@@ -10,7 +10,12 @@ pandoc可以转换html到markdown，但是不支持表格输出。
 ```
 pandoc -f html -t markdown -o output.md input.html
 ```
-有一个本地**remarkable**的gui前端，支持css导入，但是*识别一行内的多个斜体*，有问题，估计是支持的语法兼容问题，已提交bug。
+**remarkable** gui前端，支持css导入，但是*识别一行内的多个斜体*，有问题，估计是支持的语法兼容问题，已提交bug。
+
+**mark-my-words** 15M，gtk3风格，只是加入css，没反映。导出pdf是空文件。
+
+**retext** 6M，直接支持md内部指定的css。识别一行多个斜体，需要在_x_两边加空格。目前全正常。支持导出odt,html,pdf。
+
 有趣的是，pandoc转换md到html（支持带css转换），也遇到一样的问题。另外表格有些格式不兼容。
 ```
 ▶ pandoc -f markdown -t html -o output.html input.html -c ~/bin/mkd/mkd.css

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -o vi
 #alias gcc='/usr/bin/gcc `pkg-config --cflags --libs gtk+-3.0 gmodule-2.0`'
 #alias gccm3='arm-none-eabi-gcc -Os -mcpu=cortex-m3 -mthumb'
 #alias valac='/usr/bin/valac --pkg gtk+-3.0'
