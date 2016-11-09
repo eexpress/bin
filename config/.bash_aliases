@@ -89,8 +89,8 @@ export CDPATH=:~:~/bin
 pc0='\[\e[1;32;40m\]'
 pc1='\[\e[1;37;42m\]'
 pc2='\[\e[m\]'
-#PS1="$pc0\D{%Y-%m-%d %A} \t \H $pc1 \w \[\e[m\] \n▶ "
-PS1="$pc0\D{%Y-%m-%d %a} \t \H $pc1 \w $pc2 ▶ "
+PS1="$pc0\D{%Y-%m-%d %a} \t \H $pc1 \w $pc2 \n▶ "
+#PS1="$pc0\D{%Y-%m-%d %a} \t \H $pc1 \w $pc2 ▶ "
 #function prompt {
 #    PS1=" > "
 #    echo -e "\x1b[1;32;40m $(date +"%Y-%m-%d %A %H:%M:%S") $(hostname) \x1b[1;37;42m $PWD \x1b[m"
