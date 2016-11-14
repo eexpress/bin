@@ -15,6 +15,7 @@ var darr = [
 'ubuntu.com', 'zff.co', 'gnome-look.org', 'linuxinsider.com',
 'doubleclick.net', 'linuxquestions.org', 'omgubuntu.co.uk',
 'inoreader.com', 'chromium.org', 'linphone.org', 'vivaldi.com', 'opensuse.org',
+'apkpure.com', 'commandlinefu.com',
 ];
 /*
 'faqoverflow.com', 'systhread.net', 'gravatar.com',
