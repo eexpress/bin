@@ -74,6 +74,9 @@ du(){ /usr/bin/du -sch "$@"|sort -rh; }
 o(){ xdg-open ${1:-"`xsel -o|sed "s/\ /\\\ /g"|sed "s/\n.*//"`"}; }
 #loc(){ locate -eLin $(($LINES-4)) -r "^`pwd`.*$1[^\/]*$"; }
 #fcnt(){ n=`ls --color=none -1 $*|wc -l`; echo "一共有 "$n" 个文件。"; }
+#alias woman='man --html=x-www-browser'
+alias wman='man --html=opera'
+yman(){ yelp man:$1; }
 #-------LESS TERMCAP for color manpage------------
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 1)
 export LESS_TERMCAP_md=$(tput bold; tput setaf 1)
