@@ -17,8 +17,8 @@ a:hover {
 }
 h1 {
 	text-align:		center;
-	margin-top:		100px;
-	margin-bottom:	60px;
+	margin-top:		80px;
+	margin-bottom:	50px;
 }
 h4 {
 	text-align:center;
@@ -37,16 +37,16 @@ input {
 	margin-left: 10px;
 	margin-right: 10px;
 }
-em {
-	padding: 0 3px 0 3px;
+em,strong,code {
+	margin: 0px 0.2em 0px 0.2em;
+	padding: 0px 0.4em 0px 0.4em;
 	font-weight:bold;
 	font-style: normal;
+}
+em {
 /*    text-decoration:underline;*/
 	border-bottom-width:1px;   
 	border-bottom-style:solid;
-}
-strong {
-	padding: 0 3px 0 3px;
 }
 ol {
 	list-style-image:url("c.png");
@@ -72,16 +72,16 @@ pre {
 	width: 90%;
 	margin-left: 5%;
 	background-color:#333;
-	padding: 2px 0px 2px 0px;
+	padding: 0.1em 0.5em 0.1em 0.5em;
 	word-wrap: break-word;
+	border-color: #080;
+	border-style:dotted none;
+	border-left:0.5em solid #080;
 }
 code {
-	font-size: 1.1em;
-	font-weight: normal;
-	color: #ccc;
+/*    inline code必须要背景*/
 	background-color:#333;
-	border-left:dashed #080 0.4em;
-	padding: 2px 10px 2px 10px;
+	color: #eee;
 	font-family: 'Courier 10 Pitch',"Courier New",Monospace;
 	text-shadow: none;
 }
