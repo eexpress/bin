@@ -17,6 +17,11 @@ foreach(@ARGV){
 			next if ! /[,\s"]\K\d*\.\d{2}\b/;	#跳过无金额的行
 			# 会错误识别 "2015 .11.30"
 			$m=$&;
+#            提取日期和金额，用于统计可能重复的数据条目
+#            print "$d.*,$m\n";
+#▶ csv-account.pl *.csv| sort|uniq -d>t
+#▶ rm t1; cat t|while read i; do grep "$i" *.csv >>t1; echo "">>t1; done
+#▶ cat t1|sort|uniq -d>t2
 #            print "< $d $m >\n";
 			$hash{$d}+=$m;
 			$d=~s/-\d+$//;
