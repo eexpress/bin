@@ -30,3 +30,5 @@
 	default = simple
 [core]
 	quotepath = false
+[diff]
+	tool = meld

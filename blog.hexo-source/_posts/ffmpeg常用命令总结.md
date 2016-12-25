@@ -20,6 +20,10 @@ ls *.avi | perl -ne 'print "file $_"' | ffmpeg -f concat -i - -c copy Joined.mp4
 ```
 ▶ ffmpeg -i input.avi -ss 00:05 -t 00:10 -c copy output.avi
 ```
+截取5张图片，xsel -b就是在nautilus里面复制一下文件（将文件名复制到剪贴板）。
+```
+▶ ffmpeg -i `xsel -b` -ss 00:00:08 -q:v 2 -vframes 5 image-%d.jpg
+```
 列出所有视频的编码和尺寸。
 ```
 ▶ for i in *.avi *.mp4; do printf "%-26s\t" $i; ffprobe -hide_banner $i 2>&1|perl -ne '/Video: [^ ]*/ && print "$&\t"; /\s\d{3,}x\d*\b/ && printf "Size:%-12s",$&;/Audio: [^ ]*/ && print $&; END{print "\n"};'; done
