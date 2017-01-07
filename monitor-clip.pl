@@ -26,23 +26,29 @@ close(SDCV);
 
 sub web_translate{
 $in=shift;
-$in=~s/ /+/g; $in=~s/["']//g;
-if($in=~/[\x80-\xFF]{2,4}/){$str="zh-CN|en";}else{$str="en|zh-CN";}
+#$in=~s/ /+/g;
+$in=~s/["']//g;
+#if($in=~/[\x80-\xFF]{2,4}/){$str="zh-CN|en";}else{$str="en|zh-CN";}
+if($in=~/[\x80-\xFF]{2,4}/){$str="#zh/en";}else{$str="#en/zh";}
 $in=`echo "$in"|uni2ascii -a J -s`;
 chomp $in;
-$out="http://translate.google.cn/?hl=en#$str|$in";
+#$out="http://translate.google.cn/?hl=en#$str|$in";
+$out="http://fanyi.baidu.com/$str/$in";
 print $out;
 `gnome-open \'$out\'`;
 }
 
 #----------------------------------
 $sound='/usr/share/sounds/ubuntu/notifications/Mallet.ogg';
+$sound='';
+if(-f $sound){
 $_=`pacmd list-sinks`;
 /\s*(\d*)%.*dB/;
 $oldv=$1;
 `pactl set-sink-volume 0 40%`;
 `paplay $sound &`;
 `pactl set-sink-volume 0 $oldv%`;
+}
 #----------------------------------
 $_=`xsel -o`;
 if($ARGV[0]){$_=$ARGV[0];}
