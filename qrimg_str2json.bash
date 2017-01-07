@@ -5,16 +5,16 @@ echo "input qrcode image file or ss format string."
 exit
 fi
 
-echo "========  $1 ========"
 file $1|grep image
-if [ $? != 0 ]; then
-	str=$1; fn="tmp"
-	echo $str|grep 'ss://'
-	if [ $? == 0 ]; then
-		str=`echo $str| sed 's-.*//--' | base64 -d 2>/dev/null`
-	fi
+if [ $? == 0 ]; then
+	fn=$1; str=`zbarimg $1`
 else
-fn=$1; str=`zbarimg $1 | sed 's-.*//--' | base64 -d 2>/dev/null`
+	str=$1; fn="string"
+fi
+echo "================"
+echo $str|grep 'ss://'
+if [ $? == 0 ]; then
+	str=`echo $str| sed 's-.*//--' | base64 -d 2>/dev/null`
 fi
 
 str=`echo $str|sed 's/\(.*\)@/\1:/'` #贪婪匹配最后一个@号
@@ -22,10 +22,10 @@ echo "---------string------------"
 echo $str
 arr=(${str//:/ })
 lastarr=(${arr[4]//\#/ })
-echo "---------array------------"
-for i in ${arr[@]}; do echo $i; done
-echo "---------last array------------"
-for i in ${lastarr[@]}; do echo $i; done
+#echo "---------array------------"
+#for i in ${arr[@]}; do echo $i; done
+#echo "---------last array------------"
+#for i in ${lastarr[@]}; do echo $i; done
 echo "---------output json------------"
 #"local_port"	:	"1080",
 cat > $fn.json << EOF
