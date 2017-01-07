@@ -8,9 +8,13 @@ fi
 echo "========  $1 ========"
 file $1|grep image
 if [ $? != 0 ]; then
-str=$1; fn="tmp"
+	str=$1; fn="tmp"
+	echo $str|grep 'ss://'
+	if [ $? == 0 ]; then
+		str=`echo $str| sed 's-.*//--' | base64 -d 2>/dev/null`
+	fi
 else
-fn=$1; str=`zbarimg $1 | sed 's/.*\/\///' | base64 -d 2>/dev/null`
+fn=$1; str=`zbarimg $1 | sed 's-.*//--' | base64 -d 2>/dev/null`
 fi
 
 str=`echo $str|sed 's/\(.*\)@/\1:/'` #贪婪匹配最后一个@号
