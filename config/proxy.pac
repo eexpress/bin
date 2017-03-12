@@ -18,7 +18,7 @@ var darr = [
 'apkpure.com', 'commandlinefu.com', 'openbittorrent.com',
 	'gnome.org', 'alternativeto.net', 'openscad.org', 'wikibooks.org',
 	'freecadweb.org','autodesk.com','viewstl.com', 'minus.com',
-	'pinterest.com',
+	'pinterest.com', 'duckduckgo.com',
 ];
 /*
 'faqoverflow.com', 'systhread.net', 'gravatar.com',

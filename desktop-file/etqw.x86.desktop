@@ -4,6 +4,6 @@ Type=Application
 Terminal=false
 Exec=/home/eexp/bin/QuakeWars/etqw.x86
 Name=QuakeWars
-Icon=/home/eexp/bin/QuakeWars/etqw_icon.png
+Icon=/home/eexp/Game/QuakeWars/etqw_icon.png
 Categories=Game;ActionGame;
 Keywords=fps;3d;etqw;
