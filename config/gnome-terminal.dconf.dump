@@ -1,0 +1,14 @@
+[:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+foreground-color='rgb(170,170,170)'
+visible-name='eexpss'
+default-size-rows=30
+cursor-shape='block'
+use-system-font=false
+use-theme-colors=false
+use-transparent-background=true
+font='Courier 10 Pitch 12'
+use-theme-transparency=false
+allow-bold=true
+background-color='rgb(0,0,0)'
+background-transparency-percent=35
+scrollbar-policy='never'
