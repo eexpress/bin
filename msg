@@ -4,6 +4,7 @@ title="计划任务提醒"
 icon="/usr/share/icons/gnome/48x48/actions/system-search.png"
 #sound="/home/eexp/bin/resources/sound/kongas.ogg"
 #[ -f $sound ] || sound="/usr/share/sounds/gnome/default/alerts/drip.ogg"
+sound="/usr/share/sounds/gnome/default/alerts/drip.ogg"
 case $# in
 1)
 	msg=$1;;
