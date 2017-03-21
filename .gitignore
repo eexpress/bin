@@ -19,6 +19,7 @@ youtube*
 *.note
 multiget
 telegram*
+*applications
 
 adb
 tags

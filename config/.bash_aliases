@@ -72,7 +72,7 @@ cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 nmap(){ /usr/bin/nmap ${1:-localhost}|grep open; }
 p(){ ping -c 5 ${1:-www.163.com}; }
 du(){ /usr/bin/du -sch "$@"|sort -rh; }
-o(){ xdg-open ${1:-"`xsel -o|sed "s/\ /\\\ /g"|sed "s/\n.*//"`"}; }
+o(){ xdg-open ${1:-"`xsel -o|sed "s/\n.*//"`"}; }
 #loc(){ locate -eLin $(($LINES-4)) -r "^`pwd`.*$1[^\/]*$"; }
 #fcnt(){ n=`ls --color=none -1 $*|wc -l`; echo "一共有 "$n" 个文件。"; }
 #alias woman='man --html=x-www-browser'
