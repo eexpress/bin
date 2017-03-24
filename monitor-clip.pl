@@ -35,7 +35,7 @@ chomp $in;
 #$out="http://translate.google.cn/?hl=en#$str|$in";
 $out="http://fanyi.baidu.com/$str/$in";
 print $out;
-`gnome-open \'$out\'`;
+`xdg-open \'$out\'`;
 }
 
 #----------------------------------
@@ -52,8 +52,13 @@ $oldv=$1;
 #----------------------------------
 $_=`xsel -o`;
 if($ARGV[0]){$_=$ARGV[0];}
+#百度盘的地址，下载
+if(/^https.*baidupcs.com\/.*/){
+	chomp; $_.="&wshc_tag=0&wsiphost=ipdbm";
+	`gnome-terminal -e "axel -n 10 -a \'$_\'"`;exit;
+}
 #/和~开头的存在的文件，打开
-if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`gnome-open \"$_\"`;exit;}}
+if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`xdg-open \"$_\"`;exit;}}
 #终端选择的文件名，视频
 if(/\.(avi|mkv|mp4|wmv|ogg)$/){$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;exit;}
 #ip格式的数字，域名，查询
