@@ -7,35 +7,32 @@ fi
 
 file $1|grep image
 if [ $? == 0 ]; then
-	fn=$1; str=`zbarimg $1`
+	configname=$1; str=`zbarimg $1`
 else
-	str=$1; fn="string"
+	str=$1; configname="ss_string"
 fi
-echo "================"
-echo $str|grep 'ss://'
+echo $str|grep '^ss://' 1>/dev/null
 if [ $? == 0 ]; then
-	str=`echo $str| sed 's-.*//--' | base64 -d 2>/dev/null`
+	echo $str|grep '#' 1>/dev/null
+	if [ $? == 0 ]; then configname=`echo $str|sed 's/^ss.*#//'`; fi
+	str=`echo $str| sed 's-^.*//--'|sed 's/#.*$//' | base64 -d 2>/dev/null`
+else
+	exit
 fi
 
-str=`echo $str|sed 's/\(.*\)@/\1:/'` #贪婪匹配最后一个@号
-echo "---------string------------"
-echo $str
+#echo $str
+str=`echo $str|sed 's/\(.*\)@/\1:/'` #贪婪匹配最后一个@号，换成:
 arr=(${str//:/ })
-lastarr=(${arr[4]//\#/ })
-#echo "---------array------------"
-#for i in ${arr[@]}; do echo $i; done
-#echo "---------last array------------"
-#for i in ${lastarr[@]}; do echo $i; done
-echo "---------output json------------"
-#"local_port"	:	"1080",
-cat > $fn.json << EOF
+echo -e "\e[1;34m---------output json------------"
+cat > $configname.json << EOF
 {
-"remarks"	:	"${lastarr[1]:-$fn}",
-"server"	:	"${arr[3]}",
-"server_port"	:	"${lastarr[0]}",
-"password"	:	"${arr[2]}",
+"remarks"	:	"${configname}",
+"server"	:	"${arr[2]}",
+"server_port"	:	"${arr[3]}",
+"password"	:	"${arr[1]}",
 "method"	:	"${arr[0]}"
 }
 EOF
 
-cat $fn.json
+cat $configname.json
+echo -e "\e[0m"
