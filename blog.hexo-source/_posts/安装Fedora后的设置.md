@@ -17,6 +17,21 @@ sudo dnf install shadowsocks-qt5 retext inkscape gitg meld gvim nautilus-termina
 ```
 dnf的输出格式，数据的组织和记录，都比apt效果好。查看历史信息尤其方便。
 
+### 关联mplayer到媒体格式
+查找有相关文件(*/命令，我猜出来的用法)的包，并安装。
+```
+▶ dnf provides */mimeopen
+上次元数据过期检查：0:06:37 前，执行于 Sun Mar 26 06:29:30 2017。
+perl-File-MimeInfo-0.27-5.fc25.noarch : Determine file type and open application
+仓库        ：fedora
+▶ mimeopen -d .mp4
+	2) Other...
+use application #2
+use command: mplayer
+```
+其实是在 ~/.local/share/applications 建立desktop和defaults.list(mimeapps.list格式的文件)。
+
+
 ### extensions.gnome.org
 extensions|gnome|org
 -|-|-
@@ -110,3 +125,13 @@ Type=wayland
 	export GROFF_NO_SGR=1	#fix no color in Fedora 25
 
 > some bug in new groff version 
+
+
+### 制作fedora的u盘安装盘
+之前，ubuntu的软件不认fedora的iso。没想去找其他软件，直接dd。用kvm测试下。
+```
+sudo umount /dev/sdc*
+sudo dd if='/home/eexp/下载/ISO/Fedora-Workstation-Live-x86_64-25-1.3.iso' of=/dev/sdc bs=8M status=progress oflag=direct
+1440743424 bytes (1.4 GB, 1.3 GiB) copied, 526.373 s, 2.7 MB/s
+sudo kvm -hda /dev/sdc
+```
