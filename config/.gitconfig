@@ -20,6 +20,12 @@
 	diff = always
 #	ui = true
 #git config --global core.pager 'less -r'
+; [color.status.changed]
+[color "status"]
+	changed = blue normal bold
+	added = green bold
+	deleted = red bold
+	untracked = magenta bold
 [core]
 	pager = cat
 #	pager = less -r

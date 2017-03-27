@@ -135,3 +135,23 @@ sudo dd if='/home/eexp/下载/ISO/Fedora-Workstation-Live-x86_64-25-1.3.iso' of=
 1440743424 bytes (1.4 GB, 1.3 GiB) copied, 526.373 s, 2.7 MB/s
 sudo kvm -hda /dev/sdc
 ```
+
+### 家目录的链接
+```
+▶ lsm ~ ~/.local/share/|grep -E '(\->|:$)'|sed -e 's/.*:.../\t/' -e 's/->/\t\t->/'
+/home/eexpss:
+	.vimrc 		-> /home/eexpss/bin/config/fedora.vimrc
+	.bash_aliases 		-> /home/eexpss/bin/config/fedora.bash_aliases
+	.proxy.pac 		-> /home/eexpss/bin/config/.proxy.pac
+	.icons 		-> /home/eexpss/bin/config/.icons/
+	.gitconfig 		-> /home/eexpss/bin/config/.gitconfig
+	.vim 		-> /home/eexpss/bin/config/.vim
+	.ssh 		-> /home/eexpss/磁盘/eexp/.ssh/
+	.gnupg 		-> /home/eexpss/磁盘/eexp/.gnupg/
+	.password-store 		-> /home/eexpss/磁盘/eexp/.password-store
+	.steampid 		-> /home/eexpss/.steam/steam.pid
+	.steampath 		-> /home/eexpss/.steam/bin32/steam
+	bin 		-> /home/eexpss/磁盘/eexp/bin
+/home/eexpss/.local/share/:
+	applications 		-> /home/eexpss/bin/config/.local+share+applications
+```
