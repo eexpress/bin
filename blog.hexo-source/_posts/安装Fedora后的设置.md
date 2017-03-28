@@ -49,7 +49,7 @@ Toggle Touchpad(不工作)|Touchpad Indicator|Windows Blur Effects(背景窗口�
 
 
 ### 设置光标主题
-链接或者复制到.icons/Qetzal，tweak里面马上就可以选择，各处都有效。很爽啊。
+链接或者复制到.icons/Qetzal，tweak里面马上就可以选择，各处都有效。很爽啊。测试了，还不能使用~/.local/share/icons目录。
 
 ### 确保基本正常工作的设置
 ```
@@ -154,4 +154,17 @@ sudo kvm -hda /dev/sdc
 	bin 		-> /home/eexpss/磁盘/eexp/bin
 /home/eexpss/.local/share/:
 	applications 		-> /home/eexpss/bin/config/.local+share+applications
+
+▶ find ~ -type l ! -path '/home/eexpss/磁盘' ! -path '/home/eexpss/bin' -lname '/home/eexpss/bin/config/*' -printf "%p  \t->\t%l\n" 
+/home/eexpss/.local/share/applications  	->	/home/eexpss/bin/config/.local+share+applications
+/home/eexpss/.local/share/nautilus/scripts  	->	/home/eexpss/bin/config/.local+share+nautilus+scripts
+/home/eexpss/.vimrc  	->	/home/eexpss/bin/config/fedora.vimrc
+/home/eexpss/.proxy.pac  	->	/home/eexpss/bin/config/.proxy.pac
+/home/eexpss/.bash_aliases  	->	/home/eexpss/bin/config/fedora.bash_aliases
+/home/eexpss/.icons  	->	/home/eexpss/bin/config/.icons/
+find: ‘/home/eexpss/磁盘/lost+found’: Permission denied
+find: ‘/home/eexpss/磁盘/eexp/.gvfs’: Permission denied
+/home/eexpss/.vim  	->	/home/eexpss/bin/config/.vim
+/home/eexpss/.gitconfig  	->	/home/eexpss/bin/config/.gitconfig
+
 ```

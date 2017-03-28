@@ -15,26 +15,27 @@
 	lg = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr)%Creset %s'
 	ll = reflog
 	web = instaweb
-
-[color]
-	diff = always
-#	ui = true
-#git config --global core.pager 'less -r'
-; [color.status.changed]
+; ----------------------------------------------
+; 颜色配置参数说明在这里 https://gist.github.com/rab/4067067
+[color "diff"]
+	new = blue bold
+	old = red bold
+	frag = magenta bold
+	meta = green reverse
 [color "status"]
 	changed = blue normal bold
 	added = green bold
 	deleted = red bold
 	untracked = magenta bold
-[core]
-	pager = cat
-#	pager = less -r
+; ----------------------------------------------
 [user]
 	name = eexpress
 	email = eexpress@163.com
-[push]
-	default = simple
+; [push]
+;     default = simple
 [core]
+;     如果取消设置，中文文件名变成\350\256这种
 	quotepath = false
-[diff]
-	tool = meld
+;     pager = cat
+; [diff]
+;     tool = meld
