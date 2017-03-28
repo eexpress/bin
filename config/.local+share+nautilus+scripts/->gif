@@ -1,0 +1,8 @@
+#!/bin/bash
+
+$f="$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS"
+palette="/tmp/palette.png"
+filters="fps=15,scale=600:-1:flags=lanczos"
+
+ffmpeg -i $f -vf "$filters,palettegen" -y $palette
+ffmpeg -i $f -i $palette -lavfi "$filters [x]; [x][1:v] paletteuse" -y $f.gif
