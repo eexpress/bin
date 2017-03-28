@@ -1,6 +1,6 @@
 #!/bin/bash
 
-$f="$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS"
+f=`echo -n $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS|sed 's/\x0A//g'`
 mplayer -vo null -ao pcm $f
 lame audiodump.wav $f.mp3
 rm audiodump.wav
