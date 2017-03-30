@@ -26,13 +26,9 @@ close(SDCV);
 
 sub web_translate{
 $in=shift;
-#$in=~s/ /+/g;
 $in=~s/["']//g;
-#if($in=~/[\x80-\xFF]{2,4}/){$str="zh-CN|en";}else{$str="en|zh-CN";}
 if($in=~/[\x80-\xFF]{2,4}/){$str="#zh/en";}else{$str="#en/zh";}
-$in=`echo "$in"|uni2ascii -a J -s`;
 chomp $in;
-#$out="http://translate.google.cn/?hl=en#$str|$in";
 $out="http://fanyi.baidu.com/$str/$in";
 print $out;
 `xdg-open \'$out\'`;
@@ -53,10 +49,8 @@ $oldv=$1;
 $_=`xsel -o`;
 if($ARGV[0]){$_=$ARGV[0];}
 #百度盘的地址，下载
-if(/^https.*baidupcs.com\/.*/){
-	chomp; $_.="&wshc_tag=0&wsiphost=ipdbm";
-	`gnome-terminal -e "axel -n 10 -a \'$_\'"`;exit;
-}
+if(/^https.*baidupcs.com\/.*/){ chomp; $_.="&wshc_tag=0&wsiphost=ipdbm";
+	`gnome-terminal -e "axel -n 10 -a \'$_\'"`;exit; }
 #/和~开头的存在的文件，打开
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`xdg-open \"$_\"`;exit;}}
 #终端选择的文件名，视频
@@ -64,7 +58,7 @@ if(/\.(avi|mkv|mp4|wmv|ogg)$/){$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;exit;
 #ip格式的数字，域名，查询
 if(/\d+\.\d+\.\d+\.\d+/){ip_138($&);exit;}
 if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/){ip_138($&);exit;}
-#单词，本地翻译
+#单词，有本地翻译软件就直接翻译
 if(/^\w+$/ && -x '/usr/bin/sdcv'){sdcv($&); exit;}
 #番号下载
 if(/\w{2,4}-\d{3,4}/){`/home/eexp/bin/bt.pl $&`;exit;}
