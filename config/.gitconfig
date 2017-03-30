@@ -16,6 +16,8 @@
 	ll = reflog
 	web = instaweb
 ; ----------------------------------------------
+[color]
+	diff = always 	; 为了git.pl里面过滤代码
 ; 颜色配置参数说明在这里 https://gist.github.com/rab/4067067
 [color "diff"]
 	new = blue bold
@@ -36,6 +38,6 @@
 [core]
 ;     如果取消设置，中文文件名变成\350\256这种
 	quotepath = false
-;     pager = cat
+	pager = cat
 ; [diff]
 ;     tool = meld

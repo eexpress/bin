@@ -39,6 +39,7 @@ alias lsc='ls -oAh --time-style=iso -tc'
 alias lss='ls -oAh --time-style=iso -S'
 
 alias hexo='cd ~/磁盘/eexp/文档/blog.hexo;/usr/bin/hexo'
+alias git='cd ~/bin;/usr/bin/git'
 
 pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 c(){ echo $1|bc -l; }
