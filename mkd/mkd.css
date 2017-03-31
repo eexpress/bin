@@ -37,7 +37,7 @@ input {
 	margin-left: 10px;
 	margin-right: 10px;
 }
-em,strong,code {
+em,strong {
 	margin: 0px 0.2em 0px 0.2em;
 	padding: 0px 0.4em 0px 0.4em;
 	font-weight:bold;
@@ -74,8 +74,8 @@ pre {
 	background-color:#333;
 	padding: 0.1em 0.5em 0.1em 0.5em;
 	word-wrap: break-word;
-	border-color: #080;
-	border-style:dotted none;
+/*    border-color: #080;*/
+/*    border-style:dotted none;*/
 	border-left:0.5em solid #080;
 }
 code {
@@ -84,6 +84,8 @@ code {
 	color: #eee;
 	font-family: 'Courier 10 Pitch',"Courier New",Monospace;
 	text-shadow: none;
+	font-weight:bold;
+	font-style: normal;
 }
 blockquote {
 	padding: 0 0 0 1.5em;

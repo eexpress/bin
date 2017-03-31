@@ -17,8 +17,10 @@ if(@_){
 	print "差异: \n @_";
 #    @_=`git remote`;
 #    print "仓库:\n$Bblue @_ $normal \n";
-	print "本地需要提交。请输入提交的注释并回车（空注释将被日期代替）：\n$Bred";
-	$_=<STDIN>; chomp;
+	if($ARGV[0]){$_=$ARGV[0];}else{
+		print "本地需要提交。请输入提交的注释并回车（空注释将被日期代替）：\n$Bred";
+		$_=<STDIN>; chomp;
+	}
 	if(! $_){$_=`date '+%F %T'`; chomp;}
 	print "$normal提交注释为 $Bblue $_ $normal 的更新。\n";
 	`git ci -a -m \"$_\"; git push`;
