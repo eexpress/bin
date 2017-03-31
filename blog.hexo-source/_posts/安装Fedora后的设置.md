@@ -15,7 +15,8 @@ sudo dnf install shadowsocks-qt5 retext inkscape gitg meld gvim nautilus-termina
 8:	命令行   ： install shadowsocks-qt5 retext inkscape gitg meld nautilus-open-terminal
 
 ```
-dnf的输出格式，数据的组织和记录，都比apt效果好。查看历史信息尤其方便。
+dnf的输出格式，数据的组织和记录，都比apt效果好。`yumex-dnf`图形界面管理*安装细节*和*仓库*。dnf的查看历史信息尤其方便。增量安装不错。kernel自动维持3个，不用管理。一改以前rpm的坏印象，dnf比apt好啊。
+> 增量 RPM 将 194.5 MB 的更新减少至 19.2 MB
 
 ### 关联mplayer到媒体格式
 查找有相关文件(*/命令，我猜出来的用法)的包，并安装。
