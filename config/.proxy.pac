@@ -8,7 +8,7 @@ var darr = [
 'pastebin.com', 'disqus.com', 'launchpad.net',
 'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',
 'instagram', 'facebook', 'opera', 'wikipedia', 
-	'sf.net', 'sourceforge.net', 
+	'sf.net', 'sourceforge.net', 'tapatalk.com',
 	'stackoverflow.com', 'stackexchange.com', 'xda-developers.com',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp', 'youtu.be',
 'linuxtoy.org', 'askubuntu.com', 'amazonaws.com',

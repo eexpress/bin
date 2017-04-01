@@ -38,6 +38,7 @@
 [core]
 ;     如果取消设置，中文文件名变成\350\256这种
 	quotepath = false
-	pager = cat
+;     pager = cat
+	pager = less -r
 ; [diff]
 ;     tool = meld
