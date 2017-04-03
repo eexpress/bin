@@ -47,6 +47,7 @@ c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
 o(){ xdg-open ${1:-"`xsel -o|sed -e "s.^~.$HOME." -e "s/\ /\\\ /g" -e "s/\n.*//"`"}; }
+s(){ highlight --force -O ansi $1 | /usr/bin/less -iR; }
 
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=mplayer
+Name[zh_CN]=mplayer播放器
+NoDisplay=true
+Exec=/usr/bin/mplayer

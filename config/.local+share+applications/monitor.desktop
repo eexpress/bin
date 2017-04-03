@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name[zh_CN]=监视剪贴板集合
+Name=Monitor-Clip-Collect
+Icon=clip0.png
+Exec=monitor-clip.pl
+Actions=Wiki;
+
+[Desktop Action Wiki]
+Name[zh_CN]=查询百科词条
+Name=Wikipedia Search
+Exec=baike.pl
