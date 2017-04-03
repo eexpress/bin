@@ -25,7 +25,7 @@ alias myip='curl ipinfo.io'
 alias ps='/bin/ps -u `id -un` -o pid,command'
 alias pl='perl -ple'
 
-alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs -x vfat'
+alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs'
 alias f='free -h|cut -b -43'
 alias g='grep -P'
 #alias g='grep --color=always -inTZE 2>/dev/null'
