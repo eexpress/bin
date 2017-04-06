@@ -84,5 +84,5 @@ bind 'set show-all-if-ambiguous on'
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-unset command_not_found_handle
+#unset command_not_found_handle
 . /usr/share/autojump/autojump.bash

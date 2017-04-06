@@ -47,6 +47,7 @@ em {
 /*    text-decoration:underline;*/
 	border-bottom-width:1px;   
 	border-bottom-style:solid;
+	font-style: italic;
 }
 ol {
 	list-style-image:url("c.png");
