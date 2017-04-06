@@ -14,7 +14,7 @@ sub checknet{
 #    print "$url\n"; return;
 
 	@_=`curl --socks5 127.0.0.1:1080 "http://www.viewdns.info/chinesefirewall/?domain=$url" 2>/dev/null`;
-#    `echo '"'@_'"' >/tmp/curl`;
+	for(@_){s/"/'/g;}; `echo "@_" >/tmp/curl`;
 
 	for(@_){
 		s/<.*?>//g;

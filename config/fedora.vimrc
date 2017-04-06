@@ -37,11 +37,12 @@ vnoremap {{ <esc>`>a}<esc>`<i{<esc>i
 
 map <expr> rcw Replace_Current_Word()
 map <expr> <C-w> Replace_Current_Word()
+"=========================
 func Replace_Current_Word()
 	let w = expand("<cword>")
 	return "\<ESC>:%s/\\<".w."\\>/".w."/g\<Left>\<Left>"
 endfun
-
+"=========================
 inoremap <expr> <Tab> MyTab()
 fun MyTab()
 	let str=strpart(getline("."), 0, col(".")-1)
@@ -50,4 +51,7 @@ fun MyTab()
 	endif
 	return "\t"
 endfun
-
+"============= Mimetype ============
+"新脚本自动加类型
+au BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
+au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
