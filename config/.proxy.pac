@@ -11,7 +11,7 @@ var darr = [
 	'tapatalk.com', 'viewdns.info',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp', 'youtu.be',
 'feedburner.com', 'doubleclick.net', 'pinterest.com', 'duckduckgo.com', 
-'apkpure.com',
+'apkpure.com', 'alternativeto.net',
 ];
 //▶ curl --socks5 127.0.0.1:1080 'http://www.viewdns.info/chinesefirewall/?domain=opensuse.org'|g -o accessible
 

@@ -11,11 +11,17 @@ tags:
 ● ai minidlan
 ● dog /etc/minidlna.conf 
 ....
-media_dir=A,/home/eexp/图片
-media_dir=V,/home/eexp/视频
+media_dir=P,/home/eexpss/图片
+media_dir=A,/home/eexpss/音乐
+media_dir=V,/home/eexpss/视频
 ....
+▶ sudo minidlnad -R
 ● sudo service minidlna force-reload
  * Restarting DLNA/UPnP-AV media server minidlna                                   [ OK ]
 ```
 当然，和Rhythmbox的Daap服务，有些不同。
 /etc/minidlna.conf 似乎只认第一行 media_dir 设置。@@@@@@@@@@@@@@@@@@@@了。
+
+-----------------------
+安装 `gupnp-tools`，有图形化的 `gupnp-av-cp` 可以推送本地媒体到电视盒子。
+

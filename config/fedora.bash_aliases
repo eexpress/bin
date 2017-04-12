@@ -27,7 +27,7 @@ alias pl='perl -ple'
 
 alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs'
 alias f='free -h|cut -b -43'
-alias g='grep -P'
+alias g='grep -Pi'
 #alias g='grep --color=always -inTZE 2>/dev/null'
 alias v='/usr/bin/gvim --remote-silent-tab'
 alias sv='sudo /usr/bin/gvim --remote-silent-tab'
