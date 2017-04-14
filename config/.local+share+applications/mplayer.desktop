@@ -1,8 +1,8 @@
 [Desktop Entry]
-Version=1.0
-Encoding=UTF-8
-Type=Application
 Name=mplayer
-Name[zh_CN]=mplayer播放器
-NoDisplay=true
+Name[zh_CN]=mplayer 播放器
 Exec=/usr/bin/mplayer
+Terminal=false
+Icon=mplayer_osx_extended_icon_by_marc2o.png
+Categories=Video;
+Keywords=play;media;video;

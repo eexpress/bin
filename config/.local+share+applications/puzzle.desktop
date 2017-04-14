@@ -1,11 +1,10 @@
 [Desktop Entry]
-Name=Image Puzzle
+Name=Image_Puzzle
 Name[zh_CN]=图片拼图
 Comment=puzzle multi images into one picture
 Comment[zh_CN]=将多个图片拼接合成单个图片
 Exec=puzzle.bash %U
-Icon=puzzle
-NoDisplay=false
+Icon=puzzle.png
 MimeType=image/jpeg;image/png;image/gif;
 Terminal=false
 Type=Application
