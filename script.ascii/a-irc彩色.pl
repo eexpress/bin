@@ -3,7 +3,7 @@
 use Encode qw(_utf8_on _utf8_off);
 use utf8;
 use Getopt::Long;
-GetOptions('forum'=>\$forum, 'down'=>\$down, 'mess'=>\$mess);
+GetOptions('color'=>\$color, 'forum'=>\$forum, 'down'=>\$down, 'mess'=>\$mess);
 
 @c=qw(red blue green grey yellow bisque brown cyan gold khaki maroon lightcoral tomato orange navy seagreen firebrick);
 
@@ -30,6 +30,7 @@ $_=~y/a-z/ɐqɔpǝɟƃɥᴉḷʞȷɯuodbɹsʇnʌʍxʎz/ if $down;
 foreach(@_){
 #2种花字
 $_.=int rand(2)?"\xd2\x89":"\xd2\x88" if $mess;
+if($color){
 $r=int rand(15);
 #print "\.$_";
 #_utf8_off($_);
@@ -43,8 +44,11 @@ if($forum){
 	}else{$out.=sprintf "\x03$r$_";
 	}
 }
+}else{
+$out.=$_;
+}
 }
 #ctrl序列可以用xev看，粗体^B
-if($forum){$out="\[b\]$out\[/b\]";}else{$out="\x02$out";}
+if($color){if($forum){$out="\[b\]$out\[/b\]";}else{$out="\x02$out";}}
 print "$out\n";
 `echo "$out"|xsel -i`;
