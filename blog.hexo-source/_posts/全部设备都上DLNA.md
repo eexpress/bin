@@ -4,4 +4,6 @@ tags:
 - dlna
 ---
 ![](/img/dlna.png)
+![](/img/GUPnp.png)
+![](/img/MiBox-DLNA.jpg)
 家里所有屏幕独立播放媒体。
