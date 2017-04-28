@@ -5,8 +5,6 @@ image/jpeg=phatch-inspector.desktop;gthumb.desktop;phatch.desktop;
 image/png=gthumb.desktop;gimp.desktop;shotwell-viewer.desktop;
 image/svg+xml=inkscape.desktop;gthumb.desktop;
 application/x-desktop=gvim.desktop;
-video/mp4=org.gnome.Totem.desktop;
-video/webm=org.gnome.Totem.desktop;
 text/x-csrc=org.gnome.gedit.desktop;
 text/html=gvim.desktop;
 image/jpeg=puzzle.desktop;
@@ -18,6 +16,7 @@ model/vrml=meshlab.desktop;org.gnome.gedit.desktop
 [Default Applications]
 text/plain=gvim.desktop
 video/mp4=mplayer.desktop;
+video/mpeg=mplayer.desktop;
 video/webm=mplayer.desktop;
 video/x-matroska=mplayer.desktop;
 video/x-msvideo=mplayer.desktop;
@@ -26,3 +25,4 @@ application/x-STereoLithography=meshlab.desktop;
 
 [Removed Associations]
 video/mp4=meld.desktop;
+video/mpeg=meld.desktop;
