@@ -43,6 +43,7 @@ alias hexo='cd ~/磁盘/eexp/文档/blog.hexo;/usr/bin/hexo'
 alias git='cd ~/bin;/usr/bin/git'
 
 alias dl="$HOME/bin/you-get/you-get"
+alias dlp="$HOME/bin/you-get/you-get -p mplayer"
 alias dl0="$HOME/bin/you-get/you-get -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/e8fczwpf.default/cookies.sqlite'"
 
 pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
