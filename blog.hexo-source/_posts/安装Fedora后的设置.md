@@ -63,7 +63,9 @@ fedora.bash_aliases  fedora.vimrc  font  gitconfig  mkd.css  proxy.pac  Qetzal  
 Courier-10-Pitch， URW-Bookman-L
 
 ### steam
-http://negativo17.org/steam/
+`http://negativo17.org/steam/`
+
+其实还有一个重要的源也在这里：`http://negativo17.org/repos/fedora-nvidia.repo`
 
 	▶ sudo dnf config-manager --add-repo=http://negativo17.org/repos/fedora-steam.repo
 	▶ sudo dnf -y install steam
@@ -71,6 +73,12 @@ http://negativo17.org/steam/
 > 登陆账号后，退出steam。链接老的游戏目录过去。
 
 	▶ ln -sf '/home/eexpss/磁盘/eexp/.local/share/Steam/steamapps' '/home/eexpss/.local/share/Steam' 
+
+其实这目录占用SSD，太麻烦。直接这样更好。
+```
+▶ lsm ~/.local/share/Steam
+lrwxrwxrwx. 1 eexpss 30 05-02 11:17 /home/eexpss/.local/share/Steam -> /home/eexpss/磁盘/eexp/Steam
+```
 
 ### nautilus图标缺省太大了
 `▶ gsettings set org.gnome.nautilus.icon-view default-zoom-level standard`
@@ -139,22 +147,29 @@ sudo kvm -hda /dev/sdc
 
 ### 家目录的链接
 ```
-▶ lsm ~ ~/.local/share/|grep -E '(\->|:$)'|sed -e 's/.*:.../\t/' -e 's/->/\t\t->/'
+▶ lsm ~ ~/.local/share/|grep -E '(\->|:$)'|sed -e 's/.*:.../\t/' -e 's/->/\t\t->/'|grep -E '(:|磁盘)'
 /home/eexpss:
-	.vimrc 		-> /home/eexpss/bin/config/fedora.vimrc
-	.bash_aliases 		-> /home/eexpss/bin/config/fedora.bash_aliases
-	.proxy.pac 		-> /home/eexpss/bin/config/.proxy.pac
-	.icons 		-> /home/eexpss/bin/config/.icons/
-	.gitconfig 		-> /home/eexpss/bin/config/.gitconfig
-	.vim 		-> /home/eexpss/bin/config/.vim
-	.ssh 		-> /home/eexpss/磁盘/eexp/.ssh/
-	.gnupg 		-> /home/eexpss/磁盘/eexp/.gnupg/
+	.wine 					-> /home/eexpss/磁盘/eexp/wine
+	.ssh 					-> /home/eexpss/磁盘/eexp/.ssh/
+	.gnupg 					-> /home/eexpss/磁盘/eexp/.gnupg/
 	.password-store 		-> /home/eexpss/磁盘/eexp/.password-store
-	.steampid 		-> /home/eexpss/.steam/steam.pid
-	.steampath 		-> /home/eexpss/.steam/bin32/steam
-	bin 		-> /home/eexpss/磁盘/eexp/bin
+	bin 					-> /home/eexpss/磁盘/eexp/bin
+/home/eexpss/.local/share/:
+	Steam 					-> /home/eexpss/磁盘/eexp/Steam
+
+▶ lsm ~ ~/.local/share/ ~/.local/share/nautilus/|grep -E '(\->|:$)'|sed -e 's/.*:.../\t/' -e 's/->/\t\t->/'|grep -E '(:|eexpss/bin)'
+/home/eexpss:
+	.icons 				-> /home/eexpss/bin/config/.icons/
+	.vimrc 				-> /home/eexpss/bin/config/fedora.vimrc
+	.bash_aliases 		-> /home/eexpss/bin/config/fedora.bash_aliases
+	.proxy.pac 			-> /home/eexpss/bin/config/.proxy.pac
+	.gitconfig 			-> /home/eexpss/bin/config/.gitconfig
+	.vim 				-> /home/eexpss/bin/config/.vim
 /home/eexpss/.local/share/:
 	applications 		-> /home/eexpss/bin/config/.local+share+applications
+/home/eexpss/.local/share/nautilus/:
+	scripts 			-> /home/eexpss/bin/config/.local+share+nautilus+scripts
+
 
 ▶ find ~ -type l ! -path '/home/eexpss/磁盘' ! -path '/home/eexpss/bin' -lname '/home/eexpss/bin/config/*' -printf "%p  \t->\t%l\n" 
 /home/eexpss/.local/share/applications  	->	/home/eexpss/bin/config/.local+share+applications
@@ -163,8 +178,6 @@ sudo kvm -hda /dev/sdc
 /home/eexpss/.proxy.pac  	->	/home/eexpss/bin/config/.proxy.pac
 /home/eexpss/.bash_aliases  	->	/home/eexpss/bin/config/fedora.bash_aliases
 /home/eexpss/.icons  	->	/home/eexpss/bin/config/.icons/
-find: ‘/home/eexpss/磁盘/lost+found’: Permission denied
-find: ‘/home/eexpss/磁盘/eexp/.gvfs’: Permission denied
 /home/eexpss/.vim  	->	/home/eexpss/bin/config/.vim
 /home/eexpss/.gitconfig  	->	/home/eexpss/bin/config/.gitconfig
 
