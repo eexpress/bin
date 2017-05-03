@@ -52,7 +52,7 @@ if($ARGV[0]){$_=$ARGV[0];}
 if(/^https.*baidupcs.com\/.*/){ chomp; $_.="&wshc_tag=0&wsiphost=ipdbm";
 	`gnome-terminal -e "axel -n 10 -a \'$_\'"`;exit; }
 #视频网站，直接播放。
-if(/http:\/\/v.youku.com\/.*/){ chomp; `/home/eexpss/bin/you-get/you-get -p mplayer $&`; exit;}
+if($_=~m!^http://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!){ chomp; `/home/eexpss/bin/you-get/you-get -p mplayer $_`; exit;}
 #/和~开头的存在的文件，打开
 if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`xdg-open \"$_\"`;exit;}}
 #终端选择的文件名，视频
