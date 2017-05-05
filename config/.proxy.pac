@@ -8,7 +8,7 @@ var darr = [
 'pastebin.com', 'disqus.com', 'githubusercontent.com',
 'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',
 'instagram', 'facebook', 'opera', 'wikipedia', 
-	'tapatalk.com', 'viewdns.info', 'f-droid.org',
+	'tapatalk.com', 'viewdns.info', 'f-droid.org', 'pinimg.com',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp', 'youtu.be',
 'feedburner.com', 'doubleclick.net', 'pinterest.com', 'duckduckgo.com', 
 'apkpure.com', 'alternativeto.net', 'evozi.com', 'wire.com', 'apkmirror.com',

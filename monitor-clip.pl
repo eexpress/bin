@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 
-use Encode qw(encode decode);
-
 sub ip_138{
+use LWP::Simple;
+use Encode qw(encode decode);
 $in=shift;
-$icon='/usr/share/icons/gnome/48x48/actions/system-search.png';
+$icon='/usr/share/icons/HighContrast/48x48/actions/system-search.png';
 $url="http://www.ip138.com/ips138.asp?ip=".$in;
-use LWP::Simple; $_=get($url); $_=encode("utf8",decode("gbk",$_));
+$_=get($url); $_=encode("utf8",decode("gbk",$_));
 /本站数据：([^<]*)/;
 $_=$1;
 print;
@@ -54,7 +54,7 @@ if(/^https.*baidupcs.com\/.*/){ chomp; $_.="&wshc_tag=0&wsiphost=ipdbm";
 #视频网站，直接播放。
 if($_=~m!^http://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!){ chomp; `/home/eexpss/bin/you-get/you-get -p mplayer $_`; exit;}
 #/和~开头的存在的文件，打开
-if(/^\// || /^~\//){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`xdg-open \"$_\"`;exit;}}
+if(/^~?\/.../){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`xdg-open \"$_\"`;exit;}}
 #终端选择的文件名，视频
 if(/\.(avi|mkv|mp4|wmv|ogg)$/){$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;exit;}
 #ip格式的数字，域名，查询
