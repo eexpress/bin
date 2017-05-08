@@ -46,7 +46,7 @@ $oldv=$1;
 `pactl set-sink-volume 0 $oldv%`;
 }
 #----------------------------------
-$_=`xsel -o`;
+$_=`xclip -o`;
 if($ARGV[0]){$_=$ARGV[0];}
 #百度盘的地址，下载
 if(/^https.*baidupcs.com\/.*/){ chomp; $_.="&wshc_tag=0&wsiphost=ipdbm";

@@ -112,7 +112,7 @@ if ($mech->success()) {
 	}
 	pc "Paste URL","\e[30;42m$rr\e[0m";
 	$bus->Notify("paste-img", 0, "sunny", '贴图地址(已复制到剪贴板)', $rr, [], { }, -1);
-	`echo $rr|xsel -i`;
+	`echo $rr|xclip -i`;
 } else {
 	$bus->Notify("paste-img", 0, "error", '贴图失败', ':(', [], { }, -1);
 }

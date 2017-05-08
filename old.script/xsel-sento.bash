@@ -1,7 +1,7 @@
 #!/bin/bash
 
-f=`xsel -o|tr '\n' ' '|sed 's/\ +/ /g'`
-#参数中可使用+号替换xsel结果
+f=`xclip -o|tr '\n' ' '|sed 's/\ +/ /g'`
+#参数中可使用+号替换xclip结果
 echo "$*"|grep '\+'
 if [ $? == 0 ]; then
 	cmd=`echo $*|sed -e "s'\+'$f'"`

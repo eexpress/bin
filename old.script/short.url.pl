@@ -19,7 +19,7 @@ $_=$mech->content();
 eval $web{$select}{cmd};
 print "=====> \e\[31m$_\e\[0m\n";
 #复制结果到鼠标中键。
-`echo $_|xsel -i`;
+`echo $_|xclip -i`;
 `aplay /home/exp/媒体/事件声音-et/weapon_pkup.wav 2>/dev/null`;
 }
 

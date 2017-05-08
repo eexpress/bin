@@ -9,7 +9,7 @@ use Net::DBus;
 my $bus = Net::DBus->session->get_service('org.freedesktop.Notifications')->get_object('/org/freedesktop/Notifications','org.freedesktop.Notifications');
 #输入编号
 $_=$ARGV[0];
-$_=`xsel -o` if !$_;
+$_=`xclip -o` if !$_;
 m/\w{2,4}-\d{3,4}/; $s=$&;
 die "not correct id." if !$s;
 print "> $s <\n";

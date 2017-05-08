@@ -12,7 +12,7 @@ GetOptions('1' => \$oneline, 'n'=>\$notify);
 
 my $out,$in;
 # 无参数时，使用剪贴板内容。
-$in=$ARGV[0]//`xsel -o`; if(!$in){exit;}
+$in=$ARGV[0]//`xclip -o`; if(!$in){exit;}
 open(SDCV,"sdcv -n $in|");
 #my $r;
 while(<SDCV>){

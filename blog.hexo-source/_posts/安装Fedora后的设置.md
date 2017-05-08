@@ -6,13 +6,20 @@ tags:
 ---
 ## 安装 Fedora
 
+### fstab
+ 
+```
+UUID=0f55ef91-9ff5-439e-b1bb-586430bc8251 /home         ext4    defaults        1 2
+UUID=601bf370-5a87-4cd4-ab39-c319130b419f /home/eexpss/Game  ext4    defaults        1 2
+```
+
 ###dnf
 
 ```
-sudo dnf copr enable librehat/shadowsocks
-sudo dnf install shadowsocks-qt5 retext inkscape gitg meld gvim nautilus-terminal gthumb phatch
-▶ dh info 3|g install
-8:	命令行   ： install shadowsocks-qt5 retext inkscape gitg meld nautilus-open-terminal
+▶ sudo dnf copr enable librehat/shadowsocks
+▶ sudo dnf install shadowsocks-qt5 retext inkscape gitg meld gvim nautilus-terminal pass autojump
+▶ sudo dnf config-manager --add-repo=http://negativo17.org/repos/fedora-nvidia.repo
+▶ di nvidia-driver nvidia-settings kernel-devel akmod-nvidia vulkan.i686 nvidia-driver-libs.i686
 
 ```
 dnf的输出格式，数据的组织和记录，都比apt效果好。`yumex-dnf`图形界面管理*安装细节*和*仓库*。dnf的查看历史信息尤其方便。增量安装不错。kernel自动维持3个，不用管理。一改以前rpm的坏印象，dnf比apt好啊。

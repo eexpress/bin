@@ -3,7 +3,7 @@
 $Bred="\e[1;31m"; $Bgreen="\e[1;32m"; $Bblue="\e[1;34m"; $normal="\e[0m"; 
 
 if($ARGV[0]){@in=@ARGV;}else{
-	$_=`xsel -o`; s/[\n'\s]//g; @in=split ','; }
+	$_=`xclip -o`; s/[\n'\s]//g; @in=split ','; }
 foreach(@in){
 	checknet($_);
 }

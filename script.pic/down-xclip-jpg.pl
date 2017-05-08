@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 
-$_="$ENV{HOME}/下载/xsel-pic";
+$_="$ENV{HOME}/下载/xclip-pic";
 mkdir "$_" if ! -f; 
 chdir "$_";
 
-@l=`xsel -o`;
+@l=`xclip -o`;
 @l=map {/http:\/\/.*\.jpg/; $_=$&} @l;
 foreach (@l){
 print "\e[31m\e[1m=>\t".$_."\e[0m\n";

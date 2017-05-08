@@ -27,7 +27,7 @@ alias pl='perl -ple'
 
 alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs'
 alias f='free -h|cut -b -43'
-alias g='grep -Pi'
+alias g='grep --color=always -Pi'
 #alias g='grep --color=always -inTZE 2>/dev/null'
 alias v='/usr/bin/gvim --remote-silent-tab'
 alias sv='sudo /usr/bin/gvim --remote-silent-tab'
@@ -50,7 +50,7 @@ pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
-o(){ xdg-open ${1:-"`xsel -o|sed -e "s.^~.$HOME." -e "s/\ /\\\ /g" -e "s/\n.*//"`"}; }
+o(){ xdg-open ${1:-"`xclip -o|sed -e "s.^~.$HOME." -e "s/\ /\\\ /g" -e "s/\n.*//"`"}; }
 s(){ highlight --force -O ansi $1 | /usr/bin/less -iR; }
 u(){ /usr/bin/du -sch "$@"|sort -rh; }
 

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-@_=`xsel -o`;
+@_=`xclip -o`;
 foreach (@_){
 	if(/^20\d\d-\d/){$date=$_;}
 	elsif(/^#/){$tag=$_;}

@@ -2,7 +2,7 @@
 
 use Encode qw(encode decode);
 
-$in=`xsel -o`;
+$in=`xclip -o`;
 if($ARGV[0]){$in=$ARGV[0];}
 
 $icon='/usr/share/icons/gnome/48x48/actions/system-search.png';

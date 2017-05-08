@@ -12,7 +12,7 @@ srand();
 if($ARGV[0]){
 $_=join ' ',@ARGV;
 }else{
-$_=`xsel -o`;
+$_=`xclip -o`;
 }
 _utf8_on($_);
 s/[()]//g;
@@ -51,4 +51,4 @@ $out.=$_;
 #ctrl序列可以用xev看，粗体^B
 if($color){if($forum){$out="\[b\]$out\[/b\]";}else{$out="\x02$out";}}
 print "$out\n";
-`echo "$out"|xsel -i`;
+`echo "$out"|xclip -i`;
