@@ -1,9 +1,0 @@
-#!/usr/bin/env xdg-open
-
-[Desktop Entry]
-Type=Application
-Terminal=false
-Name[zh_CN]=百科词条查询
-Name=Wikipedia
-Icon=/home/eexp/图片/图标/wikipedia.png
-Exec=/home/eexp/bin/bot/baike.pl

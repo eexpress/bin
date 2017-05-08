@@ -3,7 +3,7 @@ Type=Application
 Terminal=false
 Name[zh_CN]=监视剪贴板集合
 Name=Monitor-Clip-Collect
-Icon=clip0.png
+Icon=/home/eexpss/图片/图标/clip0.png
 Exec=monitor-clip.pl
 Actions=Wiki;DownPlay;
 
@@ -15,4 +15,4 @@ Exec=baike.pl
 [Desktop Action DownPlay]
 Name[zh_CN]=播放剪贴板的视频
 Name=Play Video in Clipboard
-Exec=/bin/bash -c "/home/eexpss/bin/you-get/you-get -p mplayer `xsel -b`"
+Exec=/bin/bash -c "/home/eexpss/bin/you-get/you-get -p mplayer `xclip -b`"
