@@ -39,7 +39,7 @@ alias lsm='ls -oAh --time-style=iso -t'
 alias lsc='ls -oAh --time-style=iso -tc'
 alias lss='ls -oAh --time-style=iso -S'
 
-alias hexo='cd ~/磁盘/eexp/文档/blog.hexo;/usr/bin/hexo'
+alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
 alias git='cd ~/bin;/usr/bin/git'
 
 alias dl="$HOME/bin/you-get/you-get"

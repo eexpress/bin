@@ -17,7 +17,7 @@ UUID=601bf370-5a87-4cd4-ab39-c319130b419f /home/eexpss/Game  ext4    defaults   
 
 ```
 ▶ sudo dnf copr enable librehat/shadowsocks
-▶ sudo dnf install shadowsocks-qt5 retext inkscape gitg meld gvim nautilus-terminal pass autojump
+▶ sudo dnf install shadowsocks-qt5 retext inkscape gitg meld gvim nautilus-terminal pass qtpass autojump
 ▶ sudo dnf config-manager --add-repo=http://negativo17.org/repos/fedora-nvidia.repo
 ▶ di nvidia-driver nvidia-settings kernel-devel akmod-nvidia vulkan.i686 nvidia-driver-libs.i686
 
@@ -101,7 +101,7 @@ firefox的`about:addons->插件`里面，打开思科授权的opneh264编码器�
 
 ### 在Fedora上激活RPMFusion存储库(媒体解码器相关的软件都在这里)
 	▶ sudo rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm
-安装了gstreamer1-plugins-ugly(包含了x264-libs)，还自动安装了另外一个multimedia的解码器，totem就都正常了。看来关键是激活这个软件仓库。
+安装了gstreamer1-plugins-ugly(包含了x264-libs)，还自动安装了另外一个multimedia(GStreamer Multimedia Codecs - libav)的解码器，totem就都正常了。看来关键是激活这个软件仓库。
 
 ### 迁移密钥
 	▶ cd oldmachine_home/.gnupg; cp pubring.gpg secring.gpg ~/.gnupg/
