@@ -6,7 +6,13 @@ tags:
 - desktop
 ---
 新系统，不想安装以前的包了。只是在家目录手动增加一个脚本的关联设置。
+
 1. 执行脚本放路径下，比如`~/bin`。
 1. `~/.local/share/applications`下，增加desktop文件。
 1. desktop对应的图标放`~/.icons`下。
 1. 增加的mimetype放`~/.config/mimeapps.list`的`[Added Associations]`段。如果设置为缺省打开，在`[Default Applications]`段写。
+
+另外，在nautilus里面，可以右键点属性，直接编辑desktop文件。要点如下：
+
+1. *命令*使用全路径。
+1. *权限*设置+x可执行属性。

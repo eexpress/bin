@@ -4,8 +4,9 @@ Terminal=false
 Name[zh_CN]=监视剪贴板集合
 Name=Monitor-Clip-Collect
 Icon=/home/eexpss/图片/图标/clip0.png
-Exec=monitor-clip.pl
+Exec=/home/eexpss/bin/monitor-clip.pl
 Actions=Wiki;DownPlay;
+GenericName[zh_CN.UTF-8]=监视剪贴板并执行操作
 
 [Desktop Action Wiki]
 Name[zh_CN]=查询百科的词条
