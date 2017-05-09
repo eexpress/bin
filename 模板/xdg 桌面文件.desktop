@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=
+Name[zh_CN]=xdg 桌面文件
+GenericName[zh_CN.UTF-8]=
+Icon=
+Exec=/home/eexpss/bin/xxx
+Keywords=play;media;video;
+MimeType=video/mp4;video/mpeg;
+Actions=Menu_1;
+
+[Desktop Action Menu_1]
+Name=
+Exec=
