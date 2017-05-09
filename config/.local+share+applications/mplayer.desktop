@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=mplayer
 Exec=/usr/bin/mplayer
-Icon=mplayer_osx_extended_icon_by_marc2o.png
+Icon=/home/eexpss/图片/图标/png/Aero-128/scalable/apps/gmplayer.png
 Terminal=false
 Categories=GTK;GNOME;Player;Video;
 Type=Application

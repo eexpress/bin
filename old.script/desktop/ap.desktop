@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Terminal=false
-Name=AP 热点
-Icon=/home/eexp/图片/inkscape/单色图标/wifi.svg
-Exec=/home/eexp/bin/ap.bash

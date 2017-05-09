@@ -1,0 +1,1 @@
+fedora.bash_aliases

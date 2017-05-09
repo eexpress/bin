@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Terminal=false
-Name=Git Auto Push/Pull
-Icon=/home/eexp/图片/icon/github-color.svg
-Exec=gnome-terminal -x /home/eexp/bin/git.pl
-

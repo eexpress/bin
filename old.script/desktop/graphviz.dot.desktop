@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Graphviz Dot 生成 svg/png
-Exec=/bin/bash -c "f=%U; dot -Tsvg $f -o $f.svg; dot -Tpng $f -o $f.png"
-Icon=/home/eexp/图片/icon/graphviz.png
-Terminal=false
-Type=Application
-Categories=GTK;GNOME;Graphic;
-MimeType=text/vnd.graphviz
-
