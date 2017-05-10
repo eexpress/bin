@@ -27,24 +27,25 @@ alias pl='perl -ple'
 
 alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs'
 alias f='free -h|cut -b -43'
-alias g='grep --color=always -Pi'
+alias g='grep --color=always -Pi 2>/dev/null'
 #alias g='grep --color=always -inTZE 2>/dev/null'
 alias v='/usr/bin/gvim --remote-silent-tab'
 alias sv='sudo /usr/bin/gvim --remote-silent-tab'
 alias k='pkill -9 -f'
+
+alias ls='/usr/bin/ls --color=auto'
 alias l='ls'
 alias la='ls -a'
-
-alias lsm='ls -oAh --time-style=iso -t'
-alias lsc='ls -oAh --time-style=iso -tc'
-alias lss='ls -oAh --time-style=iso -S'
+alias lsm='ls -oAh --time-style=iso -t'		# mtime
+alias lsc='ls -oAh --time-style=iso -tc'	# ctime
+alias lss='ls -oAh --time-style=iso -S'		# size
 
 alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
 alias git='cd ~/bin;/usr/bin/git'
 
 alias dl="$HOME/bin/you-get/you-get"
 alias dlp="$HOME/bin/you-get/you-get -p mplayer"
-alias dl0="$HOME/bin/you-get/you-get -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/e8fczwpf.default/cookies.sqlite'"
+alias dl0="$HOME/bin/you-get/you-get -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/mjm952n2.default/cookies.sqlite'"
 
 pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 c(){ echo $1|bc -l; }

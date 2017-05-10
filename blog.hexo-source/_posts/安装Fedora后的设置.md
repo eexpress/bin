@@ -17,7 +17,7 @@ UUID=601bf370-5a87-4cd4-ab39-c319130b419f /home/eexpss/Game  ext4    defaults   
 
 ```
 ▶ sudo dnf copr enable librehat/shadowsocks
-▶ sudo dnf install shadowsocks-qt5 retext inkscape gitg meld gvim nautilus-terminal pass qtpass autojump axel
+▶ sudo dnf install shadowsocks-qt5 retext inkscape gitg meld gvim nautilus-terminal pass qtpass autojump axel gnome-terminal-nautilus redshift-gtk 
 ▶ sudo rpm -Uvh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm
 ▶ di unrar
 ▶ sudo dnf config-manager --add-repo=http://negativo17.org/repos/fedora-nvidia.repo

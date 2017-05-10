@@ -5,26 +5,28 @@ echo "input qrcode image file or ss format string."
 exit
 fi
 
-file $1|grep image
+file "$1"|grep image
 if [ $? == 0 ]; then
-	configname=$1; str=`zbarimg $1`
+	configname=$1; str=`zbarimg "$1"`
 else
 	str=$1; configname="ss_string"
 fi
-echo $str|grep '^ss://' 1>/dev/null
-if [ $? == 0 ]; then
-	echo $str|grep '#' 1>/dev/null
-	if [ $? == 0 ]; then configname=`echo $str|sed 's/^ss.*#//'`; fi
-	str=`echo $str| sed 's-^.*//--'|sed 's/#.*$//' | base64 -d 2>/dev/null`
-else
+echo $str
+echo $str|grep -P 'ss://' 1>/dev/null
+v=$?
+echo $str|grep '#' 1>/dev/null
+if [ $? == 0 ]; then configname=`echo $str|sed 's/^ss.*#//'`; fi
+str=`echo $str| sed 's-^.*//--'|sed 's/#.*$//' | base64 -d 2>/dev/null`
+echo $str
+if [ $v != 0 ]; then
+	echo "no valid ss:// string."
 	exit
 fi
 
-#echo $str
 str=`echo $str|sed 's/\(.*\)@/\1:/'` #贪婪匹配最后一个@号，换成:
 arr=(${str//:/ })
 echo -e "\e[1;34m---------output json------------"
-cat > $configname.json << EOF
+cat > "$configname.json" << EOF
 {
 "remarks"	:	"${configname}",
 "server"	:	"${arr[2]}",
@@ -34,5 +36,5 @@ cat > $configname.json << EOF
 }
 EOF
 
-cat $configname.json
+cat "$configname.json"
 echo -e "\e[0m"
