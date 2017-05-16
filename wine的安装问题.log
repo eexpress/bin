@@ -1,0 +1,7 @@
+# ●2017-05-16_11:12:52
+▶ cp '/home/eexpss/文档/本机配置的文件/字体/simsun.ttc' ~/.wine/drive_c/windows/Fonts/
+
+# ●2017-05-16_13:47:01
+▶ winetricks mfc42
+isskin.dll问题：需要mfc42库。
+

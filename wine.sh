@@ -2,7 +2,8 @@ info=`xrandr|grep primary`
 o=`echo $info|cut -d ' ' -f1`
 m=`echo $info|cut -d ' ' -f4|sed 's/\+.*//'`
 echo "<$o>----<$m>"
-n=1024x768
+#n=1024x768
+n=1600x900
 d=`dirname "$1"`
 #echo $d
 cd "$d"

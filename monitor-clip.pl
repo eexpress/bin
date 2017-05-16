@@ -50,7 +50,7 @@ $_=`xclip -o`;
 if($ARGV[0]){$_=$ARGV[0];}
 #百度盘的地址，下载
 if(/^https.*baidupcs.com\/.*/){ chomp; $_.="&wshc_tag=0&wsiphost=ipdbm";
-	`gnome-terminal -e "axel -n 10 -a \'$_\'"`;exit; }
+	`gnome-terminal -e "axel -n 30 -a \'$_\'"`;exit; }
 #视频网站，直接播放。
 if($_=~m!^http://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!){ chomp; `/home/eexpss/bin/you-get/you-get -p mplayer $_`; exit;}
 #/和~开头的存在的文件，打开
