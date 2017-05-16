@@ -1,4 +1,5 @@
 #!/bin/bash
 
-file=`echo -n $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS|sed 's/\x0A//g'`
-baobab "$file"
+dir=`echo -n $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS|head -n 1|sed 's/\x0A//g'`
+[ -f $dir ] && dir=`dirname $dir`
+baobab "$dir"
