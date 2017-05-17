@@ -44,19 +44,26 @@ sub videoplay{
 sub exec_regex{
 	$_=shift;
 #百度盘的地址，下载。终端里执行和面板点击都有效，就是热键失效？！！
-	if(/^https*.+baidupcs.com\/.+/){sound();chomp;`gnome-terminal -x axel -n 60 -a '$_'`;return;}
+	if(/^https*.+baidupcs.com\/.+/)
+	{sound();chomp;`gnome-terminal -x axel -n 120 -a '$_'`;return;}
 #视频网站，直接播放。
-	if($_=~m!^https*://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!){sound();videoplay($_);return;}
+	if($_=~m!^https*://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!)
+	{sound();videoplay($_);return;}
 #/和~开头的存在的文件，打开
-	if(/^~?\/.../){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){sound();`xdg-open \"$_\"`;return;}}
+	if(/^~?\/.../)
+	{s/^~/$ENV{HOME}/;s/\n.*//;if(-e){sound();`xdg-open "$_"`;return;}}
 #终端选择的视频文件(文件名可以不完整)，定位并播放
-	if(/\.(avi|mkv|mp4|wmv|ogg)\'*$/){sound();$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;return;}
+	if(/\.(avi|mkv|mp4|wmv|ogg|flv|jpg|png|svg)\'*$/)
+	{$_=`locate -e -n 1 $_`;chomp;if(-e){sound();`xdg-open "$_"`;return;}}
 #ip格式的数字，域名，查询
 	if(/\d+\.\d+\.\d+\.\d+/){sound();ip_138($&);return;}
-	if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/){sound();ip_138($&);return;}
+	if(/(\w+\.){1,3}(com|net|org|edu|gov|biz|tel|info|name|[a-z]{2})$/ && !/:/)
+	{sound();ip_138($&);return;}
+#    if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/){sound();ip_138($&);return;}
 #全英文句子或单词，有本地翻译软件就直接翻译，否则网页翻译
 # 可显示ascii字符，全英文句子。“.xxx”像文件名的，不执行。
-	if(/^[\x20-\x7e]+$/ && /\w{3,}/ && !/\.\w+$/){sound();web_translate($_);return;}
+	if(/^[\x20-\x7e]+$/ && /\w{3,}/ && !/\.\w+$/)
+	{sound();web_translate($_);return;}
 #番号下载
 	if(/\w{2,4}-\d{3,4}/){`/home/eexp/bin/bt.pl $&`;return;}
 }
@@ -83,11 +90,14 @@ if($ARGV[0]){
 #monitor mode
 $oldclip=`xclip -o`;
 while(true){
-	sleep 3;
+	sleep 2;
 	$clip=`xclip -o`;
 	if($clip ne $oldclip){
+		sleep 1;
+		$clip=`xclip -o`;
 		$oldclip=$clip;
 		print "\e[1;31mnew clip:\e[0m\t$clip\n";
+		`echo "$clip" >>/tmp/clip.log`;
 		exec_regex($clip);
 	}
 }
