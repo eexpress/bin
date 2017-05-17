@@ -14,18 +14,6 @@ sub ip_138{
 	`notify-send -i $icon "IP地址查询 $in" "$_"`;
 }
 #----------------------------------
-sub sdcv{
-	$in=shift; $out="";
-	@_=`locate stardict.png`; $icon=$_[0]; chomp $icon;
-	open(SDCV,"sdcv -n $in|");
-	while(<SDCV>){
-			if (! ((1 .. /^$/) || (/相关/||/^$/ .. eof)))
-			{$out.=" ► $_\\n";}
-		}
-	close(SDCV);
-	`notify-send -i $icon "sdcv翻译 $in" "$out"`;
-}
-#----------------------------------
 sub web_translate{
 	$in=shift;
 	$in=~s/["']//g;
@@ -64,17 +52,14 @@ sub exec_regex{
 	if($_=~m!^https*://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!){sound();videoplay($_);return;}
 #/和~开头的存在的文件，打开
 	if(/^~?\/.../){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){sound();`xdg-open \"$_\"`;return;}}
-#终端选择的视频文件，定位并播放
+#终端选择的视频文件(文件名可以不完整)，定位并播放
 	if(/\.(avi|mkv|mp4|wmv|ogg)\'*$/){sound();$_=`locate -e -n 1 $_`;chomp;`mplayer "$_"`;return;}
 #ip格式的数字，域名，查询
 	if(/\d+\.\d+\.\d+\.\d+/){sound();ip_138($&);return;}
 	if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/){sound();ip_138($&);return;}
-#单词，有本地翻译软件就直接翻译，否则网页翻译
-	if(/^[\x20-\x7e]+$/){	# 可显示ascii字符，全英文句子。
-		sound();
-		if(-x '/usr/bin/sdcv'){sdcv($&);}
-		else{web_translate($_);}
-		return;}
+#全英文句子或单词，有本地翻译软件就直接翻译，否则网页翻译
+# 可显示ascii字符，全英文句子。
+	if(/^[\x20-\x7e]+$/){sound();web_translate($_);return;}
 #番号下载
 	if(/\w{2,4}-\d{3,4}/){`/home/eexp/bin/bt.pl $&`;return;}
 }
