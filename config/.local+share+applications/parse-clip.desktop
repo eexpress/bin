@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name[zh_CN]=解析剪贴板
+Name=Parse-Clip-Collect
+Icon=/home/eexpss/图片/图标/clip0.png
+Exec=/home/eexpss/bin/parse-clip.pl
+Actions=Wiki;DownPlay;
+GenericName[zh_CN.UTF-8]=解析剪贴板并执行操作
+
+[Desktop Action Wiki]
+Name[zh_CN]=查询百科的词条
+Name=Wikipedia Search
+Exec=baike.pl
+
+[Desktop Action DownPlay]
+Name[zh_CN]=播放剪贴板的视频
+Name=Play Video in Clipboard
+Exec=/bin/bash -c "/home/eexpss/bin/you-get/you-get -p mplayer `xclip -b`"
