@@ -4,7 +4,7 @@ Terminal=false
 Name[zh_CN]=解析剪贴板
 Name=Parse-Clip-Collect
 Icon=/home/eexpss/图片/图标/clip0.png
-Exec=/home/eexpss/bin/parse-clip.pl
+Exec=/home/eexpss/bin/monitor-clip.pl x
 Actions=Wiki;DownPlay;
 GenericName[zh_CN.UTF-8]=解析剪贴板并执行操作
 

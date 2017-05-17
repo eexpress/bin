@@ -91,6 +91,14 @@ sub sound{
 	}
 }
 #==================================
+#parse mode <- any para here
+if($ARGV[0]){
+	$_=`xclip -o`;
+	exec_regex($_);
+	exit;
+}
+
+#monitor mode
 use Clipboard;	# install perl-Clipboard
 $oldclip=Clipboard->paste;
 while(true){
