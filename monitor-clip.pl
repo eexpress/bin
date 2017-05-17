@@ -20,7 +20,6 @@ sub web_translate{
 	if($in=~/[\x80-\xFF]{2,4}/){$str="#zh/en";}else{$str="#en/zh";}
 	chomp $in;
 	$out="http://fanyi.baidu.com/$str/$in";
-	print $out;
 	`xdg-open \'$out\'`;
 }
 #----------------------------------
@@ -30,7 +29,6 @@ sub videoplay{
 	chomp $in;
 	$dl='/home/eexpss/bin/you-get/you-get';
 	$out=`$dl -i $in`;
-	print $out;
 
 	@format=$out=~/--format=\K\S+/g;
 	$out=join " ",@format;
@@ -40,8 +38,7 @@ sub videoplay{
 	elsif($out=~/HD/){$out="--format=HD";}
 	else{$out="";}
 
-	print "$dl $out -p mplayer $in";
-	`$dl $out -p mplayer $in`;
+	`$dl $out -p mplayer $in 2>/dev/null`;
 }
 #----------------------------------
 sub exec_regex{
@@ -58,8 +55,8 @@ sub exec_regex{
 	if(/\d+\.\d+\.\d+\.\d+/){sound();ip_138($&);return;}
 	if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/){sound();ip_138($&);return;}
 #全英文句子或单词，有本地翻译软件就直接翻译，否则网页翻译
-# 可显示ascii字符，全英文句子。
-	if(/^[\x20-\x7e]+$/){sound();web_translate($_);return;}
+# 可显示ascii字符，全英文句子。“.xxx”像文件名的，不执行。
+	if(/^[\x20-\x7e]+$/ && /\w{3,}/ && !/\.\w+$/){sound();web_translate($_);return;}
 #番号下载
 	if(/\w{2,4}-\d{3,4}/){`/home/eexp/bin/bt.pl $&`;return;}
 }
@@ -84,15 +81,14 @@ if($ARGV[0]){
 }
 
 #monitor mode
-use Clipboard;	# install perl-Clipboard
-$oldclip=Clipboard->paste;
+$oldclip=`xclip -o`;
 while(true){
-sleep 3;
-$clip=Clipboard->paste;
-if($clip ne $oldclip){
-	$oldclip=$clip;
-	print "new clip: $clip\n";
-	exec_regex($clip);
+	sleep 3;
+	$clip=`xclip -o`;
+	if($clip ne $oldclip){
+		$oldclip=$clip;
+		print "\e[1;31mnew clip:\e[0m\t$clip\n";
+		exec_regex($clip);
 	}
 }
 #==================================
