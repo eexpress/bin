@@ -34,6 +34,25 @@ print $out;
 `xdg-open \'$out\'`;
 }
 
+sub videoplay{
+$in=shift;
+print $in;
+chomp $in;
+$dl='/home/eexpss/bin/you-get/you-get';
+$out=`$dl -i $in`;
+print $out;
+
+@format=$out=~/--format=\K\S+/g;
+$out=join " ",@format;
+if($out=~/hd2/){$out="--format=hd2";}	#youku
+elsif($out=~/mp4/){$out="--format=mp4";}
+elsif($out=~/TD/){$out="--format=TD";}	#iqiyi
+elsif($out=~/HD/){$out="--format=HD";}
+else{$out="";}
+
+print "$dl $out -p mplayer $in";
+`$dl $out -p mplayer $in`;
+}
 #----------------------------------
 $sound='/usr/share/sounds/ubuntu/notifications/Mallet.ogg';
 $sound='';
@@ -48,11 +67,10 @@ $oldv=$1;
 #----------------------------------
 $_=`xclip -o`;
 if($ARGV[0]){$_=$ARGV[0];}
-#百度盘的地址，下载
-if(/^https.*baidupcs.com\/.*/){ chomp; $_.="&wshc_tag=0&wsiphost=ipdbm";
-	`gnome-terminal -e "axel -n 30 -a \'$_\'"`;exit; }
+#百度盘的地址，下载。终端里执行和面板点击都有效，就是热键失效？！！
+if(/^https*.+baidupcs.com\/.+/){chomp;`gnome-terminal -x axel -n 60 -a '$_'`;exit;}
 #视频网站，直接播放。
-if($_=~m!^http://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!){ chomp; `/home/eexpss/bin/you-get/you-get -p mplayer $_`; exit;}
+if($_=~m!^https*://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!){videoplay($_);exit;}
 #/和~开头的存在的文件，打开
 if(/^~?\/.../){s/^~/$ENV{HOME}/;s/\n.*//;if(-e){`xdg-open \"$_\"`;exit;}}
 #终端选择的文件名，视频
