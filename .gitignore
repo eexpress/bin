@@ -19,8 +19,11 @@ youtube*
 *.note
 multiget
 telegram*
-*applications
 you-get
+wine*
+*.cache
+autovpn
+Resilio-Sync
 
 adb
 tags

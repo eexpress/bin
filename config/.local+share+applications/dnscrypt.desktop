@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=dnscrypt-proxy
+Icon=/home/eexpss/图片/图标/png/iToolbar_png/search-web.png
+Exec=/home/eexpss/bin/dnscrypt.bash
+

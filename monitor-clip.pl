@@ -64,7 +64,7 @@ sub exec_regex{
 	{$_=`locate -e -n 1 $_`;chomp;if(-e){sound();`xdg-open "$_"`;return;}}
 #-----------------
 #ip地址，域名
-	if(/\d+\.\d+\.\d+\.\d+/){sound();ip_domain($&);return;}
+	if(/\d+\.\d+\.\d+\.\d+/){$_=$&;if(/^127\./||/^192\.168\./){return;};sound();ip_domain($&);return;}
 	if(/(\w+\.){1,3}(com|net|org|edu|gov|biz|tel|info|name|cc)$/ && !/:/)
 #    if(/(\w+\.){1,3}(com|net|org|edu|gov|biz|tel|info|name|[a-z]{2})$/ && !/:/)
 #    if(/(\w+\.){1,3}[A-Za-z]{2,3}$/ && !/:/)
