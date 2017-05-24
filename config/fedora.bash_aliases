@@ -43,9 +43,9 @@ alias lss='ls -oAh --time-style=iso -S'		# size
 alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
 alias git='cd ~/bin;/usr/bin/git'
 
-alias dl="$HOME/bin/you-get/you-get"
-alias dlp="$HOME/bin/you-get/you-get -p mplayer"
-alias dl0="$HOME/bin/you-get/you-get -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/mjm952n2.default/cookies.sqlite'"
+alias dl="$HOME/bin/app/you-get/you-get"
+alias dlp="dl -p mplayer"
+alias dl0="dl -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/mjm952n2.default/cookies.sqlite'"
 
 pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 c(){ echo $1|bc -l; }

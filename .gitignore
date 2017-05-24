@@ -1,4 +1,4 @@
-goagent-local
+app
 old*
 *old
 cairo-weather
@@ -8,7 +8,6 @@ mkd.*
 lighttpd
 *linux64*
 project*
-QuakeWars
 slide
 aliedit*
 binux*
@@ -19,11 +18,9 @@ youtube*
 *.note
 multiget
 telegram*
-you-get
 wine*
 *.cache
 autovpn
-Resilio-Sync
 
 adb
 tags

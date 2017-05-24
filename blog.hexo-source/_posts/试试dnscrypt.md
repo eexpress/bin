@@ -33,3 +33,16 @@ sudo dnscrypt-proxy -R cisco -a 127.0.0.2:53 -u `whoami`
 
 `dig`一下twitter，第一下显示Dropbox公司，吓人。新开终端，再dig，才正确。什么鬼。
 
+--------------------------
+发现看视频的时候，一跳就卡，估计是没缓冲。
+
+把 `/etc/dnsmasq.conf` 里面加上链接到 dnscrypt-proxy 的行。
+```
+server=127.0.0.2#53
+```
+清除下dnsmasq的缓冲。
+```
+▶ sudo service dnsmasq restart
+```
+NM的网络连接里面，dns改成127.0.0.1。断开一次连接。似乎视频跳的时候，不卡了。
+

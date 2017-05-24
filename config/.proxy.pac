@@ -7,7 +7,7 @@ var darr = [
 'ingress', 'appspot.com', 'telegram.org', 'webupd8.org',
 'pastebin.com', 'disqus.com', 'githubusercontent.com',
 'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',
-'instagram', 'facebook', 'opera', 'wikipedia', 
+'instagram', 'facebook', 'opera', 'wikipedia', 'amazonaws.com',
 	'tapatalk.com', 'viewdns.info', 'f-droid.org', 'pinimg.com',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp', 'youtu.be',
 'feedburner.com', 'doubleclick.net', 'pinterest.com', 'duckduckgo.com', 
