@@ -41,7 +41,7 @@ alias lsc='ls -oAh --time-style=iso -tc'	# ctime
 alias lss='ls -oAh --time-style=iso -S'		# size
 
 alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
-alias git='cd ~/bin;/usr/bin/git'
+alias ggit='cd ~/bin;/usr/bin/git'
 
 alias dl="$HOME/bin/app/you-get/you-get"
 alias dlp="dl -p mplayer"

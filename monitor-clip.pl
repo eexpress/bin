@@ -52,7 +52,8 @@ sub exec_regex{
 	{sound();chomp;`gnome-terminal -x axel -n 120 -a '$_'`;return;}
 #-----------------
 #视频网站，直接播放。
-	if($_=~m!^https*://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!)
+	if($_=~m!^https*://(v.qq.com|www.iqiyi.com|www.bilibili.com)!)
+#    if($_=~m!^https*://(v.youku.com|tv.sohu.com|video.tudou.com|v.qq.com|www.iqiyi.com|www.bilibili.com|www.acfun.cn)!)
 	{sound();videoplay($_);return;}
 #-----------------
 #/和~开头的存在的文件，打开
