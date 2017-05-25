@@ -1,26 +1,21 @@
 #!/usr/bin/perl
 
 $Bred="\e[1;31m"; $Bgreen="\e[1;32m"; $Bblue="\e[1;34m"; $normal="\e[0m";
-
+@color=($Bred,$Bgreen,$Bblue);
 if(! $ARGV[0]){print "在当前目录查找文件名的关键词。支持多参数，可使用-号表示排除。\n";exit;}
-
-$cmd='find . ! -path "*/.*" ';	#不找隐含目录
-#$cmd='find . -type f ! -path "*/.*" ';	#只找文件
-for(@ARGV){
-	if(/^-/){
-		$cmd.="! -iname \"*$'*\" ";
+@out='';
+use File::Find;
+find(\&wanted, '.');
+sub wanted {
+	$fn=$File::Find::name;
+	$c=0;
+	for $arg (@ARGV){
+		if($arg=~/^-/){ if($fn=~/$'/){return;} }	#要排除的关键词
+		else{
+		   	if($fn!~/$arg/){return;}	#没找到关键词
+			$fn=~s/($arg)/$color[$c%@color]$1$normal/g; $c++;
+	   	}	
 	}
-	else{
-		$cmd.="-iname \"*$_*\" ";
-	}
+	push @out,"$fn\n";
 }
-
-$cmd.='-exec du -h {} \;';
-print "$cmd\n=====\t=========================\n";
-$out=`$cmd`;
-for(@ARGV){
-	if(! /^-/){
-		$out=~s/$_/$Bred$_$normal/g;
-	}
-}
-print $out;
+print @out;
