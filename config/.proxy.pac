@@ -1,9 +1,9 @@
 var darr = [
 'google', 'gstatic', 'google-analytics', 'googleapis',
 'googleusercontent', 'googlecode.com', 'youtube', 'chrome.com',
-'gmail', 'sstatic.net', 'github', 'googlevideo.com',
+'gmail', 'sstatic.net', 'github', 'googlevideo.com', 'torproject.org',
 'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'ytimg',
-	'tumblr.com', 'recaptcha.net', 'imgchili.net', 
+'tumblr.com', 'recaptcha.net', 'imgchili.net', 'inoreader.com',
 'ingress', 'appspot.com', 'telegram.org', 'webupd8.org',
 'pastebin.com', 'disqus.com', 'githubusercontent.com',
 'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',
