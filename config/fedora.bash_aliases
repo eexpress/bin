@@ -47,6 +47,8 @@ alias dl="$HOME/bin/app/you-get/you-get"
 alias dlp="dl -p mplayer"
 alias dl0="dl -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/mjm952n2.default/cookies.sqlite'"
 
+alias unzip="unzip -O CP936"
+
 pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
@@ -55,6 +57,7 @@ o(){ xdg-open ${1:-"`xclip -o|sed -e "s.^~.$HOME." -e "s/\ /\\\ /g" -e "s/\n.*//
 s(){ highlight --force -O ansi $1 | /usr/bin/less -iR; }
 u(){ /usr/bin/du -sch "$@"|sort -rh; }
 
+alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors;hddtemp -q'
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
 #man terminfo: set_a_foreground -> setaf; set_a_background -> setab; 
