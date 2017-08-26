@@ -31,7 +31,7 @@ sub videoplay{
 	print "\e[1;34 video \e[0m\n";
 	print $in;
 	chomp $in;
-	$dl='/home/eexpss/bin/you-get/you-get';
+	$dl='/home/eexpss/bin/app/you-get/you-get';
 	$out=`$dl -i $in`;
 
 	@format=$out=~/--format=\K\S+/g;
