@@ -23,6 +23,7 @@ alias hexdump='hexdump -C|cut -b 9-'
 alias axel='/usr/bin/axel -n 10 -a'
 alias myip='curl ipinfo.io'
 alias ps='/bin/ps -u `id -un` -o pid,command'
+alias pg='pgrep -af'
 alias pl='perl -ple'
 
 alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs'
@@ -49,7 +50,7 @@ alias dl0="dl -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/mjm952n2.defau
 
 alias unzip="unzip -O CP936"
 
-pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
+#pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
 c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
