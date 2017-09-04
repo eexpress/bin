@@ -10,7 +10,8 @@ set ignorecase		" 搜索忽略大小写
 set smartcase
 " 设置文字编码自动识别
 set encoding=utf-8
-set fencs=utf-8,gb18030,gbk
+set fencs=utf-8,gb18030,ucs-bom,utf-16,big5
+set fenc=utf-8
 set guifont=Courier\ 10\ Pitch\ 14,Nimbus\ Mono\ L\ 14
 " 设置高亮搜索
 set hlsearch

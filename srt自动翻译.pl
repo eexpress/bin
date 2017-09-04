@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use LWP::Simple;
-
+#输入编码需要转换成utf-8
 $in=shift;
 open OUT,">$in.auto.srt";
 open IN,"<$in"; while(<IN>){
