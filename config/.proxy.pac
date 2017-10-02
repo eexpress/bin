@@ -5,7 +5,7 @@ var darr = [
 'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'ytimg',
 'tumblr.com', 'recaptcha.net', 'imgchili.net', 'inoreader.com',
 'ingress', 'appspot.com', 'telegram.org', 'webupd8.org',
-	'wikipedia.org', 'resilio.com', 'bbc.com',
+	'wikipedia.org', 'resilio.com', 'bbc.com', 'wuw.red',
 'pastebin.com', 'disqus.com', 'githubusercontent.com',
 'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',
 'instagram', 'facebook', 'opera', 'wikipedia', 'amazonaws.com',

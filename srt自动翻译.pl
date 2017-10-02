@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use LWP::Simple;
+binmode STDOUT, ":utf8";
 #输入编码需要转换成utf-8
 $in=shift;
 open OUT,">$in.auto.srt";

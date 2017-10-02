@@ -8,6 +8,7 @@ set cindent
 set mouse=a
 set ignorecase		" 搜索忽略大小写
 set smartcase
+set display+=lastline
 " 设置文字编码自动识别
 set encoding=utf-8
 set fencs=utf-8,gb18030,ucs-bom,utf-16,big5
