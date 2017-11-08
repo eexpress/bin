@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=firefly_proxy
+Name[zh_CN]=萤火虫代理
+Exec=/home/eexpss/bin/app/萤火虫代理_firefly_linux_amd64
+Icon=/usr/share/icons/HighContrast/256x256/apps/preferences-system-network-proxy.png
+Type=Application
+Categories=GNOME;Network;
+

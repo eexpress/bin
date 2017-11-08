@@ -12,6 +12,8 @@ alias dinfo='dnf info'
 alias dfile='dnf repoquery -l'
 alias dfile1='rpm -q --filesbypkg'
 alias dh='sudo dnf history'
+alias dinstalled='dnf list installed'
+alias dlist='dnf list'
 
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'

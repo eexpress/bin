@@ -44,3 +44,7 @@ or
 ```
 ▶ for i in *; do ffmpeg -i $i -c:v mpeg4 -q:v 4 -c:a libmp3lame -vf scale=720x400 ../720x400/$i.mp4; done
 ```
+批量转换1080到720。
+```
+for i in *.avi *.mp4; do ffprobe -hide_banner "$i" 2>&1|grep '1920x1080' >/dev/null; [ $? -ne 0 ] && continue; echo -e '\x1b[1;31m'"$i"'\x1b[0m'; mv "$i" t.mp4; ffmpeg -i t.mp4 -vf scale=1280x720 "$i"; done
+```
