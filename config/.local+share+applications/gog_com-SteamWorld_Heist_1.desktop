@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Value=1.0
+Type=Application
+Name=SteamWorld Heist
+GenericName=SteamWorld Heist
+Comment=SteamWorld Heist
+Icon=/home/eexpss/Game/Linux/SteamWorld Heist/support/icon.png
+Exec="/home/eexpss/Game/Linux/SteamWorld Heist/start.sh" ""
+Categories=Game;
+Path=/home/eexpss/Game/Linux/SteamWorld Heist
+
