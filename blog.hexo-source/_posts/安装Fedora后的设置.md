@@ -26,6 +26,7 @@ UUID=601bf370-5a87-4cd4-ab39-c319130b419f /home/eexpss/Game  ext4    defaults   
 ```
 dnf的输出格式，数据的组织和记录，都比apt效果好。`yumex-dnf`图形界面管理*安装细节*和*仓库*。dnf的查看历史信息尤其方便。增量安装不错。kernel自动维持3个，不用管理。一改以前rpm的坏印象，dnf比apt好啊。
 > 增量 RPM 将 194.5 MB 的更新减少至 19.2 MB
+keepass instead of qtpass
 
 ### 关联mplayer到媒体格式
 查找有相关文件(*/命令，我猜出来的用法)的包，并安装。
@@ -92,7 +93,7 @@ lrwxrwxrwx. 1 eexpss 30 05-02 11:17 /home/eexpss/.local/share/Steam -> /home/eex
 ### nautilus图标缺省太大了
 `▶ gsettings set org.gnome.nautilus.icon-view default-zoom-level standard`
 
-### 安装openh264解码器(仅firefox)
+### 安装openh264解码器(仅firefox) [seems not need in fedora 27, firefox works on youtube but not youku]
 
 [wiki](https://fedoraproject.org/wiki/OpenH264)
 ```
@@ -102,8 +103,12 @@ $ sudo dnf install mozilla-openh264 gstreamer1-plugin-openh264
 firefox的`about:addons->插件`里面，打开思科授权的opneh264编码器。可以看youtube了。
 
 ### 在Fedora上激活RPMFusion存储库(媒体解码器相关的软件都在这里)
-	▶ sudo rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm
-安装了gstreamer1-plugins-ugly(包含了x264-libs)，还自动安装了另外一个multimedia(GStreamer Multimedia Codecs - libav)的解码器，totem就都正常了。看来关键是激活这个软件仓库。
+	▶ sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+> https://rpmfusion.org/Configuration
+
+安装了gstreamer1-plugins-ugly(包含了x264-libs)，还自动安装了另外一个multimedia(GStreamer Multimedia Codecs - *libav*)(must install in F27)的解码器，totem就都正常了。看来关键是激活这个软件仓库。
+
 
 ### 迁移密钥
 	▶ cd oldmachine_home/.gnupg; cp pubring.gpg secring.gpg ~/.gnupg/
@@ -136,6 +141,9 @@ gpg: [stdin]: encryption failed: 不可用公钥
 2 sessions listed.
 ▶ loginctl show-session c1 -p Type
 Type=wayland
+▶ echo $XDG_SESSION_TYPE
+wayland
+
 ```
 ### man less 颜色问题
 设置LESS_TERMCAP无效。虽然most可替代，但是不灵活，并且没有粗体。需要下行设置。
