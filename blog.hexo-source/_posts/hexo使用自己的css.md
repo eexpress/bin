@@ -6,10 +6,10 @@ tags:
 - hexo
 ---
 ```
-cd blog.hexo/themes/yilia/source/css
+▶ cd blog.hexo/themes/yilia/source/css
 ▶ ln ~/bin/mkd/mkd.css .
 ▶ cp style.styl style.styl.org
 ▶ echo -e '\n\n@import "mkd.css";'>>style.styl
-
+▶ hexo clean; hexo d -g
 ```
 奇怪的是，有些样式没有被覆盖。
