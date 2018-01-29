@@ -37,6 +37,8 @@ vnoremap [p <esc>`>a]<esc>`<i[<esc>i
 vnoremap (( <esc>`>a)<esc>`<i(<esc>i
 vnoremap {{ <esc>`>a}<esc>`<i{<esc>i
 
+"saving as sudo, only works with vim, not gvim.
+map <leader>rw <esc>:w !sudo tee > /dev/null %<CR>
 map <expr> rcw Replace_Current_Word()
 map <expr> <C-w> Replace_Current_Word()
 "=========================

@@ -34,7 +34,7 @@ alias f='free -h|cut -b -43'
 alias g='grep --color=always -Pi 2>/dev/null'
 #alias g='grep --color=always -inTZE 2>/dev/null'
 alias v='/usr/bin/gvim --remote-silent-tab'
-alias sv='sudo /usr/bin/gvim --remote-silent-tab'
+alias sv='sudo /usr/bin/vim'
 alias k='pkill -9 -f'
 
 alias ls='/usr/bin/ls --color=auto'
