@@ -6,6 +6,7 @@ set -o vi
 alias di='sudo dnf install'
 alias dr='sudo dnf remove'
 alias du='sudo dnf update'
+alias du0='sudo dnf update --refresh'
 alias da='sudo dnf autoremove'
 alias ds='dnf search'
 alias dinfo='dnf info'
