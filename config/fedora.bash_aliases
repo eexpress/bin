@@ -82,13 +82,20 @@ export GROFF_NO_SGR=1	#fix no color in Fedora 25
 #-------ENVIROMENT SET-----------------------------
 export PATH=$HOME/bin:$PATH
 export CDPATH=:~:~/bin
-pc0='\[\e[1;32;40m\]'
-pc00=`tput bold; tput setaf 2; tput setab 0;`
-pc1='\[\e[1;37;42m\]'
-pc01=`tput bold; tput setaf 7; tput setab 2;`
-pc2='\[\e[m\]'
-pc02=`tput sgr0`
-PS1="$pc00\D{%Y-%m-%d %a} \t \H $pc01 \w $pc02 \n▶ "
+
+#-------PS1 COLOR----------------------------------
+#pc0='\[\e[1;32;40m\]'
+#pc1='\[\e[1;37;42m\]'
+#pc2='\[\e[m\]'
+	darkgreen="0x16"	#dark green
+	gray="0xee"	#light gray
+	green_gray=`tput setaf 2; tput setab $gray;`
+	allgray=`tput setaf $gray; tput setab $gray;`
+	gray_green=`tput setaf 0xfa; tput setab $darkgreen;`
+	allgreen=`tput setaf $darkgreen; tput setab $darkgreen;`
+	setbold=`tput bold;`
+	setnone=`tput sgr0`
+	PS1="$setbold$gray_green \D{%Y-%m-%d %a} \t$allgreen🡺$green_gray  \H $allgray🡺$gray_green  \w$allgreen🡺$setnone \n▶ "
 
 #-------HISTORY------------------------------------
 shopt -s histappend
