@@ -83,6 +83,11 @@ export GROFF_NO_SGR=1	#fix no color in Fedora 25
 export PATH=$HOME/bin:$PATH
 export CDPATH=:~:~/bin
 
+#-------ENCFS--------------------------------------
+encfs_dir="encfs-eexp"
+alias encfs1="encfs ~/.$encfs_dir ~/$encfs_dir"
+alias encfs0="fusermount -u ~/$encfs_dir"
+
 #-------PS1 COLOR----------------------------------
 #pc0='\[\e[1;32;40m\]'
 #pc1='\[\e[1;37;42m\]'
