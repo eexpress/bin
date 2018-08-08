@@ -3,19 +3,21 @@
 set -o vi
 
 #-------ALIAS------------------------------------
+##-------- SOFTWARE PACKAGE MANAGER --------
 alias di='sudo dnf install'
 alias dr='sudo dnf remove'
 alias du='sudo dnf update'
 alias du0='sudo dnf update --refresh'
 alias da='sudo dnf autoremove'
 alias ds='dnf search'
+alias dsi='dnf list installed|grep --color=always'
 alias dinfo='dnf info'
 alias dfile='dnf repoquery -l'
-alias dp='dnf whatprovides'
+alias dp='dnf provides'
 alias dfile1='rpm -q --filesbypkg'
 alias dh='sudo dnf history'
-alias dinstalled='dnf list installed'
-alias dlist='dnf list'
+#alias dinstalled='dnf list installed'
+#alias dlist='dnf list'
 
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'
