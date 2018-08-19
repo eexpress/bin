@@ -12,7 +12,7 @@ echo ":computer:  磁盘使用状况"
 #| sed 's/^/-- /g'
 
 echo "------------------------"
-echo -n "最新接入的设备名\t"
+echo -ne "最新接入的设备\t\t\x1b[1;32m "
 
 OUT=$(dmesg|grep '\<Product:'|tail -n 1|grep -v '\ 1\.'|sed 's/.*://')
 case $OUT in
@@ -23,8 +23,9 @@ case $OUT in
 *)
 	DEV=computer;;
 esac
-OUT=$OUT"|iconName=$DEV font=monospace"
-echo $OUT
+OUT=$OUT" \x1b[0m | ansi=true iconName=$DEV font='Blogger Sans Medium' size=12"
+#OUT=$OUT"|iconName=$DEV font=monospace"
+echo -e $OUT
 
 echo "------------------------"
 echo ":computer:  最高占用"
