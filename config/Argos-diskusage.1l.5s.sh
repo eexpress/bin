@@ -12,7 +12,8 @@ echo ":computer:  磁盘使用状况"
 #| sed 's/^/-- /g'
 
 echo "------------------------"
-echo -ne "最新接入的设备\t\t\x1b[1;32m "
+#echo -ne "最新接入的设备\t\t\e[38;5;6m "	#no support for 256 color?
+echo -ne "最新接入的设备\t\t\e[1;2;36m "
 
 OUT=$(dmesg|grep '\<Product:'|tail -n 1|grep -v '\ 1\.'|sed 's/.*://')
 case $OUT in
@@ -23,7 +24,7 @@ case $OUT in
 *)
 	DEV=computer;;
 esac
-OUT=$OUT" \x1b[0m | iconName=$DEV font='Blogger Sans Medium' size=12"
+OUT=$OUT" \e[0m | iconName=$DEV font='Blogger Sans Medium' size=12"
 echo -e $OUT
 
 echo "------------------------"
