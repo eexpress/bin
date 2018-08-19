@@ -23,8 +23,7 @@ case $OUT in
 *)
 	DEV=computer;;
 esac
-OUT=$OUT" \x1b[0m | ansi=true iconName=$DEV font='Blogger Sans Medium' size=12"
-#OUT=$OUT"|iconName=$DEV font=monospace"
+OUT=$OUT" \x1b[0m | iconName=$DEV font='Blogger Sans Medium' size=12"
 echo -e $OUT
 
 echo "------------------------"

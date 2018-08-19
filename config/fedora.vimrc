@@ -13,8 +13,9 @@ set display+=lastline
 set encoding=utf-8
 set fencs=utf-8,gb18030,ucs-bom,utf-16,big5
 set fenc=utf-8
-set guifont=Nimbus\ Mono\ PS\ Bold\ 14
-set guifont=FreeMono\ Bold\ 14
+"set guifont=Nimbus\ Mono\ PS\ Italic\ 14
+"set guifont=Blogger\ Sans\ Medium\ Italic\ 14
+set guifont=FreeMono\ 14
 "set guifont=Courier\ 10\ Pitch\ 14
 " 设置高亮搜索
 set hlsearch
