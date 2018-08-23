@@ -8,10 +8,10 @@ int main(int argc, char* argv[]) {
     if (argc < 2){printf("Usage: %s file (decrypt)\n使用常数种子字节，异或一段文件头。文件名后面多带一个参数表示解密。\n", argv[0]); return 1;}
 
     FILE* file = fopen(argv[1], "rb+");
-    if (file == NULL)
-	{printf("Error opening file for writing.\n"); return 2;}
+	if (file == NULL)
+		{printf("Error opening file for writing.\n"); return 2;}
 
-	fread(buffer, 1, BUFFER_SIZE, file);
+		fread(buffer, 1, BUFFER_SIZE, file);
 
 	if (argc < 3){
 		printf("Encrypt.\n");
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 
 	fseek(file,0,SEEK_SET);
 	fwrite(buffer, 1, BUFFER_SIZE, file);
-    fclose(file);
-    return 0;
+	fclose(file);
+	return 0;
 }
 

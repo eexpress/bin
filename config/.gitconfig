@@ -40,5 +40,5 @@
 	quotepath = false
 ;     pager = cat
 	pager = less -r
-; [diff]
-;     tool = meld
+[diff]
+    tool = meld

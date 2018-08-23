@@ -1,52 +1,27 @@
-" 开启语法高亮
-"syntax on 
-colo desert
-hi PmenuSel ctermfg=7 ctermbg=4 guibg=darkgreen guifg=white
-set number
-set autochdir
-set cindent
-set mouse=a
+colo evening 		" 配色主题	desert
+set guifont=Input\ Mono\ Italic\ 14
+set number 			" 显示行号
 set ignorecase		" 搜索忽略大小写
-set smartcase
-set display+=lastline
-" 设置文字编码自动识别
-set encoding=utf-8
-set fencs=utf-8,gb18030,ucs-bom,utf-16,big5
-set fenc=utf-8
-set guifont=Input\ Mono\ 14
-" 设置高亮搜索
-set hlsearch
 set incsearch		" 输入字符串就显示匹配点
-set tabstop=4
-set shiftwidth=4
-"状态栏
-set laststatus=2
-set statusline=
-set statusline+=%-20f
-set statusline+=%10.{&encoding}
-set statusline+=\ \ \ \ (%3.l,%3.c)[0x%2B]/共%L行\ %4.p%%\ %10.y
+
 " 关闭窗口/保存文件
 map <leader>q	<Esc>:q!<CR>
 map <C-u>	:update<CR>
 imap <C-u>	<Esc>:update<CR>a
-"自动补全括号
+" 输入时自动补全括号
 imap ( ()<ESC>i
 imap { {}<ESC>i
 imap [ []<ESC>i
-vnoremap [p <esc>`>a]<esc>`<i[<esc>i
+" 选择文字，用括号包起
 vnoremap (( <esc>`>a)<esc>`<i(<esc>i
 vnoremap {{ <esc>`>a}<esc>`<i{<esc>i
-
-"saving as sudo, only works with vim, not gvim.
-map <leader>rw <esc>:w !sudo tee > /dev/null %<CR>
-map <expr> rcw Replace_Current_Word()
+" 全局替换当前单词
 map <expr> <C-w> Replace_Current_Word()
-"=========================
 func Replace_Current_Word()
 	let w = expand("<cword>")
 	return "\<ESC>:%s/\\<".w."\\>/".w."/g\<Left>\<Left>"
 endfun
-"=========================
+" 智能tab，补全或输入TAB
 inoremap <expr> <Tab> MyTab()
 fun MyTab()
 	let str=strpart(getline("."), 0, col(".")-1)
@@ -57,5 +32,5 @@ fun MyTab()
 endfun
 "============= Mimetype ============
 "新脚本自动加类型
-au BufNewFile *.bash	0put='#!/bin/bash'|setf bash|normal Go
+au BufNewFile *.bash,*.sh	0put='#!/bin/bash'|setf bash|normal Go
 au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
