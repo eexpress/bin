@@ -84,9 +84,9 @@ code {
 /*    inline code必须要背景*/
 	background-color:#333;
 	color: #eee;
-	font-family: 'Courier 10 Pitch',"Courier New",Monospace;
+	font-family: 'Fira Mono',"Courier Prime",Monospace;
 	text-shadow: none;
-	font-weight:bold;
+/*        font-weight:bold;*/
 	font-style: normal;
 }
 blockquote {
