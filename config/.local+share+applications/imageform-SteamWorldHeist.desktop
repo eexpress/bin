@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=SteamWorld Heist
-Comment=A tactical, turned based, free aiming game.
-Type=Application
-Exec="/home/eexpss/Game/Linux/SteamWorld Heist/game/play.sh"
-TryExec=/home/eexpss/Game/Linux/SteamWorld Heist/game/play.sh
-Icon=imageform-SteamWorldHeist
-Categories=Game;

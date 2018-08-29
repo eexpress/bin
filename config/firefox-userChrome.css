@@ -1,0 +1,10 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* only needed once */
+
+/*http://kb.mozillazine.org/UserChrome.css_Element_Names/IDs#Firefox_menus*/
+
+#context_sendTabToDevice, /* 把标签页发送到设备 */
+#context-viewpartialsource-selection,
+/*#context-viewpartialsource-mathml,*/
+#context-viewsource,
+#context-sep-viewinfo {display: none !important;}
+
