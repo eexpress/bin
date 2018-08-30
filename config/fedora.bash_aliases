@@ -61,7 +61,7 @@ alias unzip="unzip -O CP936"
 c(){ echo $1|bc -l; }
 cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
-o(){ xdg-open ${1:-"`xsel -o|sed -e "s.^~.$HOME." -e "s/\ /\\\ /g" -e "s/\n.*//"`"}; }
+o(){ xdg-open ${1:-"`xclip -o|sed -e "s.^~.$HOME." -e "s/\ /\\\ /g" -e "s/\n.*//"`"}; }
 s(){ highlight --force -O ansi $1 | /usr/bin/less -iR; }
 u(){ /usr/bin/du -sch "$@"|sort -rh; }
 

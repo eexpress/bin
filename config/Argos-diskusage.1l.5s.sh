@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+bar(){ # input: Total, Used
+	div=10; Total=${1%G}; Used=${2%G}
+	if [ $Total -lt 100 ]; then div=5; fi
+	Total=$[$Total/$div]; Used=$[$Used/$div]
+	green='\e[1;32m'; end='\e[0m'; red='\e[1;31m'
+#        echo -e "$red"
+	for (( i=0; i<$Total; i++ )); do
+		if [ $i -eq $Used ]; then echo -en "$green"; fi
+		echo -n "■"
+	done
+	echo -e "$end"
+}
+
 echo "▶  系统信息"
 #loop 3 seconds
 #echo "▶  System Info"
@@ -8,8 +21,10 @@ echo "---"
 #if [ "$ARGOS_MENU_OPEN" == "true" ]; then
 echo ":computer:  磁盘使用状况"
 
-/usr/bin/df -h --output=source,fstype,size,used,pcent,target | sed '/tmpfs/d; /boot/d; s./dev/..; s/$/| font=monospace iconName=drive-harddisk/g'
-#| sed 's/^/-- /g'
+/usr/bin/df -h --output=source,fstype,size,used,pcent,target | sed '/tmpfs/d; /boot/d; s./dev/..; s/$/| font=monospace iconName=drive-harddisk/g' \
+| awk '{print $0; if($4~/[0-9]+G/) \
+{printf("%s\n", "'"`bar $3 $4`"'")}}'
+#{printf("%s\n", "-----"$3"----"$4"----->\n")}}'
 
 echo "------------------------"
 #echo -ne "最新接入的设备\t\t\e[38;5;6m "	#no support for 256 color?
