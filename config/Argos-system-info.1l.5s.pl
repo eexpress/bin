@@ -45,21 +45,27 @@ switch($re){
 	case /Webcam/	{$DEV="camera-web"}
 	else 		{$DEV="computer"}
 }
-print "$re $end\| iconName=$DEV font='Blogger Sans Medium' size=12\n";
+print "$re $end\| iconName=$DEV font='Blogger Sans Medium'\n";
 
 print "------------------------\n";
 #print ":computer:  最高占用\n";
 
-@info=`top -bn 1|head -n 11|tail -n 5`;
-foreach(@info){
-	$_="  $_";
-	@item=split "\ +"; $item[12]=~s/\n//;
-	print "$item[1]\t\t$item[9]\t$item[10]\t$item[12] | iconName=dialog-warning\n"; 
+@info=`top -bn 1|head`; 	# head only for short array
+foreach(@info[6..9]){
+#        $_="  $_";	# avoid for long pid: ^22035
+#        @item=split "\ +"; $item[12]=~s/\n//;
+($pid,undef,undef,undef,undef,undef,undef,undef,$cpu,$mem,undef,$command)=split;
+#($pid,$user,$pr,$ni,$virt,$res,$shr,$s,$cpu,$mem,$time,$command)=split;
+#        ($pid,,,,,,,,$cpu,$mem,,$command)=split;
+	print "$pid\t\t$cpu\t$mem\t$command | iconName=dialog-warning\n"; 
+#        print "$item[1]\t\t$item[9]\t$item[10]\t$item[12] | iconName=dialog-warning\n"; 
 }
+#▶ top -bn 1|perl -ne 'print if /TIME+/ .. /kthreadd/' # range operator
 
 print "------------------------\n";
 #print "网络信息\t\t\n";
-@item=split "\ +",`ip route | grep -m 1 '0/24'`;
+@item=split "\ +", (grep m'0/24', `ip route`)[0];
+#@item=split "\ +",`ip route | grep -m 1 '0/24'`;
 $item[8]=~s/\.(\d+)$/.$lightblue\1$end/;
 print "网络设备名：$item[2]\t\t地址：$item[8] | iconName=network-wireless\n";
 
