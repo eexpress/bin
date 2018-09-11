@@ -63,6 +63,7 @@ cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
 o(){ xdg-open ${1:-"`xclip -o|sed -e "s.^~.$HOME." -e "s/\ /\\\ /g" -e "s/\n.*//"`"}; }
 s(){ highlight --force -O ansi $1 | /usr/bin/less -iR; }
+#▶ highlight -S bash -O svg  -u utf8 -k "Fira Mono" -K 24 -l -j 2 -W bin/y --width 600 -o t.svg -z -s autumn
 u(){ /usr/bin/du -sch "$@"|sort -rh; }
 
 alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors;hddtemp -q'
