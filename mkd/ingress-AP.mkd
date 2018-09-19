@@ -11,16 +11,16 @@ table {
 
 Ingress AP Table
 ===================
-操作|	行動點(AP)|	備註
+操作|	行动点(AP)|	备注
 ----|----|----
-Place a resonator|	125 AP|	在中立/自己陣營的Portal裡按Deploy，每個可獲得125AP
-Place the first resonator on a portal|	500 AP|	設置第一個Resonator可獲得500AP
-Place the eighth resonator on a portal|	250 AP|	設置最後一個Resonator可獲得250AP
+Place a resonator|	125 AP|	在中立/自己阵营的Portal里按Deploy，每个可获得125AP
+Place the first resonator on a portal|	500 AP|	设置第一个Resonator可获得500AP
+Place the eighth resonator on a portal|	250 AP|	设置最后一个Resonator可获得250AP
 125*8+500+250 --> |1750 AP|放满一个点的八个脚
-Create a link|	313 AP|	把2個Portal用Link(需要Portal Key)連結可獲得313AP
-Create a control field|	1250 AP|	用Link連結後形成三角形的Control Field可獲得1250AP
+Create a link|	313 AP|	把2个Portal用Link(需要Portal Key)连结可获得313AP
+Create a control field|	1250 AP|	用Link连结后形成三角形的Control Field可获得1250AP
 1750*3+313*3+1250 --> |7439 AP|全新建立一个场
-Hack an enemy portal|	100 AP|	在敵方Portal按Hack，可獲得100AP，另外有機會獲得道具
-Destroy a resonator|	75 AP|	消滅敵方Resonator，每個可獲得75AP
-Destroy a link|	187 AP|	消滅敵方Portal時，從而斷Link，每次可獲得187AP
-Destroy a control field|	750 AP|	消滅敵方Portal時，從而毀滅敵人的Control Field,每個可獲得750AP
+Hack an enemy portal|	100 AP|	在敌方Portal按Hack，可获得100AP，另外有机会获得道具
+Destroy a resonator|	75 AP|	消灭敌方Resonator，每个可获得75AP
+Destroy a link|	187 AP|	消灭敌方Portal时，从而断Link，每次可获得187AP
+Destroy a control field|	750 AP|	消灭敌方Portal时，从而毁灭敌人的Control Field,每个可获得750AP
