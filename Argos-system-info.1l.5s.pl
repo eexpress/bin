@@ -26,14 +26,15 @@ print "---\n";
 #if [ "$ARGOS_MENU_OPEN" == "true" ]; then
 #print ":computer:  磁盘使用状况\n";
 
-@info=`/usr/bin/df -h --output=source,fstype,size,used,pcent,target | sed '/tmpfs/d; /boot/d; s./dev/..;'`;
+#@info=`/usr/bin/df -h --output=source,fstype,size,used,pcent,target | sed '/tmpfs/d; /boot/d; s./dev/..;'`;
+@info=`/usr/bin/df -h -t ext4|sed "s./dev/..; s.     容量.容量."`;
 
 $format="| iconName=drive-harddisk" if ! $tty;
 print $info;
 foreach(@info){
 	s/\n//;	print "$_$format\n";
 	@item=split "\ +";
-	bar($item[2],$item[3]) if $item[2]=~/\d+G/ ;
+	bar($item[1],$item[2]) if $item[1]=~/\d+G/ ;
 }
 
 print "------------------------\n";
