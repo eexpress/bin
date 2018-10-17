@@ -70,11 +70,9 @@ foreach(@info[6..9]){
 print "------------------------\n";
 $format="\| iconName=network-wireless" if ! $tty;
 #print "网络信息\t\t\n";
-@item=split /\ +/, (grep m'0/24', `ip route`)[0];
-#@item=split "\ +",`ip route | grep -m 1 '0/24'`;
-#$item[8]=~s/\.(\d+)$/.$lightblue\1$end/;
-#print "网络设备名：$item[2]\t\t地址：$item[8]$format\n";
-@ip=split /\./, $item[8];
-print "网络设备名：$item[2]\t\t地址：$ip[0].$ip[1].$green$ip[2].$lightblue$ip[3]$end$format\n";
-
+#$_=(grep m'0/24', `ip route`)[0];
+$_=`ip route`;
+m"0/24 dev (\S*).*src (\S*)";
+@ip=split /\./, $2;
+print "网络设备名：$1\t\t地址：$ip[0].$ip[1].$green$ip[2].$lightblue$ip[3]$end$format\n";
 
