@@ -55,24 +55,19 @@ print "------------------------\n";
 #print ":computer:  最高占用\n";
 
 $format="\| iconName=dialog-warning" if ! $tty;
-@info=`top -bn 1|head`; 	# head only for short array
-foreach(@info[6..9]){
-#        $_="  $_";	# avoid for long pid: ^22035
-#        @item=split "\ +"; $item[12]=~s/\n//;
+@info=`top -bn 1|head -n 12`; 	# head only for short array
+foreach(@info[6..11]){
 ($pid,undef,undef,undef,undef,undef,undef,undef,$cpu,$mem,undef,$command)=split;
-#($pid,$user,$pr,$ni,$virt,$res,$shr,$s,$cpu,$mem,$time,$command)=split;
-#        ($pid,,,,,,,,$cpu,$mem,,$command)=split;
-	print "$pid\t\t$cpu\t$mem\t$command$format\n"; 
-#        print "$item[1]\t\t$item[9]\t$item[10]\t$item[12] | iconName=dialog-warning\n"; 
+	next if $command eq "top" or $cpu eq "0.0"; 
+	print "$pid\t\t$cpu\t$mem\t$command$format\n";
 }
 #▶ top -bn 1|perl -ne 'print if /TIME+/ .. /kthreadd/' # range operator
 
 print "------------------------\n";
 $format="\| iconName=network-wireless" if ! $tty;
-#print "网络信息\t\t\n";
 #$_=(grep m'0/24', `ip route`)[0];
 $_=`ip route`;
-m"0/24 dev (\S*).*src (\S*)";
-@ip=split /\./, $2;
-print "网络设备名：$1\t\t地址：$ip[0].$ip[1].$green$ip[2].$lightblue$ip[3]$end$format\n";
+m"0/24 dev (?<dev>\S*).*src (?<ip>\S*)";	#命名捕获
+@ip=split /\./, $+{ip};
+print "网络设备名：$+{dev}\t\t地址：$ip[0].$ip[1].$green$ip[2].$lightblue$ip[3]$end$format\n";
 
