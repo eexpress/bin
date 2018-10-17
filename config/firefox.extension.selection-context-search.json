@@ -8,7 +8,8 @@
       "id": 1,
       "contexts": [
         "selection"
-      ]
+      ],
+      "popup": true
     },
     {
       "type": "link",
@@ -17,7 +18,8 @@
       "id": 2,
       "contexts": [
         "selection"
-      ]
+      ],
+      "popup": true
     },
     {
       "type": "link",
@@ -26,7 +28,8 @@
       "id": 3,
       "contexts": [
         "selection"
-      ]
+      ],
+      "popup": true
     },
     {
       "type": "link",
@@ -39,9 +42,9 @@
     },
     {
       "type": "link",
-      "name": "Google图片",
-      "address": "http://www.google.com/images?q=",
-      "id": 5,
+      "name": "pirate bay",
+      "address": "https://thepiratebay.bet/s/?q=",
+      "id": 23,
       "contexts": [
         "selection"
       ]
@@ -65,199 +68,176 @@
       ]
     },
     {
-      "type": "separator",
-      "id": 8,
-      "contexts": [
-        "selection"
+      "type": "folder",
+      "name": "图片",
+      "id": 35,
+      "icon": "",
+      "folder": [
+        {
+          "type": "link",
+          "name": "Baidu Image",
+          "address": "https://image.baidu.com/search/index?tn=baiduimage&ie=utf-8&word=",
+          "contexts": [
+            "selection"
+          ],
+          "id": 32
+        },
+        {
+          "type": "link",
+          "name": "Google图片",
+          "address": "http://www.google.com/images?q=",
+          "id": 5,
+          "contexts": [
+            "selection"
+          ]
+        }
       ]
     },
     {
       "type": "folder",
       "name": "翻译",
-      "folder": [],
+      "folder": [
+        {
+          "type": "link",
+          "name": "有道翻译",
+          "address": "http://dict.youdao.com/search?q=",
+          "contexts": [
+            "selection"
+          ],
+          "id": 31,
+          "popup": true
+        },
+        {
+          "type": "link",
+          "name": "百度翻译",
+          "address": "http://fanyi.baidu.com/#en/zh/",
+          "id": 11,
+          "contexts": [
+            "selection"
+          ]
+        },
+        {
+          "type": "link",
+          "name": "Bing翻译",
+          "address": "https://www.bing.com/dict/search?q=",
+          "id": 12,
+          "contexts": [
+            "selection"
+          ]
+        }
+      ],
       "id": 9
     },
     {
-      "type": "link",
-      "name": "有道翻译",
-      "address": "http://www.youdao.com/w/eng/",
-      "id": 10,
-      "contexts": [
-        "selection"
+      "type": "folder",
+      "name": "视频",
+      "id": 34,
+      "icon": "",
+      "folder": [
+        {
+          "type": "link",
+          "name": "优酷",
+          "address": "http://www.soku.com/v?keyword=",
+          "id": 15,
+          "contexts": [
+            "selection"
+          ],
+          "popup": true
+        },
+        {
+          "type": "link",
+          "name": "YouTube",
+          "address": "http://www.youtube.com/results?search_query=",
+          "id": 14,
+          "contexts": [
+            "selection"
+          ]
+        }
       ]
     },
     {
-      "type": "link",
-      "name": "百度翻译",
-      "address": "http://fanyi.baidu.com/#en/zh/",
-      "id": 11,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "Bing翻译",
-      "address": "https://www.bing.com/dict/search?q=",
-      "id": 12,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "separator",
-      "id": 13,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "YouTube",
-      "address": "http://www.youtube.com/results?search_query=",
-      "id": 14,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "优酷",
-      "address": "http://www.soku.com/v?keyword=",
-      "id": 15,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "separator",
-      "id": 16,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "百度百科",
-      "address": "https://baike.baidu.com/item/",
-      "id": 17,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "Wikipedia百科",
-      "address": "http://zh.wikipedia.org/wiki/",
-      "id": 18,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "Wikipedia",
-      "address": "http://en.wikipedia.org/wiki/",
-      "id": 19,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "separator",
-      "id": 20,
-      "contexts": [
-        "selection"
+      "type": "folder",
+      "name": "百科",
+      "id": 33,
+      "icon": "",
+      "folder": [
+        {
+          "type": "link",
+          "name": "维基百科",
+          "address": "http://zh.wikipedia.org/wiki/",
+          "id": 18,
+          "contexts": [
+            "selection"
+          ]
+        },
+        {
+          "type": "link",
+          "name": "Wikipedia",
+          "address": "http://en.wikipedia.org/wiki/",
+          "id": 19,
+          "contexts": [
+            "selection"
+          ]
+        },
+        {
+          "type": "link",
+          "name": "百度百科",
+          "address": "https://baike.baidu.com/item/",
+          "id": 17,
+          "contexts": [
+            "selection"
+          ]
+        }
       ]
     },
     {
       "type": "folder",
       "name": "游戏",
-      "folder": [],
+      "folder": [
+        {
+          "type": "link",
+          "name": "游戏堡",
+          "address": "http://so.yxbao.com/cse/search?q=",
+          "id": 24,
+          "contexts": [
+            "selection"
+          ]
+        },
+        {
+          "type": "link",
+          "name": "游侠",
+          "address": "http://so.ali213.net/?keyword=",
+          "id": 25,
+          "contexts": [
+            "selection"
+          ]
+        },
+        {
+          "type": "link",
+          "name": "Steam游戏",
+          "address": "http://store.steampowered.com/search/?term=",
+          "id": 26,
+          "contexts": [
+            "selection"
+          ]
+        },
+        {
+          "type": "link",
+          "name": "3dm游戏",
+          "address": "http://so.3dmgame.com/?type=0&keyword=",
+          "id": 22,
+          "contexts": [
+            "selection"
+          ]
+        }
+      ],
       "id": 21
-    },
-    {
-      "type": "link",
-      "name": "3dm游戏",
-      "address": "http://so.3dmgame.com/?type=0&keyword=",
-      "id": 22,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "pirate bay",
-      "address": "https://thepiratebay.bet/s/?q=",
-      "id": 23,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "游戏堡",
-      "address": "http://so.yxbao.com/cse/search?q=",
-      "id": 24,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "游侠",
-      "address": "http://so.ali213.net/?keyword=",
-      "id": 25,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "link",
-      "name": "Steam游戏",
-      "address": "http://store.steampowered.com/search/?term=",
-      "id": 26,
-      "contexts": [
-        "selection"
-      ]
-    },
-    {
-      "type": "separator",
-      "contexts": [
-        "selection",
-        "page",
-        "frame",
-        "tab"
-      ],
-      "id": 27
-    },
-    {
-      "type": "bookmarks",
-      "address": "Bookmarks Menu\\Search",
-      "contexts": [
-        "selection"
-      ],
-      "id": 28
-    },
-    {
-      "type": "separator",
-      "contexts": [
-        "selection"
-      ],
-      "id": 29
-    },
-    {
-      "type": "placeholders",
-      "contexts": [
-        "selection"
-      ],
-      "id": 30
     }
   ],
   "sMenuLabel": "选择搜索引擎",
   "bShowPopup": true,
   "iPopupMaxColumns": 6,
-  "iPopupIconSize": 21,
+  "iPopupIconSize": 16,
   "bClosePopupOnClick": true,
   "bClosePopupOnScroll": true,
   "bClosePopupOnTimeout": true,
