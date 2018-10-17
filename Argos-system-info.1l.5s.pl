@@ -33,7 +33,7 @@ $format="| iconName=drive-harddisk" if ! $tty;
 print $info;
 foreach(@info){
 	s/\n//;	print "$_$format\n";
-	@item=split "\ +";
+	@item=split /\ +/;
 	bar($item[1],$item[2]) if $item[1]=~/\d+G/ ;
 }
 
@@ -70,8 +70,11 @@ foreach(@info[6..9]){
 print "------------------------\n";
 $format="\| iconName=network-wireless" if ! $tty;
 #print "网络信息\t\t\n";
-@item=split "\ +", (grep m'0/24', `ip route`)[0];
+@item=split /\ +/, (grep m'0/24', `ip route`)[0];
 #@item=split "\ +",`ip route | grep -m 1 '0/24'`;
-$item[8]=~s/\.(\d+)$/.$lightblue\1$end/;
-print "网络设备名：$item[2]\t\t地址：$item[8]$format\n";
+#$item[8]=~s/\.(\d+)$/.$lightblue\1$end/;
+#print "网络设备名：$item[2]\t\t地址：$item[8]$format\n";
+@ip=split /\./, $item[8];
+print "网络设备名：$item[2]\t\t地址：$ip[0].$ip[1].$green$ip[2].$lightblue$ip[3]$end$format\n";
+
 

@@ -31,7 +31,9 @@ alias myip='curl ipinfo.io'
 alias ps='/bin/ps -u `id -un` -o pid,command'
 alias pg='pgrep -af'
 alias pl='perl -ple'
-alias dlna='rygel'
+#Digital Media Server + Player(Controller + Renderer)
+alias dlna-dmserver='rygel'
+alias dlna-dmcontroller='gupnp-av-cp'
 
 #alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs'
 #alias d='/usr/bin/df -h --output=source,fstype,size,used,pcent,target | sed "s/     类型/类型/; /tmpfs/d; /boot/d; s./dev/..;"'
@@ -53,7 +55,7 @@ alias lss='ls -oAh --time-style=iso -S'		# size
 alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
 alias ggit='cd ~/bin;/usr/bin/git'
 
-alias dl="$HOME/bin/app/you-get/you-get"
+alias dl="$HOME/bin/app/git.clone.you-get/you-get"
 alias dlp="dl -p mplayer"
 alias dl0="dl -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/mjm952n2.default/cookies.sqlite'"
 
