@@ -1,18 +1,15 @@
+//'google', 'gstatic', 'google-analytics', 'googleapis', 'googleusercontent', 'googlecode.com', 'googlevideo.com', 
+
 var darr = [
-'google', 'gstatic', 'google-analytics', 'googleapis',
-'googleusercontent', 'googlecode.com', 'youtube', 'chrome.com',
-'gmail', 'sstatic.net', 'github', 'googlevideo.com', 'torproject.org',
-'twitter', 'twimg', 'doubleclick.net', 'cyanogenmod', 'ytimg',
-'tumblr.com', 'recaptcha.net', 'imgchili.net', 'inoreader.com',
-'ingress', 'appspot.com', 'telegram.org', 'webupd8.org', 't.me',
-'thepiratebay',	'wikipedia.org', 'resilio.com', 'bbc.com', 'wuw.red',
-'pastebin.com', 'disqus.com', 'githubusercontent.com', 'pussl3',
-'blogblog', 'blogger', 'wordpress', 'blogspot', 'feedburner.com',
-'instagram', 'facebook', 'opera', 'wikipedia', 'amazonaws.com',
-'linuxtor.org', 'tapatalk.com', 'viewdns.info', 'f-droid.org', 'pinimg.com',
-'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp', 'youtu.be',
-'feedburner.com', 'doubleclick.net', 'pinterest.com', 'duckduckgo.com', 
-'apkpure.com', 'alternativeto.net', 'evozi.com', 'wire.com', 'apkmirror.com',
+'google*', 'gstatic', 'gmail', 'sstatic.net', 'recaptcha.net', 
+'youtube', 'chrome.com',
+'pinterest.com', 'pinimg.com',
+'github', 'githubusercontent.com',
+'twitter', 'twimg',
+'disqus.com',  'wordpress', 'blogspot', 'feedburner.com', 'blogblog', 'blogger',
+'thepiratebay',	'wikipedia.org', 'wire.com', 'alternativeto.net',
+'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
+'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',
 ];
 //▶ curl --socks5 127.0.0.1:1080 'http://www.viewdns.info/chinesefirewall/?domain=opensuse.org'|g -o accessible
 

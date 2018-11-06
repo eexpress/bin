@@ -14,14 +14,10 @@ for i in *; do s=`ffmpeg -i "$i" 2>&1|grep -o '[0-9]\{3,\}x[0-9]*'`; mkdir $s; m
 ```
 合并视频，同类编码的才能正确合并。其实可以不输出单引号。perl单行输出单引号，需要技巧。`'\''`或者`\047`。
 ```
-ls *.avi | perl -ne 'chomp; print "file $_";' >/tmp/ffmpeg-merge-file-list
-ffmpeg -f concat -i /tmp/ffmpeg-merge-file-list -c copy Joined.mp4
+ls *.avi | perl -ne 'chomp; print "file '\''$_'\''\n";' > ffmpeg-merge-file-list
+ffmpeg -f concat -i ffmpeg-merge-file-list -c copy Joined.mp4
 
 ls *.avi | perl -ne 'chomp; print "file '\''$_'\''\n";' | ffmpeg -f concat -i - -c copy Joined.mp4
-直接管道，出奇怪的错误
-[file @ 0x556f70c00a20] Protocol not on whitelist 'crypto'!
-[concat @ 0x556f70bf7400] Impossible to open 'xxx.mp4'
-pipe:: Invalid argument
 
 ```
 截取一个片段。
