@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-my $Bred="\e[1;31m"; my $Bblue="\e[1;34m"; my $normal="\e[0m";
+my $Bred="\e[1;31m"; my $Bblue="\e[1;34m"; my $normal="\e[0m"; my $Bgreen="\e[1;32m";
 
 chdir "$ENV{HOME}/bin";
 @_=`git status`;
@@ -22,7 +22,7 @@ if(@_){
 		$_=<STDIN>; chomp;
 	}
 	if(! $_){$_=`date '+%F %T'`; chomp;}
-	print "$normal提交注释为 $Bblue $_ $normal 的更新。\npush....\n";
+	print "$normal提交注释为 $Bblue $_ $normal 的更新。\n${Bgreen}push....$normal\n";
 	`git ci -a -m \"$_\"; git push`;
 	exit;
 }
