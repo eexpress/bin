@@ -22,7 +22,7 @@ if(@_){
 		$_=<STDIN>; chomp;
 	}
 	if(! $_){$_=`date '+%F %T'`; chomp;}
-	print "$normal提交注释为 $Bblue $_ $normal 的更新。\n";
+	print "$normal提交注释为 $Bblue $_ $normal 的更新。\npush....\n";
 	`git ci -a -m \"$_\"; git push`;
 	exit;
 }
