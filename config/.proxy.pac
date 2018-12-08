@@ -13,6 +13,8 @@ var darr = [
 ];
 //▶ curl --socks5 127.0.0.1:1080 'http://www.viewdns.info/chinesefirewall/?domain=opensuse.org'|g -o accessible
 
+// https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
+
 function FindProxyForURL(url, host){
 	var autosocks = 'SOCKS5 localhost:1080';
 	for(var i=0;i<darr.length;i++){
