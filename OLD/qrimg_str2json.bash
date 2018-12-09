@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# ss://base64(method[-auth]:password@server:port/#base64(remark)) right???
 if [ -z "$1" ]; then
 echo "input qrcode image file or ss format string."
 exit
