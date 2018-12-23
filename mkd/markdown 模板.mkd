@@ -20,10 +20,24 @@
 ## 表格居中
 显示|居中|右对齐
 ---------- |:-------:|----------------:
-NO DATA	✘	|	测试	|✔	有效
+<input type="checkbox"/>NO DATA	✘	|	<input type="text" />|✔	有效
+<input type="checkbox"/>NO DATA	✘	|	<input type="radio" name="sex" value="male" />男<input type="radio" name="sex" value="female" />女	|<input type="button" value="button"/>button
 
 ***
+### 有序列表嵌套**多行代码**后，序号不连续。使用tab解决。
 
+1. 有序列表第一层
+1. 有序列表第一层
+> 引用第一层
+> > 引用第二层。
+**回归上层要点：下面需要一个至少空行**
+
+		嵌套的多行代码上面需要一个空行。
+		嵌套的多行代码不能使用```符号包括。使用双tab。
+> 回归引用第一层。**回归上层要点：下面需要一个至少空行**
+
+1. 回归有序列表第一层
+***
 > Markdown 语法的目标是：成为一种适用于网络的书写语言。
 
 [维基百科上的Markdown语法说明](https://zh.wikipedia.org/wiki/Markdown)
