@@ -69,31 +69,32 @@ li:nth-child(2n-1) {
 }
 pre {
 /*        display:block;*/
-/*    overflow:auto;*/
+	overflow:auto;
 /*        width: 90%;*/
 /*        width: auto;*/
 /*        margin-left: 2em;*/
-	background-color:#333!important;
+	background-color:#333 !important;
 /*        padding: 0.1em 0.5em 0.1em 0.5em;*/
 	word-wrap: break-word;
 /*    border-color: #080;*/
 /*    border-style:dotted none;*/
 	border-left:0.5em solid #080;
-	border-radius: 0.8em;	/*对code有效*/
+	border-radius: 0.8em !important;	/*对code有效*/
+	padding: 0em 0em 0em 1.5em;
 }
 code {
 /*    inline code必须要背景*/
-	background-color:#333!important;
-	color: #eee!important;
+	background-color:#333;
+	color: #eee;
 	border-radius: 0.5em;	/*对inline有效*/
-	padding: 0.1em 0.4em 0.1em 0.5em!important;	/*border内部*/
-	margin: 0em 0.1em 0em 0.1em;		/*border外部*/
+	padding: 0.1em 0.4em 0.1em 0.5em;	/*border内部*/
+	margin: 0.1em 0.1em 0.1em 0.1em;		/*border外部*/
 	font-family: 'Fira Mono',"Courier Prime",Monospace;
 	text-shadow: none;
 /*        font-weight:bold;*/
 	font-style: normal;
 	display: inline-block;	/*解决大段代码首字对齐*/
-	border: none!important;
+	border: none;
 }
 blockquote {
 	padding: 0 0 0 1.5em;
@@ -107,7 +108,7 @@ div{
 }
 table {
 	margin: auto;
-	width: 80%;
+	width: 90%;
 }
 table,th,td {
 	padding: 5px 10px 5px 10px;
