@@ -50,3 +50,5 @@ upload
 *.json
 *.mkd
 *.log
+.uuid
+*.ttf
