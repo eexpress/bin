@@ -3,8 +3,8 @@
 cd "$(dirname "$0")"
 d=`pwd`
 for i in `ls -A|grep '^\.'`; do
-# 路径中，+表示斜杠，=表示空格
-l=`echo $i|sed 's.+./.g; s.=.\\\\ .g'`
+# 路径中，+表示斜杠，=表示空格，\后面的是注释，全删除。
+l=`echo $i|sed 's/\\.*//; s.+./.g; s.=.\\\\ .g'`
 cmd="rm ~/$l; ln -sf $d/$i ~/$l"
 echo $cmd
 eval $cmd
