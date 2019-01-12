@@ -26,7 +26,11 @@ fi
 min=`identify -format "%$direct\n" "$@"|sort -n|sed '/^$/d'|head -n 1`
 echo min $direct size is $min
 rm /tmp/$out* >/dev/null
-convert -scale $p$min "$@" /tmp/$out
+n=0; for i in "$@"; do
+convert -scale $p$min "$i" /tmp/$out$n
+((n++))
+done
+
 [[ "$delete" == true ]] && echo rm "$@" && rm "$@"
-montage -tile ${p}1 -geometry +0+0 -background none /tmp/$out* ./montage-$out.png
+montage -tile ${p}1 -geometry +0+0 -background none /tmp/$out* ./montage-$out.jpg
 [ -f "montage-$out.png" ] && echo "montage-$out.png created!"
