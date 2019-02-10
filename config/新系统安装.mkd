@@ -30,6 +30,10 @@ git clone git@github.com:eexpress/bin.git
 > `Ctrl+Shift+T`
 ln -sf /home/eexpss/Home/eexpss/.mozilla/ .
 
+> 如果需要ss
+cd ~/bin/config/
+cp /run/media/eexpss/Home/eexpss/bin/config/ss-v2ray-config/ . -r
+
 > 可省略
 gpg --gen-key
 gpg --gen-revoke FA3A000A

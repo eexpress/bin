@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.1">
+  <head>
+    <title>The Old Reader</title>
+    <dateCreated>Sun, 10 Feb 2019 07:16:32 GMT</dateCreated>
+    <dateModified>Sun, 10 Feb 2019 07:16:32 GMT</dateModified>
+    <ownerName>eexpss</ownerName>
+    <ownerEmail>eexpss@139.com</ownerEmail>
+  </head>
+  <body>
+    <outline type="rss" xmlUrl="http://nationalgeographic.com.cn/index.php?m=content&amp;c=feed"/>
+    <outline type="rss" xmlUrl="https://cn.technode.com/feed/"/>
+    <outline type="rss" xmlUrl="http://ifanr.com/feed"/>
+    <outline type="rss" xmlUrl="https://cn.engadget.com/rss-full.xml"/>
+    <outline type="rss" xmlUrl="https://sspai.com/feed"/>
+    <outline type="rss" xmlUrl="http://feeds.feedburner.com/playpc"/>
+    <outline type="rss" xmlUrl="https://www.thingiverse.com/rss/tag:openscad"/>
+    <outline type="rss" xmlUrl="http://feeds.appinn.com/appinns/"/>
+    <outline type="rss" xmlUrl="http://feeds.feedburner.com/d0od"/>
+    <outline type="rss" xmlUrl="https://www.cnseoer.net/tag/qingsongyk/feed/"/>
+    <outline type="rss" xmlUrl="http://feeds.feedburner.com/ItsFoss"/>
+    <outline type="rss" xmlUrl="http://feeds.feedburner.com/Command-line-fu"/>
+    <outline type="rss" xmlUrl="http://eexpress.github.io/atom.xml"/>
+    <outline type="rss" xmlUrl="https://linuxtoy.org/feeds/all.atom.xml"/>
+    <outline type="rss" xmlUrl="http://feeds.feedburner.com/webupd8"/>
+    <outline type="rss" xmlUrl="https://inkscapetutorials.wordpress.com/feed/"/>
+    <outline type="rss" xmlUrl="http://feeds.feedburner.com/itsfoss"/>
+    <outline type="rss" xmlUrl="http://www.geekpark.net/rss"/>
+    <outline type="rss" xmlUrl="http://zuimeia.com/feed/"/>
+    <outline type="rss" xmlUrl="https://www.cyberciti.biz/faq/feed/"/>
+    <outline type="rss" xmlUrl="http://feeds.cyberciti.biz/Nixcraft-LinuxFreebsdSolarisTipsTricks"/>
+    <outline type="rss" xmlUrl="https://linux.cn/rss.xml"/>
+    <outline type="rss" xmlUrl="https://www.linuxinsider.com/perl/syndication/rssfull.pl"/>
+    <outline type="rss" xmlUrl="http://www.shejipi.com/feed"/>
+    <outline type="rss" xmlUrl="https://cn.reuters.com/rssFeed/CNTopGenNews"/>
+    <outline type="rss" xmlUrl="http://www.yankodesign.com/feed/"/>
+    <outline type="rss" xmlUrl="http://feed.qiushibaike.com/rss"/>
+  </body>
+</opml>
+
