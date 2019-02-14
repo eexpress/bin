@@ -21,4 +21,6 @@ gsettings set org.gnome.desktop.interface document-font-name 'Fira Mono 12'
 #cd; ln -sf '/home/eexpss/图片/the_legend_of_zelda_breath_of_the_wild_2017-1600x900-grey.jpg' .desktop.jpg
 gsettings set org.gnome.desktop.background picture-uri 'file:///home/eexpss/.desktop.jpg'
 
+gsettings set org.gnome.nautilus.preferences click-policy 'single'
+gsettings set org.gnome.nautilus.icon-view default-zoom-level 'large'
 # extensions setup below:

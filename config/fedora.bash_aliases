@@ -55,7 +55,7 @@ alias lss='ls -oAh --time-style=iso -S'		# size
 alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
 alias ggit='cd ~/bin;/usr/bin/git'
 
-alias dl="$HOME/bin/app/git.clone.you-get/you-get"
+alias dl="$HOME/bin/app/you-get/you-get"
 alias dlp="dl -p mplayer"
 alias dl0="dl -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/mjm952n2.default/cookies.sqlite'"
 
