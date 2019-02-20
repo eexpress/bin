@@ -37,8 +37,9 @@ alias dlna-dmcontroller='gupnp-av-cp'
 
 #alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs'
 #alias d='/usr/bin/df -h --output=source,fstype,size,used,pcent,target | sed "s/     类型/类型/; /tmpfs/d; /boot/d; s./dev/..;"'
-alias d='/usr/bin/df -h -t ext4|sed "s./dev/..; s.     容量.容量."'
-alias f='free -h|cut -b -43'
+#alias d='/usr/bin/df -h -t ext4|sed "s./dev/..; s.     容量.容量."'
+#alias f='free -h|cut -b -43'
+alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors;hddtemp -q'
 alias g='grep --color=always -Pi 2>/dev/null'
 #alias g='grep --color=always -inTZE 2>/dev/null'
 alias v='/usr/bin/gvim --remote-silent-tab'
@@ -70,7 +71,6 @@ s(){ highlight --force -O ansi $1 | /usr/bin/less -iR; }
 #▶ highlight -S bash -O svg  -u utf8 -k "Fira Mono" -K 24 -l -j 2 -W bin/y --width 600 -o t.svg -z -s autumn
 u(){ /usr/bin/du -sch "$@"|sort -rh; }
 
-alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors;hddtemp -q'
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
 #man terminfo: set_a_foreground -> setaf; set_a_background -> setab; 

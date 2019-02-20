@@ -17,6 +17,7 @@ imap [ []<ESC>i
 " 选择文字，用括号包起
 vnoremap (( <esc>`>a)<esc>`<i(<esc>i
 vnoremap {{ <esc>`>a}<esc>`<i{<esc>i
+vnoremap ** <esc>`>a*<esc>`<i*<esc>i
 " 全局替换当前单词
 map <expr> <C-w> Replace_Current_Word()
 func Replace_Current_Word()
