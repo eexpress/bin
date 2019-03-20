@@ -12,10 +12,11 @@ alias da='sudo dnf autoremove'
 alias ds='dnf search'
 alias dsi='dnf list installed|grep --color=always'
 alias dinfo='dnf info'
-alias dfile='dnf repoquery -l'
-alias dp='dnf provides'
-alias dfile1='rpm -q --filesbypkg'
-alias dh='sudo dnf history'
+alias dwhoneed='dnf repoquery --installed --whatrequires'
+alias dfile1='dnf repoquery -l'
+#alias dp='dnf provides'
+alias dfile='rpm -q --filesbypkg'
+#alias dh='sudo dnf history'
 #alias dinstalled='dnf list installed'
 #alias dlist='dnf list'
 
@@ -40,6 +41,7 @@ alias dlna-dmcontroller='gupnp-av-cp'
 #alias d='/usr/bin/df -h -t ext4|sed "s./dev/..; s.     容量.容量."'
 #alias f='free -h|cut -b -43'
 alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors;hddtemp -q'
+alias d='\du -h'
 alias g='grep --color=always -Pi 2>/dev/null'
 #alias g='grep --color=always -inTZE 2>/dev/null'
 alias v='/usr/bin/gvim --remote-silent-tab'
@@ -118,5 +120,7 @@ bind 'set show-all-if-ambiguous on'
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
+#bash_completion
+. /etc/profile.d/bash_completion.sh
 #unset command_not_found_handle
 . /usr/share/autojump/autojump.bash

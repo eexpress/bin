@@ -3,12 +3,13 @@
 # `shadowsocks-libev` (need `sudo dnf copr enable librehat/shadowsocks`) (*ss-local*) (depend on *libsodium* support *chacha20-ietf-poly1305*) **conflicts** with `python3-shadowsocks` (*sslocal*)
 
 configpath="$HOME/bin/config/"
+configfile="shadowsocks-*"
 
 # no parameter means "on", else "off".
 if [ -z "$1" ]; then
 	# on
 	cd $configpath
-	index=0; for file in shadowsocks-*; do files[$index]=$file; echo "$index --> ${files[$index]#*-}"; ((index++)); done
+	index=0; for file in $configfile; do files[$index]=$file; echo "$index --> ${files[$index]#*-}"; ((index++)); done
 	key=99; until [[ $key -lt $index ]]; do key=0; read -p  "Please choose config [0-$((index-1))]: " -t 5 -n 1 key; done
 # dealy 5 seconds, default choose 0
 	echo ""; echo "Choose : ${files[$key]}"

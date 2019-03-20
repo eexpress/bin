@@ -13,4 +13,3 @@ m="$*"
 [ -z "$m" ] && echo "输入提示文字，可为空。" && read m
 echo -e "$redB $t 分钟后，将提示 “ $m ”。$end"
 echo msg """$m"""|at "now + $t minutes"
-

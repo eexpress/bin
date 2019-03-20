@@ -15,3 +15,4 @@ case $# in
 esac
 export DISPLAY=:0.0 && notify-send -i $icon "$title" "$msg" &
 canberra-gtk-play -l 3 -i complete
+type 说 && 说 时间到了哦。
