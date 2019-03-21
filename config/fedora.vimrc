@@ -1,10 +1,12 @@
 colo evening 		" 配色主题	desert
-set guifont=Input\ Mono\ Italic\ 14
-set guifont=Fira\ Mono\ 14
+set guifont=Input\ Mono\ Italic\ 16
+set guifont=Fira\ Mono\ 16
 set number 			" 显示行号
 set mouse=a
 set ignorecase		" 搜索忽略大小写
 set incsearch		" 输入字符串就显示匹配点
+set tabstop=4
+set noexpandtab
 
 " 关闭窗口/保存文件
 map <leader>q	<Esc>:q!<CR>
@@ -37,3 +39,5 @@ endfun
 "新脚本自动加类型
 au BufNewFile *.bash,*.sh	0put='#!/bin/bash'|setf bash|normal Go
 au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
+"autocmd BufNewFile,BufRead *.vala set runtimepath="${HOME}/.vim/bundle/vala.vim/"
+autocmd BufRead,BufNewFile *.vala,*.vapi setfiletype vala

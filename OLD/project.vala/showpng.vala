@@ -1,15 +1,18 @@
+// Syntastic
+// modules: gtk+-3.0
+//▶ valac --pkg gtk+-3.0 showpng.vala
 using Gtk;
 using Cairo;
 
 class ShowPNG : Gtk.Window {
 
 	public ShowPNG(string fimg) {
-        title = "ShowPNG";
+		title = "ShowPNG";
 		skip_taskbar_hint = true;
-        decorated = false;
-        app_paintable = true;
+		decorated = false;
+		app_paintable = true;
 		set_visual(this.get_screen().get_rgba_visual());
-		set_opacity(1);
+//		set_opacity(1);	//warning: Gtk.Window.set_opacity has been deprecated since 3.8
 		stick();
 		var img = new Cairo.ImageSurface.from_png (fimg);
 		set_size_request(img.get_width(),img.get_height());
@@ -20,7 +23,7 @@ class ShowPNG : Gtk.Window {
 				ctx.paint ();
 				return true;
 				});
-        add (drawing_area);
+		add (drawing_area);
 
 		drawing_area.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
 		drawing_area.button_press_event.connect ((e) => {
