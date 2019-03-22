@@ -20,6 +20,7 @@ class ShowSVGPNG : Gtk.Window {
 		skip_taskbar_hint = true;
 		decorated = false;
 		app_paintable = true;
+		set_position(MOUSE);
 		set_visual(this.get_screen().get_rgba_visual());
 		set_keep_above (true); 
 /*        set_resizable(true);*/

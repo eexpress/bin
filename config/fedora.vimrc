@@ -7,6 +7,7 @@ set ignorecase		" 搜索忽略大小写
 set incsearch		" 输入字符串就显示匹配点
 set tabstop=4
 set noexpandtab
+set autoindent
 
 " 关闭窗口/保存文件
 map <leader>q	<Esc>:q!<CR>
