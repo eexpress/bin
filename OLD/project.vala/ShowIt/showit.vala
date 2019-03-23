@@ -8,6 +8,7 @@ public class ShowIt : Gtk.Window {
 	public ShowIt() {
 		title = "ShowIt";
 		decorated = false;
+		app_paintable = true;
 		set_visual(this.get_screen().get_rgba_visual());
 		set_keep_above (true);
 		var img = new ImageSurface.from_png("screen.png");
