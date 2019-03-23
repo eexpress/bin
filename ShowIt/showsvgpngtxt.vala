@@ -55,12 +55,14 @@ default:	//text
 		Cairo.TextExtents ex;
 		tmpctx.select_font_face("DejaVu Sans",FontSlant.NORMAL,FontWeight.BOLD);
 		tmpctx.set_font_size(fsize);
-		tmpctx.text_extents (inputtext, out ex);	//中文宽度不对？？？？
-		w=(int)ex.width+(int)Math.fabs(ex.x_bearing);
-		h=(int)ex.height+(int)Math.fabs(ex.y_bearing);	//y_bearing 可能大负数
+		tmpctx.text_extents (inputtext, out ex);
+		w=(int)(ex.width+Math.fabs(ex.x_bearing)+Math.fabs(ex.x_advance));
+		h=(int)(ex.height+Math.fabs(ex.y_bearing)+Math.fabs(ex.y_advance));	//y_bearing 可能大负数
+/*x_bearing: 2.000000, width: 246.000000, x_advance: 249.000000*/
+/*y_bearing: -46.000000, height: 57.000000, y_advance: 0.000000*/
+/*stdout.printf("w x h: %d x %d\n",w,h);*/
 		img.flush();
 		img = new ImageSurface(Format.ARGB32,w,h);
-/*stdout.printf("%d * %d, %d * %d\n",img.get_width(),img.get_height(),w,h);*/
 		tmpctx = new Cairo.Context(img);
 		tmpctx.select_font_face("Noto Sans CJK SC",FontSlant.NORMAL,FontWeight.BOLD);
 		tmpctx.set_font_size(fsize);
