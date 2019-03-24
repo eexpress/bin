@@ -3,6 +3,12 @@ using Gtk;
 using Cairo;
 
 class ShowSVGPNGTXT : Gtk.Window {
+		string mime="";
+		string str="";
+		uint8[] contents={};
+		long offset=-1;
+		int colorindex=0;
+		string[] colorlist={"6faa34","e24f51","346daa","c555ea","aa7e34"};
 
 	public ShowSVGPNGTXT(string inputtext) {
 		var handle=new Rsvg.Handle();	//new产生的，有初始值
@@ -12,14 +18,13 @@ class ShowSVGPNGTXT : Gtk.Window {
 		int w=300;
 		int h=100;
 		int max;	//正方形边长
-		string mime="";
-		int sub=-1;	//svg里面的id循环显示，没有sub0就不循环（缺省）。
 
 		int fsize=60;
 		string[] fontlist={};
 		string dispfont="Noto Sans";
 		int fontindex=-1;
 
+/*        int sub=-1;	//svg里面的id循环显示，没有sub0就不循环（缺省）。*/
 //窗口特性
 		title = "ShowSVGPNGTXT";
 		skip_taskbar_hint = true;
@@ -39,32 +44,22 @@ class ShowSVGPNGTXT : Gtk.Window {
 mime = f.query_info ("standard::content-type", 0, null).get_content_type();
 		} catch (GLib.Error e) {error ("%s", e.message);}
 		}
+//------------------------
 switch(mime){
 case "image/svg+xml":
 		try {
-			handle = new Rsvg.Handle.from_file(inputtext);
+			string etag_out;
+			f.load_contents(null, out contents, out etag_out);
+			handle = new Rsvg.Handle.from_data(contents);
+/*            handle = new Rsvg.Handle.from_file(inputtext);*/
 		} catch (GLib.Error e) {error ("%s", e.message);}
+		str=(string) contents;
+		int i=str.index_of("id=\"sub0\"", 0);
+		int j=str.substring(0,(long)i).last_index_of("fill:#");
+/*        stdout.printf("find \"fill:#\" here: "+j.to_string()+".\ttext:"+str.substring(j+6,6)+"\n");*/
+		offset=j+6;
 		w=(int)handle.width; h=(int)handle.height;
 		img = new ImageSurface(Format.ARGB32,w,h);	//创建表面
-//------------------------
-		//至少有2个sub才允许切换
-/*        if self._handle.has_sub(id="#Device") and self._handle.has_sub(id=self._layer):*/
-
-/*https://lazka.github.io/pgi-docs/Rsvg-2.0/classes/Handle.html*/
-/* has_sub(id)*/
-/*    Parameters:	id (str) – an element’s id within the SVG, starting with “##”, for example, “##layer1”.*/
-/* render_cairo_sub(cr, id)*/
-/*render_cairo_sub(cr, id)*/
-/*    Parameters:	*/
-
-/*        cr (cairo.Context) – A Cairo renderer*/
-/*        id (str or None) – An element’s id within the SVG, or None to render the whole SVG. For example, if you have a layer called “layer1” that you wish to render, pass “##layer1” as the id.*/
-
-/*        if(handle.has_sub("##layer1") && handle.has_sub("##layer2"))*/
-/*        {stdout.printf("found layer1 and layer2.\n");}*/
-/*        if(handle.has_sub("##sub0") && handle.has_sub("##sub1"))*/
-/*        {sub=0; stdout.printf("found sub0 and sub1.\n");}*/
-//------------------------
 	break;
 case "image/png":
 		img = new Cairo.ImageSurface.from_png(inputtext);
@@ -118,7 +113,11 @@ switch(mime){
 		ctx.set_source_rgba (0.3, 0.3, 0.3, 0.8);
 		ctx.move_to(2,h+2);
 		ctx.show_text(inputtext);
-		ctx.set_source_rgba (1, 0, 0, 0.8);
+		//346daa convert to rgba
+/*        Gdk.RGBA cc;*/
+		var cc=new Gdk.RGBA();
+		cc.parse("#"+colorlist[colorindex]);
+		ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
 		ctx.move_to(0,h);
 		ctx.show_text(inputtext);
 		break;
@@ -150,16 +149,16 @@ scroll_event.connect ((e) => {
 while(fontlist[fontindex]=="" && fontindex<fontlist.length)fontindex++;
 				if(fontindex>=fontlist.length)fontindex=0;
 				dispfont=fontlist[fontindex];
-				stdout.printf(fontindex.to_string()+":"+dispfont+"\n");
+/*                stdout.printf(fontindex.to_string()+":"+dispfont+"\n");*/
 				break;
-			case MOD1_MASK:	//Alt
-				stdout.printf("Alt pressed. mime:%s. sub:%d\n",mime,sub);
-				if(mime=="image/svg+xml" && sub>=0){
-					sub++;
-					if(!handle.has_sub("sub"+sub.to_string())){sub=0;}
-					stdout.printf("sub%d found.\n",sub);
-					var tmpctx = new Cairo.Context(img);
-					handle.render_cairo_sub(tmpctx,"sub"+sub.to_string());
+			case MOD1_MASK:	//Alt 修改颜色，适合svg和txt
+				if(mime=="image/png")break;
+				loop_color(true);
+				if(mime=="image/svg+xml"&&offset>0){
+contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6)).data;
+				try{
+					handle = new Rsvg.Handle.from_data(contents);
+				} catch (GLib.Error e) {error ("%s", e.message);}
 				}
 				break;
 			default:
@@ -180,16 +179,16 @@ while(fontlist[fontindex]=="" && fontindex<fontlist.length)fontindex++;
 				fontindex--; if(fontindex<0)fontindex=fontlist.length-1;
 				while(fontlist[fontindex]=="" && fontindex>0)fontindex--;
 				dispfont=fontlist[fontindex];
-				stdout.printf(fontindex.to_string()+":"+dispfont+"\n");
+/*                stdout.printf(fontindex.to_string()+":"+dispfont+"\n");*/
 				break;
-			case MOD1_MASK:	//Alt
-				if(mime=="image/svg+xml" && sub>=0){
-					sub--; if(sub<0)sub=8;	//最多8个颜色循环
-					while(!handle.has_sub("sub"+sub.to_string()) && sub>0){
-						sub--;
-					}
-					var tmpctx = new Cairo.Context(img);
-					handle.render_cairo_sub(tmpctx,"sub"+sub.to_string());
+			case MOD1_MASK:	//Alt 修改颜色，适合svg和txt
+				if(mime=="image/png")break;
+				loop_color(false);
+				if(mime=="image/svg+xml"&&offset>0){
+contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6)).data;
+				try{
+					handle = new Rsvg.Handle.from_data(contents);
+				} catch (GLib.Error e) {error ("%s", e.message);}
 				}
 				break;
 			default:
@@ -202,6 +201,14 @@ while(fontlist[fontindex]=="" && fontindex<fontlist.length)fontindex++;
 		queue_draw();
 		return true;
 		});
+	}
+//----------------------------------------------------
+	public void loop_color(bool y){
+		if(y){		//up
+if(colorindex<colorlist.length-1)colorindex++;else colorindex=0;
+		}else{		//down
+if(colorindex>0)colorindex--;else colorindex=colorlist.length-1;
+		}
 	}
 //----------------------------------------------------
 	static int main (string[] args) {
