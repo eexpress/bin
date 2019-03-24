@@ -13,8 +13,12 @@ class ShowSVGPNGTXT : Gtk.Window {
 		int h=100;
 		int max;	//正方形边长
 		string mime="";
-		int fsize=60;
 		int sub=-1;	//svg里面的id循环显示，没有sub0就不循环（缺省）。
+
+		int fsize=60;
+		string[] fontlist={};
+		string dispfont="Noto Sans";
+		int fontindex=-1;
 
 //窗口特性
 		title = "ShowSVGPNGTXT";
@@ -67,10 +71,19 @@ case "image/png":
 		w=img.get_width(); h=img.get_height();
 	break;
 default:	//text
+//------------------get font array
+		string file_contents="";
+try{
+		FileUtils.get_contents("fontname.list", out file_contents);
+		if(file_contents!=""){fontlist = file_contents.split("\n",8);}
+} catch (GLib.Error e) {error ("%s", e.message);}
+if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
+/*foreach(string fn in fontlist){ stdout.printf(fn+"\n"); }*/
+//------------------get text display size
 		img = new ImageSurface(Format.ARGB32,w,h);
 		var tmpctx = new Cairo.Context(img);
 		Cairo.TextExtents ex;
-		tmpctx.select_font_face("DejaVu Sans",FontSlant.NORMAL,FontWeight.BOLD);
+		tmpctx.select_font_face(dispfont,FontSlant.NORMAL,FontWeight.BOLD);
 		tmpctx.set_font_size(fsize);
 		tmpctx.text_extents (inputtext, out ex);
 		w=(int)ex.width; h=(int)ex.height;
@@ -100,7 +113,7 @@ switch(mime){
 		break;
 	default:	//text
 		ctx.translate(0,(max-h)/2);
-		ctx.select_font_face("Noto Sans CJK SC",FontSlant.NORMAL,FontWeight.BOLD);
+		ctx.select_font_face(dispfont,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(fsize);
 		ctx.set_source_rgba (0.3, 0.3, 0.3, 0.8);
 		ctx.move_to(2,h+2);
@@ -131,7 +144,13 @@ scroll_event.connect ((e) => {
 				rotate+=15; 
 				if(rotate>=360)rotate=0;
 				break;
-			case CONTROL_MASK:
+			case CONTROL_MASK:	//font
+				if(fontindex<0)break;
+				fontindex++;
+while(fontlist[fontindex]=="" && fontindex<fontlist.length)fontindex++;
+				if(fontindex>=fontlist.length)fontindex=0;
+				dispfont=fontlist[fontindex];
+				stdout.printf(fontindex.to_string()+":"+dispfont+"\n");
 				break;
 			case MOD1_MASK:	//Alt
 				stdout.printf("Alt pressed. mime:%s. sub:%d\n",mime,sub);
@@ -156,7 +175,12 @@ scroll_event.connect ((e) => {
 				rotate-=15;
 				if(rotate<0)rotate+=360;
 				break;
-			case CONTROL_MASK:
+			case CONTROL_MASK:	//font
+				if(fontindex<0)break;
+				fontindex--; if(fontindex<0)fontindex=fontlist.length-1;
+				while(fontlist[fontindex]=="" && fontindex>0)fontindex--;
+				dispfont=fontlist[fontindex];
+				stdout.printf(fontindex.to_string()+":"+dispfont+"\n");
 				break;
 			case MOD1_MASK:	//Alt
 				if(mime=="image/svg+xml" && sub>=0){
