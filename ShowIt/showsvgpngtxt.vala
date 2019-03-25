@@ -8,7 +8,8 @@ class ShowSVGPNGTXT : Gtk.Window {
 		uint8[] contents={};
 		long offset=-1;
 		int colorindex=0;
-		string[] colorlist={"6faa34","e24f51","346daa","c555ea","aa7e34"};
+		string[] colorlist={"ff0000","FF00FF","ffa500","ffd700","2e8b57","32CD32","0000cd", "7B68EE"};
+		//Red, Magenta, Orange, Gold, SeaGreen, LimeGreen, MediumBlue, MediumSlateBlue
 
 	public ShowSVGPNGTXT(string inputtext) {
 		var handle=new Rsvg.Handle();	//new产生的，有初始值
