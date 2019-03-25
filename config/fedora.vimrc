@@ -6,8 +6,13 @@ set mouse=a
 set ignorecase		" 搜索忽略大小写
 set incsearch		" 输入字符串就显示匹配点
 set tabstop=4
+set shiftwidth=4 	" < > 平移
 set noexpandtab
 set autoindent
+set foldmethod=syntax
+set foldlevel=9
+"indent 	"相同缩进的行折叠。zc/zo/zR(reset)
+"mark: 设置 me 回来 'e/`e
 
 " 关闭窗口/保存文件
 map <leader>q	<Esc>:q!<CR>

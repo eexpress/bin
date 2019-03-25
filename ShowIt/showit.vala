@@ -64,11 +64,11 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 		});
 	} catch (SpawnError e) { print ("Error: %s\n", e.message); }
 	}
+}
 //--------------------------------------------------------
-	static int main (string[] args) {
+int main (string[] args) {
 		Gtk.init(ref args);
 		var DW = new ShowIt(); DW.show_all();
 		Gtk.main(); return 0;
-		}
 }
 //--------------------------------------------------------

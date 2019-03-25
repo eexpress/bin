@@ -2,6 +2,8 @@
 	ci = commit
 	st = status
 	co = checkout
+
+	d = difftool
 	df = diff
 	df1= diff HEAD^
 	df2= diff HEAD^^
@@ -10,6 +12,7 @@
 	d1d	= diff master@{'yesterday'}
 	d2d	= diff master@{'2 days ago'}
 	d3d	= diff master@{'3 days ago'}
+
 	dflog = log -p
 	ls = ls-files
 	lg = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr)%Creset %s'
@@ -41,4 +44,6 @@
 ;     pager = cat
 	pager = less -r
 [diff]
-    tool = meld
+	tool = meld
+[difftool]
+	prompt = false
