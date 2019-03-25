@@ -6,6 +6,7 @@ class ShowSVGPNGTXT : Gtk.Window {
 		string mime="";
 		string str="";
 		uint8[] contents={};
+		const string keyid="sub0";
 		long offset=-1;
 		int colorindex=0;
 		string[] colorlist={"ff0000","FF00FF","ffa500","ffd700","2e8b57","32CD32","0000cd", "7B68EE"};
@@ -25,7 +26,7 @@ class ShowSVGPNGTXT : Gtk.Window {
 		string dispfont="Noto Sans";
 		int fontindex=-1;
 
-/*        int sub=-1;	//svg里面的id循环显示，没有sub0就不循环（缺省）。*/
+/*        int sub=-1;	//svg里面的id循环显示，没有keyid就不循环（缺省）。*/
 //窗口特性
 		title = "ShowSVGPNGTXT";
 		skip_taskbar_hint = true;
@@ -55,11 +56,20 @@ case "image/svg+xml":
 /*            handle = new Rsvg.Handle.from_file(inputtext);*/
 		} catch (GLib.Error e) {error ("%s", e.message);}
 		str=(string) contents;
-		int i=str.index_of("id=\"sub0\"", 0);
-		if(i>0){
-				int j=str.substring(0,(long)i).last_index_of("fill:#");
-/*        stdout.printf("find \"fill:#\" here: "+j.to_string()+".\ttext:"+str.substring(j+6,6)+"\n");*/
-				if(j>0)offset=j+6;
+		int i=str.index_of("id=\""+keyid+"\"", 0);
+		if(i>0){	//向前找，2种格式
+			int l=6;
+			int j=str.substring(0,(long)i).last_index_of("fill:#");
+			if(j<0){l=7;j=str.substring(0,(long)i).last_index_of("fill=\"#");}
+			int k=str.substring(0,(long)i).last_index_of("<");
+			if(j>k>0){offset=j+l;}else{	//向后找
+				l=6;
+				j=str.substring((long)i).index_of("fill:#");
+				if(j<0){l=7;j=str.substring((long)i).index_of("fill=\"#");}
+				k=str.substring((long)i).index_of("/>");
+				if(k>j>0){j+=i;offset=j+l;}
+			}
+if(offset>0)stdout.printf("find fill color: "+str.substring(offset,6)+"\n");
 		}
 		w=(int)handle.width; h=(int)handle.height;
 		img = new ImageSurface(Format.ARGB32,w,h);	//创建表面
