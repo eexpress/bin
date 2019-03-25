@@ -56,9 +56,11 @@ case "image/svg+xml":
 		} catch (GLib.Error e) {error ("%s", e.message);}
 		str=(string) contents;
 		int i=str.index_of("id=\"sub0\"", 0);
-		int j=str.substring(0,(long)i).last_index_of("fill:#");
+		if(i>0){
+				int j=str.substring(0,(long)i).last_index_of("fill:#");
 /*        stdout.printf("find \"fill:#\" here: "+j.to_string()+".\ttext:"+str.substring(j+6,6)+"\n");*/
-		offset=j+6;
+				if(j>0)offset=j+6;
+		}
 		w=(int)handle.width; h=(int)handle.height;
 		img = new ImageSurface(Format.ARGB32,w,h);	//创建表面
 	break;
@@ -114,9 +116,8 @@ switch(mime){
 		ctx.set_source_rgba (0.3, 0.3, 0.3, 0.8);
 		ctx.move_to(2,h+2);
 		ctx.show_text(inputtext);
-		//346daa convert to rgba
-/*        Gdk.RGBA cc;*/
-		var cc=new Gdk.RGBA();
+		//html color "346daa" convert to rgba
+		Gdk.RGBA cc=Gdk.RGBA();
 		cc.parse("#"+colorlist[colorindex]);
 		ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
 		ctx.move_to(0,h);
