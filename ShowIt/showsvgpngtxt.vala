@@ -6,7 +6,7 @@ class ShowSVGPNGTXT : Gtk.Window {
 		string mime="";
 		string str="";
 		uint8[] contents={};
-		const string keyid="sub0";
+		const string keyid="sub0";	//改成变色龙？chameleon
 		long offset=-1;
 		int colorindex=0;
 		string[] colorlist={"ff0000","FF00FF","ffa500","ffd700","2e8b57","32CD32","0000cd", "7B68EE"};
