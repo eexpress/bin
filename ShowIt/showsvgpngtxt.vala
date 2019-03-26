@@ -11,22 +11,22 @@ class ShowSVGPNGTXT : Gtk.Window {
 		int colorindex=0;
 		string[] colorlist={"ff0000","FF00FF","ffa500","ffd700","2e8b57","32CD32","0000cd", "7B68EE"};
 		//Red, Magenta, Orange, Gold, SeaGreen, LimeGreen, MediumBlue, MediumSlateBlue
+		Rsvg.Handle handle;	//new产生的，有初始值
 
 	public ShowSVGPNGTXT(string inputtext) {
-		var handle=new Rsvg.Handle();	//new产生的，有初始值
 		ImageSurface img;
 		double scale=1;
 		double rotate=0;
 		int w=300;
 		int h=100;
 		int max;	//正方形边长
+/*        var handle=new Rsvg.Handle();	//new产生的，有初始值*/
 
-		int fsize=60;
 		string[] fontlist={};
-		string dispfont="Noto Sans";
 		int fontindex=-1;
+		string dispfont="Noto Sans";
+		int fsize=60;
 
-/*        int sub=-1;	//svg里面的id循环显示，没有keyid就不循环（缺省）。*/
 //窗口特性
 		title = "ShowSVGPNGTXT";
 		skip_taskbar_hint = true;
@@ -55,6 +55,7 @@ case "image/svg+xml":
 			handle = new Rsvg.Handle.from_data(contents);
 /*            handle = new Rsvg.Handle.from_file(inputtext);*/
 		} catch (GLib.Error e) {error ("%s", e.message);}
+/*if(handle.has_sub("#sub0") && handle.has_sub("#sub1"))//work */
 		str=(string) contents;
 		int i=str.index_of("id=\""+keyid+"\"", 0);
 		if(i>0){	//向前找，2种格式
@@ -86,7 +87,6 @@ try{
 		if(file_contents!=""){fontlist = file_contents.split("\n",8);}
 } catch (GLib.Error e) {error ("%s", e.message);}
 if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
-/*foreach(string fn in fontlist){ stdout.printf(fn+"\n"); }*/
 //------------------get text display size
 		img = new ImageSurface(Format.ARGB32,w,h);
 		var tmpctx = new Cairo.Context(img);
@@ -103,7 +103,6 @@ if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
 }
 		max=(int)Math.sqrt(Math.pow(w,2)+Math.pow(h,2));
 		set_size_request(max,max);
-/*stdout.printf("w x h: %d x %d\n",w,h);*/
 //----------------------------------------------------
 //绘制窗口事件
 		draw.connect ((da,ctx) => {	//直接在窗口绘图
@@ -116,6 +115,7 @@ switch(mime){
 	case "image/svg+xml":
 		ctx.translate((max-w)/2,(max-h)/2);
 		handle.render_cairo(ctx);
+/*handle.render_cairo_sub(ctx,"#"+keyid);	//work */
 		break;
 	case "image/png":
 		break;
@@ -152,26 +152,15 @@ scroll_event.connect ((e) => {
 		if(e.direction==Gdk.ScrollDirection.UP){
 			switch(e.state){
 			case SHIFT_MASK:
-				rotate+=15; 
-				if(rotate>=360)rotate=0;
+				rotate+=15; if(rotate>=360)rotate=0;
 				break;
 			case CONTROL_MASK:	//font
 				if(fontindex<0)break;
-				fontindex++;
-while(fontlist[fontindex]=="" && fontindex<fontlist.length)fontindex++;
-				if(fontindex>=fontlist.length)fontindex=0;
+		get_next_string_array(ref fontlist, ref fontindex, true);
 				dispfont=fontlist[fontindex];
-/*                stdout.printf(fontindex.to_string()+":"+dispfont+"\n");*/
 				break;
 			case MOD1_MASK:	//Alt 修改颜色，适合svg和txt
-				if(mime=="image/png")break;
 				loop_color(true);
-				if(mime=="image/svg+xml"&&offset>0){
-contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6)).data;
-				try{
-					handle = new Rsvg.Handle.from_data(contents);
-				} catch (GLib.Error e) {error ("%s", e.message);}
-				}
 				break;
 			default:
 				scale/=0.98;
@@ -183,25 +172,15 @@ contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6))
 		if(e.direction==Gdk.ScrollDirection.DOWN){
 			switch(e.state){
 			case SHIFT_MASK:
-				rotate-=15;
-				if(rotate<0)rotate+=360;
+				rotate-=15; if(rotate<0)rotate+=360;
 				break;
 			case CONTROL_MASK:	//font
 				if(fontindex<0)break;
-				fontindex--; if(fontindex<0)fontindex=fontlist.length-1;
-				while(fontlist[fontindex]=="" && fontindex>0)fontindex--;
+		get_next_string_array(ref fontlist, ref fontindex, false);
 				dispfont=fontlist[fontindex];
-/*                stdout.printf(fontindex.to_string()+":"+dispfont+"\n");*/
 				break;
 			case MOD1_MASK:	//Alt 修改颜色，适合svg和txt
-				if(mime=="image/png")break;
 				loop_color(false);
-				if(mime=="image/svg+xml"&&offset>0){
-contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6)).data;
-				try{
-					handle = new Rsvg.Handle.from_data(contents);
-				} catch (GLib.Error e) {error ("%s", e.message);}
-				}
 				break;
 			default:
 				scale*=0.98;
@@ -215,17 +194,33 @@ contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6))
 		});
 	}
 //----------------------------------------------------
-	public void loop_color(bool y){
-		if(y){		//up
-if(colorindex<colorlist.length-1)colorindex++;else colorindex=0;
-		}else{		//down
-if(colorindex>0)colorindex--;else colorindex=colorlist.length-1;
+	void loop_color(bool y){
+		if(mime=="image/png")return;
+		get_next_string_array(ref colorlist, ref colorindex, y);
+		if(mime=="image/svg+xml"&&offset>0){
+contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6)).data;
+		try{
+			handle = new Rsvg.Handle.from_data(contents);
+		} catch (GLib.Error e) {error ("%s", e.message);}
 		}
 	}
+//---------------递归找数组中下一个非空字符串----------
+	void get_next_string_array(
+	ref string[] array, ref int index, bool direction){
+		if (direction){	//向后找
+			if (index<array.length-1) index++; else index=0;
+		}else{	//向前找
+			if (index>0) index--; else index=array.length-1;
+		}
+		if(array[index]!="") return;
+		get_next_string_array(ref array,ref index,direction);
+	}
 //----------------------------------------------------
-	static int main (string[] args) {
-		Gtk.init (ref args);
-		if(args[1]==null) return 0;
-		var w=new ShowSVGPNGTXT(args[1]);
-		w.show_all(); Gtk.main(); return 0; }
+}
+//----------------------------------------------------
+int main (string[] args) {
+	Gtk.init (ref args);
+	if(args[1]==null) return 0;
+	var w=new ShowSVGPNGTXT(args[1]);
+	w.show_all(); Gtk.main(); return 0;
 }
