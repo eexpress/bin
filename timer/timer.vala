@@ -3,8 +3,14 @@ using Gtk;
 using Cairo;
 	
 //--------------------------------------------------------
+/*
+圆心：鼠标1键开关定时，其他键退出。
+其他：鼠标1键拖动，其他键选择定时。
+滚轮：切换显示大小
+*/
+//--------------------------------------------------------
 public class Timer : Gtk.Window {
-	int size=300;
+	int size=400;
 	int th=0; int tm=0;
 	int h; int m;
 	double Dalarm=0;
@@ -20,6 +26,8 @@ public class Timer : Gtk.Window {
 /*        set_keep_above (true);*/
 		set_size_request(size,size);
 		destroy.connect (Gtk.main_quit);
+		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
+
 		GLib.Timeout.add_seconds(10,()=>{
 			queue_draw();
 			if(h==th && m==tm && alarm_alpha==1){
@@ -87,39 +95,48 @@ draw_line(ctx, "#353CDB", 0.9, size/20, (h*30+m*30/60)*(Math.PI/180),0,-(size/2-
 draw_line(ctx, "", 0.9, size/30, m*6*(Math.PI/180),0,-(size/2-30));	//分针，6度1分钟
 draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(size/4));	//定时针，30度1小时，30度内分60分钟
 //---------------------center
-			ctx.set_source_rgba (0.2, 0.2, 0.8, 0.9);	//蓝色
+			ctx.set_source_rgba (0.9, 0.2, 0.2, 0.9);	//蓝色
 			ctx.arc(0,0,size/20,0,2*Math.PI);
 			ctx.fill();
 			return true;
 		});
-//------------------------------
-//鼠标点击事件。1键拖动；3键退出。2键（中键）设置定时。
-		button_press_event.connect ((e) => {
-//---------------------root坐标转窗口坐标
-			int x; int y; get_position(out x, out y);
-			x=(int)(e.x_root-x-size/2);
-			y=(int)(e.y_root-y-size/2);
-//---------------------
-			if(e.button == 1){
-				int d=(int)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
-				if(d<size/20){	//点在圆心上
-					alarm_alpha=alarm_alpha==1?0:1;
-					queue_draw();
-				}else{	//其他位置拖动
-begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
-				}
-			} else if(e.button == 2){	//切换定时
-				Dalarm=Math.atan2(y, x)/(Math.PI/180)+90;
-				if(Dalarm<0)Dalarm+=360;	//修正成向上为0度。
-				th=(int)(Dalarm/30);	//30度1小时
-				tm=(int)((Dalarm-th*30)/30*60);
-				tm=tm/5*5;		//调整成5分钟一格
-/*stdout.printf("(%d,%d)\t%f\t%d:%d\n",x,y,Dalarm,th,tm);*/
-				queue_draw();
-			} else {Gtk.main_quit();}
+//----------鼠标点击事件。
+	button_press_event.connect ((e) => {
+	//----------root坐标转窗口坐标，计算和原点的距离。
+		int x; int y; get_position(out x, out y);
+		x=(int)(e.x_root-x-size/2);
+		y=(int)(e.y_root-y-size/2);
+		int d=(int)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+		if(d<size/20){	//圆心之内
+			if(e.button == 1){alarm_alpha=alarm_alpha==1?0:1;queue_draw();}
+			else Gtk.main_quit();
 			return true;
-		});
-	}
+		}
+		if(e.button == 1){	//圆心之外
+begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
+		} else {
+			Dalarm=Math.atan2(y, x)/(Math.PI/180)+90;
+			if(Dalarm<0)Dalarm+=360;	//修正成向上为0度。
+			th=(int)(Dalarm/30);	//30度1小时
+			tm=(int)((Dalarm-th*30)/30*60);
+			tm=tm/5*5;		//调整成5分钟一格
+			queue_draw();
+		}
+		return true;
+	});
+//------------鼠标滚轮事件
+	scroll_event.connect ((e) => {
+		if(e.direction==Gdk.ScrollDirection.UP){
+			if(size<400)size+=50;
+		}
+		if(e.direction==Gdk.ScrollDirection.DOWN){
+			if(size>100)size-=50;
+		}
+		set_size_request(size,size);
+		return true;
+	});
+	//---------------------
+}
 //---------------------
 	void draw_line(Cairo.Context ctx, string color, double alpha, int width, double angle, int dx, int dy){
 		Gdk.RGBA rgb=Gdk.RGBA();
