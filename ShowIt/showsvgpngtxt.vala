@@ -12,14 +12,15 @@ class ShowSVGPNGTXT : Gtk.Window {
 		string[] colorlist={"ff0000","FF00FF","ffa500","ffd700","2e8b57","32CD32","0000cd", "7B68EE"};
 		//Red, Magenta, Orange, Gold, SeaGreen, LimeGreen, MediumBlue, MediumSlateBlue
 		Rsvg.Handle handle;	//new产生的，有初始值
+		int max;	//正方形边长
+		double hscale=1;	//滚轮改svg水平缩放
+		double wscale=1;	//ctrl滚轮改svg垂直缩放
 
 	public ShowSVGPNGTXT(string inputtext) {
 		ImageSurface img;
-		double scale=1;
 		double rotate=0;
 		int w=300;
 		int h=100;
-		int max;	//正方形边长
 /*        var handle=new Rsvg.Handle();	//new产生的，有初始值*/
 
 		string[] fontlist={};
@@ -106,7 +107,8 @@ if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
 //----------------------------------------------------
 //绘制窗口事件
 		draw.connect ((da,ctx) => {	//直接在窗口绘图
-			ctx.scale(scale,scale);
+			if(mime=="image/svg+xml") ctx.scale(wscale,hscale);
+			else ctx.scale(wscale,wscale);
 			ctx.translate(max/2, max/2); //窗口中心为旋转原点
 			ctx.rotate (rotate*Math.PI/180);
 			ctx.translate(-max/2, -max/2);
@@ -154,18 +156,20 @@ scroll_event.connect ((e) => {
 			case SHIFT_MASK:
 				rotate+=15; if(rotate>=360)rotate=0;
 				break;
-			case CONTROL_MASK:	//font
-				if(fontindex<0)break;
-		get_next_string_array(ref fontlist, ref fontindex, true);
-				dispfont=fontlist[fontindex];
+			case CONTROL_MASK:
+				if(mime=="image/svg+xml"){
+					set_scale(ref hscale,true);
+				}else{
+					if(fontindex<0)break;
+get_next_string_array(ref fontlist, ref fontindex, true);
+					dispfont=fontlist[fontindex];
+				}
 				break;
 			case MOD1_MASK:	//Alt 修改颜色，适合svg和txt
 				loop_color(true);
 				break;
 			default:
-				scale/=0.98;
-				if(scale>4.5)scale=4.5;
-				resize((int)(max*scale),(int)(max*scale));
+				set_scale(ref wscale,true);
 				break;
 			}
 		}
@@ -174,18 +178,20 @@ scroll_event.connect ((e) => {
 			case SHIFT_MASK:
 				rotate-=15; if(rotate<0)rotate+=360;
 				break;
-			case CONTROL_MASK:	//font
-				if(fontindex<0)break;
-		get_next_string_array(ref fontlist, ref fontindex, false);
-				dispfont=fontlist[fontindex];
+			case CONTROL_MASK:
+				if(mime=="image/svg+xml"){
+					set_scale(ref hscale,false);
+				}else{
+					if(fontindex<0)break;
+get_next_string_array(ref fontlist, ref fontindex, false);
+					dispfont=fontlist[fontindex];
+				}
 				break;
 			case MOD1_MASK:	//Alt 修改颜色，适合svg和txt
 				loop_color(false);
 				break;
 			default:
-				scale*=0.98;
-				if(scale<0.2)scale=0.2;
-				resize((int)(max*scale),(int)(max*scale));
+				set_scale(ref wscale,false);
 				break;
 			}
 		}
@@ -194,9 +200,21 @@ scroll_event.connect ((e) => {
 		});
 	}
 //----------------------------------------------------
-	void loop_color(bool y){
+	void set_scale(ref double scale,bool direction){
+		if(direction){	//放大
+			scale/=0.98;
+			if(scale>4.5)scale=4.5;
+		}else{		//缩小
+			scale*=0.98;
+			if(scale<0.2)scale=0.2;
+		}
+		if(mime=="image/svg+xml") resize((int)(max*wscale),(int)(max*hscale));
+		else resize((int)(max*wscale),(int)(max*wscale));
+	}
+//----------------------------------------------------
+	void loop_color(bool direction){
 		if(mime=="image/png")return;
-		get_next_string_array(ref colorlist, ref colorindex, y);
+get_next_string_array(ref colorlist, ref colorindex, direction);
 		if(mime=="image/svg+xml"&&offset>0){
 contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6)).data;
 		try{
