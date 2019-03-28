@@ -123,4 +123,3 @@ bind '"\e[B": history-search-forward'
 #bash_completion
 . /etc/profile.d/bash_completion.sh
 #unset command_not_found_handle
-. /usr/share/autojump/autojump.bash

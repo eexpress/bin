@@ -15,10 +15,12 @@ public class Timer : Gtk.Window {
 	int h; int m;
 	double Dalarm=0;
 	double alarm_alpha=0;	//no alarm
+	int timespan=0;	//alarm和time的分钟差距。
+	DateTime now;
 //----------------------------
 	public Timer() {
 	Gdk.RGBA cc=Gdk.RGBA();
-	string time="";
+	string showtext="";
 		title = "Timer";
 		decorated = false;
 		app_paintable = true;
@@ -31,20 +33,23 @@ public class Timer : Gtk.Window {
 		GLib.Timeout.add_seconds(10,()=>{
 			queue_draw();
 			if(h==th && m==tm && alarm_alpha==1){
+				present();
+	string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
 /*                Posix.system("canberra-gtk-play -f cow.wav");*/
 try {
 	string[] spawn_args = {"/usr/bin/canberra-gtk-play","-l","5","-i","complete"};
+	File f = File.new_for_path(exec);
+	if(f.query_exists()){spawn_args = {exec};}
 	string[] spawn_env = Environ.get ();
 	Pid child_pid;
-	int standard_input; int standard_output; int standard_error;
-	Process.spawn_async_with_pipes ("/", spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid, out standard_input, out standard_output, out standard_error);
+	Process.spawn_async ("/", spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
 ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 } catch (SpawnError e) { print ("Error: %s\n", e.message); }
 			}
 			return true;});
 
 		draw.connect ((da,ctx) => {
-			ctx.set_font_size(size/6);
+			ctx.set_font_size(size/7);
 			Cairo.TextExtents ex;
 			ctx.translate(size/2, size/2);	//窗口中心为坐标原点。
 			ctx.set_line_cap (Cairo.LineCap.ROUND);
@@ -77,19 +82,25 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 //---------------------alarm text
 			cc.parse("#A80CA8");	//紫色
 			ctx.set_source_rgba (cc.red, cc.green, cc.blue, alarm_alpha);
-			time=th.to_string()+":"+tm.to_string();
-			ctx.text_extents (time, out ex);
+			showtext=th.to_string()+":"+tm.to_string();
+			ctx.text_extents (showtext, out ex);
 			ctx.move_to(-ex.width/2,ex.height*2);
-			ctx.show_text(time);
+			ctx.show_text(showtext);
+			if(timespan>0){
+				showtext="+"+timespan.to_string();
+				ctx.text_extents (showtext, out ex);
+				ctx.move_to(-ex.width/2,ex.height*3.5);
+				ctx.show_text(showtext);
+			}
 //---------------------clock text
 			ctx.set_source_rgba (0.2, 0.2, 0.8, alarm_alpha);	//蓝色
-			var now = new DateTime.now_local ();
+			now = new DateTime.now_local ();
 			h=now.get_hour(); m=now.get_minute();
-			if(h>=12)h-=12;
-			time=h.to_string()+":"+m.to_string();
-			ctx.text_extents (time, out ex);
+			h%=12;
+			showtext=h.to_string()+":"+m.to_string();
+			ctx.text_extents (showtext, out ex);
 			ctx.move_to(-ex.width/2,-ex.height);
-			ctx.show_text(time);
+			ctx.show_text(showtext);
 //---------------------
 draw_line(ctx, "#353CDB", 0.9, size/20, (h*30+m*30/60)*(Math.PI/180),0,-(size/2-45));	//时针，30度1小时
 draw_line(ctx, "", 0.9, size/30, m*6*(Math.PI/180),0,-(size/2-30));	//分针，6度1分钟
@@ -112,6 +123,7 @@ draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(size/4)
 			else Gtk.main_quit();
 			return true;
 		}
+		timespan=0;
 		if(e.button == 1){	//圆心之外
 begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 		} else {
@@ -126,11 +138,17 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 	});
 //------------鼠标滚轮事件
 	scroll_event.connect ((e) => {
+		int x; int y; get_position(out x, out y);
+		x=(int)(e.x_root-x-size/2);
+		y=(int)(e.y_root-y-size/2);
+		int d=(int)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 		if(e.direction==Gdk.ScrollDirection.UP){
-			if(size<400)size+=50;
+			if(d<size/20){timespan++;change_from_current_time();}
+			else if(size<400)size+=50;
 		}
 		if(e.direction==Gdk.ScrollDirection.DOWN){
-			if(size>100)size-=50;
+			if(d<size/20){timespan--;change_from_current_time();}
+			else if(size>100)size-=50;
 		}
 		set_size_request(size,size);
 		return true;
@@ -149,6 +167,15 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 		ctx.move_to (0, 0);
 		ctx.rotate(angle); ctx.line_to(dx, dy);
 		ctx.stroke(); ctx.restore();
+	}
+//---------------------
+	void change_from_current_time(){
+		//从now加减timespan分钟，设置th:tm
+		DateTime x=now.add_minutes(timespan);
+		th=x.get_hour(); tm=x.get_minute();
+		th%=12;
+		Dalarm=th*30+tm/2;
+		queue_draw();
 	}
 //---------------------
 }
