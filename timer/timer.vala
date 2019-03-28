@@ -17,6 +17,8 @@ public class Timer : Gtk.Window {
 	double alarm_alpha=0;	//no alarm
 	int timespan=0;	//alarm和time的分钟差距。
 	DateTime now;
+/*    Rsvg.Handle handle;*/
+/*    string svg="<可以embed svg，需要将\"替换成'>";*/
 //----------------------------
 	public Timer() {
 	Gdk.RGBA cc=Gdk.RGBA();
@@ -29,6 +31,9 @@ public class Timer : Gtk.Window {
 		set_size_request(size,size);
 		destroy.connect (Gtk.main_quit);
 		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
+/*        try {*/
+/*        handle = new Rsvg.Handle.from_data(svg.data);*/
+/*        } catch (GLib.Error e) {error ("%s", e.message);}*/
 
 		GLib.Timeout.add_seconds(10,()=>{
 			queue_draw();
@@ -49,31 +54,42 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			return true;});
 
 		draw.connect ((da,ctx) => {
-			ctx.set_font_size(size/7);
+/*            handle.render_cairo(ctx);*/
 			Cairo.TextExtents ex;
+			ctx.set_font_size(size/8);
 			ctx.translate(size/2, size/2);	//窗口中心为坐标原点。
 			ctx.set_line_cap (Cairo.LineCap.ROUND);
 			ctx.set_operator (Cairo.Operator.SOURCE);
-			cc.parse("#A80CA8");	//紫色
+
+			ctx.set_source_rgba (0, 0, 0, 1);
+			ctx.set_line_width (size/30);
+			ctx.arc(0,0,size/2.2,0,2*Math.PI);
+			ctx.stroke();
+			cc.parse("#D8D8D8");
 			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
 			ctx.set_line_width (size/20);
-			ctx.arc(0,0,size/2-size/20/2,0,2*Math.PI);
+			ctx.arc(0,0,size/2.3,0,2*Math.PI);
 			ctx.stroke();
-			cc.parse("#C3C3C3");	//灰色
+			cc.parse("#C3C3C3");
 			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
 			ctx.arc(0,0,size/2-size/20,0,2*Math.PI);
 			ctx.fill();
+			cc.parse("#D8D8D8");
+			ctx.set_source_rgba (0, 0, 0, 0);
+			ctx.set_line_width (3);
+			ctx.arc(0,0,size/2.5,0,2*Math.PI);
+			ctx.stroke();
 //---------------------graduation
 			for(int i=0;i<12;i++){
 				ctx.set_line_width (size/20);
 				ctx.save();
 				ctx.rotate(i*30*(Math.PI/180));
 				if(i%3==0){
-					ctx.set_line_width (size/20);
-					ctx.set_source_rgba (0, 0, 0, 0.9);
+					ctx.set_line_width (size/30);
+					ctx.set_source_rgba (0, 0, 0, 0.8);
 				}else{
 					ctx.set_line_width (size/50);
-					ctx.set_source_rgba (0.2, 0.2, 0.2, 0.4);
+					ctx.set_source_rgba (0.2, 0.2, 0.2, 0.2);
 				}
 				ctx.move_to(0,-(size/2-20));
 				ctx.rel_line_to(0,-5); ctx.stroke();
@@ -82,7 +98,7 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 //---------------------alarm text
 			cc.parse("#A80CA8");	//紫色
 			ctx.set_source_rgba (cc.red, cc.green, cc.blue, alarm_alpha);
-			showtext=th.to_string()+":"+tm.to_string();
+			showtext="%02d:%02d".printf(th,tm);
 			ctx.text_extents (showtext, out ex);
 			ctx.move_to(-ex.width/2,ex.height*2);
 			ctx.show_text(showtext);
@@ -93,21 +109,24 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 				ctx.show_text(showtext);
 			}
 //---------------------clock text
-			ctx.set_source_rgba (0.2, 0.2, 0.8, alarm_alpha);	//蓝色
+			ctx.set_source_rgba (0, 0, 0, alarm_alpha);
 			now = new DateTime.now_local ();
 			h=now.get_hour(); m=now.get_minute();
 			h%=12;
-			showtext=h.to_string()+":"+m.to_string();
+			showtext="%02d:%02d".printf(h,m);
 			ctx.text_extents (showtext, out ex);
 			ctx.move_to(-ex.width/2,-ex.height);
 			ctx.show_text(showtext);
 //---------------------
-draw_line(ctx, "#353CDB", 0.9, size/20, (h*30+m*30/60)*(Math.PI/180),0,-(size/2-45));	//时针，30度1小时
-draw_line(ctx, "", 0.9, size/30, m*6*(Math.PI/180),0,-(size/2-30));	//分针，6度1分钟
-draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(size/4));	//定时针，30度1小时，30度内分60分钟
+draw_line(ctx, "#000000", 0.9, size/20, (h*30+m*30/60)*(Math.PI/180),0,-(int)(size/3.6));	//时针，30度1小时
+draw_line(ctx, "", 0.9, size/30, m*6*(Math.PI/180),0,-(int)(size/2.5));	//分针，6度1分钟
+draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(int)(size/4));	//定时针，30度1小时，30度内分60分钟
 //---------------------center
-			ctx.set_source_rgba (0.9, 0.2, 0.2, 0.9);	//蓝色
+			ctx.set_source_rgba (0, 0, 0, 0.9);
 			ctx.arc(0,0,size/20,0,2*Math.PI);
+			ctx.fill();
+			ctx.set_source_rgba (0.87, 0, 0, 0.9);	//暗红
+			ctx.arc(0,0,size/35,0,2*Math.PI);
 			ctx.fill();
 			return true;
 		});
