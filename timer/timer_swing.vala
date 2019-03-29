@@ -6,12 +6,13 @@ using Cairo;
 public class swing {
 	public double vscale;
 	int cnt;		//下摆动需要cnt
-	const int max_cnt=5;	//半幅度下摆动次数
+	const int max_cnt=6;	//半幅度下摆动次数
 	int direct;
 	double step_angle;	//switch of swing
 	double decay=0.1;	//const
 	double angle;
 	const double min_angle=50;	//第一次到达后，确定max_cnt
+	public bool dark=true;	//for light deal
 //---------------------
 	public void init() {step_angle=10; angle=90; direct=1; cnt=0; vscale=1;}
 //---------------------
@@ -26,6 +27,7 @@ public class swing {
 				cnt++;
 				if(cnt>=max_cnt) {direct=-1; cnt=0;}
 			}else{	//上摆动经过90度才改变方向
+				dark=!dark;	//direct change from -1 to 1
 				if(angle>=90) direct=1;
 			}
 			vscale=Math.sin(angle*(Math.PI/180));
@@ -103,8 +105,10 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			ctx.set_line_width (size/20);
 			ctx.arc(0,0,size/2.3,0,2*Math.PI);
 			ctx.stroke();
+			double xx;
+			if(!sss.dark) xx=sss.vscale; else xx=1/sss.vscale;
 			cc.parse("#C3C3C3");
-			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
+			ctx.set_source_rgba (cc.red*xx, cc.green*xx, cc.blue*xx, 0.8);
 			ctx.arc(0,0,size/2-size/20,0,2*Math.PI);
 			ctx.fill();
 			cc.parse("#D8D8D8");
