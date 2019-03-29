@@ -2,6 +2,38 @@
 using Gtk;
 using Cairo;
 	
+//---------------------------------------
+public class swing {
+	public double vscale;
+	int cnt;		//下摆动需要cnt
+	const int max_cnt=5;	//半幅度下摆动次数
+	int direct;
+	double step_angle;	//switch of swing
+	double decay=0.1;	//const
+	double angle;
+	const double min_angle=50;	//第一次到达后，确定max_cnt
+//---------------------
+	public void init() {step_angle=10; angle=90; direct=1; cnt=0; vscale=1;}
+//---------------------
+	public bool need_draw_swing() {
+			if(step_angle<=0) {init(); 
+			return false;}
+			angle-=step_angle*direct;
+			step_angle-=decay;
+			//需要容错。保持摇摆能归位。
+			if(step_angle<=0 && angle<89) step_angle=decay;
+			if(direct==1){	//下摆动记次数
+				cnt++;
+				if(cnt>=max_cnt) {direct=-1; cnt=0;}
+			}else{	//上摆动经过90度才改变方向
+				if(angle>=90) direct=1;
+			}
+			vscale=Math.sin(angle*(Math.PI/180));
+			return true;
+		}
+}
+//---------------------------------------
+
 //--------------------------------------------------------
 /*
 圆心：鼠标1键开关定时，其他键退出。
@@ -28,13 +60,17 @@ public class Timer : Gtk.Window {
 		app_paintable = true;
 		set_visual(this.get_screen().get_rgba_visual());
 		set_size_request(size,size);
+		var sss=new swing(); sss.init();
 		destroy.connect (Gtk.main_quit);
 add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 
 		GLib.Timeout.add_seconds(10,()=>{
 			queue_draw();
 			if(h==th && m==tm && alarm_alpha==1){
-				present(); set_keep_above(true);
+				GLib.Timeout.add(50,()=>{
+					if(sss.need_draw_swing()){queue_draw(); return true;}
+					else return false;});
+					present(); set_keep_above(true);
 	string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
 /*                Posix.system("canberra-gtk-play -f cow.wav");*/
 try {
@@ -56,6 +92,7 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			ctx.translate(size/2, size/2);	//窗口中心为坐标原点。
 			ctx.set_line_cap (Cairo.LineCap.ROUND);
 			ctx.set_operator (Cairo.Operator.SOURCE);
+			ctx.scale(1,sss.vscale);
 
 			ctx.set_source_rgba (0, 0, 0, 1);
 			ctx.set_line_width (size/30);
