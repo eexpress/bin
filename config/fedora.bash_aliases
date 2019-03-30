@@ -44,7 +44,7 @@ alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|c
 alias d='\du -h'
 alias g='grep --color=always -Pi 2>/dev/null'
 #alias g='grep --color=always -inTZE 2>/dev/null'
-alias v='/usr/bin/gvim'
+alias v='/usr/bin/gvim --remote-tab'
 alias sv='sudo /usr/bin/vim'
 alias k='pkill -9 -f'
 
