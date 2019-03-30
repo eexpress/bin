@@ -159,10 +159,8 @@ draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(int)(si
 		});
 //----------鼠标点击事件。
 	button_press_event.connect ((e) => {
-	//----------root坐标转窗口坐标，计算和原点的距离。
-		int x; int y; get_position(out x, out y);
-		x=(int)(e.x_root-x-size/2);
-		y=(int)(e.y_root-y-size/2);
+		int x; int y;
+		x=(int)(e.x-size/2); y=(int)(e.y-size/2);
 		int d=(int)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 		if(d<size/20){	//圆心之内
 			if(e.button == 1){
@@ -187,9 +185,8 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 	});
 //------------鼠标滚轮事件
 	scroll_event.connect ((e) => {
-		int x; int y; get_position(out x, out y);
-		x=(int)(e.x_root-x-size/2);
-		y=(int)(e.y_root-y-size/2);
+		int x; int y;
+		x=(int)(e.x-size/2); y=(int)(e.y-size/2);
 		int d=(int)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 		if(e.direction==Gdk.ScrollDirection.UP){
 			if(d<size/20){timespan++;change_from_current_time();}
