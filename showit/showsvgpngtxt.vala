@@ -12,9 +12,9 @@ class ShowSVGPNGTXT : Gtk.Window {
 		string[] colorlist={"ff0000","FF00FF","ffa500","ffd700","2e8b57","32CD32","0000cd", "7B68EE"};
 		//Red, Magenta, Orange, Gold, SeaGreen, LimeGreen, MediumBlue, MediumSlateBlue
 		Rsvg.Handle handle;	//new产生的，有初始值
-		int max;	//正方形边长
-		double hscale=1;	//滚轮改svg水平缩放
-		double wscale=1;	//ctrl滚轮改svg垂直缩放
+		int max;	//原始图形正方形边长
+		double hscale=1;	//ctrl滚轮改svg水平缩放
+		double scale=1;		//滚轮缩放
 
 	public ShowSVGPNGTXT(string inputtext) {
 		ImageSurface img;
@@ -31,7 +31,7 @@ class ShowSVGPNGTXT : Gtk.Window {
 //窗口特性
 		title = "ShowSVGPNGTXT";
 		skip_taskbar_hint = true;
-		decorated = false;
+/*        decorated = false;*/
 		app_paintable = true;
 		set_position(MOUSE);
 		set_visual(this.get_screen().get_rgba_visual());
@@ -107,10 +107,10 @@ if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
 //----------------------------------------------------
 //绘制窗口事件
 		draw.connect ((da,ctx) => {	//直接在窗口绘图
-			if(mime=="image/svg+xml") ctx.scale(wscale,hscale);
-			else ctx.scale(wscale,wscale);
-			ctx.translate(max/2, max/2); //窗口中心为旋转原点
+			ctx.scale(scale,scale);
+			ctx.translate(max*hscale/2, max*hscale/2); //窗口中心为旋转原点
 			ctx.rotate (rotate*Math.PI/180);
+			ctx.scale(hscale,1);
 			ctx.translate(-max/2, -max/2);
 
 switch(mime){
@@ -169,7 +169,7 @@ get_next_string_array(ref fontlist, ref fontindex, true);
 				loop_color(true);
 				break;
 			default:
-				set_scale(ref wscale,true);
+				set_scale(ref scale,true);
 				break;
 			}
 		}
@@ -191,7 +191,7 @@ get_next_string_array(ref fontlist, ref fontindex, false);
 				loop_color(false);
 				break;
 			default:
-				set_scale(ref wscale,false);
+				set_scale(ref scale,false);
 				break;
 			}
 		}
@@ -200,16 +200,16 @@ get_next_string_array(ref fontlist, ref fontindex, false);
 		});
 	}
 //----------------------------------------------------
-	void set_scale(ref double scale,bool direction){
+	void set_scale(ref double s,bool direction){
 		if(direction){	//放大
-			scale/=0.98;
-			if(scale>4.5)scale=4.5;
+			s/=0.98;
+			if(s>4.5)s=4.5;
 		}else{		//缩小
-			scale*=0.98;
-			if(scale<0.2)scale=0.2;
+			s*=0.98;
+			if(s<0.2)s=0.2;
 		}
-		if(mime=="image/svg+xml") resize((int)(max*wscale),(int)(max*hscale));
-		else resize((int)(max*wscale),(int)(max*wscale));
+		double maxscale=hscale>1?scale*hscale:scale;
+		resize((int)(max*maxscale),(int)(max*maxscale));
 	}
 //----------------------------------------------------
 	void loop_color(bool direction){
