@@ -31,7 +31,7 @@ class ShowSVGPNGTXT : Gtk.Window {
 //窗口特性
 		title = "ShowSVGPNGTXT";
 		skip_taskbar_hint = true;
-/*        decorated = false;*/
+		decorated = false;
 		app_paintable = true;
 		set_position(MOUSE);
 		set_visual(this.get_screen().get_rgba_visual());
