@@ -13,6 +13,11 @@ set foldmethod=syntax
 set foldlevel=9
 "indent 	"相同缩进的行折叠。zc/zo/zR(reset)
 "mark: 设置 me 回来 'e/`e
+"`gd` : Goto local Declaration.  "比*更直接的找到定义处。
+set autoread 	"文件在Vim之外修改过，自动重新读入
+filetype plugin on		"运行vim加载文件类型插件
+"bn bp: buffer切换上下文件
+set autochdir
 
 " 关闭窗口/保存文件
 map <leader>q	<Esc>:q!<CR>
@@ -47,3 +52,16 @@ au BufNewFile *.bash,*.sh	0put='#!/bin/bash'|setf bash|normal Go
 au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 "autocmd BufNewFile,BufRead *.vala set runtimepath="${HOME}/.vim/bundle/vala.vim/"
 autocmd BufRead,BufNewFile *.vala,*.vapi setfiletype vala
+"============ <F5> 编译和运行 =========
+map <F5> :call CompileRun()<CR>
+func CompileRun()
+    exec "w"
+        if &filetype == 'c'
+            exec "!gcc % -o %<"
+            exec "! %<"
+        elseif &filetype == 'vala'
+		"设置多了附带的包，编译结果md5sum不同，大小无差距。
+            exec "!valac --pkg gtk+-3.0 --pkg librsvg-2.0 -X -lm %"
+            exec "!./%< &"
+        endif
+endfunc

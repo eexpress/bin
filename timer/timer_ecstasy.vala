@@ -3,30 +3,28 @@ using Gtk;
 using Cairo;
 	
 //--------------------------------------------------------
-public class ecstasy {
-	public double angle;
+public class swing {
 	int cnt;
-	int max_cnt=6;	//半幅度
-	int direct;
+	const int max_cnt=6;	//半幅度摆动次数，回位不计数
+	int direct;	//顺时钟为1
 	double step_angle;
-	double decay=0.1;
+	const double decay=0.1;
 
+	public double angle;
 //---------------------
 	public void init() {step_angle=10; angle=0; direct=1; cnt=0;}
 //---------------------
-	public bool need_draw_ecstasy() {
-		if(step_angle<=0) {init(); return false;}
+	public bool need_draw_swing() {
+		if(step_angle==decay && Math.fabs(angle)<=decay) {init(); return false;}
 		angle+=step_angle*direct;
 		step_angle-=decay;
-/*        if(step_angle<=0 && angle!=0) step_angle=decay;*/
+		if(step_angle<=decay) step_angle=decay;
 		if(angle>0 && direct==1) cnt++;	//左边左摇
 		if(angle<0 && direct==-1) cnt++;	//右边右摇
 		if(cnt>max_cnt){direct=direct==1?-1:1; cnt=0;}
 		return true;
 	}
 }
-//---------------------------------------
-
 //--------------------------------------------------------
 /*
 圆心：鼠标1键开关定时，其他键退出。
@@ -53,7 +51,7 @@ public class Timer : Gtk.Window {
 		app_paintable = true;
 		set_visual(this.get_screen().get_rgba_visual());
 		set_size_request(size,size);
-		var sss=new ecstasy(); sss.init();
+		var sss=new swing(); sss.init();
 		destroy.connect (Gtk.main_quit);
 add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 
@@ -61,26 +59,23 @@ add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 			queue_draw(); sss.init();
 			if(h==th && m==tm && alarm_alpha==1){
 				GLib.Timeout.add(50,()=>{
-					bool ret=sss.need_draw_ecstasy();
+					bool ret=sss.need_draw_swing();
 					queue_draw(); return ret;
 					});
 					present(); set_keep_above(true);
-	string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
-/*                Posix.system("canberra-gtk-play -f cow.wav");*/
+string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
 try {
-	string[] spawn_args = {"/usr/bin/canberra-gtk-play","-l","5","-i","complete"};
+	string[] spawn_args = "/usr/bin/canberra-gtk-play -l 5 -i complete".split(" ");
 	File f = File.new_for_path(exec);
 	if(f.query_exists()){spawn_args = {exec};}
-	string[] spawn_env = Environ.get ();
 	Pid child_pid;
-	Process.spawn_async ("/", spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
+	Process.spawn_async (".", spawn_args, null, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
 ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 } catch (SpawnError e) { print ("Error: %s\n", e.message); }
 			}
 			return true;});
 
 		draw.connect ((da,ctx) => {
-/*            handle.render_cairo(ctx);*/
 			Cairo.TextExtents ex;
 			ctx.set_font_size(size/8);
 			ctx.translate(size/2, size/2);	//窗口中心为坐标原点。

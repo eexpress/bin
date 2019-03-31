@@ -34,23 +34,20 @@ add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 		GLib.Timeout.add_seconds(10,()=>{
 			queue_draw();
 			if(h==th && m==tm && alarm_alpha==1){
-				present(); set_keep_above(true);
-	string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
-/*                Posix.system("canberra-gtk-play -f cow.wav");*/
+					present(); set_keep_above(true);
+string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
 try {
-	string[] spawn_args = {"/usr/bin/canberra-gtk-play","-l","5","-i","complete"};
+	string[] spawn_args = "/usr/bin/canberra-gtk-play -l 5 -i complete".split(" ");
 	File f = File.new_for_path(exec);
 	if(f.query_exists()){spawn_args = {exec};}
-	string[] spawn_env = Environ.get ();
 	Pid child_pid;
-	Process.spawn_async ("/", spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
+	Process.spawn_async (".", spawn_args, null, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
 ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 } catch (SpawnError e) { print ("Error: %s\n", e.message); }
 			}
 			return true;});
 
 		draw.connect ((da,ctx) => {
-/*            handle.render_cairo(ctx);*/
 			Cairo.TextExtents ex;
 			ctx.set_font_size(size/8);
 			ctx.translate(size/2, size/2);	//窗口中心为坐标原点。

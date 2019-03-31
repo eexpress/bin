@@ -2,40 +2,29 @@
 using Gtk;
 using Cairo;
 	
-//---------------------------------------
+//--------------------------------------------------------
 public class swing {
-	public double vscale;
-	int cnt;		//下摆动需要cnt
-	const int max_cnt=6;	//半幅度下摆动次数
-	int direct;
-	double step_angle;	//switch of swing
-	double decay=0.1;	//const
-	double angle;
-	const double min_angle=50;	//第一次到达后，确定max_cnt
-	public bool dark=true;	//for light deal
+	int cnt;
+	const int max_cnt=6;	//半幅度摆动次数，回位不计数
+	int direct;	//顺时钟为1
+	double step_angle;
+	const double decay=0.1;
+
+	public double angle;
 //---------------------
-	public void init() {step_angle=10; angle=90; direct=1; cnt=0; vscale=1;}
+	public void init() {step_angle=10; angle=0; direct=1; cnt=0;}
 //---------------------
 	public bool need_draw_swing() {
-			if(step_angle<=0) {init(); 
-			return false;}
-			angle-=step_angle*direct;
-			step_angle-=decay;
-			//需要容错。保持摇摆能归位。
-			if(step_angle<=0 && angle<89) step_angle=decay;
-			if(direct==1){	//下摆动记次数
-				cnt++;
-				if(cnt>=max_cnt) {direct=-1; cnt=0;}
-			}else{	//上摆动经过90度才改变方向
-				dark=!dark;	//direct change from -1 to 1
-				if(angle>=90) direct=1;
-			}
-			vscale=Math.sin(angle*(Math.PI/180));
-			return true;
-		}
+		if(step_angle==decay && Math.fabs(angle)<=decay) {init(); return false;}
+		angle+=step_angle*direct;
+		step_angle-=decay;
+		if(step_angle<=decay) step_angle=decay;
+		if(angle>0 && direct==1) cnt++;	//前部前摆
+		if(angle<0 && direct==-1) cnt++;	//后部后摆
+		if(cnt>max_cnt){direct=direct==1?-1:1; cnt=0;}
+		return true;
+	}
 }
-//---------------------------------------
-
 //--------------------------------------------------------
 /*
 圆心：鼠标1键开关定时，其他键退出。
@@ -74,28 +63,26 @@ add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 					queue_draw(); return ret;
 					});
 					present(); set_keep_above(true);
-	string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
-/*                Posix.system("canberra-gtk-play -f cow.wav");*/
+string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
 try {
-	string[] spawn_args = {"/usr/bin/canberra-gtk-play","-l","5","-i","complete"};
+	string[] spawn_args = "/usr/bin/canberra-gtk-play -l 5 -i complete".split(" ");
 	File f = File.new_for_path(exec);
 	if(f.query_exists()){spawn_args = {exec};}
-	string[] spawn_env = Environ.get ();
 	Pid child_pid;
-	Process.spawn_async ("/", spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
+	Process.spawn_async (".", spawn_args, null, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
 ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 } catch (SpawnError e) { print ("Error: %s\n", e.message); }
 			}
 			return true;});
 
 		draw.connect ((da,ctx) => {
-/*            handle.render_cairo(ctx);*/
 			Cairo.TextExtents ex;
 			ctx.set_font_size(size/8);
 			ctx.translate(size/2, size/2);	//窗口中心为坐标原点。
 			ctx.set_line_cap (Cairo.LineCap.ROUND);
 			ctx.set_operator (Cairo.Operator.SOURCE);
-			ctx.scale(1,sss.vscale);
+			double vscale=Math.cos(sss.angle*(Math.PI/180));
+			ctx.scale(1,vscale);
 
 			ctx.set_source_rgba (0, 0, 0, 1);
 			ctx.set_line_width (size/30);
@@ -106,10 +93,14 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			ctx.set_line_width (size/20);
 			ctx.arc(0,0,size/2.3,0,2*Math.PI);
 			ctx.stroke();
-			double xx;
-			if(!sss.dark) xx=sss.vscale; else xx=1/sss.vscale;
 			cc.parse("#C3C3C3");
-			ctx.set_source_rgba (cc.red*xx, cc.green*xx, cc.blue*xx, 0.8);
+			double xx=1;
+			if(sss.angle!=0){
+				xx=vscale*vscale;
+				if(sss.angle>=0) xx*=cc.red; else xx=cc.red/xx;
+				ctx.set_source_rgba (xx, xx, xx, 0.8);
+			} else
+			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
 			ctx.arc(0,0,size/2-size/20,0,2*Math.PI);
 			ctx.fill();
 			cc.parse("#D8D8D8");
