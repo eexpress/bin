@@ -1,4 +1,4 @@
-/*▶ valac --pkg gtk+-3.0 -X -lm timer.vala*/
+//!valac --pkg gtk+-3.0 -X -lm %
 using Gtk;
 using Cairo;
 	

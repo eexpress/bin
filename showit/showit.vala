@@ -1,3 +1,4 @@
+//!valac --pkg gtk+-3.0 %
 using Gtk;
 using Cairo;
 	
