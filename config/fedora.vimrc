@@ -52,16 +52,18 @@ au BufNewFile *.bash,*.sh	0put='#!/bin/bash'|setf bash|normal Go
 au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 "autocmd BufNewFile,BufRead *.vala set runtimepath="${HOME}/.vim/bundle/vala.vim/"
 autocmd BufRead,BufNewFile *.vala,*.vapi setfiletype vala
-"============ <F5> 编译和运行 =========
-map <F5> :call CompileRun()<CR>
-func CompileRun()
-    exec "w"
-        if &filetype == 'c'
-            exec "!gcc % -o %<"
-            exec "! %<"
-        elseif &filetype == 'vala'
-		"设置多了附带的包，编译结果md5sum不同，大小无差距。
-            exec "!valac --pkg gtk+-3.0 --pkg librsvg-2.0 -X -lm %"
-            exec "!./%< &"
-        endif
+
+"============ <F5> 运行前五行注释中的命令 =========
+map <F5> :call RunComment()<CR>
+func RunComment()
+	let n = 1
+	while n < 5
+		let l=getline(n)
+		if l =~ '//!'
+			echo strpart(l, stridx(l, "!"))
+			exec strpart(l, stridx(l, "!"))
+		endif
+		let n = n + 1
+	endwhile
 endfunc
+

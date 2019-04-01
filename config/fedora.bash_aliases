@@ -55,7 +55,7 @@ alias lsm='ls -oAh --time-style=iso -t'		# mtime
 alias lsc='ls -oAh --time-style=iso -tc'	# ctime
 alias lss='ls -oAh --time-style=iso -S'		# size
 
-alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
+#alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
 alias ggit='cd ~/bin;/usr/bin/git'
 
 alias dl="$HOME/bin/app/you-get/you-get"
