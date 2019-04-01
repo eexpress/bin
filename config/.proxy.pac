@@ -5,7 +5,7 @@ var darr = [
 'youtube', 'chrome.com',
 'pinterest.com', 'pinimg.com',
 'github', 'githubusercontent.com',
-'twitter', 'twimg',
+'twitter', 'twimg', 'imgur.com',
 'telegram.org', 'wire.com',
 'disqus.com',  'wordpress', 'blogspot', 'feedburner.com', 'blogblog', 'blogger',
 'reddit.com', 'valadoc.org',

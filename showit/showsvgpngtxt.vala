@@ -6,22 +6,22 @@ class ShowSVGPNGTXT : Gtk.Window {
 		string mime="";
 		string str="";
 		uint8[] contents={};
-		const string keyid="sub0";	//改成变色龙？chameleon
+		const string keyid="sub0";
 		long offset=-1;
 		int colorindex=0;
 		string[] colorlist={"ff0000","FF00FF","ffa500","ffd700","2e8b57","32CD32","0000cd", "7B68EE"};
 		//Red, Magenta, Orange, Gold, SeaGreen, LimeGreen, MediumBlue, MediumSlateBlue
-		Rsvg.Handle handle;	//new产生的，有初始值
+		Rsvg.Handle handle;
 		int max;	//原始图形正方形边长
 		double hscale=1;	//ctrl滚轮改svg水平缩放
 		double scale=1;		//滚轮缩放
+		double maxscale=1;
 
 	public ShowSVGPNGTXT(string inputtext) {
 		ImageSurface img;
 		double rotate=0;
 		int w=300;
 		int h=100;
-/*        var handle=new Rsvg.Handle();	//new产生的，有初始值*/
 
 		string[] fontlist={};
 		int fontindex=-1;
@@ -201,6 +201,9 @@ get_next_string_array(ref fontlist, ref fontindex, false);
 	}
 //----------------------------------------------------
 	void set_scale(ref double s,bool direction){
+		int root_x; int root_y;
+		get_position(out root_x, out root_y);
+		double max0=maxscale;
 		if(direction){	//放大
 			s/=0.98;
 			if(s>4.5)s=4.5;
@@ -208,7 +211,9 @@ get_next_string_array(ref fontlist, ref fontindex, false);
 			s*=0.98;
 			if(s<0.2)s=0.2;
 		}
-		double maxscale=hscale>1?scale*hscale:scale;
+		maxscale=hscale>1?scale*hscale:scale;
+		int off=(int)(max*(maxscale-max0)/2);
+		move(root_x-off, root_y-off);
 		resize((int)(max*maxscale),(int)(max*maxscale));
 	}
 //----------------------------------------------------
