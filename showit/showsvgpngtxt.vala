@@ -1,5 +1,5 @@
 //!valac --pkg gtk+-3.0 --pkg librsvg-2.0 %
-//!./%<
+//!./%< arrow.svg
 using Gtk;
 using Cairo;
 
@@ -108,8 +108,8 @@ if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
 //----------------------------------------------------
 //绘制窗口事件
 		draw.connect ((da,ctx) => {	//直接在窗口绘图
+			ctx.translate(max*maxscale/2, max*maxscale/2); //窗口中心为旋转原点
 			ctx.scale(scale,scale);
-			ctx.translate(max*hscale/2, max*hscale/2); //窗口中心为旋转原点
 			ctx.rotate (rotate*Math.PI/180);
 			ctx.scale(hscale,1);
 			ctx.translate(-max/2, -max/2);
@@ -202,8 +202,6 @@ get_next_string_array(ref fontlist, ref fontindex, false);
 	}
 //----------------------------------------------------
 	void set_scale(ref double s,bool direction){
-		int root_x; int root_y;
-		get_position(out root_x, out root_y);
 		double max0=maxscale;
 		if(direction){	//放大
 			s/=0.98;
@@ -213,8 +211,11 @@ get_next_string_array(ref fontlist, ref fontindex, false);
 			if(s<0.2)s=0.2;
 		}
 		maxscale=hscale>1?scale*hscale:scale;
-		int off=(int)(max*(maxscale-max0)/2);
-		move(root_x-off, root_y-off);
+/*        Window managers are free to ignore this; most window managers ignore requests for initial window positions (instead using a user-defined placement algorithm) and honor requests after the window has already been shown.*/
+/*        int off=(int)(max*(maxscale-max0)/2);*/
+/*        int root_x; int root_y;*/
+/*        get_position(out root_x, out root_y);*/
+/*        move(root_x-off, root_y-off);*/
 		resize((int)(max*maxscale),(int)(max*maxscale));
 	}
 //----------------------------------------------------

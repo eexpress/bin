@@ -22,7 +22,7 @@ func RunComment()
 	endwhile
 endfunc
 ```
-源码里面类似这样的，直接写编译命令。反正只认包含"//!"的行。第二句没运行，还要看看为啥。
+源码里面类似这样的，直接写编译命令。反正只认包含"//!"的行。
 ```
 ▶ head -n 5 ~/bin/showit/showsvgpngtxt.vala 
 //▶ valac --pkg gtk+-3.0 --pkg librsvg-2.0 showsvgpngtxt.vala
