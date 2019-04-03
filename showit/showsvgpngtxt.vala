@@ -17,6 +17,7 @@ class ShowSVGPNGTXT : Gtk.Window {
 		double hscale=1;	//ctrl滚轮改svg水平缩放
 		double scale=1;		//滚轮缩放
 		double maxscale=1;
+		int switchindex=-1;
 
 	public ShowSVGPNGTXT(string inputtext) {
 		ImageSurface img;
@@ -57,7 +58,8 @@ case "image/svg+xml":
 			handle = new Rsvg.Handle.from_data(contents);
 /*            handle = new Rsvg.Handle.from_file(inputtext);*/
 		} catch (GLib.Error e) {error ("%s", e.message);}
-/*if(handle.has_sub("#sub0") && handle.has_sub("#sub1"))//work */
+		if(handle.has_sub("#switch0") && handle.has_sub("#switch1")) switchindex=0;
+
 		str=(string) contents;
 		int i=str.index_of("id=\""+keyid+"\"", 0);
 		if(i>0){	//向前找，2种格式
@@ -117,7 +119,8 @@ if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
 switch(mime){
 	case "image/svg+xml":
 		ctx.translate((max-w)/2,(max-h)/2);
-		handle.render_cairo(ctx);
+		if(switchindex>=0) handle.render_cairo_sub(ctx, "#switch"+switchindex.to_string());
+		else handle.render_cairo(ctx);
 /*handle.render_cairo_sub(ctx,"#"+keyid);	//work */
 		break;
 	case "image/png":
@@ -159,7 +162,8 @@ scroll_event.connect ((e) => {
 				break;
 			case CONTROL_MASK:
 				if(mime=="image/svg+xml"){
-					set_scale(ref hscale,true);
+					if(switchindex>=0) switchnext(true);
+					else set_scale(ref hscale,true);
 				}else{
 					if(fontindex<0)break;
 get_next_string_array(ref fontlist, ref fontindex, true);
@@ -181,7 +185,8 @@ get_next_string_array(ref fontlist, ref fontindex, true);
 				break;
 			case CONTROL_MASK:
 				if(mime=="image/svg+xml"){
-					set_scale(ref hscale,false);
+					if(switchindex>=0) switchnext(false);
+					else set_scale(ref hscale,false);
 				}else{
 					if(fontindex<0)break;
 get_next_string_array(ref fontlist, ref fontindex, false);
@@ -228,6 +233,23 @@ contents=(str.substring(0,offset)+colorlist[colorindex]+str.substring(offset+6))
 			handle = new Rsvg.Handle.from_data(contents);
 		} catch (GLib.Error e) {error ("%s", e.message);}
 		}
+	}
+//----------------------------------------------------
+	void switchnext(bool direction){
+		if(direction) {
+			switchindex++;
+			if(!handle.has_sub("#switch"+switchindex.to_string()))
+				switchindex=0;
+		} else {
+			switchindex--;
+			if(switchindex<0){
+				switchindex=7;	//max 8 icons
+				while(!handle.has_sub("#switch"+switchindex.to_string())){
+					switchindex--;
+				}
+			}
+		}
+		
 	}
 //---------------递归找数组中下一个非空字符串----------
 	void get_next_string_array(
