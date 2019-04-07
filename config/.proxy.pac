@@ -6,7 +6,7 @@ var darr = [
 'pinterest.com', 'pinimg.com',
 'github', 'githubusercontent.com',
 'twitter', 'twimg', 'imgur.com',
-'telegram.org', 'wire.com',
+'telegram.org', 'wire.com', 'tdesktop.com',
 'disqus.com',  'wordpress', 'blogspot', 'feedburner.com', 'blogblog', 'blogger',
 'reddit.com', 'valadoc.org',
 'thepiratebay',	'wikipedia.org', 'alternativeto.net',

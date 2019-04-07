@@ -1,5 +1,5 @@
 //!valac --pkg gtk+-3.0 --pkg librsvg-2.0 %
-//!./%< arrow.svg
+//!./%< 字体演示--Text
 using Gtk;
 using Cairo;
 
@@ -10,8 +10,8 @@ class ShowSVGPNGTXT : Gtk.Window {
 		const string keyid="sub0";
 		long offset=-1;
 		int colorindex=0;
-		string[] colorlist={"ff0000","FF00FF","ffa500","ffd700","2e8b57","32CD32","0000cd", "7B68EE"};
-		//Red, Magenta, Orange, Gold, SeaGreen, LimeGreen, MediumBlue, MediumSlateBlue
+		string[] colorlist={"ff0000","FF00FF","ffdd00","00ddff","000000","32CD32","0000dd", "7B68EE"};
+		//Red, Magenta, Orange, White, Black, LimeGreen, MediumBlue, MediumSlateBlue
 		Rsvg.Handle handle;
 		int max;	//原始图形正方形边长
 		double hscale=1;	//ctrl滚轮改svg水平缩放
@@ -99,6 +99,7 @@ if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
 		tmpctx.set_font_size(fsize);
 		tmpctx.text_extents (inputtext, out ex);
 		w=(int)ex.width; h=(int)ex.height;
+		w+=w/10;	//不同字体宽度不同。并不方便切换时候resize窗口。
 /*x_bearing: 2.000000, width: 246.000000, x_advance: 249.000000*/
 /*y_bearing: -46.000000, height: 57.000000, y_advance: 0.000000*/
 		img.flush();
