@@ -90,7 +90,7 @@ export GROFF_NO_SGR=1	#fix no color in Fedora 25
 
 #-------ENVIROMENT SET-----------------------------
 export PATH=$HOME/bin:$PATH
-export CDPATH=:~:~/bin
+export CDPATH=:~:~/bin:~/文档
 
 #-------ENCFS--------------------------------------
 encfs_dir="encfs-eexp"
