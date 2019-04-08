@@ -1,7 +1,7 @@
 #hexo
-
+---
 ## Fedora 29 恢复 hexo
-
+---
 ## 安装必要环境
 ```
 # dnf install libuv
@@ -59,5 +59,37 @@ jsonContent:
 ▶ ln ~/bin/mkd/mkd.css .
 ▶ cp main.scss{,.org}
 ▶ echo -e '\n\n@import "mkd.css";'>>main.scss
+
+```
+---
+## 完全卸载hexo和npm
+---
+
+```
+⭕ cd hexo
+⭕ npm uninstall hexo-deployer-git hexo-generator-feed hexo-generator-json-content hexo-cli
+⭕ sudo npm uninstall hexo-cli -g
+⭕ npm list -g --depth 0         <-- 全局 -g
+/usr/lib
+├── hexo@3.8.0
+└── npm@6.4.1
+⭕ sudo npm uninstall -g hexo
+⭕ npm list --depth 0            <--本地安装太多，一把删除目录
+hexo-site@0.0.0 /home/eexpss/文档/hexo
+├── hexo@3.8.0
+├── hexo-generator-archive@0.1.5
+├── hexo-generator-category@0.1.3
+├── hexo-generator-index@0.2.1
+├── hexo-generator-tag@0.2.0
+├── hexo-renderer-ejs@0.3.1
+├── hexo-renderer-marked@0.3.2
+├── hexo-renderer-stylus@0.3.3
+└── hexo-server@0.3.3
+
+npm ERR! missing: mkdirp@0.5.1, required by node-pre-gyp@0.10.3
+⭕ cd ..
+⭕ sudo rm -r hexo/
+⭕ dr npm libuv nodejs
+将会释放空间：45 M
 
 ```

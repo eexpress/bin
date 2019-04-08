@@ -100,8 +100,8 @@ if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
 		tmpctx.text_extents (inputtext, out ex);
 		w=(int)ex.width; h=(int)ex.height;
 		w+=w/10;	//不同字体宽度不同。并不方便切换时候resize窗口。
-/*x_bearing: 2.000000, width: 246.000000, x_advance: 249.000000*/
-/*y_bearing: -46.000000, height: 57.000000, y_advance: 0.000000*/
+/*x_bearing: 2.000000, width: 246, x_advance: 249.000000*/
+/*y_bearing: -46.000000, height: 57, y_advance: 0.000000*/
 		img.flush();
 		img = new ImageSurface(Format.ARGB32,w,h);
 	break;
