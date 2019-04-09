@@ -9,7 +9,7 @@ set tabstop=4
 set shiftwidth=4 	" < > 平移
 set noexpandtab
 set autoindent
-set foldmethod=syntax
+set foldmethod=indent
 set foldlevel=9
 "indent 	"相同缩进的行折叠。zc/zo/zR(reset)
 "mark: 设置 me 回来 'e/`e

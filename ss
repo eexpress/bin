@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# `shadowsocks-libev` (need `sudo dnf copr enable librehat/shadowsocks`) (*ss-local*) (depend on *libsodium* support *chacha20-ietf-poly1305*) **conflicts** with `python3-shadowsocks` (*sslocal*)
+# `shadowsocks-libev` (need `sudo dnf copr enable librehat/shadowsocks`) (*ss-local*) (depend on *libsodium* support *chacha20-ietf-poly1305*) 
+
+#**conflicts** with `python3-shadowsocks` (*sslocal*)
+
+#shadowsocks-local-linux64-1.1.5 -c bin/config/shadowsocks-csho.json 
+#2019/04/09 00:07:24 Failed generating ciphers:Unsupported encryption method: chacha20-ietf-poly1305
 
 configpath="$HOME/bin/config/"
 configfile="shadowsocks-*"
