@@ -14,6 +14,7 @@ set foldlevel=9
 "indent 	"相同缩进的行折叠。zc/zo/zR(reset)
 "mark: 设置 me 回来 'e/`e
 "`gd` : Goto local Declaration.  "比*更直接的找到定义处。
+"Ctrl-o/i 跳回去
 set autoread 	"文件在Vim之外修改过，自动重新读入
 filetype plugin on		"运行vim加载文件类型插件
 "bn bp: buffer切换上下文件
@@ -62,6 +63,10 @@ func RunComment()
 		if l =~ '//!'
 			echo strpart(l, stridx(l, "!"))
 			exec strpart(l, stridx(l, "!"))
+			if v:shell_error
+				echo "=================== exec error !!! =================="
+				break
+			endif
 		endif
 		let n = n + 1
 	endwhile

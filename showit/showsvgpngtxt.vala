@@ -27,8 +27,9 @@ class ShowSVGPNGTXT : Gtk.Window {
 		double diagonal;	//对角线
 
 		int rootx; int rooty;	//窗口中心的root坐标
-		double minw; double minh;		//旋转或横向缩放后的原始矩形图形最紧凑尺寸
+		int sw; int sh;	//旋转后的尺寸
 		bool pressed;
+		double minw; double minh;		//旋转或横向缩放后的原始矩形图形最紧凑尺寸
 
 		string dispfont="Noto Sans";
 		const int fsize=60;
@@ -108,17 +109,19 @@ if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
 	break;
 }
 //------------------
-		minw=w; minh=h;
+		minw=w; minh=h; sw=w; sh=h;
 		set_size_request(w,h);
 		get_position(out rootx, out rooty);
 		rootx+=w/2; rooty+=h/2;
 //----------------------------------------------------
 //绘制窗口事件
 		draw.connect ((da,ctx) => {	//直接在窗口绘图
-			ctx.translate(minw*scale/2, minh*scale/2); //窗口中心为旋转原点
+			ctx.translate((double)(sw/2), (double)(sh/2)); //窗口中心为旋转原点
 			ctx.rotate (rotate*Math.PI/180);
 			ctx.scale(scale*hscale,scale);
 			ctx.translate(-w/2, -h/2);
+/*        int tmpx; int tmpy; get_position(out tmpx, out tmpy);*/
+/*stdout.printf("%f-->\ttrans: %f x %f\troot: %d x %d\n",rotate,tmpx+sw/2,tmpy+sh/2,rootx,rooty);*/
 
 switch(mime){
 	case "image/svg+xml":
@@ -156,9 +159,9 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);	//拖动�
 //----------------------------------------------------
 //鼠标滚轮事件
 scroll_event.connect ((e) => {
-	if(pressed){
+	if(pressed){	//上一次拖动后的新中心坐标
 		get_position(out rootx, out rooty);
-		int sw=(int)(minw*scale); int sh=(int)(minh*scale);
+/*        sw=(int)(minw*scale); sh=(int)(minh*scale);*/
 		rootx+=sw/2; rooty+=sh/2;
 		pressed=false;
 /*        stdout.printf("root: %d x %d\n",rootx,rooty);*/
@@ -240,7 +243,8 @@ get_next_string_array(ref fontlist, ref fontindex, false);
 		diagonal=Math.sqrt(Math.pow(w*hscale,2)+Math.pow(h,2));
 		minw=Math.cos(angle-inangle)*diagonal;
 		minh=Math.sin(angle+inangle)*diagonal;
-		int sw=(int)(minw*scale); int sh=(int)(minh*scale);
+		sw=(int)(minw*scale); sh=(int)(minh*scale);
+/*        sw=(int)(Math.ceil)(minw*scale); sh=(int)(Math.ceil)(minh*scale);*/
 		move(rootx-sw/2,rooty-sh/2);	//旋转，就界面跳动！！！
 		resize(sw,sh);
 	}
