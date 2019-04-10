@@ -12,6 +12,8 @@ set autoindent
 set foldmethod=indent
 set foldlevel=9
 "indent 	"相同缩进的行折叠。zc/zo/zR(reset)
+" 用空格键来开关折叠
+nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zO')<CR>
 "mark: 设置 me 回来 'e/`e
 "`gd` : Goto local Declaration.  "比*更直接的找到定义处。
 "Ctrl-o/i 跳回去
