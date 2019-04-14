@@ -58,7 +58,7 @@ endfun
 map <F2> :call Devhelp()<CR>
 func Devhelp()
 	let w = expand("<cword>")
-	exec "!devhelp -s ".w."&"
+	exec "call system('devhelp -s '.w.'&')"
 endfunc
 "======== <F4> 全局替换当前单词 ========
 map <expr> <F4> Replace_Current_Word()
