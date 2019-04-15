@@ -1,4 +1,5 @@
 //!valac --pkg gtk+-3.0 -X -lm %
+//!./%< &
 using Gtk;
 using Cairo;
 	
@@ -80,7 +81,7 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 
 		draw.connect ((da,ctx) => {
 			Cairo.TextExtents ex;
-			ctx.set_font_size(size/8);
+			ctx.set_font_size(size/12);
 			ctx.translate(size/2, size/2);	//窗口中心为坐标原点。
 			ctx.set_line_cap (Cairo.LineCap.ROUND);
 			ctx.set_operator (Cairo.Operator.SOURCE);
@@ -132,12 +133,12 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			ctx.set_source_rgba (cc.red, cc.green, cc.blue, alarm_alpha);
 			showtext="%02d:%02d".printf(th,tm);
 			ctx.text_extents (showtext, out ex);
-			ctx.move_to(-ex.width/2,ex.height*2);
+			ctx.move_to(-ex.width/2,ex.height*4);
 			ctx.show_text(showtext);
 			if(timespan>0){
 				showtext="+"+timespan.to_string();
 				ctx.text_extents (showtext, out ex);
-				ctx.move_to(-ex.width/2,ex.height*3.5);
+				ctx.move_to(-ex.width/2,ex.height*5.5);
 				ctx.show_text(showtext);
 			}
 //---------------------clock text
@@ -147,7 +148,7 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			h%=12;
 			showtext="%02d:%02d".printf(h,m);
 			ctx.text_extents (showtext, out ex);
-			ctx.move_to(-ex.width/2,-ex.height);
+			ctx.move_to(-ex.width/2,-ex.height*2.5);
 			ctx.show_text(showtext);
 //---------------------
 draw_line(ctx, "#000000", 0.9, size/20, (h*30+m*30/60)*(Math.PI/180),0,-(int)(size/3.6),false);	//时针，30度1小时
