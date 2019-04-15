@@ -38,6 +38,7 @@ public class Timer : Gtk.Window {
 	int h; int m;
 	double Dalarm=0;
 	double alarm_alpha=0;	//no alarm
+	const double alarm_alpha_dark=0.6;
 	int timespan=0;	//alarm和time的分钟差距。
 	DateTime now;
 /*    string svg="<可以embed svg，需要将\"替换成'>";*/
@@ -57,7 +58,7 @@ add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 
 		GLib.Timeout.add_seconds(10,()=>{
 			queue_draw(); sss.init();
-			if(h==th && m==tm && alarm_alpha==1){
+			if(h==th && m==tm && alarm_alpha==alarm_alpha_dark){
 				if(instr!="0"){
 					GLib.Timeout.add(50,()=>{
 						bool ret=sss.need_draw_swing();
@@ -149,15 +150,15 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			ctx.move_to(-ex.width/2,-ex.height);
 			ctx.show_text(showtext);
 //---------------------
-draw_line(ctx, "#000000", 0.9, size/20, (h*30+m*30/60)*(Math.PI/180),0,-(int)(size/3.6));	//时针，30度1小时
-draw_line(ctx, "", 0.9, size/30, m*6*(Math.PI/180),0,-(int)(size/2.5));	//分针，6度1分钟
-draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(int)(size/4));	//定时针，30度1小时，30度内分60分钟
+draw_line(ctx, "#000000", 0.9, size/20, (h*30+m*30/60)*(Math.PI/180),0,-(int)(size/3.6),false);	//时针，30度1小时
+draw_line(ctx, "", 0.9, size/30, m*6*(Math.PI/180),0,-(int)(size/2.5),false);	//分针，6度1分钟
+draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(int)(size/4),true);	//定时针，30度1小时，30度内分60分钟
 //---------------------center
 			ctx.set_source_rgba (0, 0, 0, 0.9);
 			ctx.arc(0,0,size/20,0,2*Math.PI);
 			ctx.fill();
 			ctx.set_source_rgba (0.87, 0, 0, 0.9);	//暗红
-			ctx.arc(0,0,size/35,0,2*Math.PI);
+			ctx.arc(0,0,size/30,0,2*Math.PI);
 			ctx.fill();
 			return true;
 		});
@@ -168,7 +169,7 @@ draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(int)(si
 		int d=(int)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 		if(d<size/20){	//圆心之内
 			if(e.button == 1){
-				alarm_alpha=alarm_alpha==1?0:1;
+				alarm_alpha=alarm_alpha==0?alarm_alpha_dark:0;
 				if(alarm_alpha==0) set_keep_above(false);
 				queue_draw();}
 			else Gtk.main_quit();
@@ -206,7 +207,7 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 	//---------------------
 }
 //---------------------
-	void draw_line(Cairo.Context ctx, string color, double alpha, int width, double angle, int dx, int dy){
+	void draw_line(Cairo.Context ctx, string color, double alpha, int width, double angle, int dx, int dy, bool dot){
 		Gdk.RGBA rgb=Gdk.RGBA();
 		if(color!=""){
 			rgb.parse(color);
@@ -215,8 +216,13 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 		ctx.save(); 
 		if(width>0) ctx.set_line_width (width);
 		ctx.move_to (0, 0);
-		ctx.rotate(angle); ctx.line_to(dx, dy);
-		ctx.stroke(); ctx.restore();
+		ctx.rotate(angle); ctx.line_to(dx, dy); ctx.stroke();
+		if(dot){
+			ctx.set_source_rgba (0.87, 0, 0, 0.9);	//暗红
+			ctx.arc(dx,dy,width/3,0,2*Math.PI);
+			ctx.fill();
+		}
+		ctx.restore();
 	}
 //---------------------
 	void change_from_current_time(){
