@@ -43,7 +43,6 @@ au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 autocmd BufRead,BufNewFile *.vala,*.vapi setfiletype vala
 
 "======== 改变Insert模式时，智能切换中文输入 ========
-autocmd InsertEnter * exec "call system('ibus engine libpinyin')"
 autocmd InsertLeave * exec "call system('ibus engine xkb:us::eng')"
 "======== 智能tab，补全或输入TAB ========
 inoremap <expr> <Tab> MyTab()

@@ -3,6 +3,29 @@ using Gtk;
 using Cairo;
 	
 //--------------------------------------------------------
+public class swing {
+	const double cos_a[]={0.2588,0.5,0.7071,0.866,0.966,1,  1,0.966,0.866,0.7071,0.5,0.2588};	//cos 0-75,+15
+	int cnt;	//012345(1) 543210(-1) 012345(-1) 543210(1)
+	const int max_cnt=6;	//半幅度摆动次数，回位不计数
+	int direct;	//顺时钟为1
+	double step_angle=10;	//first degree
+	const double decay=1;
+
+	public double angle;
+//---------------------
+	public void init() {
+	step_angle=10; angle=0; direct=1; cnt=6;}
+//---------------------
+	public bool need_draw_swing() {
+		if(step_angle==0) {init(); return false;}
+		angle+=direct*(step_angle*cos_a[cnt]);
+		if((cnt==cos_a.length-1 && direct==1) || (cnt==0 && direct==-1)) {direct=direct==1?-1:1; step_angle-=decay;}
+		else cnt+=direct;
+		return true;
+	}
+//---------------------
+}
+//--------------------------------------------------------
 /*
 圆心：鼠标1键开关定时，其他键退出。
 其他：鼠标1键拖动，其他键选择定时。
@@ -20,20 +43,27 @@ public class Timer : Gtk.Window {
 /*    string svg="<可以embed svg，需要将\"替换成'>";*/
 /*        handle = new Rsvg.Handle.from_data(svg.data);*/
 //----------------------------
-	public Timer() {
-	Gdk.RGBA cc=Gdk.RGBA();
-	string showtext="";
+	public Timer(string instr) {
+		Gdk.RGBA cc=Gdk.RGBA();
+		string showtext="";
 		title = "Timer";
 		decorated = false;
 		app_paintable = true;
 		set_visual(this.get_screen().get_rgba_visual());
 		set_size_request(size,size);
+		var sss=new swing(); sss.init();
 		destroy.connect (Gtk.main_quit);
 add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 
 		GLib.Timeout.add_seconds(10,()=>{
-			queue_draw();
+			queue_draw(); sss.init();
 			if(h==th && m==tm && alarm_alpha==1){
+				if(instr!="0"){
+					GLib.Timeout.add(50,()=>{
+						bool ret=sss.need_draw_swing();
+						queue_draw(); return ret;
+						});
+				}
 					present(); set_keep_above(true);
 string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
 try {
@@ -53,6 +83,14 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			ctx.translate(size/2, size/2);	//窗口中心为坐标原点。
 			ctx.set_line_cap (Cairo.LineCap.ROUND);
 			ctx.set_operator (Cairo.Operator.SOURCE);
+			if(instr=="z"){
+			ctx.rotate(sss.angle*(Math.PI/180));
+			}
+			if(instr=="y"||instr=="x"){
+			double vscale=Math.cos(sss.angle*(Math.PI/180));
+			if(instr=="y") ctx.scale(1,vscale);
+			else ctx.scale(vscale,1);
+			}
 
 			ctx.set_source_rgba (0, 0, 0, 1);
 			ctx.set_line_width (size/30);
@@ -194,7 +232,11 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 //--------------------------------------------------------
 int main (string[] args) {
 		Gtk.init(ref args);
-		var ww = new Timer(); ww.show_all();
+		//增加x,y,z,0的参数，缺省为z。
+		string s = args[1];
+		if(s!="x" && s!="y" && s!="z" && s!="0") s="z";
+/*        stdout.printf("instr = %s.\n",instr);*/
+		var ww = new Timer(s); ww.show_all();
 		Gtk.main(); return 0;
 }
 //--------------------------------------------------------
