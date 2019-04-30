@@ -38,15 +38,22 @@ public class Timer : Gtk.Window {
 	int th=0; int tm=0;
 	int h; int m;
 	double Dalarm=0;
-	double alarm_alpha=0;	//no alarm
-	const double alarm_alpha_dark=0.6;
+	const string alarm_color="#57C575";
+	const string hand_color="#F1F1F1";
+	const string back_color="#4E4E4E";
+/*    const string center_color="#C02C3F";*/
+	const string shadow="#cEcEcE";
+	const double alarm_true=0.9;
+	const double alarm_false=0.2;
+	double alarm_alpha=alarm_false;
 	int timespan=0;	//alarm和time的分钟差距。
 	DateTime now;
+	Gdk.RGBA cc;
 /*    string svg="<可以embed svg，需要将\"替换成'>";*/
 /*        handle = new Rsvg.Handle.from_data(svg.data);*/
 //----------------------------
 	public Timer(string instr) {
-		Gdk.RGBA cc=Gdk.RGBA();
+		cc=Gdk.RGBA();
 		string showtext="";
 		title = "Timer";
 		decorated = false;
@@ -59,7 +66,7 @@ add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 
 		GLib.Timeout.add_seconds(10,()=>{
 			queue_draw(); sss.init();
-			if(h==th && m==tm && alarm_alpha==alarm_alpha_dark){
+			if(h==th && m==tm && alarm_alpha==alarm_true){
 				if(instr!="0"){
 					GLib.Timeout.add(50,()=>{
 						bool ret=sss.need_draw_swing();
@@ -94,23 +101,20 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			else ctx.scale(vscale,1);
 			}
 
-			ctx.set_source_rgba (0, 0, 0, 1);
-			ctx.set_line_width (size/30);
-			ctx.arc(0,0,size/2.2,0,2*Math.PI);
-			ctx.stroke();
-			cc.parse("#D8D8D8");
+			cc.parse(back_color);	//底色
 			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
-			ctx.set_line_width (size/20);
-			ctx.arc(0,0,size/2.3,0,2*Math.PI);
-			ctx.stroke();
-			cc.parse("#C3C3C3");
-			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
 			ctx.arc(0,0,size/2-size/20,0,2*Math.PI);
 			ctx.fill();
-			cc.parse("#D8D8D8");
-			ctx.set_source_rgba (0, 0, 0, 0);
-			ctx.set_line_width (3);
-			ctx.arc(0,0,size/2.5,0,2*Math.PI);
+
+			cc.parse(shadow);	//边缘
+			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
+			ctx.set_line_width (size/16);
+			ctx.arc(0,0,size/2.35,0,2*Math.PI);
+			ctx.stroke();
+			cc.parse(hand_color);	//亮色边缘
+			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
+			ctx.set_line_width (size/19);
+			ctx.arc(0,0,size/2.33,0,2*Math.PI);
 			ctx.stroke();
 //---------------------graduation
 			for(int i=0;i<12;i++){
@@ -118,19 +122,27 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 				ctx.save();
 				ctx.rotate(i*30*(Math.PI/180));
 				if(i%3==0){
-					ctx.set_line_width (size/30);
-					ctx.set_source_rgba (0, 0, 0, 0.8);
-				}else{
+					cc.parse(back_color);	//边缘
+					ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
 					ctx.set_line_width (size/50);
-					ctx.set_source_rgba (0.2, 0.2, 0.2, 0.2);
+/*                    ctx.set_source_rgba (0, 0, 0, 0.8);*/
+				}else{
+					cc.parse(shadow);	//边缘
+					ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
+					ctx.set_line_width (size/200);
+/*                    ctx.set_source_rgba (0.2, 0.2, 0.2, 0.2);*/
 				}
-				ctx.move_to(0,-(size/2-20));
+				ctx.move_to(0,-(size/2-size/12));
 				ctx.rel_line_to(0,-5); ctx.stroke();
 				ctx.restore();
 			}
 //---------------------alarm text
-			cc.parse("#A80CA8");	//紫色
-			ctx.set_source_rgba (cc.red, cc.green, cc.blue, alarm_alpha);
+			if(alarm_alpha==alarm_false)
+				{ctx.set_source_rgba (0, 0, 0, 1);}
+			else{
+				cc.parse(alarm_color);
+				ctx.set_source_rgba (cc.red, cc.green, cc.blue, alarm_alpha);
+			}
 			showtext="%02d:%02d".printf(th,tm);
 			ctx.text_extents (showtext, out ex);
 			ctx.move_to(-ex.width/2,ex.height*4);
@@ -142,7 +154,7 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 				ctx.show_text(showtext);
 			}
 //---------------------clock text
-			ctx.set_source_rgba (0, 0, 0, alarm_alpha);
+			ctx.set_source_rgba (0, 0, 0, 1);
 			now = new DateTime.now_local ();
 			h=now.get_hour(); m=now.get_minute();
 			h%=12;
@@ -151,15 +163,23 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			ctx.move_to(-ex.width/2,-ex.height*2.5);
 			ctx.show_text(showtext);
 //---------------------
-draw_line(ctx, "#000000", 0.9, size/20, (h*30+m*30/60)*(Math.PI/180),0,-(int)(size/3.6),false);	//时针，30度1小时
-draw_line(ctx, "", 0.9, size/30, m*6*(Math.PI/180),0,-(int)(size/2.5),false);	//分针，6度1分钟
-draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(int)(size/4),true);	//定时针，30度1小时，30度内分60分钟
+draw_line(ctx, hand_color, size/15, (h*30+m*30/60)*(Math.PI/180),-(int)(size/3.6),false);	//时针，30度1小时
+draw_line(ctx, "#F1F1F1", size/20, m*6*(Math.PI/180),-(int)(size/3),false);	//分针，6度1分钟
+draw_line(ctx, "#F1F1F1", size/50, Dalarm*(Math.PI/180),-(int)(size/4),true);	//定时针，30度1小时，30度内分60分钟
 //---------------------center
-			ctx.set_source_rgba (0, 0, 0, 0.9);
+			ctx.set_line_width (1);
+			cc.parse(back_color);
+			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
+			ctx.arc(1,1,size/20,0,2*Math.PI);
+			ctx.stroke();
+			cc.parse(hand_color);
+			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
 			ctx.arc(0,0,size/20,0,2*Math.PI);
 			ctx.fill();
-			ctx.set_source_rgba (0.87, 0, 0, 0.9);	//暗红
-			ctx.arc(0,0,size/30,0,2*Math.PI);
+			if(alarm_alpha==alarm_true){cc.parse(alarm_color);}
+			else{cc.parse(back_color);}
+			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
+			ctx.arc(0,0,size/40,0,2*Math.PI);
 			ctx.fill();
 			return true;
 		});
@@ -170,8 +190,8 @@ draw_line(ctx, "#A80CA8", alarm_alpha, size/25, Dalarm*(Math.PI/180),0,-(int)(si
 		int d=(int)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 		if(d<size/20){	//圆心之内
 			if(e.button == 1){
-				alarm_alpha=alarm_alpha==0?alarm_alpha_dark:0;
-				if(alarm_alpha==0) set_keep_above(false);
+	alarm_alpha=alarm_alpha==alarm_false?alarm_true:alarm_false;
+				if(alarm_alpha==alarm_true) set_keep_above(false);
 				queue_draw();}
 			else Gtk.main_quit();
 			return true;
@@ -208,22 +228,25 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 	//---------------------
 }
 //---------------------
-	void draw_line(Cairo.Context ctx, string color, double alpha, int width, double angle, int dx, int dy, bool dot){
-		Gdk.RGBA rgb=Gdk.RGBA();
-		if(color!=""){
-			rgb.parse(color);
-			ctx.set_source_rgba (rgb.red, rgb.green, rgb.blue, alpha);
-		}
-		ctx.save(); 
-		if(width>0) ctx.set_line_width (width);
-		ctx.move_to (0, 0);
-		ctx.rotate(angle); ctx.line_to(dx, dy); ctx.stroke();
+	void draw_line(Cairo.Context ctx, string color, int width, double angle, int len, bool dot){
+		ctx.save();
+		ctx.rotate(angle);
+		cc.parse(shadow);	//阴影
+		ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
+		ctx.set_line_width (width+size/200);
+		ctx.move_to (0, 0); ctx.line_to(0, len); ctx.stroke();
+		cc.parse(hand_color);	//指针颜色
+		ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
+		ctx.set_line_width (width);
+		ctx.move_to (0, 0); ctx.line_to(0, len); ctx.stroke();
 		if(dot){
-			ctx.set_source_rgba (0.87, 0, 0, 0.9);	//暗红
-			ctx.arc(dx,dy,width/3,0,2*Math.PI);
-			ctx.fill();
+			cc.parse(alarm_color);
+			ctx.set_source_rgba (cc.red, cc.green, cc.blue, alarm_true);
+			if(alarm_alpha==alarm_false){ ctx.move_to (0, len-len/6); }
+			else{ ctx.move_to (0, len/2); }
+			ctx.line_to(0, len); ctx.stroke();
 		}
-		ctx.restore();
+		ctx.restore();	//消除旋转的角度
 	}
 //---------------------
 	void change_from_current_time(){
