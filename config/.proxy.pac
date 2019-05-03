@@ -8,7 +8,7 @@ var darr = [
 'twitter', 'twimg', 'imgur.com',
 'telegram.org', 'wire.com', 'tdesktop.com',
 'disqus.com',  'wordpress', 'blogspot', 'feedburner.com', 'blogblog', 'blogger',
-'reddit.com', 'valadoc.org',
+'reddit.com', 'valadoc.org', 'greasyfork.org',
 'thepiratebay',	'wikipedia.org', 'alternativeto.net',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
 'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',

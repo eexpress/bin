@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <dateCreated>Fri, 03 May 2019 10:22:29 GMT</dateCreated>
+    <docs />
+  </head>
+  <body>
+    <outline type="rss" title="动点科技" xmlUrl="https://cn.technode.com/feed/" />
+    <outline type="rss" title="Engadget 中文" xmlUrl="https://cn.engadget.com/rss-full.xml" />
+    <outline type="rss" title="少数派" xmlUrl="https://sspai.com/feed" />
+    <outline type="rss" title="電腦玩物" xmlUrl="http://feeds.feedburner.com/playpc" />
+    <outline type="rss" title="Thingiverse - 'openscad'" xmlUrl="https://www.thingiverse.com/rss/tag:openscad" />
+    <outline type="rss" title="小众软件" xmlUrl="http://feeds.appinn.com/appinns/" />
+    <outline type="rss" title="OMG! Ubuntu!" xmlUrl="http://feeds.feedburner.com/d0od" />
+    <outline type="rss" title="It's FOSS" xmlUrl="http://feeds.feedburner.com/ItsFoss" />
+    <outline type="rss" title="All commands" xmlUrl="http://feeds.feedburner.com/Command-line-fu" />
+    <outline type="rss" title="LinuxTOY" xmlUrl="https://linuxtoy.org/feeds/all.atom.xml" />
+    <outline type="rss" title="爱范儿" xmlUrl="http://www.ifanr.com/feed" />
+    <outline type="rss" title="Web Upd8" xmlUrl="http://feeds.feedburner.com/webupd8" />
+    <outline type="rss" title="inkscape tutorials blog" xmlUrl="https://inkscapetutorials.wordpress.com/feed/" />
+    <outline type="rss" title="It's FOSS" xmlUrl="http://feeds.feedburner.com/itsfoss" />
+    <outline type="rss" title="极客公园" xmlUrl="http://www.geekpark.net/rss" />
+    <outline type="rss" title="最美应用" xmlUrl="http://zuimeia.com/feed/" />
+    <outline type="rss" title="nixCraft: Linux" xmlUrl="http://feeds.cyberciti.biz/Nixcraft-LinuxFreebsdSolarisTipsTricks" />
+    <outline type="rss" title="Linux 中国◆开源社区" xmlUrl="https://linux.cn/rss.xml" />
+    <outline type="rss" title="LinuxInsider" xmlUrl="https://www.linuxinsider.com/perl/syndication/rssfull.pl" />
+    <outline type="rss" title="设计癖" xmlUrl="http://www.shejipi.com/feed" />
+    <outline type="rss" title="Yanko Design" xmlUrl="http://www.yankodesign.com/feed/" />
+    <outline type="rss" title="路透: 时事要闻" xmlUrl="https://cn.reuters.com/rssFeed/CNTopGenNews" />
+    <outline type="rss" title="糗事百科" xmlUrl="http://feed.qiushibaike.com/rss" />
+    <outline type="rss" title="路透: 时事要闻" xmlUrl="https://cn.reuters.com/rssFeed/CNTopGenNews" />
+    <outline type="rss" title="网易轻松一刻" xmlUrl="https://feedx.net/rss/163easy.xml" />
+    <outline type="rss" title="Linux 中国◆开源社区" xmlUrl="https://linux.cn/rss.xml" />
+    <outline type="rss" title="Industrial Design Sandbox" xmlUrl="http://idsandbox.blogspot.com/feeds/posts/default" />
+    <outline type="rss" title="Design Milk" xmlUrl="http://feeds.feedburner.com/design-milk" />
+    <outline type="rss" title="Beautiful Life" xmlUrl="http://feeds2.feedburner.com/beautifullifeblog" />
+    <outline type="rss" title="Design – Fubiz Media" xmlUrl="http://www.fubiz.net/category/design/" />
+    <outline type="rss" title="Red Dot Forum" xmlUrl="http://www.reddotforum.com/" />
+    <outline type="rss" title="Yanko Design" xmlUrl="http://www.yankodesign.com/" />
+    <outline type="rss" title="National Geographic Photo of the Day" xmlUrl="http://www.nationalgeographic.com/rss/photography/photo-of-the-day" />
+  </body>
+</opml>
