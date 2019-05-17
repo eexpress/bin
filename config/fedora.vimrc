@@ -1,6 +1,7 @@
 colo evening 		" 配色主题	desert
 set guifont=Input\ Mono\ Italic\ 15
 set guifont=Fira\ Mono\ 15
+set fileencodings=utf8,gbk
 set number 			" 显示行号
 set mouse=a
 set ignorecase		" 搜索忽略大小写
