@@ -1,53 +1,51 @@
 #!/usr/bin/perl
 
-#ss://method:password@server:port
-#ssr://server:port:protocol:method:obfs:password_base64/?params_base64
+#ss://base64(method:password@server:port)#remarks
+#ssr://base64(server:port:protocol:method:obfs:password/?remarks=base64(params))
+
+use MIME::Base64;
 
 if(! $ARGV[0]){print "input qrcode image file or ss/ssr format string.\noutput json format text.\n";exit;}
 
-$_=$ARGV[0]; $outfile="new"; $remark="new";
+$_=$ARGV[0]; $remark="";
 if(-f "$_"){
-	$outfile=$_; $remark=$_; $remark=~s'.*/''g; $remark=~s'\ '_'g;
+	$remark=$_; $remark=~s'.*/''g; $remark=~s'\ '_'g;
 	#缺省的remark是文件名。
 	$_=`zbarimg "$_"`;
 }
 if(! m'ssr?://'){print "no valid ss:// or ssr:// string.";exit;}
 
-if(/^ssr:/){
-	$ssr=1;
-}else{
-	$ssr=0; s/-/+/g; s/_/\//g;
-}
-s'.*//'';
-$l1=`echo "$_"|base64 -d`;
-$_=$l1;
-if(! $ssr){
-	s/\@/:/;
-	@i=split ':';
+print "========================================\n";
+if(/^ss:/){		#=================SS==================
+	s'.*//'';	#去头
+	s/#(.*)//;	#去尾。缺省贪婪匹配
+	$remark=$1?$1:"new" if ! $remark;
+	$_=decode_base64($_);
+	s/\@/:/; @i=split ':';
 	$out = <<"END";
-========================================
 {
 "remarks"	:	"$remark",
 "method"	:	"$i[0]",
 "password"	:	"$i[1]",
 "server"	:	"$i[2]",
-"server_port"	:	"$i[3]"
+"server_port"	:	"$i[3]",
+"local_address"	:	"127.0.0.1",
+"local_port"	:	1080
 }
-========================================
-$outfile.json
 END
-	print $out;
+	$remark="ss-".$remark;
 }
-else{
-	s/(.*)\/\?/\1:/;	#贪婪匹配最后一个/?remarks=号，换成:
+else{		#=================SSR==================
+	s'.*//'';	#去头
+	$_=decode_base64($_);
+	s'\/\?remarks=(.*)'';	#去尾。
 	@i=split ':';
-	$i[5]=`echo "$i[5]"|base64 -d`;
-	if($i[6]=~/^remarks=/){
-		$remark=`echo "$'"|base64 -d`;
-		$outfile=$remark if $outfile eq "new";
+	if (! $remark){
+		$_=decode_base64($1);
+		s'/'+'g; s' '_'g; s/\n//; s/\r//g;	#当文件名需要格式化
+		$remark=$_;
 	}
 	$out = <<"END";
-========================================
 {
 "remarks"	:	"$remark",
 "server"	:	"$i[0]",
@@ -55,14 +53,26 @@ else{
 "protocol"	:	"$i[2]",
 "method"	:	"$i[3]",
 "obfs"		:	"$i[4]",
-"password"	:	"$i[5]"
+"password"	:	"$i[5]",
+"local_address"	:	"127.0.0.1",
+"local_port"	:	1080
 }
-========================================
-$outfile.json
 END
-	print $out;
+	$remark="ssr-".$remark;
 }
-#open OUT,">$outfile.json";
-#print OUT $out;
-#close OUT;
+print $out;
+print "========================================\n";
 
+#输出文件
+print "保存到文件？回车按键确认，其他按键取消。\n$remark.json\n";
+use Term::ReadKey;
+$n=5;
+while ( not defined( $key = ReadKey(-1) ) ){
+	$n--; print "$n."; 
+	last if $n<=0;
+	sleep 1;
+	}
+if($key eq "\n"){
+	print "save.\n";
+	open OUT,">$remark.json"; print OUT $out; close OUT;
+	}else{print"exit.\n";}

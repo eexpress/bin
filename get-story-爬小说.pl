@@ -21,6 +21,7 @@ $txt=get($url);		# 获得每个章节
 #$_=join "\n", grep /&nbsp;/, split /\n/, $txt;
 $txt=~m"【回目录】(.*?)【回目录】"s; $_=$1; 
 s/&nbsp;/ /g; s/&quot;/"/g; s/\r//g; s/<.*?>//g; s/\n{2,}/\n/gs;
+s/-\d{1,3}-//g; s/<u>一<\/u>/\n/g;
 print OUT $_;
 }
 close OUT;

@@ -44,7 +44,7 @@ au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
 autocmd BufRead,BufNewFile *.vala,*.vapi setfiletype vala
 
 "======== 改变Insert模式时，智能切换中文输入 ========
-autocmd InsertLeave * exec "call system('ibus engine xkb:us::eng')"
+"autocmd InsertLeave * exec "call system('ibus engine xkb:us::eng')"
 "autocmd InsertEnter * exec "call system('ibus engine rime')"
 " 进入Insert模式，如果切换输入法，经常会强制中文，所以取消设置行。
 " 目前，不设置输入法而进入Insert模式，会导致shift切换不出中文。

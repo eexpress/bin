@@ -8,7 +8,8 @@
 #2019/04/09 00:07:24 Failed generating ciphers:Unsupported encryption method: chacha20-ietf-poly1305
 
 configpath="$HOME/bin/config/"
-configfile="shadowsocks-*"
+#configfile="shadowsocks-*"
+configfile="ss-*"
 
 # no parameter means "on", else "off".
 if [ -z "$1" ]; then
