@@ -3,23 +3,24 @@
 #ss://base64(method:password@server:port)#remarks
 #ssr://base64(server:port:protocol:method:obfs:password/?remarks=base64(params))
 
+use 5.010;
 use MIME::Base64;
 
-if(! $ARGV[0]){print "input qrcode image file or ss/ssr format string.\noutput json format text.\n";exit;}
+if(! $ARGV[0]){say "输入二维码图像文件，或者 ss/ssr 字符串。输出 json 格式。"; exit;}
 
 $_=$ARGV[0]; $remark="";
 if(-f "$_"){
-	$remark=$_; $remark=~s'.*/''g; $remark=~s'\ '_'g;
-	#缺省的remark是文件名。
-	$_=`zbarimg "$_"`;
+	s'.*/''g; s' '_'g; $remark=$_;		#缺省的remark是文件名。
+	$_=`zbarimg "$ARGV[0]"`;
 }
-if(! m'ssr?://'){print "no valid ss:// or ssr:// string.";exit;}
+if(! m'ssr?://'){say "no valid ss:// or ssr:// string.";exit;}
 
-print "========================================\n";
+say "========================================";
 if(/^ss:/){		#=================SS==================
 	s'.*//'';	#去头
-	s/#(.*)//;	#去尾。缺省贪婪匹配
-	$remark=$1?$1:"new" if ! $remark;
+	s/#(?<mark>.*)//;	#去尾。缺省贪婪匹配
+#    $remark=$+{mark}?$+{mark}:"new" if ! $remark;
+	$remark||=$+{mark}//="new";
 	$_=decode_base64($_);
 	s/\@/:/; @i=split ':';
 	$out = <<"END";
@@ -38,10 +39,10 @@ END
 else{		#=================SSR==================
 	s'.*//'';	#去头
 	$_=decode_base64($_);
-	s'\/\?remarks=(.*)'';	#去尾。
+	s'\/\?remarks=(?<mark>.*)'';	#去尾。
 	@i=split ':';
 	if (! $remark){
-		$_=decode_base64($1);
+		$_=decode_base64($+{mark});
 		s'/'+'g; s' '_'g; s/\n//; s/\r//g;	#当文件名需要格式化
 		$remark=$_;
 	}
@@ -60,19 +61,21 @@ else{		#=================SSR==================
 END
 	$remark="ssr-".$remark;
 }
-print $out;
-print "========================================\n";
+say $out;
+say "========================================";
 
 #输出文件
-print "保存到文件？回车按键确认，其他按键取消。\n$remark.json\n";
+say "保存到文件 $remark.json？回车按键确认，其他按键取消。";
 use Term::ReadKey;
-$n=5;
+ReadMode 4;
 while ( not defined( $key = ReadKey(-1) ) ){
+	state $n=8;
 	$n--; print "$n."; 
 	last if $n<=0;
 	sleep 1;
 	}
 if($key eq "\n"){
-	print "save.\n";
+	say "save.";
 	open OUT,">$remark.json"; print OUT $out; close OUT;
-	}else{print"exit.\n";}
+	}else{say "exit.";}
+ReadMode 0;
