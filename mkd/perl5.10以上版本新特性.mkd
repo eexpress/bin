@@ -1,0 +1,61 @@
+# Perl5 新特性
+
+`use 5.010;`
+>至少5.10版本以上。
+
+##智能匹配
+例子 	|匹配方式
+--|--
+<td bgcolor=#FFA500>散列，Hash，哈希
+%a ~~ %b 	|哈希的*键*是否一致
+%a ~~ @b 	|至少`%a`中的一个*键*在列表`@b`中
+%a ~~ /Fred/ 	|至少一个*键*匹配给定的模式
+%a ~~ 'Fred' 	|哈希中某一指定*键*是否存在
+<td bgcolor=#FFA500>数组
+@a ~~ @b 	|数组是否相同
+@a ~~ /Fred/ 	|🟊 有一个元素匹配给定的模式
+@a ~~ 123 	|🟊 至少有一个元素转化为数字后是123
+@a ~~ 'Fred' 	|🟊 至少有一个元素转化为字符串后是'Fred'
+<td bgcolor=#FFA500>字符串，数字
+$name ~~ undef 	|$name确实尚未定义
+$name ~~ /Fred/ 	|⭐ 模式匹配
+123 ~~ '123.0' 	|数字和字符串是否相等
+'Fred' ~~ 'Fred' 	|字符串是否相同
+123 ~~ 456 	|数字是否相等
+
+##say
+`use feature qw(say);`
+
+##//
+`$x ||= $DEFAULT;`
+>bug：0或者“0”或者空字符串，会被赋值$DEFAULT
+
+`$x //= $DEFAULT;`
+`$x = defined $x ? $x : $DEFAULT;`
+
+##state
+>`state`静态初始化变量，方便写在循环体内。v5.28开始支持数组和哈希。
+`state @previous_arguments = qw(this that);`
+
+##正则命名捕捉
+`/(?<first>\S+) (and|or) (?<second>\S+)/`
+>括号内匹配的内容保存在`%+`散列，`$+{first}`，`$+{second}`。
+
+##given-when
+continue可以继续执行下行。
+```
+given( $ARGV[0] ) {
+  when( /fred/i ) { say 'Name has fred in it'; continue }
+  when( /^Fred/ ) { say 'Name starts with Fred'; continue }
+  when( 'Fred' )  { say 'Name is Fred' }
+  default { say "I don't see a Fred" }
+}
+foreach ( @names ) { # 不要使用命名变量！
+  say("\nProcessing $_");
+  when( /fred/i ) { say 'Name has fred in it'; continue }
+  when( /^Fred/ ) { say 'Name starts with Fred'; continue }
+  when( 'Fred' )  { say 'Name is Fred'; }
+  say("Moving on to default...");
+  default { say "I don't see a Fred" }
+}
+```
