@@ -2,8 +2,8 @@
 Name=ShowIt
 Name[zh_CN]=桌面图片
 Comment[zh_CN]=将svg/png图片显示到桌面，支持旋转缩放拉伸改色等操作。
-Exec=/home/eexpss/bin/showit/showit
-Icon=/home/eexpss/bin/showit/screen.png
+Exec=showit
+Icon=/usr/share/pixmaps/showit.png
 NoDisplay=false
 Terminal=false
 Type=Application

@@ -1,10 +1,14 @@
 //!valac --pkg gtk+-3.0 %
+/*⭕ rpmbuild -ba showit.spec */
+/*⭕ sudo dnf reinstall '/home/eexpss/rpmbuild/RPMS/x86_64/showit-0.6.0-linux.x86_64.rpm' */
+/*⭕ showit*/
+
 using Gtk;
 using Cairo;
 	
 public class ShowIt : Gtk.Window {
 	private const Gtk.TargetEntry[] targets={{"text/uri-list",0,0}};
-	string path="";
+/*    string path="";*/
 //----------------------------
 	public ShowIt() {
 		title = "ShowIt";
@@ -12,9 +16,9 @@ public class ShowIt : Gtk.Window {
 		app_paintable = true;
 		set_visual(this.get_screen().get_rgba_visual());
 		set_keep_above (true);
-		var img = new ImageSurface.from_png("screen.png");
+		var img = new ImageSurface.from_png("/usr/share/pixmaps/showit.png");
 		set_size_request(img.get_width(),img.get_height());
-		path=GLib.Environment.get_current_dir();
+/*        path=GLib.Environment.get_current_dir();*/
 		destroy.connect (Gtk.main_quit);
 		draw.connect ((da,ctx) => {
 			ctx.set_operator (Cairo.Operator.SOURCE);
@@ -53,12 +57,12 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 //--------------------------------------------------------
 	private void callshow(string instr){
 	try {
-		string[] spawn_args = {path+"/showsvgpngtxt", instr};
+		string[] spawn_args = {"showsvgpngtxt", instr};
 		string[] spawn_env = Environ.get ();
 		Pid child_pid;
 		int standard_input; int standard_output; int standard_error;
 
-		Process.spawn_async_with_pipes (path, spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid, out standard_input, out standard_output, out standard_error);
+		Process.spawn_async_with_pipes ("/", spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid, out standard_input, out standard_output, out standard_error);
 
 		ChildWatch.add (child_pid, (pid, status) => {
 			Process.close_pid (pid);

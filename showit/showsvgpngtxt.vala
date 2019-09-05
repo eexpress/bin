@@ -102,7 +102,7 @@ default:	//text
 //------------------get font array
 		string file_contents="";
 try{
-		FileUtils.get_contents("fontname.list", out file_contents);
+		FileUtils.get_contents(Environment.get_variable("HOME")+"/.config/"+"showit.fontname.list", out file_contents);
 		if(file_contents!=""){fontlist = file_contents.split("\n",8);}
 } catch (GLib.Error e) {error ("%s", e.message);}
 if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
