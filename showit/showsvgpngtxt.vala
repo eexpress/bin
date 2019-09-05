@@ -1,5 +1,6 @@
 //!valac --pkg gtk+-3.0 --pkg librsvg-2.0 %
-//!./%< 字体演示--Text
+//x!./%< 字体演示--Text
+//x!./%< switch-Emoticon.svg
 using Gtk;
 using Cairo;
 
@@ -24,7 +25,7 @@ class ShowSVGPNGTXT : Gtk.Window {
 		double rotate=0;
 		int w=300;
 		int h=100;
-		double diagonal;	//对角线
+/*        double diagonal;	//对角线*/
 
 		int rootx; int rooty;	//窗口中心的root坐标
 		int sw; int sh;	//旋转后的尺寸
@@ -46,10 +47,12 @@ class ShowSVGPNGTXT : Gtk.Window {
 		title = "ShowSVGPNGTXT";
 		skip_taskbar_hint = true;
 		decorated = false;
+/*        decorated = true;*/
 		app_paintable = true;
 		set_position(MOUSE);
 		set_visual(this.get_screen().get_rgba_visual());
 		set_keep_above (true); 
+stdout.printf("%s ====== Version 0.6\n",title);
 //允许鼠标事件
 		destroy.connect (Gtk.main_quit);
 		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.SMOOTH_SCROLL_MASK);
@@ -67,6 +70,7 @@ case "image/svg+xml":
 		try {
 			string etag_out;
 			f.load_contents(null, out svg_buff, out etag_out);
+/*    svg_buff		附注：需要类型‘char **’，但实参的类型为‘guint8 **’ {或称 ‘unsigned char **’}*/
 			handle = new Rsvg.Handle.from_data(svg_buff);
 		} catch (GLib.Error e) {error ("%s", e.message);}
 		if(handle.has_sub(switchid+"0") && handle.has_sub(switchid+"1")) switchindex=0;
@@ -236,17 +240,21 @@ get_next_string_array(ref fontlist, ref fontindex, false);
 	}
 //----------------------------------------------------
 	void getminsize(){
-		double inangle=Math.atan(h/(double)(w*hscale));	//对角线夹角弧度
+/*        double inangle=Math.atan(h/(double)(w*hscale));	//对角线夹角弧度*/
 		double angle=Math.fabs(rotate);	//0-180
 		if(angle>90)angle=180-angle;	//0-90
 		angle=angle*Math.PI/180;	//变成弧度
-		diagonal=Math.sqrt(Math.pow(w*hscale,2)+Math.pow(h,2));
-		minw=Math.cos(angle-inangle)*diagonal;
-		minh=Math.sin(angle+inangle)*diagonal;
+/*        diagonal=Math.sqrt(Math.pow(w*hscale,2)+Math.pow(h,2));*/
+/*        minw=Math.cos(angle-inangle)*diagonal;*/
+/*        minh=Math.sin(angle+inangle)*diagonal;*/
+		minw=Math.cos(angle)*(double)(w*hscale)+Math.sin(angle)*h;
+		minh=Math.sin(angle)*(double)(w*hscale)+Math.cos(angle)*h;
 		sw=(int)(minw*scale); sh=(int)(minh*scale);
 /*        sw=(int)(Math.ceil)(minw*scale); sh=(int)(Math.ceil)(minh*scale);*/
 		move(rootx-sw/2,rooty-sh/2);	//旋转，就界面跳动！！！
 		resize(sw,sh);
+/*stdout.printf("after: %f \t%f x %f\n",angle,minw,minh);*/
+/*        move_resize(rootx-sw/2,rooty-sh/2,sw,sh);	//move_resize不存在？*/
 	}
 //----------------------------------------------------
 	void loop_color(bool direction){
