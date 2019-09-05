@@ -1,10 +1,11 @@
-//!valac --pkg gtk+-3.0 %
+//!valac --pkg gtk+-3.0 --pkg posix  %
 /*⭕ rpmbuild -ba showit.spec */
 /*⭕ sudo dnf reinstall '/home/eexpss/rpmbuild/RPMS/x86_64/showit-0.6.0-linux.x86_64.rpm' */
 /*⭕ showit*/
 
 using Gtk;
 using Cairo;
+using Posix;
 	
 public class ShowIt : Gtk.Window {
 	private const Gtk.TargetEntry[] targets={{"text/uri-list",0,0}};
@@ -34,7 +35,7 @@ public class ShowIt : Gtk.Window {
 					mime=File.new_for_uri(uri).query_info ("standard::content-type", 0, null).get_content_type();	// image/png image/svg+xml
 				} catch (GLib.Error e) {error ("%s", e.message);}
 				string str=Uri.unescape_string(uri.replace("file://",""));
-				stdout.printf("filename: \"%s\". mimetype: \"%s\"\n",str, mime);
+				GLib.stdout.printf("filename: \"%s\". mimetype: \"%s\"\n",str, mime);
 				if(mime!="image/png" && mime!="image/svg+xml")continue;
 				callshow(str);
 	//-------------------
@@ -56,24 +57,26 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 	}
 //--------------------------------------------------------
 	private void callshow(string instr){
-	try {
-		string[] spawn_args = {"showsvgpngtxt", instr};
-		string[] spawn_env = Environ.get ();
-		Pid child_pid;
-		int standard_input; int standard_output; int standard_error;
+/*    try {*/
+/*        string[] spawn_args = {"showsvgpngtxt", instr};*/
+/*        string[] spawn_env = Environ.get ();*/
+/*        Pid child_pid;*/
+/*        int standard_input; int standard_output; int standard_error;*/
 
-		Process.spawn_async_with_pipes ("/", spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid, out standard_input, out standard_output, out standard_error);
+/*        Process.spawn_async_with_pipes ("/", spawn_args, spawn_env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid, out standard_input, out standard_output, out standard_error);*/
 
-		ChildWatch.add (child_pid, (pid, status) => {
-			Process.close_pid (pid);
-		});
-	} catch (SpawnError e) { print ("Error: %s\n", e.message); }
+/*        ChildWatch.add (child_pid, (pid, status) => {*/
+/*            Process.close_pid (pid);*/
+/*        });*/
+/*    } catch (SpawnError e) { print ("Error: %s\n", e.message); }*/
+		Posix.system("showsvgpngtxt "+instr+" &");
 	}
 }
 //--------------------------------------------------------
 int main (string[] args) {
 		Gtk.init(ref args);
 		var DW = new ShowIt(); DW.show_all();
+		Posix.system("xdg-open /usr/share/showit/ &");
 		Gtk.main(); return 0;
 }
 //--------------------------------------------------------
