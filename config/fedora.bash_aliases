@@ -14,11 +14,9 @@ alias dsi='dnf list installed|grep --color=always'
 alias dinfo='dnf info'
 alias dwhoneed='dnf repoquery --installed --whatrequires'
 alias dfile1='dnf repoquery -l'
-#alias dp='dnf provides'
-alias dfile='rpm -q --filesbypkg'
-#alias dh='sudo dnf history'
-#alias dinstalled='dnf list installed'
-#alias dlist='dnf list'
+
+alias dfile='rpm -q --filesbypkg'	#包的文件列表
+alias dfpkg='rpm -qf'				#文件所属的包
 
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'

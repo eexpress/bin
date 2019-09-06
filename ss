@@ -9,7 +9,7 @@
 
 configpath="$HOME/bin/config/"
 #configfile="shadowsocks-*"
-configfile="ss-*"
+configfile="ss-*.json"
 
 # no parameter means "on", else "off".
 if [ -z "$1" ]; then

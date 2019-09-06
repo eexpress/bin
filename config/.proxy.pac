@@ -1,10 +1,7 @@
-//'google', 'gstatic', 'google-analytics', 'googleapis', 'googleusercontent', 'googlecode.com', 'googlevideo.com', 
-
 var darr = [
 'google*', 'gstatic', 'gmail', 'sstatic.net', 'recaptcha.net', 
 'youtube', 'chrome.com',
 'pinterest.com', 'pinimg.com',
-'github', 'githubusercontent.com',
 'twitter', 'twimg', 'imgur.com',
 'telegram.org', 'wire.com', 'tdesktop.com',
 'disqus.com',  'wordpress', 'blogspot', 'feedburner.com', 'blogblog', 'blogger',
@@ -13,6 +10,7 @@ var darr = [
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
 'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',
 ];
+//'github', 'githubusercontent.com',
 //▶ curl --socks5 127.0.0.1:1080 'http://www.viewdns.info/chinesefirewall/?domain=opensuse.org'|g -o accessible
 
 // https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
