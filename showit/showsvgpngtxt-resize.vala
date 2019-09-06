@@ -55,7 +55,7 @@ class ShowSVGPNGTXT : Gtk.Window {
 stdout.printf("%s ====== Version 0.6\n",title);
 //允许鼠标事件
 		destroy.connect (Gtk.main_quit);
-		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.SMOOTH_SCROLL_MASK);
+		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 //----------------------------------------------------
 //读取图形，准备好img和各种尺寸。
 		File f = File.new_for_path(inputtext);
@@ -72,6 +72,7 @@ case "image/svg+xml":
 			f.load_contents(null, out svg_buff, out etag_out);
 /*    svg_buff		附注：需要类型‘char **’，但实参的类型为‘guint8 **’ {或称 ‘unsigned char **’}*/
 			handle = new Rsvg.Handle.from_data(svg_buff);
+/*            handle = new Rsvg.Handle.from_file(inputtext);*/
 		} catch (GLib.Error e) {error ("%s", e.message);}
 		if(handle.has_sub(switchid+"0") && handle.has_sub(switchid+"1")) switchindex=0;
 
@@ -91,7 +92,21 @@ case "image/svg+xml":
 			}
 /*if(keyoffset>0)stdout.printf("find fill color: "+tmpstr.substring(keyoffset,6)+"\n");*/
 		}
-		w=(int)handle.width; h=(int)handle.height;
+/*        w=(int)handle.width; h=(int)handle.height;*/
+		Rsvg.Rectangle x;
+		Rsvg.Length rw, rh;
+		bool hasw,hash,hasv;
+		handle.get_intrinsic_dimensions (out hasw, out rw, out hash, out rh, out hasv, out x);
+		if(hasw && hash){
+			if(rw.unit==Rsvg.Unit.MM){	//毫米单位	CM EM EX IN MM PC PERCENT PT PX
+				w=(int)(rw.length*handle.dpi_x/25.4);
+				h=(int)(rh.length*handle.dpi_y/25.4);
+			}else{		//认为是pixel/point单位，枚举都没判断
+				w=(int)rw.length; h=(int)rh.length;
+			}
+		}else{ w=(int)x.width; h=(int)x.height; }	//hasv 都没判断
+/*stdout.printf("svg dimension :\t%d x %d,\t%f-%f,\t%d\n",w,h,handle.width,handle.height,(int)rw.unit);*/
+
 		img = new ImageSurface(Format.ARGB32,w,h);	//创建表面
 	break;
 case "image/png":
@@ -101,11 +116,15 @@ case "image/png":
 default:	//text
 //------------------get font array
 		string file_contents="";
-try{
-		FileUtils.get_contents(Environment.get_variable("HOME")+"/.config/"+"showit.fontname.list", out file_contents);
-		if(file_contents!=""){fontlist = file_contents.split("\n",8);}
-} catch (GLib.Error e) {error ("%s", e.message);}
-if(fontlist[0]!=""){fontindex=0; dispfont=fontlist[0];}
+		tmpstr=Environment.get_variable("HOME")+"/.config/showit.fontname.list";
+		f = File.new_for_path(tmpstr);
+		if(f.query_exists()){
+			try{
+				FileUtils.get_contents(tmpstr, out file_contents);
+				if(file_contents!=""){fontlist = file_contents.split("\n",8);}
+			} catch (GLib.Error e) {error ("%s", e.message);}
+		}
+		if(fontlist[0]!=null){fontindex=0; dispfont=fontlist[0];}
 //------------------get text display size
 		img = new ImageSurface(Format.ARGB32,600,200);
 		get_font_size(); img.flush();
@@ -171,58 +190,35 @@ scroll_event.connect ((e) => {
 /*        stdout.printf("root: %d x %d\n",rootx,rooty);*/
 	}
 //------------------
-	if(e.direction==Gdk.ScrollDirection.UP){
-		switch(e.state){
-		case SHIFT_MASK:
-			rotate+=15; if(rotate>180)rotate-=360;
+	bool up;
+	if(e.direction==Gdk.ScrollDirection.UP){ up=true; }
+	else if(e.direction==Gdk.ScrollDirection.DOWN){ up=false; }
+	else return true;
+//----------------
+	switch(e.state){
+	case SHIFT_MASK:	//Shift 旋转
+		if(up){rotate+=15; if(rotate>=360)rotate-=360;}
+		else{rotate-=15; if(rotate<0)rotate+=360;}
+		getminsize();
+		break;
+	case CONTROL_MASK:	//Ctrl
+		if(mime=="image/svg+xml"){	//图片
+			if(switchindex>=0) switchnext(up);	//切换图层
+			else set_scale(ref hscale,up);		//拉伸
+		}else{			//文字字体
+			if(fontindex<0)break;
+			get_next_string_array(ref fontlist, ref fontindex, up);
+			dispfont=fontlist[fontindex];
+			get_font_size();
 			getminsize();
-			break;
-		case CONTROL_MASK:
-			if(mime=="image/svg+xml"){
-				if(switchindex>=0) switchnext(true);
-				else set_scale(ref hscale,true);
-			}else{
-				if(fontindex<0)break;
-get_next_string_array(ref fontlist, ref fontindex, true);
-				dispfont=fontlist[fontindex];
-				get_font_size(); getminsize();
-			}
-			break;
-		case MOD1_MASK:	//Alt 修改颜色，适合svg和txt
-			loop_color(true);
-			break;
-		default:
-			set_scale(ref scale,true);
-			break;
 		}
+		break;
+	case MOD1_MASK:		//Alt 修改颜色，适合svg和txt
+		loop_color(up); break;
+	default:			//缩放
+		set_scale(ref scale,up); break;
 	}
-//------------------
-	if(e.direction==Gdk.ScrollDirection.DOWN){
-		switch(e.state){
-		case SHIFT_MASK:
-			rotate-=15; if(rotate<-180)rotate+=360;
-			getminsize();
-			break;
-		case CONTROL_MASK:
-			if(mime=="image/svg+xml"){
-				if(switchindex>=0) switchnext(false);
-				else set_scale(ref hscale,false);
-			}else{
-				if(fontindex<0)break;
-get_next_string_array(ref fontlist, ref fontindex, false);
-				dispfont=fontlist[fontindex];
-				get_font_size(); getminsize();
-			}
-			break;
-		case MOD1_MASK:	//Alt 修改颜色，适合svg和txt
-			loop_color(false);
-			break;
-		default:
-			set_scale(ref scale,false);
-			break;
-		}
-	}
-//------------------
+//----------------
 	queue_draw();
 	return true;
 	});
@@ -277,9 +273,7 @@ svg_buff=(tmpstr.substring(0,keyoffset)+colorlist[colorindex]+tmpstr.substring(k
 			switchindex--;
 			if(switchindex<0){
 				switchindex=7;	//max 8 icons
-				while(!handle.has_sub(switchid+switchindex.to_string())){
-					switchindex--;
-				}
+			while(!handle.has_sub(switchid+switchindex.to_string())){switchindex--;}
 			}
 		}
 		
