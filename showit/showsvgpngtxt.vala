@@ -3,6 +3,7 @@
 //x!./%< switch-Emoticon.svg
 using Gtk;
 using Cairo;
+/*using Pango;*/
 
 class ShowSVGPNGTXT : Gtk.Window {
 		string mime="";
@@ -38,6 +39,12 @@ class ShowSVGPNGTXT : Gtk.Window {
 		int fontindex=-1;
 
 		inputtext=instr;
+
+/*        FontFamily[] fam={};*/
+/*        Pango.Context.list_families(ref fam);*/
+/*        foreach (FontFamily ff in fam) {*/
+/*            stdout.printf("%s\n",ff.get_name());*/
+/*        }*/
 
 //窗口特性
 		title = "ShowSVGPNGTXT";
