@@ -12,8 +12,7 @@ while(<STDIN>){
 #    $o=1;	# 缺省输出，全文上色。
 	for $arg (@ARGV){
 		if($arg=~/^-/){ if(/$'/i){$o=0;last;} }	# "-"号前缀，强制排除的关键词
-		if(/$arg/i){$o++;}
-		s/($arg)/$color[$c%@color]$1$normal/ig;
+		$o++ if s/($arg)/$color[$c%@color]$1$normal/ig;
 		$c++;
 	}
 	say if $o;
