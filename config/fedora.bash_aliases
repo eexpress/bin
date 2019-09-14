@@ -10,9 +10,9 @@ alias du='sudo dnf update'
 alias du0='sudo dnf update --refresh'
 #--refresh             在运行命令之前将元数据标记为过期。
 alias da='sudo dnf autoremove'
-ds(){ dnf list -Cy "*$1*"; }
-#alias ds='dnf search'		#没有是否已安装的信息
-alias dsi='dnf list installed|g'
+alias ds='dnf search -Cy'		#没有是否已安装的信息
+dsi(){ dnf list installed -Cy "*$1*"|gc $@; }
+#alias dsi='dnf list installed -Cy'
 alias dinfo='dnf info -Cy'
 alias dinfoi='dnf info -Cy --installed'
 #-C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
