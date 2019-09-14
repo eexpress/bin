@@ -12,9 +12,9 @@ sub wanted {
 	for $arg (@ARGV){
 		if($arg=~/^-/){ if($fn=~/$'/i){return;} }	#要排除的关键词
 		else{
-		   	if($fn!~/$arg/i){return;}	#没找到关键词
+			if($fn!~/$arg/i){return;}		#没找到关键词
 			$fn=~s/($arg)/$color[$c%@color]$1$normal/ig; $c++;
-	   	}	
+		}
 	}
 	push @out,"$fn\n";
 }

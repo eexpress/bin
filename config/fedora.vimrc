@@ -1,21 +1,26 @@
-colo evening 		" 配色主题	desert
-set guifont=Input\ Mono\ Italic\ 15
-set guifont=Fira\ Mono\ 15
+" 配色
+colo evening					" 配色主题 desert
+set list listchars=tab:>\ ,trail:-	" 显示tab后尾部空格
+hi SpecialKey guifg=#606060		" 非打印字符颜色
+hi Comment gui=bold				" 注释粗体
+
+set guifont=Input\ Mono\ Italic\ 16
+set guifont=Fira\ Mono\ 16
 set fileencodings=utf8,gbk
-set number 			" 显示行号
+set number			" 显示行号
 set mouse=a
 set ignorecase		" 搜索忽略大小写
 set incsearch		" 输入字符串就显示匹配点
 set tabstop=4
-set shiftwidth=4 	" < > 平移
+set shiftwidth=4	" < > 平移
 set noexpandtab
 set autoindent
 set foldmethod=indent
 set foldlevel=9
-"indent 	"相同缩进的行折叠。zc/zo/zR(reset)
+"indent		"相同缩进的行折叠。zc/zo/zR(reset)
 " 用空格键来开关折叠
 nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zO')<CR>
-"mark: 设置 me 回来 'e/`e
+"mark: 设置 me 回来 'e(回行)/`e(回位置)
 "`gd` : Goto local Declaration.  "比*更直接的找到定义处。
 "Ctrl-o/i 跳回去
 set autoread 	"文件在Vim之外修改过，自动重新读入
@@ -28,7 +33,7 @@ map <leader>q	<Esc>:q!<CR>
 map <C-u>	:update<CR>
 imap <C-u>	<Esc>:update<CR>a
 "水平垂直拆分窗口
-"C-W split/vsplit/close(saft)/4个方向切换焦点
+"C-W s/v/c: split/vsplit/close(saft)/4个方向切换焦点
 
 "======== Insert模式，输入时自动补全括号 ========
 imap ( ()<ESC>i
