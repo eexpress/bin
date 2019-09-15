@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+use 5.010;
+
+$_=`xclip -o`;
+chomp;
+s.^['"]..g;
+s.['"]$..g;		#只能处理一个参数
+s.^~.$ENV{HOME}.g;
+#s...g;
+if(! -e $_){
+$_=`locate -n 1 "$_"`;
+chomp;
+}
+s. .\\ .g;
+say;
+system("xdg-open $_ &");
+#if(! $ARGV[0]){
+#    `xdg-open $_ &`;
+#}else{
+#    use File::Basename;
+#    $_=dirname($_);
+#    say "目录：->$_<-";
+#    say "cd \"$_\"\n";	# 能在bash中使用eval o.pl改变目录。
+#}
+

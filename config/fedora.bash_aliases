@@ -3,79 +3,50 @@
 set -o vi
 
 #-------ALIAS------------------------------------
-##-------- 软件包管理 --------
-alias di='sudo dnf install'
-alias dr='sudo dnf remove'
-alias du='sudo dnf update'
-alias du0='sudo dnf update --refresh'
-#--refresh             在运行命令之前将元数据标记为过期。
-alias da='sudo dnf autoremove'
-alias ds='dnf search -Cy'		#没有是否已安装的信息
-dsi(){ dnf list installed -Cy "*$1*"|gc $@; }
-#alias dsi='dnf list installed -Cy'
-alias dinfo='dnf info -Cy'
-alias dinfoi='dnf info -Cy --installed'
-#-C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
-alias dwhoneed='dnf repoquery --installed --whatrequires'
-alias dfile='dnf repoquery -l -Cy'	#包的文件列表
-#-l, --list            显示软件包中的文件列表
-#alias dfile='rpm -q --filesbypkg'	#包的文件列表，只能查询已安装的包
-alias dfpkg='rpm -qf'				#文件所属的包
+##			-------- 软件包管理 --------
+alias pi='sudo dnf install'
+alias pr='sudo dnf remove'
+alias pu='sudo dnf update'
+##			-------- 未安装的包 --------
+# -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
+alias pf='dnf search -Cy'			# 无安装状态。搜索参数是AND关系。
+pfi(){ dnf list installed -Cy "*$1*"|gc $@; }	# gc参数是OR关系。
+alias pinf0='dnf info -Cy'			# 可通配符查未安装的包说明
+##			-------- 已安装的包 --------
+alias pinfo='rpm -qi'					# 包信息
+alias plist='rpm -ql'					# 文件列表
+alias pfile='rpm -qf'					# 文件所属的包
+alias pneed='rpm -q --whatrequires'		# 被哪个包需要
 
 ##------- ---------
+alias ps='\ps -u `id -un` -o pid,command'
+alias pg='pgrep -af'
+alias k='pkill -9 -f'
+alias g='grep --color=always -Pi 2>/dev/null'
+
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'
 alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
 alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
 alias dog='grep -v -E "(^$|^#|^!)"'
-alias hexdump='hexdump -C|cut -b 9-'
-alias axel='/usr/bin/axel -n 10 -a'
-alias myip='curl ipinfo.io'
-alias ps='/bin/ps -u `id -un` -o pid,command'
-alias pg='pgrep -af'
 alias pl='perl -ple'
-#Digital Media Server + Player(Controller + Renderer)
-alias dlna-dmserver='rygel'
-alias dlna-dmcontroller='gupnp-av-cp'
 
-#alias d='/usr/bin/df -hT -x tmpfs -x devtmpfs'
-#alias d='/usr/bin/df -h --output=source,fstype,size,used,pcent,target | sed "s/     类型/类型/; /tmpfs/d; /boot/d; s./dev/..;"'
-#alias d='/usr/bin/df -h -t ext4|sed "s./dev/..; s.     容量.容量."'
-#alias f='free -h|cut -b -43'
 alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors;hddtemp -q'
-alias d='\du -h'
-alias g='grep --color=always -Pi 2>/dev/null'
-#-P, --perl-regexp; -i, --ignore-case
-#alias g='grep --color=always -inTZE 2>/dev/null'
-alias v='/usr/bin/gvim --remote-tab-silent'
-alias sv='sudo /usr/bin/vim'
-alias k='pkill -9 -f'
+alias v='gvim --remote-tab-silent'
+alias sv='sudo gvim'
 
-alias ls='/usr/bin/ls --color=auto'
-alias l='ls'
-alias la='ls -a'
-alias lsm='ls -oAh --time-style=iso -t'		# mtime
-alias lsc='ls -oAh --time-style=iso -tc'	# ctime
-alias lss='ls -oAh --time-style=iso -S'		# size
+##			-------- LS --------
+alias l='\ls --color=auto'
+alias la='l -oAh  --time-style=iso -t'		# mtime
+alias ls='la -S'		# size
 
-#alias hexo='cd ~/文档/blog.hexo;/usr/bin/hexo'
-alias ggit='cd ~/bin;/usr/bin/git'
-
-alias dl="$HOME/bin/app/you-get/you-get"
-alias dlp="dl -p mplayer"
-alias dl0="dl -s 127.0.0.1:1080 -c '/home/eexpss/.mozilla/firefox/mjm952n2.default/cookies.sqlite'"
-
-alias unzip="unzip -O CP936"
-
-#pg(){ /bin/ps -e -o pid,command|grep $1|grep -v grep; }
+#-------FUNC------------------------------------
 c(){ echo $1|bc -l; }
-cdd(){ d=`dirname "$1"`; echo $d; cd "$d";}
+# 鼠标选择路径或文件，快速进入所在的上层目录。
+d(){ c=`xclip -o`; d=`dirname "$c"`; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
-o(){ xdg-open ${1:-"`xclip -o|sed -e "s.^~.$HOME." -e "s/\ /\\\ /g" -e "s/\n.*//"`"}; }
-s(){ highlight --force -O ansi $1 | /usr/bin/less -iR; }
-#▶ highlight -S bash -O svg  -u utf8 -k "Fira Mono" -K 24 -l -j 2 -W bin/y --width 600 -o t.svg -z -s autumn
-u(){ /usr/bin/du -sch "$@"|sort -rh; }
+u(){ \du -sch "$@"|sort -rh; }
 
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
@@ -96,15 +67,7 @@ export GROFF_NO_SGR=1	#fix no color in Fedora 25
 export PATH=$HOME/bin:$PATH
 export CDPATH=:~:~/bin:~/文档
 
-#-------ENCFS--------------------------------------
-encfs_dir="encfs-eexp"
-alias encfs1="encfs ~/.$encfs_dir ~/$encfs_dir"
-alias encfs0="fusermount -u ~/$encfs_dir"
-
 #-------PS1 COLOR----------------------------------
-#pc0='\[\e[1;32;40m\]'
-#pc1='\[\e[1;37;42m\]'
-#pc2='\[\e[m\]'
 	darkgreen="0x16"	#dark green
 	gray="0xee"	#light gray
 	green_gray=`tput setaf 2; tput setab $gray;`
