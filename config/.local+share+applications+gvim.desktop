@@ -2,7 +2,7 @@
 Name="gVim TAB"
 Comment=Edit text files using TAB
 TryExec=gvim
-Exec=gvim -f --remote-tab %F
+Exec=gvim -p --remote-tab %F
 Terminal=false
 Type=Application
 Keywords=Text;editor;
