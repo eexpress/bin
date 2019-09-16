@@ -7,7 +7,7 @@
 #shadowsocks-local-linux64-1.1.5 -c bin/config/shadowsocks-csho.json 
 #2019/04/09 00:07:24 Failed generating ciphers:Unsupported encryption method: chacha20-ietf-poly1305
 
-configpath="$HOME/bin/config/"
+configpath="$HOME/bin/config/ss.json/"
 #configfile="shadowsocks-*"
 configfile="ss-*.json"
 
