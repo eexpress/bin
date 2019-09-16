@@ -2,12 +2,14 @@
 
 use 5.010;
 
+# 从参数或者鼠标选择(primary剪贴板)，快速打开文件。
 $_=defined $ARGV[0]?$ARGV[0]:`xclip -o`;
+print "input:\t";
 say;
 chomp;
 s.^['"]..g; s.['"]$..g;		# 去掉引号包裹，只能处理一个参数。
 s.^~.$ENV{HOME}.g;
-if(! -e $_){
+if(! -e $_){	# 残缺的文件名或路径，自动补全定位文件。
 $_=`locate -n 1 "$_"`;
 chomp;
 print "locate:\t";
