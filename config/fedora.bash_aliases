@@ -43,8 +43,8 @@ alias ls='la -S'		# size
 
 #-------FUNC------------------------------------
 c(){ echo $1|bc -l; }
-# 鼠标选择路径或文件，快速进入所在的上层目录。
-d(){ c=`xclip -o`; d=`dirname "$c"`; echo $d; cd "$d";}
+# 鼠标选择路径或文件，快速进入目录。
+d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
 u(){ \du -sch "$@"|sort -rh; }
 
