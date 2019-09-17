@@ -135,10 +135,10 @@ default:	//text
 	break;
 }
 		max=(int)Math.sqrt(Math.pow(w,2)+Math.pow(h,2));
-		set_size_request(max,max);
 //----------------------------------------------------
 //绘制窗口事件
 		draw.connect ((da,ctx) => {	//直接在窗口绘图
+			resize((int)(max*maxscale),(int)(max*maxscale));
 			ctx.translate(max*maxscale/2, max*maxscale/2); //窗口中心为旋转原点
 /*            ctx.scale(scale,scale);*/
 			ctx.rotate (rotate*Math.PI/180);
@@ -151,7 +151,6 @@ switch(mime){
 		ctx.translate((max-w)/2,(max-h)/2);
 		if(switchindex>=0) handle.render_cairo_sub(ctx, switchid+switchindex.to_string());
 		else handle.render_cairo(ctx);
-/*handle.render_cairo_sub(ctx,"#"+keyid);	//work */
 		break;
 	case "image/png":
 		break;
@@ -159,13 +158,13 @@ switch(mime){
 		ctx.translate(0,(max-h)/2);
 		ctx.select_font_face(dispfont,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(fsize);
-		ctx.set_source_rgba (0.3, 0.3, 0.3, 0.8);
-		ctx.move_to(2,h+2);
+		ctx.set_source_rgba (0.3, 0.3, 0.3, 0.8);	//文字阴影
+		ctx.move_to(2,y_bearing+2);
 		ctx.show_text(inputtext);
 		Gdk.RGBA cc=Gdk.RGBA();		//html color convert to rgba
 		cc.parse("#"+colorlist[colorindex]);
 		ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
-		ctx.move_to(0,h);
+		ctx.move_to(0,y_bearing);
 		ctx.show_text(inputtext);
 		break;
 	}
@@ -230,7 +229,6 @@ scroll_event.connect ((e) => {
 /*        int root_x; int root_y;*/
 /*        get_position(out root_x, out root_y);*/
 /*        move(root_x-off, root_y-off);*/
-		resize((int)(max*maxscale),(int)(max*maxscale));
 	}
 //----------------------------------------------------
 	void loop_color(bool direction){
@@ -282,6 +280,7 @@ svg_buff=(tmpstr.substring(0,keyoffset)+colorlist[colorindex]+tmpstr.substring(k
 		w=(int)ex.x_advance;
 		h=(int)ex.height+3;
 		y_bearing=(int)Math.fabs(ex.y_bearing);
+		max=(int)Math.sqrt(Math.pow(w,2)+Math.pow(h,2));
 	}
 //----------------------------------------------------
 }

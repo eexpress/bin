@@ -156,7 +156,7 @@ switch(mime){
 	default:	//text
 		ctx.select_font_face(dispfont,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(fsize);
-		ctx.set_source_rgba (0.3, 0.3, 0.3, 0.8);
+		ctx.set_source_rgba (0.3, 0.3, 0.3, 0.8);	//文字阴影
 		ctx.move_to(2,y_bearing+2);
 		ctx.show_text(inputtext);
 		Gdk.RGBA cc=Gdk.RGBA();		//html color convert to rgba
