@@ -71,8 +71,8 @@ func Devhelp()
 	let w = expand("<cword>")
 	exec "call system('devhelp -s '.w.'&')"
 endf
-"======== <F4> 全局替换当前单词 ========
-map <expr> <F4> Replace_Current_Word()
+"======== <F3> 全局替换当前单词 ========
+map <expr> <F3> Replace_Current_Word()
 func Replace_Current_Word()
 	let w = expand("<cword>")
 	return "\<ESC>:%s/\\<".w."\\>/".w."/g\<Left>\<Left>"

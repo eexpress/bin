@@ -3,7 +3,6 @@
 //x!./%< switch-Emoticon.svg
 using Gtk;
 using Cairo;
-/*using Pango;*/
 
 class ShowSVGPNGTXT : Gtk.Window {
 		string mime="";
@@ -21,13 +20,11 @@ class ShowSVGPNGTXT : Gtk.Window {
 		int colorindex=0;
 		string[] colorlist={"ff0000","FF00FF","ffdd00","00ddff","000000","32CD32","0000dd", "7B68EE"};
 		//Red, Magenta, Orange, White, Black, LimeGreen, MediumBlue, MediumSlateBlue
-		double hscale=1;	//ctrl滚轮改svg水平缩放
+		double wscale=1;	//ctrl滚轮改svg水平缩放
 		double scale=1;		//滚轮缩放
 		double rotate=0;
 		int w=300;
 		int h=100;
-		int max;	//原始图形正方形边长
-		double maxscale=1;
 
 		string dispfont="Noto Sans";
 		const int fsize=60;
@@ -40,22 +37,16 @@ class ShowSVGPNGTXT : Gtk.Window {
 
 		inputtext=instr;
 
-/*        FontFamily[] fam={};*/
-/*        Pango.Context.list_families(ref fam);*/
-/*        foreach (FontFamily ff in fam) {*/
-/*            stdout.printf("%s\n",ff.get_name());*/
-/*        }*/
-
 //窗口特性
 		title = "ShowSVGPNGTXT";
 		skip_taskbar_hint = true;
 		decorated = false;
-/*        decorated = true;*/
+/*        decorated = true;	//调试，开窗口边框*/
 		app_paintable = true;
 		set_position(MOUSE);
 		set_visual(this.get_screen().get_rgba_visual());
 		set_keep_above (true); 
-stdout.printf("%s ====== Version 0.6\n",title);
+stdout.printf("%s ====== Version 0.62\n",title);
 //允许鼠标事件
 		destroy.connect (Gtk.main_quit);
 		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
@@ -134,28 +125,25 @@ default:	//text
 		img = new ImageSurface(Format.ARGB32,w,h);
 	break;
 }
-		max=(int)Math.sqrt(Math.pow(w,2)+Math.pow(h,2));
 //----------------------------------------------------
 //绘制窗口事件
 		draw.connect ((da,ctx) => {	//直接在窗口绘图
-			resize((int)(max*maxscale),(int)(max*maxscale));
-			ctx.translate(max*maxscale/2, max*maxscale/2); //窗口中心为旋转原点
-/*            ctx.scale(scale,scale);*/
+int diagonal=(int)(Math.sqrt(Math.pow(w*wscale,2)+Math.pow(h,2))*scale);
+			resize(diagonal,diagonal);
+			ctx.translate(diagonal/2,diagonal/2); //窗口中心为旋转原点
 			ctx.rotate (rotate*Math.PI/180);
-			ctx.scale(scale*hscale,scale);
-/*            ctx.scale(hscale,1);*/
-			ctx.translate(-max/2, -max/2);
+			ctx.scale(scale*wscale,scale);
+			ctx.translate(-w/2, -h/2);
+/*stdout.printf("w:%d\th:%d\ts:%f\ths:%f\tr:%f\tdia:%d\n",w,h,scale,wscale,rotate,diagonal);*/
 
 switch(mime){
 	case "image/svg+xml":
-		ctx.translate((max-w)/2,(max-h)/2);
 		if(switchindex>=0) handle.render_cairo_sub(ctx, switchid+switchindex.to_string());
 		else handle.render_cairo(ctx);
 		break;
 	case "image/png":
 		break;
 	default:	//text
-		ctx.translate(0,(max-h)/2);
 		ctx.select_font_face(dispfont,FontSlant.NORMAL,FontWeight.BOLD);
 		ctx.set_font_size(fsize);
 		ctx.set_source_rgba (0.3, 0.3, 0.3, 0.8);	//文字阴影
@@ -168,8 +156,8 @@ switch(mime){
 		ctx.show_text(inputtext);
 		break;
 	}
-			ctx.set_source_surface(img,(max-w)/2,(max-h)/2);
-			ctx.paint (); //除掉img偏移量，绘图。
+			ctx.set_source_surface(img,0,0);
+			ctx.paint ();
 			return true;
 		});
 //----------------------------------------------------
@@ -196,7 +184,7 @@ scroll_event.connect ((e) => {
 	case CONTROL_MASK:	//Ctrl
 		if(mime=="image/svg+xml"){	//图片
 			if(switchindex>=0) switchnext(up);	//切换图层
-			else set_scale(ref hscale,up);		//拉伸
+			else set_scale(ref wscale,up);		//拉伸
 		}else{			//文字字体
 			if(fontindex<0)break;
 			get_next_string_array(ref fontlist, ref fontindex, up);
@@ -223,12 +211,7 @@ scroll_event.connect ((e) => {
 			s*=0.98;
 			if(s<0.2)s=0.2;
 		}
-		maxscale=hscale>1?scale*hscale:scale;
 /*        Window managers are free to ignore this; most window managers ignore requests for initial window positions (instead using a user-defined placement algorithm) and honor requests after the window has already been shown.*/
-/*        int off=(int)(max*(maxscale-max0)/2);*/
-/*        int root_x; int root_y;*/
-/*        get_position(out root_x, out root_y);*/
-/*        move(root_x-off, root_y-off);*/
 	}
 //----------------------------------------------------
 	void loop_color(bool direction){
@@ -250,7 +233,7 @@ svg_buff=(tmpstr.substring(0,keyoffset)+colorlist[colorindex]+tmpstr.substring(k
 		} else {
 			switchindex--;
 			if(switchindex<0){
-				switchindex=7;	//max 8 icons
+				switchindex=7;	//Maximum 8 icons
 			while(!handle.has_sub(switchid+switchindex.to_string())){switchindex--;}
 			}
 		}
@@ -280,7 +263,6 @@ svg_buff=(tmpstr.substring(0,keyoffset)+colorlist[colorindex]+tmpstr.substring(k
 		w=(int)ex.x_advance;
 		h=(int)ex.height+3;
 		y_bearing=(int)Math.fabs(ex.y_bearing);
-		max=(int)Math.sqrt(Math.pow(w,2)+Math.pow(h,2));
 	}
 //----------------------------------------------------
 }

@@ -1,6 +1,6 @@
 Name:           showit
 Summary:        Show SVG PNG TXT on screen. Use mouse and/or Meta Key to Zoom/Scale/Rotate/Change_Color/Change_Layer.
-Version:        0.6.1
+Version:        0.6.2
 Release:        linux
 Buildarch:      x86_64
 Buildroot:      %{_topdir}/BUILDROOT/%{name}-%{version}-%{release}.%{buildarch}
