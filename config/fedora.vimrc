@@ -55,27 +55,28 @@ autocmd BufRead,BufNewFile *.vala,*.vapi setfiletype vala
 " 目前，不设置输入法而进入Insert模式，会导致shift切换不出中文。
 " 虽然状态栏上显示的是拼音输入法。此时，需要super+space切换到拼音一次
 " ibus engine就没有设置“拼音输入法的英文状态”的参数。
+
 "======== 智能tab，补全或输入TAB ========
 inoremap <expr> <Tab> MyTab()
-fun MyTab()
+func MyTab()
 	let str=strpart(getline("."), 0, col(".")-1)
 	if str!="" && str=~'\m\w$'
 		return "\<C-N>"
 	endif
 	return "\t"
-endfun
+endf
 "======== <F2> 使用devhelp查询当前词 ========
 map <F2> :call Devhelp()<CR>
 func Devhelp()
 	let w = expand("<cword>")
 	exec "call system('devhelp -s '.w.'&')"
-endfunc
+endf
 "======== <F4> 全局替换当前单词 ========
 map <expr> <F4> Replace_Current_Word()
 func Replace_Current_Word()
 	let w = expand("<cword>")
 	return "\<ESC>:%s/\\<".w."\\>/".w."/g\<Left>\<Left>"
-endfun
+endf
 "======== <F5> 运行前五行注释中的命令 ========
 map <F5> :call RunComment()<CR>
 func RunComment()
@@ -92,6 +93,19 @@ func RunComment()
 		endif
 		let n = n + 1
 	endwhile
-endfunc
-"======= 修改vimrc后立刻load载入生效 =========
-map <F8>	<Esc>:source ~/.vimrc<CR>
+endf
+"======= <F8> 修改vimrc后立刻载入生效 =========
+map <F8> <Esc>:source ~/.vimrc<CR>
+"======= <F10> 切换菜单栏工具栏显示 =========
+set guioptions-=m
+set guioptions-=T
+map <silent> <F10> :call ToggleMenuToolbar()<CR>
+func ToggleMenuToolbar()
+	if &guioptions =~# 'T'
+		set guioptions-=T
+		set guioptions-=m
+	else
+		set guioptions+=T
+		set guioptions+=m
+	endif
+endf
