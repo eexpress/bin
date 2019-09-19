@@ -37,14 +37,31 @@ $name=$1; say "=====>\t$name";
 exit if $name eq "";
 $html=~s/.*$aa[$i][2]//s;	# 掐头
 $html=~s/$aa[$i][3].*//s;	# 去尾
-#==============
 open OUT,">$ENV{HOME}/$name.txt";
-while($html=~m'href="(/.*?html*)".*?>(.*?)<'g){	# 所有html链接，暂时不好排序。
-	$url="$aa[$i][0]$1"; $topic=$2;
-	$url=~m"[^/]*$"; say "=====>\t$&\t$topic";	# 只打印尾部链接和标题
+#==============按照章节名，排序章节链接
+#while($html=~m'href="(/.*?html*)".*?>(.*?)<'g){	# 所有html链接
+#    $links{$2}=$1;	# 章节名，链接。其实可以按照链接排序。
+#    push @line,$2;	# 章节名列表
+#}
+#@num=qw(前|序 一 二 三 四 五 六 七 八 九 十 十一 十二 十三 十四 十五 十六 十七 十八 十九 二十 二十一 二十二 二十三 二十四 二十五 尾|续);
+#for (0..$#num){$hash{$num[$_]}=$_;} 	# 做一个数字索引的散列。
+
+#@newline = sort { ($k1)=$a=~m/第(.*?)章/; ($k2)=$b=~m/第(.*?)章/; $hash{$k1}<=>$hash{$k2}; } @line;		# <=> 就是比大小并交换。
+#================按照链接建立散列，直接sort
+# 所有html链接。建立
+	# 链接，章节名。
+while($html=~m'href="(/.*?html*)".*?>(.*?)<'g){$links{$1}=$2;}
+#================
+for(sort keys %links){
+	$url=$_; $topic=$links{$_};
+	say "=====>\t$url\t$topic";
+#}
+#for(@newline){
+#    $url=$links{$_}; $topic=$_;
+#    say "=====>\t$url\t$topic";
 	print OUT "\n".$topic."\n";
 #    next;	# 只打印章节标题
-	$txt=get("https://".$url);		# 获得每个章节
+	$txt=get("https://".$aa[$i][0].$url);		# 获得每个章节
 	$txt=~m"$aa[$i][4]"s; $_=$1; 
 #==============格式化文字内容
 	s/&nbsp;/ /g; s/&quot;/"/g; s/\r//g; s/<.*?>//g; s/\n{2,}/\n/gs;
