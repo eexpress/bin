@@ -8,7 +8,7 @@ use LWP::Simple;	# perl-LWP-Protocol-https
 # 格式数组
 # 根网址(相对于链接)，标题格式化(获取$1内容)，掐头，去尾，内容范围
 @aa=(
-['www.yooread.net',	'(.*)_在线阅读.*',	'直达底部','喜欢这本书的人','theme\(\);(.*?)chap_bg\(\);'],
+['www.yooread.net',	'(.*)_.*?在线阅读.*',	'直达底部','喜欢这本书的人','theme\(\);(.*?)chap_bg\(\);'],
 ['www.sbkk88.com',	'.*?《(.*?)》.*',	'leftList','名著分类','【回目录】(.*?)【回目录】'],
 );
 # lwp无法get内容的网址，难道是cookie限制？
@@ -43,9 +43,9 @@ while($html=~m'href="(/.*?html*)".*?>(.*?)<'g){	# 所有html链接，暂时不�
 	$url="$aa[$i][0]$1"; $topic=$2;
 	$url=~m"[^/]*$"; say "=====>\t$&\t$topic";	# 只打印尾部链接和标题
 	print OUT "\n".$topic."\n";
-	next;	# 只打印章节标题
+#    next;	# 只打印章节标题
 	$txt=get("https://".$url);		# 获得每个章节
-	$txt=~m"$aa[$i][5]"s; $_=$1; 
+	$txt=~m"$aa[$i][4]"s; $_=$1; 
 #==============格式化文字内容
 	s/&nbsp;/ /g; s/&quot;/"/g; s/\r//g; s/<.*?>//g; s/\n{2,}/\n/gs;
 	s/-\d{1,3}-//g; s/<u>一<\/u>/\n/g;
