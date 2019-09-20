@@ -8,9 +8,9 @@ var darr = [
 'reddit.com', 'valadoc.org', 'greasyfork.org',
 'thepiratebay',	'wikipedia.org', 'alternativeto.net',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
-'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',
-'github', 'githubusercontent.com', 'githubassets.com'
+'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org'
 ];
+//'github', 'githubusercontent.com', 'githubassets.com'
 //▶ curl --socks5 127.0.0.1:1080 'http://www.viewdns.info/chinesefirewall/?domain=opensuse.org'|g -o accessible
 
 // https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
