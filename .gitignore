@@ -5,7 +5,6 @@ old*
 cairo-weather
 paste-img
 nmn
-mkd.*
 lighttpd
 *linux64*
 project*
@@ -22,6 +21,10 @@ telegram*
 wine*
 *.cache
 autovpn
+脚本图解
+resource
+*发布页面
+img
 
 adb
 tags
@@ -49,7 +52,6 @@ upload
 *.asm
 *.pdf
 *.json
-*.mkd
 *.log
 .uuid
 *.ttf
