@@ -33,6 +33,7 @@ perl -ne 'print unless /^START$/ .. /^END$/' file 	#不显示start和end之间�
 
 `-0777` 禁用分隔符，即将整个文件作为一个记录
 
+
 ---
 
 说明|命令实例
@@ -44,7 +45,7 @@ perl -ne 'print unless /^START$/ .. /^END$/' file 	#不显示start和end之间�
 查找不含comment字符串的行：反向的grep，即grep -v。|`perl -ne 'print unless /comment/' duptext`
 文件按行排序：|`perl -e 'print sort <>' file`
 文件按行反转：|`perl -e 'print reverse <>' file`
-
+一次性读入全部内容。修改缺省分行符|`perl -e 'local $/=undef; $_=<>; s/\n/, /g; print $_;' 名字.txt`
 
 ---
 %s/['']/'/g
