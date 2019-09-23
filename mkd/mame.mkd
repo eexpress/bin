@@ -1,0 +1,31 @@
+#MAME
+---
+
+- 资源：
+    1. https://edgeemu.net/
+    1. https://www.mamecn.com
+
+- 下载：
+
+文件|尺寸|系统|说明
+-|-|-|-
+Cabal.7z|91K|Nintendo Entertainment System ROMs
+cabal.zip|515K|MAME .208 ROMs|Cabal (World Joystick)
+cabalus.zip|518K|
+cabalbl.zip|515K
+
+- 设置
+
+修改`~/.mame/roms/mame.ini`是无效的，必须修改`/etc/mame/mame.ini`的`rompath`行。
+```
+⭕ g rom /etc/mame/mame.ini
+rompath   $HOME/.mame/roms;/usr/share/mame/roms;/usr/share/mame/chds
+```
+---
+
+xx [](This is a comment.) yy
+
+<!---
+⭕ mame s1945ii
+eeprom-s1945ii.bin NOT FOUND (tried in s1945ii s1945ii)
+-->
