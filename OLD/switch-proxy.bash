@@ -29,5 +29,5 @@ case $key in
 	;;
 esac
 
-pgrep ss-qt || ss-qt5 &
+pgrep ss-qt 1>/dev/null || ss-qt5 &
 
