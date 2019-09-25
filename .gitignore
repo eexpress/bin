@@ -25,6 +25,7 @@ autovpn
 resource
 *发布页面
 *string
+*说明
 img
 
 adb
