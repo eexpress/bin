@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# 使用v2ray来统管shadowsocks+v2ray的json
+
+configpath="$HOME/bin/config/proxy.config/"		#要带后缀的/
+configfile="*.pac v*-*.json"
+v2raycmd="/home/eexpss/bin/app/v2ray-linux-64/v2ray"
+
+cd $configpath
+echo "0 --> none proxy"; files[0]="none";
+echo "1 --> all proxy"; files[1]="all";
+index=2; for file in $configfile; do files[$index]=$file; echo "$index --> ${files[$index]%.json}"; ((index++)); done
+key=99; until [[ $key -lt $index && $key -ge 0 ]]; do read -p  "Please choose config [0-$((index-1))]: " -t 5 -n 1 key; done
+# dealy 5 seconds, default choose 0
+key=${files[$key]}; echo ""; echo "Choose : $key"
+
+case $key in
+	none)
+		echo "关闭全局代理"
+		gsettings set org.gnome.system.proxy mode 'none'
+		;;
+	all)
+		echo "全部数据走代理"
+		gsettings set org.gnome.system.proxy mode 'manual'
+		gsettings set org.gnome.system.proxy.http host ''
+		gsettings set org.gnome.system.proxy.https host ''
+		gsettings set org.gnome.system.proxy.ftp host ''
+		gsettings set org.gnome.system.proxy.socks port 1080
+		gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
+		;;
+	*.pac)
+		echo "自定义代理 $key"
+		fullpath="file://$configpath$key"
+		gsettings set org.gnome.system.proxy autoconfig-url "$fullpath"
+		gsettings set org.gnome.system.proxy mode 'auto'
+		;;
+	*.json)
+		echo "切换到v2ray代理 $key"
+		sudo pkill -9 -x ${v2raycmd##*/}
+		if [ -x $v2raycmd ]; then
+			sudo $v2raycmd -config $key &
+		else
+			echo "没安装命令行的v2ray软件。"; exit
+		fi
+		;;
+esac
