@@ -38,8 +38,9 @@ alias sv='sudo gvim'
 
 ##			-------- LS --------
 alias l='\ls --color=auto'
-alias la='l -oAh  --time-style=iso -t'		# mtime
-alias ls='la -S'		# size
+alias la='l -A'
+alias lt='l -oAh  --time-style=iso -t'		# mtime
+alias ls='lt -S'		# size
 
 #-------FUNC------------------------------------
 c(){ echo $1|bc -l; }

@@ -26,6 +26,7 @@ resource
 *发布页面
 *string
 *说明
+*project
 img
 
 adb

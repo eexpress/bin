@@ -16,8 +16,9 @@ key=${files[$key]}; echo ""; echo "Choose : $key"
 
 case $key in
 	none)
-		echo "关闭全局代理"
+		echo "关闭全局代理／停止后台"
 		gsettings set org.gnome.system.proxy mode 'none'
+		sudo pkill -9 -x ${v2raycmd##*/}
 		;;
 	all)
 		echo "全部数据走代理"
