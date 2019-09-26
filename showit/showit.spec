@@ -49,7 +49,6 @@ install -m 755 /home/eexpss/bin/showit/svg/*.svg %{buildroot}/usr/share/showit/
 /usr/share/showit/switch-app0.svg
 /usr/share/showit/switch-Emoticon.svg
 /usr/share/showit/switch-Flag.svg
-/usr/share/showit/switch-frame.svg
 /usr/share/showit/switch-Line.svg
 /usr/share/showit/switch-Number.svg
 /usr/share/showit/switch-OS.svg

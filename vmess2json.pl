@@ -4,9 +4,10 @@ use 5.010;
 use MIME::Base64;
 use JSON;
 
-$_=shift; s'^vmess://'';
+$_=defined $ARGV[0]?$ARGV[0]:`xclip -o`;
+s'^vmess://'';
 $_=decode_base64($_);
-say;
+say; say "==================";
 $rh=decode_json($_);
 if($rh->{"add"} eq ""){say "格式无效"; exit;}
 $_='// https://www.v2ray.com/chapter_00/start.html
@@ -46,5 +47,6 @@ $_='// https://www.v2ray.com/chapter_00/start.html
 ';
 s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
 s/xxxid/$rh->{id}/; s/xxxaid/$rh->{aid}/;
-open OUT,">$ENV{HOME}/vv-$rh->{ps}.json";
+$f="$ENV{HOME}/vv-$rh->{ps}.json";
+open OUT,">$f"; say $f;
 print OUT $_; close OUT;
