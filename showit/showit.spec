@@ -52,6 +52,7 @@ install -m 755 /home/eexpss/bin/showit/svg/*.svg %{buildroot}/usr/share/showit/
 /usr/share/showit/switch-Line.svg
 /usr/share/showit/switch-Number.svg
 /usr/share/showit/switch-OS.svg
+/usr/share/showit/switch-mono-os.svg
 /usr/share/showit/switch-penguin.svg
 /usr/share/showit/switch-yesno.svg
 
