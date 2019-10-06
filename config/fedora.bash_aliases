@@ -6,7 +6,8 @@ set -o vi
 ##			-------- 软件包管理 --------
 alias pi='sudo dnf install'
 alias pr='sudo dnf remove'
-alias pu='sudo dnf update --exclude="botan2"'
+alias pu='sudo dnf update'
+#alias pu='sudo dnf update --exclude="botan2"'
 ##			-------- 未安装的包 --------
 # -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
 alias pf='dnf search -Cy'			# 无安装状态。搜索参数是AND关系。

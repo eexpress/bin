@@ -3,7 +3,10 @@
 
 use 5.010;
 use utf8::all;	# perl-utf8-all，消除全部的 Wide character in print
-use LWP::Simple;	# perl-LWP-Protocol-https
+#use LWP::Simple;	# perl-LWP-Protocol-https
+use LWP::UserAgent;
+$ua = LWP::UserAgent->new( agent => 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:69.0) Gecko/20100101 Firefox/69.0', timeout => 10 );
+
 #================================
 # 格式数组
 # 根网址(相对于链接)，标题格式化(获取$1内容)，
@@ -39,7 +42,10 @@ if($i>=@web){say "网址不支持。";exit;}
 if(grep /^$/,@{$web[$i]}){say "网址设置不完整。";exit;}
 #二维数组取一维数组，需要@{}包裹
 #================================
-$html=get($url);
+#$html=get($url);
+$response = $ua->get($url);
+if ($response->is_success){$html=$response->decoded_content;}
+else{say "timeout!"; exit;}
 say "======================";
 $html=~m"<title>$web[$i][1]</title>";	# 网页标题中的书名
 $name=$1; say "=====>\t《$name》";
@@ -69,8 +75,12 @@ for(sort keys %links){
 	$url=$_; $topic=$links{$_};
 	say "=====>\t$url\t$topic";
 	print OUT "\n".$topic."\n";
+# 标题有‘&ldquo; &rdquo;’是中文双引号的情况。
 #    next;	# 只打印章节标题
-	$_=get($prefix.$url);
+#    $_=get($prefix.$url);
+	$response = $ua->get($prefix.$url);
+	if ($response->is_success){$_=$response->decoded_content;}
+	else{say "article timeout!"; exit;}
 	s/.*$web[$i][4]//s;	# 掐头
 	s/$web[$i][5].*//s;	# 去尾
 #==============格式化文字内容
