@@ -28,6 +28,7 @@ resource
 *说明
 *project
 img
+*fonts*
 
 adb
 tags
@@ -57,4 +58,3 @@ upload
 *.json
 *.log
 .uuid
-*.ttf

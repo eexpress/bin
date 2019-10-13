@@ -26,8 +26,18 @@ WARNING: sound subsystem disabled
 ```
 搞定。以前扯的那些配置里面改oss的，都没用。
 
+##libSDL
 另外一个缺少libsdl的，也是少一个i686的包。
 ```
+⭕ ldd etqw.x86 |g found
 libSDL-1.2.so.0 => not found
+
 ▶ di SDL-1.2.15-21.fc24.i686
+
+⭕ pi SDL.i686
+  安装    : SDL-1.2.15-41.fc30.i686                  1/1 
+
+⭕ plist SDL.i686|g libSDL-1.2.so.0
+/usr/lib/libSDL-1.2.so.0
+/usr/lib/libSDL-1.2.so.0.11.4
 ```

@@ -3,7 +3,7 @@
 # 使用v2ray来统管shadowsocks+v2ray的json
 
 configpath="$HOME/bin/config/proxy.config/"		#要带后缀的/
-configfile="*.pac v*-*.json"
+configfile="*.pac *.json"
 v2raycmd="/home/eexpss/bin/app/v2ray-linux-64/v2ray"
 
 cd $configpath
