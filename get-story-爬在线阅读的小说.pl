@@ -92,7 +92,7 @@ for(sort keys %links){
 	s/&mdash;/—/g; s/&hellip;/…/g;
 	print OUT $_;
 }
-#⭕ perl -i.bak -lane 's/&ldquo;/“/g; s/&rdquo;/”/g; s/&mdash;/—/g; s/&lsquo;/‘/g; s/&rsquo;/’/g; s/&hellip;/…/g;' *.txt
+#⭕ perl -i.bak -ple 's/&ldquo;/“/g; s/&rdquo;/”/g; s/&mdash;/—/g; s/&lsquo;/‘/g; s/&rsquo;/’/g; s/&hellip;/…/g;' *.txt
 close OUT;
 say "======================";
 @_=stat("$ENV{HOME}/$name.txt"); $_=$_[7]/1000;
