@@ -73,9 +73,11 @@ say "=====>\t$prefix";
 #================获取各个章节
 for(sort keys %links){
 	$url=$_; $topic=$links{$_};
+# 标题有‘&ldquo; &rdquo;’是中文双引号的情况。
+	$topic=~s/&ldquo;/“/g;
+	$topic=~s/&rdquo;/”/g;
 	say "=====>\t$url\t$topic";
 	print OUT "\n".$topic."\n";
-# 标题有‘&ldquo; &rdquo;’是中文双引号的情况。
 #    next;	# 只打印章节标题
 #    $_=get($prefix.$url);
 	$response = $ua->get($prefix.$url);
@@ -86,8 +88,11 @@ for(sort keys %links){
 #==============格式化文字内容
 	s/&nbsp;/ /g; s/&quot;/"/g; s/\r//g; s/<.*?>//g; s/\n{2,}/\n/gs;
 	s/-\d{1,3}-//g; s/<u>一<\/u>/\n/g; s/^\s+$//g;
+	s/&ldquo;/“/g; s/&rdquo;/”/g; s/&lsquo;/‘/g; s/&rsquo;/’/g;
+	s/&mdash;/—/g; s/&hellip;/…/g;
 	print OUT $_;
 }
+#⭕ perl -i.bak -lane 's/&ldquo;/“/g; s/&rdquo;/”/g; s/&mdash;/—/g; s/&lsquo;/‘/g; s/&rsquo;/’/g; s/&hellip;/…/g;' *.txt
 close OUT;
 say "======================";
 @_=stat("$ENV{HOME}/$name.txt"); $_=$_[7]/1000;

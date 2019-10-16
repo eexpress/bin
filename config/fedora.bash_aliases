@@ -11,13 +11,15 @@ alias pu='sudo dnf update'
 ##			-------- 未安装的包 --------
 # -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
 alias pf='dnf search -Cy'			# 无安装状态。搜索参数是AND关系。
-pfi(){ dnf list installed -Cy "*$1*"|gc $@; }	# gc参数是OR关系。
-alias pinf0='dnf info -Cy'			# 可通配符查未安装的包说明
+pfi(){ dnf list installed "*$1*"|gc $@; }	# gc参数是OR关系。
+#alias pinf0='dnf info -Cy'			# 可通配符查未安装的包说明
 ##			-------- 已安装的包 --------
-alias pinfo='rpm -qi'					# 包信息
-alias plist='rpm -ql'					# 文件列表
-alias pfile='rpm -qf'					# 文件所属的包
+#alias pinfo='rpm -qi'					# 包信息
+alias plist='rpm -q --list'				# 文件列表
+alias pfile='rpm -q --file'				# 文件所属的包
 alias pneed='rpm -q --whatrequires'		# 被哪个包需要
+# 包信息。rpm需要已安装的确切包名；dnf可通配符查未安装的包。
+pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
 
 ##------- ---------
 alias ps='\ps -u `id -un` -o pid,command'
