@@ -15,12 +15,13 @@ pfi(){ dnf list installed "*$1*"|gc $@; }	# gc参数是OR关系。
 #alias pinf0='dnf info -Cy'			# 可通配符查未安装的包说明
 ##			-------- 已安装的包 --------
 #alias pinfo='rpm -qi'					# 包信息
-alias plist='rpm -q --list'				# 文件列表
+#alias plist='rpm -q --list'				# 文件列表
 alias pfile='rpm -q --file'				# 文件所属的包
 alias pneed='rpm -q --whatrequires'		# 被哪个包需要
 # 包信息。rpm需要已安装的确切包名；dnf可通配符查未安装的包。
 pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
-
+# 包的文件列表。
+plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 ##------- ---------
 alias ps='\ps -u `id -un` -o pid,command'
 alias pg='pgrep -af'
