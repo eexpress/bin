@@ -22,34 +22,8 @@ say "==================";
 if($rh->{"add"} eq ""){say "格式无效"; exit;}
 
 # 输出成v2ray格式的json文件
-$_='{
-	"log": { "loglevel": "none" },
-//手机BifrostV导出的V2ray配置，缺少inbounds段。需要复制过去，否则本地没端口。
-//---------------------------
-	"inbounds": [{
-		"port": 1080,  // 本机 SOCKS 代理端口
-		"listen": "127.0.0.1", "protocol": "socks", "settings": { "udp": true } }],
-//---------------------------
-	"outbounds": [{
-		"protocol": "shadowsocks",	//协议
-		"settings": {
-			"servers": [{
-				"address": "xxxadd",	// 服务器地址
-				"port": xxxport,	// 服务器端口
-				"method": "xxxmethod",	//加密模式
-				"password": "xxxpassword",	//密码
-				"ota": false,
-				"level": 0 }]}},
-		{ "protocol": "freedom", "settings": {}, "tag": "direct" },
-		{ "protocol": "blackhole", "settings": {}, "tag": "block" }
-	],
-//---------------------------
-	"routing": {
-		"domainStrategy": "IPIfNonMatch",
-		"rules": [{ "type": "field", "ip": [ "geoip:private", "geoip:cn" ],
-		"outboundTag": "direct" }]}
-}
-';
+$if='/home/eexpss/bin/config/proxy.config/Simple.ss.json.Template';
+open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
 s/xxxmethod/$rh->{method}/; s/xxxpassword/$rh->{password}/;
 $f="$ENV{HOME}/vss-$rh->{add}.json";
