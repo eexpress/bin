@@ -1,3 +1,5 @@
 #!/bin/bash
 
+#ffplay -t 5 -nodisp -t无效
+#espeak -vzh $*
 totem "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=$*"
