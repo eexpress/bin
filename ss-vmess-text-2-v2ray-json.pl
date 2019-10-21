@@ -61,6 +61,7 @@ sub text(){
 #157.245.48.12 	17975 	isx-30216959 	aes-256-cfb
 	say "----\t\Utext\t----";
 	@_=split /\s+/;
+	if($#_ ne 3){say "数据必须4个，格式无效"; exit;}
 	for(@_){
 		when(/^$/) {}	#网页表格鼠标选择后，夹杂空格和制表符。split导致空字符串，影响default的赋值。所以需要跳过。
 		when(/\d{1,3}(\.\d{1,3}){3}/)	{$add=$_}
@@ -70,14 +71,14 @@ sub text(){
 		default		{$password=$_}
 	}
 	$remark=$add;
-	if(! $port || ! $password || ! $method){say "格式无效"; exit;}
+	if(! $port || ! $password || ! $method){say "缺少必要数据，格式无效"; exit;}
 	savess();
 }
 #-------------------
 sub savess(){	
 	say "$method \t$password \t$add \t$port\t$remark";
 	say "==================";
-	if($add eq ""){say "格式无效"; exit;}
+	if($add eq ""){say "无地址，格式无效"; exit;}
 
 	# v2ray不认ss格式的json文件
 	# 输出成v2ray格式的json文件
