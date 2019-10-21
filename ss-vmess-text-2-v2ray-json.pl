@@ -10,7 +10,7 @@ use JSON;
 $_=shift;
 given($_){
 	when (m'^--?h(elp)?$')		{help()}
-	when (m'')					{help()}
+	when (undef)				{help()}
 	when (-f && /\.(png|jpg)$/)	{img()}
 	when (m'^ss://')			{ss()}
 	when (m'^vmess://')			{vmess()}
@@ -34,6 +34,7 @@ sub img(){
 # 只支持ss原版的二维码
 #ss://YWVzLTI1Ni1jZmI6VWowTW9vSVpYRWF4QDEzOS4xNjIuMTk0LjIzMzo1NDIzMAo=
 	say "----\t\Uimg\t----";
+	die "需要安装zbarimg才能识别二维码。" if ! -x "/usr/bin/zbarimgx";
 	$_=`zbarimg "$_"`;
 	s'QR-Code:''; chomp;
 	say; say "==================";
@@ -77,6 +78,7 @@ sub savess(){
 	say "==================";
 	if($add eq ""){say "格式无效"; exit;}
 
+	# v2ray不认ss格式的json文件
 	# 输出成v2ray格式的json文件
 	$if='/home/eexpss/bin/config/proxy.config/Simple.ss.json.Template';
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
@@ -107,7 +109,7 @@ sub vmess(){
 #-------------------
 sub json(){
 	say "----\t\Ujson\t----";
-	open IN,"<$ARGV[0]" or die "打开文件失败。";
+	open IN,"<$_" or die "打开文件失败。";
 	$_=join "\n",<IN>; close IN;
 	s'//.+$''mg; $json=decode_json $_;
 #    use Data::Dumper; printf Dumper($json)."\n"; say "============";
@@ -120,9 +122,8 @@ sub json(){
 			$_="$method:$password\@$add:$port";
 			say; say "============";
 			$_="ss://".encode_base64($_);
-			chomp;
-			`qrencode -t ANSI256 "$_" -o -`; say;
-		}
+			chomp; qrcode(); say;
+			}
 		when ("vmess"){
 			$add=$json->{outbounds}[0]->{settings}->{vnext}[0]->{address};
 			$port=$json->{outbounds}[0]->{settings}->{vnext}[0]->{port};
@@ -132,10 +133,19 @@ sub json(){
 			say; say "============";
 			$_="vmess://".encode_base64($_);
 			s/\n//sg;
-			chomp; say;
+			chomp; qrcode(); say;
 		}
 		default		{say "无效的协议格式。"}
 	}
 }
 #-------------------
+sub qrcode(){
+	# 让外部命令的显示，输出到父进程。
+	if (! -x "/usr/bin/qrencode"){say "可以安装qrencode显示二维码。";return;}
+	open(PROCS,"qrencode -t ANSI256 \'$_\'|");
+	@_=<PROCS>; pop; pop; pop; shift; shift; shift;		#去掉上下三行
+	for(@_){s"^([^ ]+)\ {4}"\1"; s"\ {4}([^ ]+)$"\1";}	#左右去掉四列
+	print @_;
+	close(PROCS);
+}
 #-------------------
