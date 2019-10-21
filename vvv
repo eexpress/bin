@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# 使用v2ray来统管shadowsocks+v2ray的json
+
+configpath="$HOME/bin/config/proxy.config"
+configfile="*.pac *.json"
+logfile="$configpath/vv.log"
+v2raycmd="/home/eexpss/bin/app/v2ray-linux-64/v2ray"
+
+wlog(){
+	grep "$1=" $logfile
+	if [ $? -eq 0 ]; then
+		sed -i "s/$1=.*/$1=$key/" $logfile
+	else
+		echo "$1=$key" >> $logfile
+	fi
+}
+
+addlist(){
+	if [[ $1 == $2 ]]; then
+		list+="true "
+	else
+		list+="false "
+	fi
+	list+="$2 $3 "
+}
+
+lastjson=`grep "lastjson=" $logfile | sed 's/.*=//'`
+lastproxy=`grep "lastproxy=" $logfile | sed 's/.*=//'`
+
+cd $configpath
+list=""
+addlist $lastproxy "off" "关闭全局代理／停止后台"
+addlist $lastproxy "all" "全部数据走代理"
+
+for file in $configfile; do
+	echo $file|grep "\.pac$" 1>/dev/null && last=$lastproxy || last=$lastjson
+	dis=${file%.json}; dis=${dis#*-}
+	addlist $last $file "选用_$dis";
+done
+
+key=`zenity --window-icon=web --width=400 --height=500 --list --radiolist --column=选择 --column=文件 --column=说明 --hide-column=2 --text=选择代理设置 $list`
+
+#-----------------------------
+case $key in
+	off)
+		echo "关闭全局代理／停止后台"
+		gsettings set org.gnome.system.proxy mode 'none'
+		sudo pkill -9 -x ${v2raycmd##*/}
+		wlog lastproxy
+		;;
+	all)
+		echo "全部数据走代理"
+		gsettings set org.gnome.system.proxy mode 'manual'
+		gsettings set org.gnome.system.proxy.http host ''
+		gsettings set org.gnome.system.proxy.https host ''
+		gsettings set org.gnome.system.proxy.ftp host ''
+		gsettings set org.gnome.system.proxy.socks port 1080
+		gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
+		wlog lastproxy
+		;;
+	*.pac)
+		echo "自定义代理 $key"
+		fullpath="file://$configpath/$key"
+		gsettings set org.gnome.system.proxy autoconfig-url "$fullpath"
+		gsettings set org.gnome.system.proxy mode 'auto'
+		wlog lastproxy
+		;;
+	*.json)
+		echo "切换到v2ray代理 $key"
+		sudo pkill -9 -x ${v2raycmd##*/}
+		if [ -x $v2raycmd ]; then
+			sudo $v2raycmd -config $key &
+		else
+			echo "没安装命令行的v2ray软件。"; exit
+		fi
+		wlog lastjson
+		;;
+esac
