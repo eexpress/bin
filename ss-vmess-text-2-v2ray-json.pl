@@ -70,6 +70,7 @@ sub text(){
 		default		{$password=$_}
 	}
 	$remark=$add;
+	if(! $port || ! $password || ! $method){say "格式无效"; exit;}
 	savess();
 }
 #-------------------
