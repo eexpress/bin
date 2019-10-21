@@ -45,7 +45,7 @@ vmap {{ <esc>`>a}<esc>`<i{<esc>i
 vmap ** <esc>`>a*<esc>`<i*<esc>i
 "======== Mimetype 新脚本自动加类型============
 au BufNewFile *.bash,*.sh	0put='#!/bin/bash'|setf bash|normal Go
-au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|setf perl|normal Go
+au BufNewFile *.perl,*.pl	0put='#!/usr/bin/perl'|2put='use 5.010;'|setf perl|normal Go
 autocmd BufRead,BufNewFile *.vala,*.vapi setfiletype vala
 
 "======== 改变Insert模式时，智能切换中文输入 ========

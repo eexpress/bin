@@ -1,0 +1,141 @@
+#!/usr/bin/perl
+
+use 5.010;
+no warnings 'experimental::smartmatch';
+use MIME::Base64;
+use JSON;
+
+#暂时禁止剪贴板操作。
+#$_=$ARGV[0]//`xclip -o`;
+$_=shift;
+given($_){
+	when (m'^--?h(elp)?$')		{help()}
+	when (m'')					{help()}
+	when (-f && /\.(png|jpg)$/)	{img()}
+	when (m'^ss://')			{ss()}
+	when (m'^vmess://')			{vmess()}
+	when (-f && /\.json$/)		{json()}
+	default						{text()}
+}
+
+#-------------------
+sub help(){
+	say "ss/vmess字符串，或者网页明文表格文本，转换成v2ray格式的json文件。";
+	say "支持ss原版的二维码识别。(需要安装zbarimg)";
+	say "为了统一使用v2ray，不支持ssr字符串。";
+	say "或从json文件，转换成对应的ss/vmess字符串。";
+}
+#-------------------
+sub img(){
+# BifrostV 居然用(半截)明文二维码。。。算了。。
+#QR-Code:ss://YWVzLTI1Ni1jZmI6VWowTW9vSVpYRWF4@139.16.19.233:54230#139.16.19.233
+#QR-Code:bfv://139.16.19.233:54230/shadowsocks/1?rtype=lanina&dns=8.8.8.8&method=aes-256-cfb&pass=Uj0MooEax&ota=0&tcp=header%3Dnone%26req%3D#139.162.194.233
+
+# 只支持ss原版的二维码
+#ss://YWVzLTI1Ni1jZmI6VWowTW9vSVpYRWF4QDEzOS4xNjIuMTk0LjIzMzo1NDIzMAo=
+	say "----\t\Uimg\t----";
+	$_=`zbarimg "$_"`;
+	s'QR-Code:''; chomp;
+	say; say "==================";
+	given($_){
+		when (m'^ss://')			{ss()}
+		when (m'^vmess://')			{vmess()}
+		default						{say "不可转换的二维码。"; exit;}
+	}
+}
+#-------------------
+sub ss(){
+#ss://base64(method:password@server:port)#remarks
+	say "----\t\Uss\t----";
+	s'^ss://'';			#去头
+	s/#(?<mark>.*)//;	#去尾。缺省贪婪匹配
+	$remark=$+{mark};
+	$_=decode_base64($_);
+	s/\@/:/; ($method,$password,$add,$port)=split ':';
+	$remark||=$add;
+	savess();
+}
+#-------------------
+sub text(){
+#157.245.48.12 	17975 	isx-30216959 	aes-256-cfb
+	say "----\t\Utext\t----";
+	@_=split /\s+/;
+	for(@_){
+		when(/^$/) {}	#网页表格鼠标选择后，夹杂空格和制表符。split导致空字符串，影响default的赋值。所以需要跳过。
+		when(/\d{1,3}(\.\d{1,3}){3}/)	{$add=$_}
+		when(/[\w-]+(\.[\w-]+){2}/)		{$add=$_}
+		when(/^\d{3,5}$/)				{$port=$_}
+		when(/^[ac]\w+(-\w+){0,2}/)		{$method=$_}
+		default		{$password=$_}
+	}
+	$remark=$add;
+	savess();
+}
+#-------------------
+sub savess(){	
+	say "$method \t$password \t$add \t$port\t$remark";
+	say "==================";
+	if($add eq ""){say "格式无效"; exit;}
+
+	# 输出成v2ray格式的json文件
+	$if='/home/eexpss/bin/config/proxy.config/Simple.ss.json.Template';
+	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
+	s/xxxadd/$add/; s/xxxport/$port/;
+	s/xxxmethod/$method/; s/xxxpassword/$password/;
+	$f="$ENV{HOME}/vss-$remark.json";
+	open OUT,">$f"; say $f;
+	print OUT $_; close OUT;
+}
+#-------------------
+sub vmess(){
+	say "----\t\Uvmess\t----";
+	s'^vmess://'';
+	$_=decode_base64($_);
+	say; say "==================";
+	$rh=decode_json($_);
+	if($rh->{"add"} eq ""){say "格式无效"; exit;}
+
+	# 输出成v2ray格式的json文件
+	$if='/home/eexpss/bin/config/proxy.config/Simple.vmess.json.Template';
+	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
+	s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
+	s/xxxid/$rh->{id}/; s/xxxaid/$rh->{aid}/;
+	$f="$ENV{HOME}/vv-$rh->{ps}.json";
+	open OUT,">$f"; say $f;
+	print OUT $_; close OUT;
+}
+#-------------------
+sub json(){
+	say "----\t\Ujson\t----";
+	open IN,"<$ARGV[0]" or die "打开文件失败。";
+	$_=join "\n",<IN>; close IN;
+	s'//.+$''mg; $json=decode_json $_;
+#    use Data::Dumper; printf Dumper($json)."\n"; say "============";
+	given($json->{outbounds}[0]->{protocol}){
+		when ("shadowsocks"){
+			$add=$json->{outbounds}[0]->{settings}->{servers}[0]->{address};
+			$port=$json->{outbounds}[0]->{settings}->{servers}[0]->{port};
+			$method=$json->{outbounds}[0]->{settings}->{servers}[0]->{method};
+			$password=$json->{outbounds}[0]->{settings}->{servers}[0]->{password};
+			$_="$method:$password\@$add:$port";
+			say; say "============";
+			$_="ss://".encode_base64($_);
+			chomp;
+			`qrencode -t ANSI256 "$_" -o -`; say;
+		}
+		when ("vmess"){
+			$add=$json->{outbounds}[0]->{settings}->{vnext}[0]->{address};
+			$port=$json->{outbounds}[0]->{settings}->{vnext}[0]->{port};
+			$id=$json->{outbounds}[0]->{settings}->{vnext}[0]->{users}[0]->{id};
+			$aid=$json->{outbounds}[0]->{settings}->{vnext}[0]->{users}[0]->{alterId};
+			$_="{\"add\":\"$add\",\"aid\":\"$aid\",\"id\":\"$id\",\"port\":\"$port\",\"ps\":\"$add\"}";
+			say; say "============";
+			$_="vmess://".encode_base64($_);
+			s/\n//sg;
+			chomp; say;
+		}
+		default		{say "无效的协议格式。"}
+	}
+}
+#-------------------
+#-------------------
