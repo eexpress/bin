@@ -4,13 +4,44 @@
 
 configpath="$HOME/bin/config/proxy.config/"		#要带后缀的/
 configfile="*.pac *.json"
+logfile="$configpath/vv.log"
 v2raycmd="/home/eexpss/bin/app/v2ray-linux-64/v2ray"
+revgreenB='\x1b[7;32m'; end='\x1b[0m';
+
+wlog(){
+	grep "$1=" $logfile
+	if [ $? -eq 0 ]; then
+		sed -i "s/$1=.*/$1=$key/" $logfile
+	else
+		echo "$1=$key" >> $logfile
+	fi
+}
+
+showbold(){
+	if [[ $1 == $2 ]]; then
+		echo -e "${revgreenB}$3${end}";
+	else
+		echo "$3";
+	fi
+}
+
+lastjson=`grep "lastjson=" $logfile | sed 's/.*=//'`
+lastproxy=`grep "lastproxy=" $logfile | sed 's/.*=//'`
 
 cd $configpath
-echo "0 --> none proxy"; files[0]="none";
-echo "1 --> all proxy"; files[1]="all";
-index=2; for file in $configfile; do files[$index]=$file; echo "$index --> ${files[$index]%.json}"; ((index++)); done
-key=99; until [[ $key -lt $index && $key -ge 0 ]]; do read -p  "Please choose config [0-$((index-1))]: " -t 5 -n 1 key; done
+showbold $lastproxy "none" "0 --> none proxy"
+files[0]="none";
+
+showbold $lastproxy "all" "1 --> all proxy"
+files[1]="all";
+
+index=2; for file in $configfile; do
+	files[$index]=$file;
+	echo $file|grep "\.pac$" 1>/dev/null && last=$lastproxy || last=$lastjson
+	showbold $last $file "$index --> ${files[$index]%.json}";
+	((index++));
+done
+key=99; until [[ $key -lt $index && $key -ge 0 ]]; do read -p  "Please choose config [0-$((index-1))]: " -t 8 -n 1 key; done
 # dealy 5 seconds, default choose 0
 key=${files[$key]}; echo ""; echo "Choose : $key"
 
@@ -19,6 +50,7 @@ case $key in
 		echo "关闭全局代理／停止后台"
 		gsettings set org.gnome.system.proxy mode 'none'
 		sudo pkill -9 -x ${v2raycmd##*/}
+		wlog lastproxy
 		;;
 	all)
 		echo "全部数据走代理"
@@ -28,12 +60,14 @@ case $key in
 		gsettings set org.gnome.system.proxy.ftp host ''
 		gsettings set org.gnome.system.proxy.socks port 1080
 		gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
+		wlog lastproxy
 		;;
 	*.pac)
 		echo "自定义代理 $key"
 		fullpath="file://$configpath$key"
 		gsettings set org.gnome.system.proxy autoconfig-url "$fullpath"
 		gsettings set org.gnome.system.proxy mode 'auto'
+		wlog lastproxy
 		;;
 	*.json)
 		echo "切换到v2ray代理 $key"
@@ -43,5 +77,6 @@ case $key in
 		else
 			echo "没安装命令行的v2ray软件。"; exit
 		fi
+		wlog lastjson
 		;;
 esac
