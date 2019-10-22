@@ -29,10 +29,10 @@ lastjson=`grep "lastjson=" $logfile | sed 's/.*=//'`
 lastproxy=`grep "lastproxy=" $logfile | sed 's/.*=//'`
 
 cd $configpath
-showbold $lastproxy "none" "0 --> none proxy"
-files[0]="none";
+showbold $lastproxy "off" "0 --> 关闭全局代理／停止后台"
+files[0]="off";
 
-showbold $lastproxy "all" "1 --> all proxy"
+showbold $lastproxy "all" "1 --> 全部数据走代理"
 files[1]="all";
 
 index=2; for file in $configfile; do
@@ -46,7 +46,7 @@ key=99; until [[ $key -lt $index && $key -ge 0 ]]; do read -p  "Please choose co
 key=${files[$key]}; echo ""; echo "Choose : $key"
 
 case $key in
-	none)
+	off)
 		echo "关闭全局代理／停止后台"
 		gsettings set org.gnome.system.proxy mode 'none'
 		sudo pkill -9 -x ${v2raycmd##*/}
