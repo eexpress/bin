@@ -8,7 +8,7 @@ logfile="$configpath/vv.log"
 v2raycmd="/home/eexpss/bin/app/v2ray-linux-64/v2ray"
 
 wlog(){
-	grep "$1=" $logfile
+	grep "$1=" $logfile 1>/dev/null
 	if [ $? -eq 0 ]; then
 		sed -i "s/$1=.*/$1=$key/" $logfile
 	else

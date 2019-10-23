@@ -2,14 +2,14 @@
 
 # 使用v2ray来统管shadowsocks+v2ray的json
 
-configpath="$HOME/bin/config/proxy.config/"		#要带后缀的/
+configpath="$HOME/bin/config/proxy.config"
 configfile="*.pac *.json"
 logfile="$configpath/vv.log"
 v2raycmd="/home/eexpss/bin/app/v2ray-linux-64/v2ray"
 revgreenB='\x1b[7;32m'; end='\x1b[0m';
 
 wlog(){
-	grep "$1=" $logfile
+	grep "$1=" $logfile 1>/dev/null
 	if [ $? -eq 0 ]; then
 		sed -i "s/$1=.*/$1=$key/" $logfile
 	else
@@ -64,7 +64,7 @@ case $key in
 		;;
 	*.pac)
 		echo "自定义代理 $key"
-		fullpath="file://$configpath$key"
+		fullpath="file://$configpath/$key"
 		gsettings set org.gnome.system.proxy autoconfig-url "$fullpath"
 		gsettings set org.gnome.system.proxy mode 'auto'
 		wlog lastproxy
