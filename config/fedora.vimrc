@@ -56,6 +56,15 @@ autocmd BufRead,BufNewFile *.vala,*.vapi setfiletype vala
 " 虽然状态栏上显示的是拼音输入法。此时，需要super+space切换到拼音一次
 " ibus engine就没有设置“拼音输入法的英文状态”的参数。
 
+"======== 预览markdown ========
+"autocmd FileType markdown map <expr> <F5> :call ViewMKD()<CR>
+"autocmd FileType markdown map <buffer> <F5> ViewMKD()
+"设置不出F5，奇怪。
+autocmd FileType markdown map <expr> <leader>vv ViewMKD()
+func ViewMKD()
+	silent exec "!pandoc % -s -c /home/eexpss/bin/mkd/mkd.css -o %.html && firefox %.html &"
+endf
+"请按enter或其他命令继续，执行命令出这提示，就是输出太长。使用silent。
 "======== 智能tab，补全或输入TAB ========
 inoremap <expr> <Tab> MyTab()
 func MyTab()
@@ -69,7 +78,7 @@ endf
 map <F2> :call Devhelp()<CR>
 func Devhelp()
 	let w = expand("<cword>")
-	exec "call system('devhelp -s '.w.'&')"
+	silent exec "!devhelp -s ".w."&"
 endf
 "======== <F3> 全局替换当前单词 ========
 map <expr> <F3> Replace_Current_Word()
@@ -78,14 +87,14 @@ func Replace_Current_Word()
 	return "\<ESC>:%s/\\<".w."\\>/".w."/g\<Left>\<Left>"
 endf
 "======== <F5> 运行前五行注释中的命令 ========
-map <F5> :call RunComment()<CR>
+autocmd FileType c,cpp,vala map <buffer> <F5> :call RunComment()<CR>
 func RunComment()
 	let n = 1
 	while n < 5
 		let l=getline(n)
 		if l =~ '//!'
 			echo strpart(l, stridx(l, "!"))
-			exec strpart(l, stridx(l, "!"))
+			silent exec strpart(l, stridx(l, "!"))
 			if v:shell_error
 				echo "============= exec error !!! ============="
 				break
