@@ -85,6 +85,7 @@ export CDPATH=:~:~/bin:~/文档
 	setbold=`tput bold;`
 	setnone=`tput sgr0`
 	PS1="$setbold$gray_green \D{%F %A %T}$allgreen🡺$green_gray  \H $allgray🡺$gray_green  \w$allgreen🡺$setnone \n⭕ "
+#⚠️   
 
 #-------HISTORY------------------------------------
 shopt -s histappend
