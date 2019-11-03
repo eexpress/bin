@@ -24,13 +24,14 @@ pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
 plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 ##------- ---------
 alias ps='\ps -u `id -un` -o pid,command'
-alias pg='pgrep -af'
-alias k='pkill -9 -f'
-alias g='grep --color=always -Pi 2>/dev/null'
+alias pg='pgrep -u `id -un` -af'
+alias k='pkill -u `id -un` -9 -f'
 
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'
 alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
+
+alias g='grep --color=always -Pi 2>/dev/null'
 alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
 alias dog='grep -v -E "(^$|^#|^!)"'

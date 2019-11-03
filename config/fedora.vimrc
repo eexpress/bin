@@ -22,7 +22,7 @@ set foldlevel=9
 nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zO')<CR>
 "mark: 设置 me 回来 'e(回行)/`e(回位置)
 "`gd` : Goto local Declaration.  "比*更直接的找到定义处。
-"Ctrl-o/i 跳回去
+"Ctrl-o/i 跨文件前后跳转
 set autoread 	"文件在Vim之外修改过，自动重新读入
 filetype plugin on		"运行vim加载文件类型插件
 "bn bp: buffer切换上下文件
