@@ -86,7 +86,8 @@ sub savess(){
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 	s/xxxadd/$add/; s/xxxport/$port/;
 	s/xxxmethod/$method/; s/xxxpassword/$password/;
-	$f="$ENV{HOME}/vss-$remark.json";
+#    $f="$ENV{HOME}/vss-$remark.json";
+	$f="/home/eexpss/bin/config/proxy.config/vss-$remark.json";
 	open OUT,">$f"; say $f;
 	print OUT $_; close OUT;
 }

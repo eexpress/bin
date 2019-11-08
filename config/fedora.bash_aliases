@@ -2,6 +2,7 @@
 
 set -o vi
 
+export VGL_LOGO=1
 #-------ALIAS------------------------------------
 ##			-------- 软件包管理 --------
 alias pi='sudo dnf install'
