@@ -41,6 +41,7 @@ alias pl='perl -ple'
 ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
 
 alias i='df -hT -x tmpfs -x devtmpfs|sed "/\/boot/D";echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors|grep Core;echo;hddtemp'
+alias e='geany'
 alias v='gvim --remote-tab-silent'
 alias sv='sudo gvim'
 alias du='\du -hs 2>/dev/null'
@@ -60,7 +61,7 @@ u(){ \du -sch "$@"|sort -rh; }
 
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
-#man terminfo: set_a_foreground -> setaf; set_a_background -> setab; 
+#man terminfo: set_a_foreground -> setaf; set_a_background -> setab;
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 1)	# enter_bold_mode
 export LESS_TERMCAP_md=$(tput bold; tput setaf 1)	# begin bold
 export LESS_TERMCAP_me=$(tput sgr0)					# exit_attribute_mode
@@ -87,7 +88,7 @@ export CDPATH=:~:~/bin:~/文档
 	setbold=`tput bold;`
 	setnone=`tput sgr0`
 	PS1="$setbold$gray_green \D{%F %A %T}$allgreen🡺$green_gray  \H $allgray🡺$gray_green  \w$allgreen🡺$setnone \n⭕ "
-#⚠️   
+#⚠️
 
 #-------HISTORY------------------------------------
 shopt -s histappend
