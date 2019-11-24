@@ -1,9 +1,12 @@
 
 using Gtk;
+using WebKit;		// ⭕ pi webkit2gtk3-devel
 
-//Creates a new VBox.
-//Note:
-//You can use Box with gtk_orientation_vertical instead, which is a quick and easy change. But the recommendation is to switch to Grid , since Box is going to go away eventually. See Migrating from other containers to GtkGrid.
+// valac --pkg webkit2gtk-4.0 --pkg gtk+-3.0 "%f"
+
+// VBox 等各种 Box，都快死了。全部转移到 Grid 控件。
+
+public WebKit.WebView web;
 
 int main(string[] args)
 {
@@ -31,7 +34,8 @@ int main(string[] args)
 	entry.hexpand = true;
 	grid.attach(entry, 1, 0, 1, 1);
 
-	var button = new Gtk.Button.from_icon_name("system-search");
+//	var button = new Gtk.Button.from_icon_name("system-search");
+	var button = new Gtk.Button.from_icon_name("edit-find");
 	grid.attach(button, 2, 0, 1, 1);
 
 	var list = new Gtk.ListBox();
@@ -42,11 +46,22 @@ int main(string[] args)
 
 	grid.attach(list, 0, 1, 3, 1);
 
-//----------------------------------------
+//-----------------------------------------
+	web = new WebKit.WebView();
+	web.load_uri("http://www.kusuu.net/");
+	web.load_changed.connect(printHTML);
+//-----------------------------------------
     window.add(grid);
     window.show_all();
     Gtk.main ();
     return 0;
+}
+
+void printHTML(LoadEvent load_event)
+{
+	if(load_event == FINISHED){
+		stderr.printf(web.get_title());
+	}
 }
 
 Gtk.Grid infogrid(string imagefile, string bookname, string bookinfo)
