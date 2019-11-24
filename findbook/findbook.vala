@@ -35,9 +35,9 @@ int main(string[] args)
 	grid.attach(button, 2, 0, 1, 1);
 
 	var list = new Gtk.ListBox();
-	list.insert(infogrid("/home/eexpss/1.jpg","凡·高密码","凡·高的举世名画《向日葵》里埋藏着怎样的秘密？"),-1);
-	list.insert(infogrid("/home/eexpss/sample.png","凡·高密码","凡·高的举世名画《向日葵》里埋藏着怎样的秘密？"),-1);
-	list.insert(infogrid("/home/eexpss/2.jpg","死亡密码","刑侦总队密码组是顶刑侦总队\n密码组是顶级情报人刑侦总队级情报人员的培训、任命和派遣机构"),-1);
+	list.insert(infogrid("1.jpg","凡·高密码","凡·高的举世名画《向日葵》里埋藏着怎样的秘密？"),-1);
+	list.insert(infogrid("sample.png","凡·高密码","凡·高的举世名画《向日葵》里埋藏着怎样的秘密？"),-1);
+	list.insert(infogrid("2.jpg","死亡密码","刑侦总队密码组是顶刑侦总队\n密码组是顶级情报人刑侦总队级情报人员的培训、任命和派遣机构"),-1);
 
 	grid.attach(list, 0, 1, 3, 1);
 
@@ -52,6 +52,7 @@ Gtk.Grid infogrid(string imagefile, string bookname, string bookinfo)
 {
 	var g = new Gtk.Grid ();
 	var img = new Gtk.Image.from_file(imagefile);
+	img.set_size_request(128, 128);		//最小宽度 128
 	var name = new Gtk.Label(bookname);
 	name.halign = START;
 	var info = new Gtk.TextView();
