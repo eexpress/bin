@@ -36,8 +36,9 @@ int main(string[] args)
 
 	var list = new Gtk.ListBox();
 	list.insert(infogrid("1.jpg","凡·高密码","凡·高的举世名画《向日葵》里埋藏着怎样的秘密？"),-1);
-	list.insert(infogrid("sample.png","凡·高密码","凡·高的举世名画《向日葵》里埋藏着怎样的秘密？"),-1);
+	list.insert(infogrid("3.jpg","大唐悬疑录4·大明宫密码","易学奇书《推背图》，相传为唐代数学家李淳风与天文学家袁天罡所著，融易学、天文、诗词、谜语、图画为一体，仅六十则谶言便算尽天下大势。然自成书起，便版本各异，真假难辨，让大明宫充满腥风血雨？"),-1);
 	list.insert(infogrid("2.jpg","死亡密码","刑侦总队密码组是顶刑侦总队\n密码组是顶级情报人刑侦总队级情报人员的培训、任命和派遣机构"),-1);
+	list.insert(infogrid("sample.png","山海经密码","本书为网络版本，原名《桐宫之囚》。这是一个历史记载的真实故事构"),-1);
 
 	grid.attach(list, 0, 1, 3, 1);
 
