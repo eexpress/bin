@@ -88,6 +88,7 @@ class InfoDownload {
 		info.wrap_mode = CHAR;	//自动折行
 		pbar = new Gtk.ProgressBar();
 		pbar.expand = true;
+		pbar.show_text = true;
 		butt = new Gtk.Button.from_icon_name("emblem-downloads");
 		butt.clicked.connect(download);
 
@@ -107,6 +108,7 @@ class InfoDownload {
 	{
 		stderr.printf(url);
 		pbar.fraction = 0.8;
+		pbar.set_text("5/11");
 	}
 //-----------------------------------------
 }
