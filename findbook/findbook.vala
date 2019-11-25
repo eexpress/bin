@@ -73,8 +73,6 @@ class InfoDownload {
 	Gtk.ProgressBar pbar;
 	Gtk.Button butt;
 	string url;
-//	public void init() {
-//	}
 //-----------------------------------------
 	public Gtk.Grid show(string imagefile, string bookname, string bookinfo)
 	{
@@ -108,6 +106,7 @@ class InfoDownload {
 	void download()
 	{
 		stderr.printf(url);
+		pbar.fraction = 0.8;
 	}
 //-----------------------------------------
 }
