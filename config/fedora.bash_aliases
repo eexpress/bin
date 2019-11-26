@@ -41,7 +41,7 @@ alias pl='perl -ple'
 ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
 
 alias i='df -hT -x tmpfs -x devtmpfs|sed "/\/boot/D";echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors|grep Core;echo;hddtemp'
-alias e='geany'
+alias e='gedit'
 alias v='gvim --remote-tab-silent'
 alias sv='sudo gvim'
 alias du='\du -hs 2>/dev/null'

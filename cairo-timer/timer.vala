@@ -44,7 +44,7 @@ public class Timer : Gtk.Window {
 /*    const string center_color="#C02C3F";*/
 	const string shadow="#cEcEcE";
 	const double alarm_true=0.9;
-	const double alarm_false=0.2;
+	const double alarm_false=0.5;
 	double alarm_alpha=alarm_false;
 	int timespan=0;	//alarm和time的分钟差距。
 	DateTime now;
@@ -102,7 +102,7 @@ ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
 			}
 
 			cc.parse(back_color);	//底色
-			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 1);
+			ctx.set_source_rgba (cc.red, cc.green, cc.blue, 0.8);
 			ctx.arc(0,0,size/2-size/20,0,2*Math.PI);
 			ctx.fill();
 

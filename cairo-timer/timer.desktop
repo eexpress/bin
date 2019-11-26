@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Cairo Timer
+Name[zh_CN]=定时器
+Comment[zh_CN]=集合`定时器`和`闹钟⏰`功能。
+Exec=/home/eexpss/bin/cairo-timer/timer
+Icon=/home/eexpss/bin/cairo-timer/timer.png
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Graphics;
+
