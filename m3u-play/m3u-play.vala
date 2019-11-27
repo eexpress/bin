@@ -78,6 +78,7 @@ int main(string[] args)
 	scroll.expand = true;
 	grid.attach(scroll, 0, 1, 1, 1);
     window.add(grid);
+    int x; int y; window.get_position (out x, out y); window.move(0, y);
     window.show_all();
     Gtk.main ();
     return 0;
