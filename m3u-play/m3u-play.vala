@@ -1,9 +1,6 @@
 using Gtk;
 // valac --pkg gtk+-3.0 --pkg posix "%f"
 
-//Array<string> mname;
-//Array<string> muri;
-
 int main(string[] args)
 {
 	Array<string> mname = new Array<string> ();
@@ -24,22 +21,19 @@ int main(string[] args)
 	grid.row_spacing = 5;
 	grid.margin = 5;	//Gtk.Widget属性
 
-//	var label = new Gtk.Label("过滤");
-//	grid.attach(label, 0, 0, 1, 1);
+	var list = new Gtk.ListBox();
 
 	var entry = new Gtk.Entry();
+	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.PRIMARY, "edit-find");	//system-search 金色放大镜 edit-find 蓝色放大镜
+	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, "edit-clear");
+	entry.icon_press.connect((pos,e)=>{
+		if(pos == Gtk.EntryIconPosition.SECONDARY){entry.text="";}
+		list.invalidate_filter();
+	});
+	entry.activate.connect(()=>{list.invalidate_filter();});
 	entry.set_max_width_chars(40);
 	entry.hexpand = true;
 	grid.attach(entry, 0, 0, 1, 1);
-
-	var list = new Gtk.ListBox();
-	
-	var button = new Gtk.Button.from_icon_name("edit-find");
-//	https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
-	button.clicked.connect(()=>{
-		list.invalidate_filter();
-	});
-	grid.attach(button, 1, 0, 1, 1);
 //-----------------------------------------
 	string mn = "x";
 	try{
@@ -53,7 +47,6 @@ int main(string[] args)
 				if("://" in line[i]){
 					mname.append_val(mn);
 					muri.append_val(line[i]);
-//					stderr.printf(mn+"\n.x.");
 				}
 			}
 		}
@@ -61,7 +54,6 @@ int main(string[] args)
 //-----------------------------------------
 	list.set_filter_func((row)=>{
 		if(entry.text in mname.index(row.get_index())){return true;}
-//		stderr.printf(mname.index(row.get_index())+"\trow text\n");
 		return false;
 	});
 //-----------------------------------------
@@ -84,7 +76,7 @@ int main(string[] args)
 	var scroll = new Gtk.ScrolledWindow(null, null);
 	scroll.add(list);
 	scroll.expand = true;
-	grid.attach(scroll, 0, 1, 2, 1);
+	grid.attach(scroll, 0, 1, 1, 1);
     window.add(grid);
     window.show_all();
     Gtk.main ();
