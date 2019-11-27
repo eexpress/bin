@@ -90,11 +90,8 @@ class UriInfo {
 		string protocol = uri[0:4];
 		string color = protocol in "https"?"#ce5c00":"#3465a4";
 		var lbl = new Gtk.Label("");
-//使用pango和变量中文后，文字垂直顶格，Label高度增加，还调整不好。使用常量高度正常。
-//		lbl.height_request = 10;	//只能增大有效。
-//		lbl.yalign = (float)0.5;	//垂直对齐无效
 		lbl.xalign = (float)0;
-		lbl.set_markup("<span background=\""+color+"\" foreground=\"#ffffff\"><b> "+protocol+" </b></span>\t<big>"+name+"</big>");
+		lbl.set_markup("<span background=\""+color+"\" foreground=\"#ffffff\"><b> "+protocol+" </b></span>\t<big>"+name.chomp()+"</big>");
 		return lbl;
 	}	
 }
