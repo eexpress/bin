@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# 在json，ss字符串，QRCode二维码，文本字符串之间互相转换。
+
 use 5.010;
 no warnings 'experimental::smartmatch';
 use MIME::Base64;

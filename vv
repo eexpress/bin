@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# 终端版本。切换json代理和pac设置。
 # 使用v2ray来统管shadowsocks+v2ray的json
 
 configpath="$HOME/bin/config/proxy.config"
