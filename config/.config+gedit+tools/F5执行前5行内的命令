@@ -1,0 +1,27 @@
+#!/bin/perl
+# [Gedit Tool]
+# Name=F5执行前5行内的命令
+# Input=nothing
+# Output=output-panel
+# Applicability=titled
+# Save-files=nothing
+# Shortcut=F5
+# Languages=
+
+
+# https://wiki.gnome.org/Apps/Gedit/Plugins/ExternalTools
+
+use 5.010;
+
+chdir $ENV{GEDIT_CURRENT_DOCUMENT_DIR};
+open IN,"<$ENV{GEDIT_CURRENT_DOCUMENT_PATH}" or die $!;
+@_ = split '\n', <IN>.<IN>.<IN>.<IN>.<IN>;
+for(@_){
+	next if ! m'//!';
+	$cmd = $';
+	$cmd =~ s/%f/$ENV{GEDIT_CURRENT_DOCUMENT_NAME}/;
+	say "当前目录：".`pwd`;
+	say "执行命令：".$cmd;
+	say `$cmd`;
+	say "输出无错误" if $? eq 0;
+}

@@ -1,0 +1,21 @@
+#!/bin/perl
+# [Gedit Tool]
+# Name=行首F4复制行
+# Input=line
+# Output=insert
+# Applicability=titled
+# Save-files=nothing
+# Shortcut=F4
+
+
+use 5.010;
+
+#如何发送Home
+#keysym 0xff50, Home
+#$HOME_KEY = pack "H4", "ff50";
+#$HOME_KEY = pack "H4", "50ff";
+#print $HOME_KEY;
+#print chr(0xff);
+#print chr(0x50)
+#print "\r";
+say <STDIN>;
