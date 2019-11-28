@@ -1,5 +1,6 @@
 app
 *v2ray*
+OLD
 old*
 *old
 cairo-weather
@@ -29,6 +30,8 @@ resource
 *project
 img
 *fonts*
+github.*
+*.m3u
 
 adb
 tags
