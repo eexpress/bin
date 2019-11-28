@@ -1,5 +1,5 @@
 using Gtk;
-// valac --pkg gtk+-3.0 --pkg posix "%f"
+//! valac --pkg gtk+-3.0 --pkg posix "%f"
 
 int main(string[] args)
 {

@@ -1,4 +1,3 @@
-
 using Gtk;
 using WebKit;		// ⭕ pi webkit2gtk3-devel
 
@@ -21,24 +20,24 @@ int main(string[] args)
 
 //----------------------------------------
 	var grid = new Gtk.Grid ();
-	grid.column_spacing = 10;
-	grid.row_spacing = 10;
-	grid.margin = 15;	//Gtk.Widget属性
-
-	var label = new Gtk.Label("输入要搜索的书名");
-	//label.set_markup("<small></small>");
-	grid.attach(label, 0, 0, 1, 1);
-
-	var entry = new Gtk.Entry();
-	entry.set_max_width_chars(40);
-	entry.hexpand = true;
-	grid.attach(entry, 1, 0, 1, 1);
-
-//	var button = new Gtk.Button.from_icon_name("system-search");
-	var button = new Gtk.Button.from_icon_name("edit-find");
-	grid.attach(button, 2, 0, 1, 1);
+	grid.column_spacing = 5;
+	grid.row_spacing = 5;
+	grid.margin = 5;	//Gtk.Widget属性
 
 	var list = new Gtk.ListBox();
+
+	var entry = new Gtk.Entry();
+	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.PRIMARY, "edit-find");	//system-search 金色放大镜 edit-find 蓝色放大镜
+	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, "edit-clear");
+	entry.icon_press.connect((pos,e)=>{
+		if(pos == Gtk.EntryIconPosition.SECONDARY){entry.text="";}
+		list.invalidate_filter();
+	});
+	entry.activate.connect(()=>{list.invalidate_filter();});
+	entry.set_max_width_chars(40);
+	entry.hexpand = true;
+	grid.attach(entry, 0, 0, 1, 1);
+//-----------------------------------------
 	var id0 = new InfoDownload();
 	var id1 = new InfoDownload();
 	var id2 = new InfoDownload();
@@ -48,13 +47,15 @@ int main(string[] args)
 	list.insert(id2.show("2.jpg","死亡密码","刑侦总队密码组是顶刑侦总队\n密码组是顶级情报人刑侦总队级情报人员的培训、任命和派遣机构"),-1);
 	list.insert(id3.show("sample.png","山海经密码","本书为网络版本，原名《桐宫之囚》。这是一个历史记载的真实故事构"),-1);
 
-	grid.attach(list, 0, 1, 3, 1);
-
 //-----------------------------------------
 	web = new WebKit.WebView();
 	web.load_uri("http://www.kusuu.net/");
 	web.load_changed.connect(printHTML);
 //-----------------------------------------
+	var scroll = new Gtk.ScrolledWindow(null, null);
+	scroll.add(list);
+	scroll.expand = true;
+	grid.attach(scroll, 0, 1, 1, 1);
     window.add(grid);
     window.show_all();
     Gtk.main ();
