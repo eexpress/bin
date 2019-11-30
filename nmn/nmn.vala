@@ -118,7 +118,7 @@ Array<string> history=new Array<string>();
 		Gtk.drag_dest_set (this,Gtk.DestDefaults.ALL, targets, Gdk.DragAction.COPY);
 		drag_data_received.connect(on_drag_data_received);
 		button_press_event.connect ((e) => {
-			if(e.x<pagex || e.y<pagey-fixheight-lyh || e.x>pagex+arraycnt[arraycnt.length-1]*bw || e.y>pagey-fixheight-lyh+(arraycnt.length)*bh){
+			if(e.x<pagex || e.y<pagey-fixheight-lyh || e.x>pagex+arraycnt[arraycnt.length-1]*bw || e.y>pagey-fixheight-lyh+arraycnt.length*bh){
 				begin_move_drag ((int) e.button, (int) e.x_root, (int) e.y_root, e.time);
 			}else{
 				if(e.button == 1 && fixheight != 0){
@@ -327,7 +327,7 @@ Array<string> history=new Array<string>();
 					queue_draw();
 				});
 
-				Gtk.Button bok=new Gtk.Button.from_stock(Gtk.Stock.CLOSE);
+				Gtk.Button bok=new Gtk.Button.from_icon_name("window-close");
 				box.pack_end (bok, false, true, 0);
 				bok.clicked.connect (() => {
 					win.destroy();
@@ -554,7 +554,7 @@ Array<string> history=new Array<string>();
 		pagex=(int)(fixheight*3);
 		pagey=(int)(fixheight*10);
 		if(lyric1!=""){bh+=lyh;}
-		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*2+(arraycnt.length)*bh));
+		resize((int)(pagex*2+maxcolumn*bw),(int)(pagey*2+arraycnt.length*bh));
 		this.get_size(out ww,out wh);
 		if(filename=="Sample"){
 			string ss="Drag File Here.";
