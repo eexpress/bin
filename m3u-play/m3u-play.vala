@@ -23,15 +23,16 @@ int main(string[] args)
 
 	var list = new Gtk.ListBox();
 
-	var entry = new Gtk.Entry();
-	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.PRIMARY, "edit-find");	//system-search 金色放大镜 edit-find 蓝色放大镜
-	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, "edit-clear");
-	entry.icon_press.connect((pos,e)=>{
-		if(pos == Gtk.EntryIconPosition.SECONDARY){entry.text="";}
-		list.invalidate_filter();
-	});
-	entry.activate.connect(()=>{list.invalidate_filter();});
-	entry.set_max_width_chars(40);
+	var entry = new Gtk.SearchEntry();
+//	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.PRIMARY, "edit-find");	//system-search 金色放大镜 edit-find 蓝色放大镜
+//	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, "edit-clear");
+//	entry.icon_press.connect((pos,e)=>{
+//		if(pos == Gtk.EntryIconPosition.SECONDARY){entry.text="";}
+//		list.invalidate_filter();
+//	});
+//	entry.activate.connect(()=>{list.invalidate_filter();});
+	entry.search_changed.connect(()=>{list.invalidate_filter();});
+//	entry.set_max_width_chars(40);
 	entry.hexpand = true;
 	grid.attach(entry, 0, 0, 1, 1);
 //-----------------------------------------
