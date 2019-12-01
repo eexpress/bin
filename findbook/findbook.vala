@@ -1,7 +1,14 @@
+//devhelp里面的 Namespace 使用 using; Package 使用 --pkg。
+//! valac --pkg webkit2gtk-4.0 --pkg libedataserver-1.2 --pkg gtk+-3.0 "%f"
 using Gtk;
 using WebKit;		// ⭕ pi webkit2gtk3-devel
+using E;
+//⭕ pfile /usr/lib64/libedataserverui-1.2.so.2.0.0
+//evolution-data-server-3.34.1-1.fc31.x86_64
+//⭕ pi evolution-data-server-devel
+///usr/share/vala/vapi/libedataserverui-1.2.vapi
 
-// valac --pkg webkit2gtk-4.0 --pkg gtk+-3.0 "%f"
+//using NM;			//安装: NetworkManager-libnm-devel
 
 // VBox 等各种 Box，都快死了。全部转移到 Grid 控件。
 
@@ -51,6 +58,10 @@ int main(string[] args)
 	web = new WebKit.WebView();
 	web.load_uri("http://www.kusuu.net/");
 	web.load_changed.connect(printHTML);
+//-----------------------------------------
+	var ep = new E.SourceProxy();
+//	var nmp = nm.get_setting_proxy ();
+	stderr.printf ("pac_url: "+ep.autoconfig_url+"\n");
 //-----------------------------------------
 	var scroll = new Gtk.ScrolledWindow(null, null);
 	scroll.add(list);

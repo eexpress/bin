@@ -1,6 +1,6 @@
 #!/bin/perl
 # [Gedit Tool]
-# Name=行首F4复制行
+# Name=F4行首复制行
 # Input=line
 # Output=insert
 # Applicability=titled

@@ -19,9 +19,10 @@ open IN,"<$ENV{GEDIT_CURRENT_DOCUMENT_PATH}" or die $!;
 for(@_){
 	next if ! m'//!';
 	$cmd = $';
-	$cmd =~ s/%f/$ENV{GEDIT_CURRENT_DOCUMENT_NAME}/;
-	say "当前目录：".`pwd`;
+ 	$cmd =~ s/%f/$ENV{GEDIT_CURRENT_DOCUMENT_NAME}/;
+	print "当前目录：".`pwd`;
 	say "执行命令：".$cmd;
+	say "-----------------------------------------";
 	say `$cmd`;
 	say "输出无错误" if $? eq 0;
 }

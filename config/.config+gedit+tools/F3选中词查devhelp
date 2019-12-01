@@ -1,0 +1,15 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=F3选中词查devhelp
+# Shortcut=F3
+# Input=selection
+# Output=output-panel
+# Applicability=all
+# Save-files=nothing
+
+
+read in
+#$in = cat
+echo $in
+[ -z $in ] && echo "没有选中词" && exit
+devhelp -s "$in" 2>/dev/null
