@@ -53,7 +53,7 @@ int main(string[] args)
 				FileUtils.get_contents(dir+"/"+f, out tmp);
 				protocol = "shadowsocks" in tmp? "shadowsocks":"vmess";
 				list.insert(info.show(f, protocol), -1);
-				lbstr.append_val(protocol+", "+f);
+				lbstr.append_val(f);
 //				如何在进程中查找已经启动的json，并给它上色成使用中的状态。
 			}
 		}
@@ -61,12 +61,16 @@ int main(string[] args)
 //-----------------------------------------
 	list.set_filter_func((row)=>{
 		if(entry.text in lbstr.index(row.get_index())){return true;}
+//		可以使用get_child获取Label。只是后期获取文件名复杂，必须正则处理markup的label。
+//		所以维护一个string数组来同步，更方便。
+//		Gtk.Label tlbl = (Gtk.Label)row.get_child();
+//		if(entry.text in tlbl.label){return true;}
 		return false;
 	});
 //-----------------------------------------
 	list.row_selected.connect((x, row)=>{
 //		int i = row.get_index();
-		string conf = lbstr.index(row.get_index()).split(", ")[1];
+		string conf = lbstr.index(row.get_index());
 //		print("select: %d\tconf:\t%s\n",i,conf);
 		Posix.system("sudo pkill  -9 -x v2ray; sudo "+v2raycmd+" -config \""+dir+"/"+conf+"\" &");
 	});

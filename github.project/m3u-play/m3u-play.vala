@@ -23,18 +23,18 @@ int main(string[] args)
 
 	var list = new Gtk.ListBox();
 
-	var entry = new Gtk.SearchEntry();
-//	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.PRIMARY, "edit-find");	//system-search 金色放大镜 edit-find 蓝色放大镜
-//	entry.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, "edit-clear");
-//	entry.icon_press.connect((pos,e)=>{
-//		if(pos == Gtk.EntryIconPosition.SECONDARY){entry.text="";}
+	var sentry = new Gtk.Searchsentry();
+//	sentry.set_icon_from_icon_name(Gtk.sentryIconPosition.PRIMARY, "edit-find");	//system-search 金色放大镜 edit-find 蓝色放大镜
+//	sentry.set_icon_from_icon_name(Gtk.sentryIconPosition.SECONDARY, "edit-clear");
+//	sentry.icon_press.connect((pos,e)=>{
+//		if(pos == Gtk.sentryIconPosition.SECONDARY){sentry.text="";}
 //		list.invalidate_filter();
 //	});
-//	entry.activate.connect(()=>{list.invalidate_filter();});
-	entry.search_changed.connect(()=>{list.invalidate_filter();});
-//	entry.set_max_width_chars(40);
-	entry.hexpand = true;
-	grid.attach(entry, 0, 0, 1, 1);
+//	sentry.activate.connect(()=>{list.invalidate_filter();});
+	sentry.search_changed.connect(()=>{list.invalidate_filter();});
+//	sentry.set_max_width_chars(40);
+	sentry.hexpand = true;
+	grid.attach(sentry, 0, 0, 1, 1);
 //-----------------------------------------
 	string mn = "x";
 	try{
@@ -54,7 +54,7 @@ int main(string[] args)
 	} catch (GLib.Error e) {error ("%s", e.message);}
 //-----------------------------------------
 	list.set_filter_func((row)=>{
-		if(entry.text in mname.index(row.get_index())){return true;}
+		if(sentry.text in mname.index(row.get_index())){return true;}
 		return false;
 	});
 //-----------------------------------------

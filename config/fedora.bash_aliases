@@ -11,8 +11,9 @@ alias pu='sudo dnf update'
 #alias pu='sudo dnf update --exclude="botan2"'
 ##			-------- 未安装的包 --------
 # -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
-alias pf='dnf search -Cy'			# 无安装状态。搜索参数是AND关系。
-pfi(){ dnf list installed "*$1*"|gc $@; }	# gc参数是OR关系。
+#alias pf='dnf search -Cy'			# 无安装状态。搜索参数是AND关系。
+pf(){ dnf search -Cy $@|gc $@; }	# 无安装状态。搜索参数是AND关系。
+pfi(){ dnf list installed "*$1*$2*$3*"|gc $@; }	# 搜索已安装的包。
 #alias pinf0='dnf info -Cy'			# 可通配符查未安装的包说明
 ##			-------- 已安装的包 --------
 #alias pinfo='rpm -qi'					# 包信息
@@ -36,7 +37,8 @@ alias g='grep --color=always -Pi 2>/dev/null'
 alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
 alias dog='grep -v -E "(^$|^#|^!)"'
-alias pl='perl -ple'
+alias pl='perl -pe'
+alias pln='perl -ne'
 
 ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
 
