@@ -17,5 +17,13 @@ use 5.010;
 #print $HOME_KEY;
 #print chr(0xff);
 #print chr(0x50)
-#print "\r";
+#^[[H
+#1b, 5b, 48
+#print chr(0x1b);
+#print chr(0x5b);
+#print chr(0x48);
+#print "\x1b\x5b\x48";
+#print "\x50\xff";
+#print "\n";
+#print "\x0a";
 say <STDIN>;

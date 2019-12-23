@@ -23,16 +23,8 @@ int main(string[] args)
 
 	var list = new Gtk.ListBox();
 
-	var sentry = new Gtk.Searchsentry();
-//	sentry.set_icon_from_icon_name(Gtk.sentryIconPosition.PRIMARY, "edit-find");	//system-search 金色放大镜 edit-find 蓝色放大镜
-//	sentry.set_icon_from_icon_name(Gtk.sentryIconPosition.SECONDARY, "edit-clear");
-//	sentry.icon_press.connect((pos,e)=>{
-//		if(pos == Gtk.sentryIconPosition.SECONDARY){sentry.text="";}
-//		list.invalidate_filter();
-//	});
-//	sentry.activate.connect(()=>{list.invalidate_filter();});
+	var sentry = new Gtk.SearchEntry();
 	sentry.search_changed.connect(()=>{list.invalidate_filter();});
-//	sentry.set_max_width_chars(40);
 	sentry.hexpand = true;
 	grid.attach(sentry, 0, 0, 1, 1);
 //-----------------------------------------
@@ -62,12 +54,6 @@ int main(string[] args)
 		int i = row.get_index();
 		Posix.system("totem \'"+muri.index(i)+"\' &");
 	});
-//	list.row_selected.connect(play);
-//void play (Gtk.ListBox x, Gtk.ListBoxRow? row)
-//{
-//	int i = row.get_index();
-//	Posix.system("totem \'"+muri.index(i)+"\' &");
-//}
 //-----------------------------------------
 	for(int i = 0; i < mname.length ; i++){
 		var id = new UriInfo();
