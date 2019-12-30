@@ -17,7 +17,7 @@
 				 }]},
 		"streamSettings": { "network": "xxxnet", "security": "xxxtls",
         "tlsSettings": { "serverName": "", "allowInsecure": false },
-        "wsSettings": { "path": "\xxxhost", "headers": {} }
+        "wsSettings": { "path": "xxxhost", "headers": {} }
 		}},
 		{ "protocol": "freedom", "settings": {}, "tag": "direct" },
 		{ "protocol": "blackhole", "settings": {}, "tag": "block" }

@@ -17,7 +17,7 @@ given($_){
 	when (m'^ss://')			{ss()}
 	when (m'^vmess://')			{vmess()}
 	when (-f && /\.json$/)		{json()}
-	default						{text()}
+#	default						{text()}
 }
 
 #-------------------
@@ -59,23 +59,23 @@ sub ss(){
 	savess();
 }
 #-------------------
-sub text(){
-#157.245.48.12 	17975 	isx-30216959 	aes-256-cfb
-	say "----\t\Utext\t----";
-	@_=split /\s+/;
-	if($#_ ne 3){say "数据必须4个，格式无效"; exit;}
-	for(@_){
-		when(/^$/) {}	#网页表格鼠标选择后，夹杂空格和制表符。split导致空字符串，影响default的赋值。所以需要跳过。
-		when(/\d{1,3}(\.\d{1,3}){3}/)	{$add=$_}
-		when(/[\w-]+(\.[\w-]+){2}/)		{$add=$_}
-		when(/^\d{3,5}$/)				{$port=$_}
-		when(/^[ac]\w+(-\w+){0,2}/)		{$method=$_}
-		default		{$password=$_}
-	}
-	$remark=$add;
-	if(! $port || ! $password || ! $method){say "缺少必要数据，格式无效"; exit;}
-	savess();
-}
+#sub text(){
+##157.245.48.12 	17975 	isx-30216959 	aes-256-cfb
+#	say "----\t\Utext\t----";
+#	@_=split /\s+/;
+#	if($#_ ne 3){say "数据必须4个，格式无效"; exit;}
+#	for(@_){
+#		when(/^$/) {}	#网页表格鼠标选择后，夹杂空格和制表符。split导致空字符串，影响default的赋值。所以需要跳过。
+#		when(/\d{1,3}(\.\d{1,3}){3}/)	{$add=$_}
+#		when(/[\w-]+(\.[\w-]+){2}/)		{$add=$_}
+#		when(/^\d{3,5}$/)				{$port=$_}
+#		when(/^[ac]\w+(-\w+){0,2}/)		{$method=$_}
+#		default		{$password=$_}
+#	}
+#	$remark=$add;
+#	if(! $port || ! $password || ! $method){say "缺少必要数据，格式无效"; exit;}
+#	savess();
+#}
 #-------------------
 sub savess(){	
 	say "$method \t$password \t$add \t$port\t$remark";
@@ -107,8 +107,10 @@ sub vmess(){
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 	s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
 	s/xxxid/$rh->{id}/; s/xxxaid/$rh->{aid}/;
-	s/xxxnet/$rh->{net}/; s/xxxtls/$rh->{tls}/; s/xxxhost/$rh->{host}/;
-	$f="$ENV{HOME}/vv-$rh->{ps}.json";
+	s/xxxnet/$rh->{net}/; s/xxxtls/$rh->{tls}/;
+	$tmp=$rh->{host}; $tmp=~s'/'\/'g; s/xxxhost/$tmp/;
+	$tmp=$rh->{ps}; $tmp=~s/\[.*\]//;
+	$f="$ENV{HOME}/vv-$tmp.json";
 	open OUT,">$f"; say $f;
 	print OUT $_; close OUT;
 }
