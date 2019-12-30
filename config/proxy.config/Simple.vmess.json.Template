@@ -6,15 +6,19 @@
 		"port": 1080,  // 本机 SOCKS 代理端口
 		"listen": "127.0.0.1", "protocol": "socks", "settings": { "udp": true } }],
 //---------------------------
-	"outbounds": [{
-		"protocol": "vmess",	//协议
+	"outbounds": [
+		{"protocol": "vmess",	//协议
 		"settings": {
 			"vnext": [{
 				"address": "xxxadd",	// 服务器地址
 				"port": xxxport,	// 服务器端口
 				// ID 和 AlterID
 				"users": [{ "id": "xxxid", "alterId": xxxaid }]
-				 }]}},
+				 }]},
+		"streamSettings": { "network": "xxxnet", "security": "xxxtls",
+        "tlsSettings": { "serverName": "", "allowInsecure": false },
+        "wsSettings": { "path": "\xxxhost", "headers": {} }
+		}},
 		{ "protocol": "freedom", "settings": {}, "tag": "direct" },
 		{ "protocol": "blackhole", "settings": {}, "tag": "block" }
 	],

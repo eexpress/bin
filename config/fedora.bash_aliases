@@ -26,7 +26,7 @@ pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
 plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 ##------- ---------
 alias ps='\ps -u `id -un` -o pid,command'
-alias pg='pgrep -u `id -un` -af'
+alias pg='pgrep -af'
 alias k='pkill -u `id -un` -9 -f'
 
 alias cn='export LC_ALL=zh_CN.UTF-8'

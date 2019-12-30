@@ -36,7 +36,7 @@ sub img(){
 # 只支持ss原版的二维码
 #ss://YWVzLTI1Ni1jZmI6VWowTW9vSVpYRWF4QDEzOS4xNjIuMTk0LjIzMzo1NDIzMAo=
 	say "----\t\Uimg\t----";
-	die "需要安装zbarimg才能识别二维码。" if ! -x "/usr/bin/zbarimgx";
+	die "需要安装zbarimg才能识别二维码。" if ! -x "/usr/bin/zbarimg";
 	$_=`zbarimg "$_"`;
 	s'QR-Code:''; chomp;
 	say; say "==================";
@@ -107,6 +107,7 @@ sub vmess(){
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 	s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
 	s/xxxid/$rh->{id}/; s/xxxaid/$rh->{aid}/;
+	s/xxxnet/$rh->{net}/; s/xxxtls/$rh->{tls}/; s/xxxhost/$rh->{host}/;
 	$f="$ENV{HOME}/vv-$rh->{ps}.json";
 	open OUT,">$f"; say $f;
 	print OUT $_; close OUT;
