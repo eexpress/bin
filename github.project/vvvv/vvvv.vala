@@ -5,11 +5,15 @@ using Gtk;
 
 int main(string[] args)
 {
-	string v2raycmd = "/home/eexpss/bin/app/v2ray-linux-64/v2ray";
-	string dir = GLib.Environment.get_home_dir()+"/bin/config/proxy.config";
-	string suffix = ".json";
+//v2ray执行文件和json文件，全链接到当前目录。
+	string v2raycmd = "./v2ray";
+	string confdir = "./json/";
+	const string suffix = ".json";
 
 	Array<string> lbstr = new Array<string> ();
+
+//	进入执行文件目录
+	Environment.set_current_dir(Path.get_dirname(args[0]));
 
     Gtk.init (ref args);
 
@@ -47,17 +51,17 @@ int main(string[] args)
 	string tmp;
 	string protocol;
 	try{
-		var d = Dir.open(dir,0);
+		var d = Dir.open(confdir,0);
 		while((f=d.read_name ())!=null){
 			if(f.has_suffix(suffix)){
-				FileUtils.get_contents(dir+"/"+f, out tmp);
+				FileUtils.get_contents(confdir+f, out tmp);
 				protocol = "shadowsocks" in tmp? "shadowsocks":"vmess";
 				list.insert(info.show(f, protocol), -1);
 				lbstr.append_val(f);
 //				如何在进程中查找已经启动的json，并给它上色成使用中的状态。
 			}
 		}
-	} catch (GLib.Error e) {error ("%s", e.message);}
+	} catch (Error e) {error ("%s", e.message);}
 //-----------------------------------------
 	list.set_filter_func((row)=>{
 		if(entry.text in lbstr.index(row.get_index())){return true;}
@@ -72,7 +76,7 @@ int main(string[] args)
 //		int i = row.get_index();
 		string conf = lbstr.index(row.get_index());
 //		print("select: %d\tconf:\t%s\n",i,conf);
-		Posix.system("sudo pkill  -9 -x v2ray; sudo "+v2raycmd+" -config \""+dir+"/"+conf+"\" &");
+		Posix.system("sudo pkill  -9 -x v2ray; sudo "+v2raycmd+" -config \""+confdir+conf+"\" &");
 	});
 //-----------------------------------------
 	var scroll = new Gtk.ScrolledWindow(null, null);
