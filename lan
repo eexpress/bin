@@ -10,6 +10,9 @@ if [ $1 ]; then
 	sudo /usr/bin/nmap -sS $ip|sed -e "/^Interest/ s/[1-9][0-9.]\{6,14\}/${greenB}&${end}/g" -e "/open/ s/[^\ ]*$/${redB}&${end}/g" -e "/^MAC/ s/[0-9:A-F]\{17\}/${blueB}&${end}/g"
 else
 	# 如果对方关闭了icmp，就探测不到
-	/usr/bin/nmap -sP $ip|sed "s/[1-9][0-9.]\{6,14\}/${greenB}&${end}/g"
+#	/usr/bin/nmap -sP $ip|sed "s/[1-9][0-9.]\{6,14\}/${greenB}&${end}/g"
+	/usr/bin/nmap -sP $ip|grep report|cut -d ' ' -f 5|while read i; do echo -en ${greenB}$i${end}"\t";
+	sudo nmap -sS $i|grep MAC|cut -d ' ' -f 3-|tr '\n' ' '; echo ""; done
 fi
+#⭕ telnet cip.cc|enconv 
 
