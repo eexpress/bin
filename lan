@@ -14,5 +14,5 @@ else
 	/usr/bin/nmap -sP $ip|grep report|cut -d ' ' -f 5|while read i; do echo -en ${greenB}$i${end}"\t";
 	sudo nmap -sS $i|grep MAC|cut -d ' ' -f 3-|tr '\n' ' '; echo ""; done
 fi
-#⭕ telnet cip.cc|enconv 
+#⭕ telnet cip.cc|enconv 外网IP
 
