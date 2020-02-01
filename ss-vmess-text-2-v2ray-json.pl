@@ -7,11 +7,14 @@ no warnings 'experimental::smartmatch';
 use MIME::Base64;
 use JSON;
 
+$savepath="$ENV{HOME}/bin/github.project/list-exec/json/";
+
 #暂时禁止剪贴板操作。
 #$_=$ARGV[0]//`xclip -o`;
 $_=shift;
 given($_){
 	when (m'^--?h(elp)?$')		{help()}
+	when (m'^--?s(creen)?$')	{screen()}
 	when (undef)				{help()}
 	when (-f && /\.(png|jpg)$/)	{img()}
 	when (m'^ss://')			{ss()}
@@ -21,11 +24,19 @@ given($_){
 }
 
 #-------------------
+sub screen(){
+	die "需要安装ImageMagick才能自动截屏，识别二维码。" if ! -x "/usr/bin/import";
+	`import -window root /tmp/ss.png`;
+	$_="/tmp/ss.png";
+	img();
+}
+#-------------------
 sub help(){
 	say "ss/vmess字符串，或者网页明文表格文本，转换成v2ray格式的json文件。";
 	say "支持ss原版的二维码识别。(需要安装zbarimg)";
 	say "为了统一使用v2ray，不支持ssr字符串。";
 	say "或从json文件，转换成对应的ss/vmess字符串。";
+	say "-s --screen 可以截屏识别二维码。暂时使用import截图，需要安装ImagMagick。没添加scrot支持。"
 }
 #-------------------
 sub img(){
@@ -89,7 +100,7 @@ sub savess(){
 	s/xxxadd/$add/; s/xxxport/$port/;
 	s/xxxmethod/$method/; s/xxxpassword/$password/;
 #    $f="$ENV{HOME}/vss-$remark.json";
-	$f="/home/eexpss/bin/config/proxy.config/vss-$remark.json";
+	$f=$savepath."vss-$remark.json";
 	open OUT,">$f"; say $f;
 	print OUT $_; close OUT;
 }
@@ -110,7 +121,8 @@ sub vmess(){
 	s/xxxnet/$rh->{net}/; s/xxxtls/$rh->{tls}/;
 	$tmp=$rh->{host}; $tmp=~s'/'\/'g; s/xxxhost/$tmp/;
 	$tmp=$rh->{ps}; $tmp=~s/\[.*\]//;
-	$f="$ENV{HOME}/vv-$tmp.json";
+#	$f="$ENV{HOME}/vv-$tmp.json";
+	$f=$savepath."vv-$tmp.json";
 	open OUT,">$f"; say $f;
 	print OUT $_; close OUT;
 }
