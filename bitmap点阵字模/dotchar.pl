@@ -35,20 +35,28 @@ foreach $str (split //, $in){	# utf8::all，下句不需要decode了。
 	if(!$vmode){$index=0;}	# 水平输出，字符串追加。
 #	S				An unsigned short value.
 #	> sSiIlLqQ		Force big-endian byte-order on the type.
+	# 垂直，除开第一个字，字之前加间隔
+	if($vmode && $index>0){$out[$index]="x"x($size/2); $index++;}
 	foreach $ch (unpack("S>*",$buf)){
 		$_=sprintf("%016b",$ch);
 		$omit="."x(16-$size/2); s/$omit$//;	# 尾部4位丢弃
+#		if($frame){$_="x".$_."x";}	# 逐字左右加边
 		if($vmode){
 			$out[$index]=$_;
 		}else{
-			$out[$index]=$out[$index]." ".$_;
+			if($out[$index]){$_="x".$_;}	# 水平，除开第一个字，字每行之前加间隔
+			$out[$index]=$out[$index].$_;
 		}
 		$index+=1;
 	}
-	if($vmode){$index+=1;}	# 垂直输出，字之间隔开一行。
 }
 #-------------------------------------
 close IN;
-for(@out){ s/0/⚫/g; s/1/⚪/g; say; }
+$separate="x"x(length($out[0]));	# 加边框
+unshift(@out, $separate);
+push(@out, $separate);
+for(@out){ s/(.*)/x$1x/; s/x/⚫/g; s/0/⚫/g; s/1/⚪/g; say; }
 #-------------------------------------
+#特殊的Unicode字符，找不到对应的字体。
+#⭕ cat t|convert -pointsize 24 -font Fira-Mono-Regular label:@- t.png
 
