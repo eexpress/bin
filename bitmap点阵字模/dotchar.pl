@@ -3,20 +3,22 @@
 use 5.010;
 use utf8::all;
 use Encode;
+use Getopt::Std;
 no warnings 'experimental::smartmatch';
 #-------------------------------------
-$f="HZK16"; $size=32;	# 16点阵
-$f="HZK12"; $size=24;	# 12点阵
+getopts('hb');
 
+$f="HZK12"; $size=24;	# 12点阵
 $vmode=1;	# 缺省垂直
+
+if($opt_h){$vmode=0;}
+if($opt_b){$f="HZK16"; $size=32;}
+
 $_=shift;
-given($_){
-	when('-h'){$vmode=0; $_=shift;}
-	when('-v'){$vmode=1; $_=shift;}
-}
 $in=$_//"点阵字模";
 say "-------------------------------------";
-say "使用 -v -h 设置垂直或水平输出，缺省垂直输出。";
+say "使用 -h 设置水平输出，缺省垂直输出。";
+say "使用 -b 指定16点阵，缺省12点阵输出。";
 say "当前使用的点阵字库：$f";
 say "-------------------------------------";
 #-------------------------------------
