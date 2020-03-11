@@ -1,5 +1,5 @@
-//!valac --pkg gtk+-3.0 -X -lm %
-//!./%< &
+//!valac --pkg gtk+-3.0 -X -lm %f
+//#!./% &
 using Gtk;
 using Cairo;
 	
@@ -73,16 +73,13 @@ add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK);
 						queue_draw(); return ret;
 						});
 				}
-					present(); set_keep_above(true);
-string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
-try {
-	string[] spawn_args = "/usr/bin/canberra-gtk-play -l 5 -i complete".split(" ");
-	File f = File.new_for_path(exec);
-	if(f.query_exists()){spawn_args = {exec};}
-	Pid child_pid;
-	Process.spawn_async (".", spawn_args, null, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
-ChildWatch.add(child_pid,(pid,status) => {Process.close_pid(pid);});
-} catch (SpawnError e) { print ("Error: %s\n", e.message); }
+				present(); set_keep_above(true);
+				string exec=GLib.Environment.get_home_dir()+"/.config/time.script";
+				try {
+					File f = File.new_for_path(exec);
+					if(! f.query_exists()){exec = "/usr/bin/canberra-gtk-play -l 5 -i complete";}
+					Process.spawn_command_line_async(exec);
+				} catch (SpawnError e) { print ("Error: %s\n", e.message); }
 			}
 			return true;});
 
@@ -191,7 +188,8 @@ draw_line(ctx, "#F1F1F1", size/50, Dalarm*(Math.PI/180),-(int)(size/4),true);	//
 		if(d<size/20){	//圆心之内
 			if(e.button == 1){
 	alarm_alpha=alarm_alpha==alarm_false?alarm_true:alarm_false;
-				if(alarm_alpha==alarm_true) set_keep_above(false);
+//				if(alarm_alpha==alarm_true) set_keep_above(false);
+				set_keep_above(false);
 				queue_draw();}
 			else Gtk.main_quit();
 			return true;
@@ -215,8 +213,8 @@ begin_move_drag ((int)e.button, (int)e.x_root, (int)e.y_root, e.time);
 		x=(int)(e.x-size/2); y=(int)(e.y-size/2);
 		int d=(int)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 		if(e.direction==Gdk.ScrollDirection.UP){
-			if(d<size/20){timespan++;change_from_current_time();}
-			else if(size<400)size+=50;
+			if(d<size/20){timespan++;change_from_current_time();}	//圆心位置
+			else if(size<400)size+=50;	//钟面位置
 		}
 		if(e.direction==Gdk.ScrollDirection.DOWN){
 			if(d<size/20){timespan--;change_from_current_time();}

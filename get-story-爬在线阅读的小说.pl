@@ -5,7 +5,7 @@ use 5.010;
 use utf8::all;	# perl-utf8-all，消除全部的 Wide character in print
 #use LWP::Simple;	# perl-LWP-Protocol-https
 use LWP::UserAgent;
-$ua = LWP::UserAgent->new( agent => 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:69.0) Gecko/20100101 Firefox/69.0', timeout => 10 );
+$ua = LWP::UserAgent->new( agent => 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:69.0) Gecko/20100101 Firefox/69.0', timeout => 100 );
 
 #================================
 # 格式数组
@@ -25,10 +25,19 @@ $ua = LWP::UserAgent->new( agent => 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:
 '正文','"mRight"','"mouseRight"','上一章'],
 
 ['www.luoxia.com',		'(.*?), .*',
-'章节列表','adsbygoogle','gg_post_top','上一章'],	# 卡
+'章节列表','adsbygoogle','gg_post_top\(\);','上一章'],	# 卡
 
 ['www.365book.net',		'(.*?)最新章节.*',
 '更新时间','友情链接','更新时间','友情链接'],	# 快
+
+['book.zongheng.com',		'(.*?)最新章节.*',
+'正文','出版合作','全文阅读','目录'],
+
+['www.biquxuan.com',		'(.*?)\ -.*',
+'全文免费阅读','①你好','wenzhang32\(\);','wenzhang31\(\);'],
+
+['www.daocaorenshuwu.com',		'(.*?)全文阅读.*',
+'完整目录','最新入库','\.Tez110','关注微信'], # 章节超时！
 );
 #================================
 if(! $ARGV[0]){
@@ -45,7 +54,7 @@ if(grep /^$/,@{$web[$i]}){say "网址设置不完整。";exit;}
 #$html=get($url);
 $response = $ua->get($url);
 if ($response->is_success){$html=$response->decoded_content;}
-else{say "timeout!"; exit;}
+else{say "目录超时！"; exit;}
 say "======================";
 $html=~m"<title>$web[$i][1]</title>";	# 网页标题中的书名
 $name=$1; say "=====>\t《$name》";
@@ -77,15 +86,27 @@ for(sort keys %links){
 	$topic=~s/&ldquo;/“/g;
 	$topic=~s/&rdquo;/”/g;
 	say "=====>\t$url\t$topic";
-	print OUT "\n".$topic."\n";
+	print OUT "\n-------------------------\n".$topic."\n-------------------------\n";
 #    next;	# 只打印章节标题
 #    $_=get($prefix.$url);
 	$response = $ua->get($prefix.$url);
-	if ($response->is_success){$_=$response->decoded_content;}
-	else{say "article timeout!"; exit;}
+	if ($response->is_success){$_=$response->decoded_content;}else{say "章节超时！"; exit;}
 	s/.*$web[$i][4]//s;	# 掐头
 	s/$web[$i][5].*//s;	# 去尾
+	if($prefix=~/biquxuan|daocaorenshuwu/){	# 网站把一个章节自动分成2个地址
+		$tmp=$_;
+		$url=~s/\.html/_2\.html/;
+		say "=====>\t$url\t$topic";
+		$response = $ua->get($prefix.$url);
+		if ($response->is_success){$_=$response->decoded_content;}else{say "章节超时！"; exit;}
+		s/.*$web[$i][4]//s;	# 掐头
+		s/$web[$i][5].*//s;	# 去尾
+		$_=$tmp.$_;
+	}
 #==============格式化文字内容
+	s"</p><p>"\n"g;	# book.zongheng.com 正文用</p><p>取代了回车
+	s"<br /><br />"\n"g;	# book.biquxuan.com 正文用<br><br>取代了回车
+#	print $_;
 	s/&nbsp;/ /g; s/&quot;/"/g; s/\r//g; s/<.*?>//g; s/\n{2,}/\n/gs;
 	s/-\d{1,3}-//g; s/<u>一<\/u>/\n/g; s/^\s+$//g;
 	s/&ldquo;/“/g; s/&rdquo;/”/g; s/&lsquo;/‘/g; s/&rsquo;/’/g;

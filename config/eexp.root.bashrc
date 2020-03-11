@@ -9,14 +9,14 @@ alias pg='pgrep -af'
 
 alias g='grep --color=always -Pi 2>/dev/null'
 alias v='/usr/bin/gvim --remote-tab'
+alias e='gedit'
 alias k='pkill -9 -f'
 
-alias ls='/usr/bin/ls --color=auto'
-alias l='ls'
-alias la='ls -a'
-alias lsm='ls -oAh --time-style=iso -t'		# mtime
-alias lsc='ls -oAh --time-style=iso -tc'	# ctime
-alias lss='ls -oAh --time-style=iso -S'		# size
+##			-------- LS --------
+alias l='\ls --color=auto'
+alias la='l -A'
+alias lt='l -oAh  --time-style=iso -t'		# mtime
+alias ls='lt -S'		# size
 
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white

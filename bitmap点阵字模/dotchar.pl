@@ -15,7 +15,7 @@ if($opt_h){$vmode=0;}	# 水平输出
 if($opt_b){$f="HZK16"; $size=32;}	# 16点阵
 
 $_=shift;
-$in=$_//"点阵字模";
+$in=$_//"点阵";
 say "-------------------------------------";
 say "使用 -h 设置水平输出，缺省垂直输出。";
 say "使用 -b 指定16点阵，缺省12点阵输出。";
@@ -25,7 +25,7 @@ say "-------------------------------------";
 #-------------------------------------
 use File::Basename;
 use Cwd "abs_path";
-chdir dirname(abs_path($0));
+chdir dirname(abs_path($0));	# 切换绝对工作目录，跳过链接。
 
 open IN,"$f" or die $!;
 binmode(IN);
