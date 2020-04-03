@@ -1,1 +1,1 @@
-fedora.bash_aliases
+all.bashrc
