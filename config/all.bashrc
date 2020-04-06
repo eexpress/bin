@@ -9,8 +9,9 @@ if [ -x /usr/bin/apt ]; then
 	alias pi='sudo apt install'
 	alias pr='sudo apt remove'
 	alias pu='sudo apt update && sudo apt upgrade'
-	alias pf='apt list'		# 搜索包名
-	alias pf0='apt search'		# 搜索描述，参数是AND关系。
+	alias pf='apt list'			# 搜索包名
+	alias pfi='apt list --installed'	# 搜索已安装的包。
+	alias pf0='apt search'			# 搜索描述，参数是AND关系。
 	alias pinfo='apt show'
 	alias plist='dpkg -L'
 	#as(){ aptitude search "!~nlib!~ri386!~v $*";}
@@ -21,13 +22,10 @@ else
 	#alias pu='sudo dnf update --exclude="botan2"'
 	##			-------- 未安装的包 --------
 	# -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
-	#alias pf='dnf search -Cy'			# 无安装状态。搜索参数是AND关系。
 	pf(){ dnf search -Cy $@|gc $@; }	# 无安装状态。搜索参数是AND关系。
 	pfi(){ dnf list installed "*$1*$2*$3*"|gc $@; }	# 搜索已安装的包。
 	#alias pinf0='dnf info -Cy'			# 可通配符查未安装的包说明
 	##			-------- 已安装的包 --------
-	#alias pinfo='rpm -qi'					# 包信息
-	#alias plist='rpm -q --list'				# 文件列表
 	alias pfile='rpm -q --file'				# 文件所属的包
 	alias pneed='rpm -q --whatrequires'		# 被哪个包需要
 	# 包信息。rpm需要已安装的确切包名；dnf可通配符查未安装的包。

@@ -1,13 +1,14 @@
 #!/usr/bin/perl
 
 # 在json，ss字符串，QRCode二维码，文本字符串之间互相转换。
+# 依赖 libjson-perl 包。
 
 use 5.010;
 no warnings 'experimental::smartmatch';
 use MIME::Base64;
 use JSON;
 
-$savepath="$ENV{HOME}/bin/github.project/list-exec/json/";
+$savepath="$ENV{HOME}/json/";
 
 #暂时禁止剪贴板操作。
 #$_=$ARGV[0]//`xclip -o`;
