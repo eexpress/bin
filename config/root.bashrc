@@ -1,14 +1,11 @@
 #!/bin/bash
 
-set -o vi
-
-export VGL_LOGO=1	# Bumbleebee显示右下角VGL标记
 #-------ALIAS------------------------------------
 ##			-------- 软件包管理 --------
 if [ -x /usr/bin/apt ]; then
-	alias pi='sudo apt install'
-	alias pr='sudo apt remove'
-	alias pu='sudo apt update && sudo apt upgrade'
+	alias pi='apt install'
+	alias pr='apt remove'
+	alias pu='apt update && apt upgrade'
 	alias pf='apt list'			# 搜索包名
 	alias pfi='apt list --installed'	# 搜索已安装的包。
 	alias pf0='apt search'			# 搜索描述，参数是AND关系。
@@ -16,10 +13,10 @@ if [ -x /usr/bin/apt ]; then
 	alias plist='dpkg -L'
 	#as(){ aptitude search "!~nlib!~ri386!~v $*";}
 else
-	alias pi='sudo dnf install'
-	alias pr='sudo dnf remove'
-	alias pu='sudo dnf update'
-	#alias pu='sudo dnf update --exclude="botan2"'
+	alias pi='dnf install'
+	alias pr='dnf remove'
+	alias pu='dnf update'
+	#alias pu='dnf update --exclude="botan2"'
 	##			-------- 未安装的包 --------
 	# -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
 	pf(){ dnf search -Cy $@|gc $@; }	# 无安装状态。搜索参数是AND关系。
@@ -37,57 +34,14 @@ fi
 alias ps='\ps -u `id -un` -o pid,command'
 alias pg='pgrep -af'
 alias k='pkill -u `id -un` -9 -f'
-
-alias cn='export LC_ALL=zh_CN.UTF-8'
-alias en='export LC_ALL=C'
-alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
-
 alias g='grep --color=always -Pi 2>/dev/null'
-alias tail='/usr/bin/tail -n $(($LINES-4))'
-alias head='/usr/bin/head -n $(($LINES-4))'
-alias dog='grep -v -E "(^$|^#|^!)"'
-alias pl='perl -pe'
-alias pln='perl -ne'
-
-ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
-
-alias i='df -hT -x tmpfs -x devtmpfs|sed "/\/boot/D";echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors|grep Core;echo;hddtemp'
 alias e='gedit'
-alias v='gvim --remote-tab-silent'
-alias sv='sudo gvim'
-alias du='\du -hs 2>/dev/null'
 
 ##			-------- LS --------
 alias l='\ls --color=auto'
 alias la='l -A'
 alias lt='l -oAh  --time-style=iso -t'		# mtime
 alias ls='lt -S'		# size
-
-#-------FUNC------------------------------------
-c(){ echo $1|bc -l; }
-# 鼠标选择路径或文件，快速进入目录。
-d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
-p(){ ping -c 5 ${1:-www.163.com}; }
-u(){ \du -sch "$@"|sort -rh; }
-
-#-------LESS TERMCAP for color manpage------------
-#0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
-#man terminfo: set_a_foreground -> setaf; set_a_background -> setab;
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 1)	# enter_bold_mode
-export LESS_TERMCAP_md=$(tput bold; tput setaf 1)	# begin bold
-export LESS_TERMCAP_me=$(tput sgr0)					# exit_attribute_mode
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)		# exit_standout_mode
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 2)	# enter_underline_mode
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)		# exit_underline_mode
-export LESS_TERMCAP_mr=$(tput rev)		# enter_reverse_mode
-export LESS_TERMCAP_mh=$(tput dim)		# enter_dim_mode (half-bright)
-export MANPAGER="/usr/bin/less"
-export GROFF_NO_SGR=1	#fix no color in Fedora 25
-
-#-------ENVIROMENT SET-----------------------------
-export PATH=$HOME/bin:$PATH
-export CDPATH=:~:~/bin:~/文档
 
 #-------PS1 COLOR----------------------------------
 if [ "$(whoami)" == "root" ]; then psch="🔴"; else psch="⭕"; fi
