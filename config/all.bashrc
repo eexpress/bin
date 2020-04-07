@@ -12,9 +12,11 @@ if [ -x /usr/bin/apt ]; then
 	alias pf='apt list'			# 搜索包名
 	alias pfi='apt list --installed'	# 搜索已安装的包。
 	alias pf0='apt search'			# 搜索描述，参数是AND关系。
-	alias pfile='dpkg -S '			# 文件所属的包
+#	alias pfile='dpkg -S '			# 文件所属的包
+	pfile(){ dpkg -S $@ || apt-file search $@; }	# 查找文件所属的包(已安装/未安装)
 	alias pinfo='apt show'
-	alias plist='dpkg -L'
+#	alias plist='dpkg -L'
+	plist(){ dpkg -L $@ || apt-file list $@; }	# 列出包的文件(已安装/未安装)
 	#as(){ aptitude search "!~nlib!~ri386!~v $*";}
 else
 	alias pi='sudo dnf install'
@@ -52,7 +54,7 @@ alias pln='perl -ne'
 
 ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
 
-alias i='df -hT -x tmpfs -x devtmpfs|sed "/\/boot/D";echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors|grep Core;echo;hddtemp'
+alias i='df -hT -x tmpfs -x devtmpfs -x squashfs|sed "/\/boot/D";echo -e "\n内存---------------";free -h|cut -b -43;echo -e "\n温度---------------";sensors|grep Core'
 alias e='gedit'
 alias v='gvim --remote-tab-silent'
 alias sv='sudo gvim'
@@ -70,6 +72,8 @@ c(){ echo $1|bc -l; }
 d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
 u(){ \du -sch "$@"|sort -rh; }
+
+TERM=xterm-256color	# 放在所有tput之前。
 
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
