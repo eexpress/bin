@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+
+# 作为管道。翻译管道内容中所有的IP地址。
+
 use LWP::Simple; 
 use Encode qw(encode decode);
 #mtr bootstrap.upsight-api.com -r -c 1 -n|ipfilter.pl

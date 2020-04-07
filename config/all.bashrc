@@ -12,6 +12,7 @@ if [ -x /usr/bin/apt ]; then
 	alias pf='apt list'			# 搜索包名
 	alias pfi='apt list --installed'	# 搜索已安装的包。
 	alias pf0='apt search'			# 搜索描述，参数是AND关系。
+	alias pfile='dpkg -S '			# 文件所属的包
 	alias pinfo='apt show'
 	alias plist='dpkg -L'
 	#as(){ aptitude search "!~nlib!~ri386!~v $*";}
