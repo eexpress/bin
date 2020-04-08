@@ -1,1 +1,1 @@
-all.bashrc
+eexp.bashrc
