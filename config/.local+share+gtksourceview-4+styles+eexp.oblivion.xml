@@ -21,7 +21,7 @@
 
 -->
 
-<style-scheme id="eexp.oblivion" _name="eexp.Oblivion.修改版" version="1.0">
+<style-scheme id="eexp.oblivion" _name="eexp.Oblivion" version="1.0">
 
   <author>Paolo Borelli</author>
   <_description>Dark color scheme using the Tango color palette</_description>

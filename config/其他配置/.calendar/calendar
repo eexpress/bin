@@ -1,8 +1,0 @@
-#ifndef _calendar_self_
-#define _calendar_self_
-
-#include <calendar.eexp>
-#include <calendar.china>
-#include <calendar.2014.lunar>
-
-#endif
