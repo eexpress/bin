@@ -93,7 +93,7 @@ export GROFF_NO_SGR=1	#fix no color in Fedora 25
 
 #-------ENVIROMENT SET-----------------------------
 export PATH=$HOME/bin:$PATH
-export CDPATH=:~:~/bin:~/文档
+export CDPATH=:~:~/bin:~/文档:~/github.com:
 
 #-------PS1 COLOR----------------------------------
 if [ "$(whoami)" == "root" ]; then psch="🔴"; else psch="⭕"; fi
