@@ -8,7 +8,7 @@ no warnings 'experimental::smartmatch';
 use MIME::Base64;
 use JSON;
 
-$savepath="$ENV{HOME}/json/";
+$savepath="$ENV{HOME}/";
 
 #暂时禁止剪贴板操作。
 #$_=$ARGV[0]//`xclip -o`;
@@ -89,7 +89,7 @@ sub ss(){
 #	savess();
 #}
 #-------------------
-sub savess(){	
+sub savess(){
 	say "$method \t$password \t$add \t$port\t$remark";
 	say "==================";
 	if($add eq ""){say "无地址，格式无效"; exit;}
