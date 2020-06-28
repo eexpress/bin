@@ -55,6 +55,9 @@ public class Timer : Gtk.Window {
 		}
 		if(e.button == 1){	//有效圆环
 			stdout.printf("at now + %d minutes\n",mm);
+//~ 			echo 'export DISPLAY=:0.0 && /home/eexpss/bin/rockpng "/home/eexpss/图片/s.png"' |\at "now + 1 minutes"
+//~ echo "export DISPLAY=:0.0 && /home/eexpss/bin/rockpng "/home/eexpss/图片/s.png"" |\at "now + 1 minutes"
+
 			Gtk.main_quit();
 		}
 		return true;
