@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# zenity版本。切换json代理和pac设置。
+# 使用v2ray来统管shadowsocks+v2ray的json
+
+configpath="$HOME/v2ray.json"
+configfile="*.pac *.json"
+v2raycmd="/home/eexpss/app/v2ray-linux-64/v2ray"
+
+off(){
+	gsettings set org.gnome.system.proxy mode 'none'
+	pkill -9 -x ${v2raycmd##*/}
+	}
+
+on(){
+	gsettings set org.gnome.system.proxy mode 'manual'
+	gsettings set org.gnome.system.proxy.http port 8888
+	gsettings set org.gnome.system.proxy.https port 8888
+	gsettings set org.gnome.system.proxy.ftp port 8888
+	gsettings set org.gnome.system.proxy.socks port 1088
+	gsettings set org.gnome.system.proxy.http host '127.0.0.1'
+	gsettings set org.gnome.system.proxy.https host '127.0.0.1'
+	gsettings set org.gnome.system.proxy.ftp host '127.0.0.1'
+	gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
+	}
+
+cd $configpath
+list=""
+list+="关闭全局代理／停止后台 "
+list+="全部数据走代理 "
+
+for file in $configfile; do
+	list+="$file "
+done
+
+key=`zenity --window-icon=web --width=400 --height=500 --list --column=选择 --text=选择代理设置 $list`
+
+#-----------------------------
+case $key in
+	关闭*)
+		echo $key
+		off
+		;;
+	全部*)
+		echo $key
+		on
+		;;
+	*.pac)
+		echo "自定义代理 $key"
+		fullpath="file://$configpath/$key"
+		gsettings set org.gnome.system.proxy autoconfig-url "$fullpath"
+		gsettings set org.gnome.system.proxy mode 'auto'
+		;;
+	*.json)
+		echo "切换到v2ray代理 $key"
+		pkill -9 -x ${v2raycmd##*/}
+		if [ -x $v2raycmd ]; then
+			on
+			$v2raycmd -config $key &
+		else
+			echo "没安装命令行的v2ray软件。"; exit
+		fi
+		;;
+esac

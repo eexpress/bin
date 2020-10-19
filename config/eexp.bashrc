@@ -57,6 +57,7 @@ ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
 alias i='df -hT -x tmpfs -x devtmpfs -x squashfs|sed "/\/boot/D";echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
 alias e='gedit'
 if [ -x /usr/bin/io.elementary.code ]; then alias e='io.elementary.code'; fi
+if [ -x /usr/bin/geany ]; then alias e='geany'; fi
 alias v='gvim --remote-tab-silent'
 alias sv='sudo gvim'
 alias du='\du -hs 2>/dev/null'

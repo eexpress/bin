@@ -8,7 +8,7 @@ no warnings 'experimental::smartmatch';
 use MIME::Base64;
 use JSON;
 
-$savepath="$ENV{HOME}/";
+$savepath="$ENV{HOME}/v2ray.json/";
 
 #暂时禁止剪贴板操作。
 #$_=$ARGV[0]//`xclip -o`;
@@ -120,7 +120,8 @@ sub vmess(){
 	s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
 	s/xxxid/$rh->{id}/; s/xxxaid/$rh->{aid}/;
 	s/xxxnet/$rh->{net}/; s/xxxtls/$rh->{tls}/;
-	$tmp=$rh->{host}; $tmp=~s'/'\/'g; s/xxxhost/$tmp/;
+	#~ $tmp=$rh->{host}; $tmp=~s'/'\/'g; s/xxxhost/$tmp/;
+	$tmp=$rh->{host}; s/xxxhost/$tmp/;
 	$tmp=$rh->{ps}; $tmp=~s/\[.*\]//;
 #	$f="$ENV{HOME}/vv-$tmp.json";
 	$f=$savepath."vv-$tmp.json";
