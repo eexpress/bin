@@ -33,10 +33,11 @@ sub screen(){
 }
 #-------------------
 sub help(){
-	say "ss/vmess字符串，或者网页明文表格文本，转换成v2ray格式的json文件。";
+	say "参数: ss/vmess字符串/网页明文表格文本，转换成v2ray格式的json文件。";
+	say "参数: json文件，转换成对应的ss/vmess字符串。并在tty显示二维码。";
+	say "---------------------------------------";
 	say "支持ss原版的二维码识别。(需要安装zbarimg)";
 	say "为了统一使用v2ray，不支持ssr字符串。";
-	say "或从json文件，转换成对应的ss/vmess字符串。";
 	say "-s --screen 可以截屏识别二维码。暂时使用import截图，需要安装ImagMagick。没添加scrot支持。"
 }
 #-------------------
