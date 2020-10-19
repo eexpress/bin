@@ -10,6 +10,7 @@ if [ -x /usr/bin/io.elementary.code ]; then alias e='io.elementary.code'; fi
 if [ -x /usr/bin/geany ]; then alias e='geany'; fi
 
 alias dog='grep -v -E "(^$|^#|^!)"'
+alias du='\du -hs 2>/dev/null'
 alias ps='\ps -u `id -un` -o pid,command'
 alias pg='pgrep -af'
 alias k='pkill -9 -f'
