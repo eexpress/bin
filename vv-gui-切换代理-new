@@ -6,6 +6,7 @@
 configpath="$HOME/v2ray.json"
 configfile="*.pac *.json"
 v2raycmd="/home/eexpss/app/v2ray-linux-64/v2ray"
+running=`pgrep -af 'v2ray -config'|awk '{print $NF}'`
 
 off(){
 	gsettings set org.gnome.system.proxy mode 'none'
@@ -33,7 +34,8 @@ for file in $configfile; do
 	list+="$file "
 done
 
-key=`zenity --window-icon=web --width=400 --height=500 --list --column=选择 --text=选择代理设置 $list`
+[ -n "$running" ] && m="已运行-$running" || m="v2ray没有运行"
+key=`zenity --window-icon=web --width=400 --height=500 --list --column=$m --text=选择代理设置 $list`
 
 #-----------------------------
 case $key in
