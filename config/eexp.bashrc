@@ -1,8 +1,12 @@
 #!/bin/bash
 
 set -o vi
-
 export VGL_LOGO=1	# Bumbleebee显示右下角VGL标记
+
+TERM=dumb
+TERM=xterm
+TERM=xterm-256color	# 放在所有tput之前。
+
 #-------ALIAS------------------------------------
 ##			-------- 软件包管理 --------
 if [ -x /usr/bin/apt ]; then
@@ -37,30 +41,33 @@ else
 	plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 fi
 ##------- ---------
-alias ps='\ps -u `id -un` -o pid,command'
-alias pg='pgrep -af'
-alias k='pkill -u `id -un` -9 -f'
 
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'
 alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
 
-alias g='grep --color=always -Pi 2>/dev/null'
 alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
-alias dog='grep -v -E "(^$|^#|^!)"'
 alias pl='perl -pe'
 alias pln='perl -ne'
 
 ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
 
 alias i='df -hT -x tmpfs -x devtmpfs -x squashfs|sed "/\/boot/D";echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
-alias e='gedit'
-if [ -x /usr/bin/io.elementary.code ]; then alias e='io.elementary.code'; fi
-if [ -x /usr/bin/geany ]; then alias e='geany'; fi
 alias v='gvim --remote-tab-silent'
 alias sv='sudo gvim'
 alias du='\du -hs 2>/dev/null'
+#alias k='pkill -u `id -un` -9 -f'
+
+if [ -x /usr/bin/gedit ]; then alias e='gedit'; fi
+if [ -x /usr/bin/io.elementary.code ]; then alias e='io.elementary.code'; fi
+if [ -x /usr/bin/geany ]; then alias e='geany'; fi
+
+alias dog='grep -v -E "(^$|^#|^!)"'
+alias ps='\ps -u `id -un` -o pid,command'
+alias pg='pgrep -af'
+alias k='pkill -9 -f'
+alias g='grep --color=always -Pi 2>/dev/null'
 
 ##			-------- LS --------
 alias l='\ls --color=auto'
@@ -74,8 +81,6 @@ c(){ echo $1|bc -l; }
 d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
 p(){ ping -c 5 ${1:-www.163.com}; }
 u(){ \du -sch "$@"|sort -rh; }
-
-TERM=xterm-256color	# 放在所有tput之前。
 
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
@@ -109,11 +114,13 @@ export CDPATH=:~:~/bin:~/文档:~/github.com:
 	setbold=`tput bold;`
 	setnone=`tput sgr0`
 if [ "$(whoami)" == "root" ]; then
-	psch="🔴"; psc1=$gray_red; psc2=$allred; 
+	psch="🔴"; psc1=$gray_red; psc2=$allred;
 else
 	psch="⭕"; psc1=$gray_green; psc2=$allgreen;
 fi
-	PS1="$setbold$psc1 \D{%F %A %T}$psc2🡺$green_gray  \H $allgray🡺$psc1 \w$psc2🡺$setnone \n$psch "
+	psarrow=🡺
+	psarrow=▶
+	PS1="$setbold$psc1 \D{%F %A %T}$psc2$psarrow$green_gray  \H $allgray$psarrow$psc1 \w$psc2$psarrow$setnone \n$psch "
 
 #-------HISTORY------------------------------------
 shopt -s histappend

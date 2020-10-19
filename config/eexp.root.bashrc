@@ -1,12 +1,19 @@
 #!/bin/bash
 
-#-------ALIAS------------------------------------
-alias dog='grep -v -E "(^$|^#|^!)"'
-alias ps='/bin/ps -u `id -un` -o pid,command'
-alias pg='pgrep -af'
+TERM=dumb
+TERM=xterm
+TERM=xterm-256color	# 放在所有tput之前。
 
-alias g='grep --color=always -Pi 2>/dev/null'
+#-------ALIAS------------------------------------
+if [ -x /usr/bin/gedit ]; then alias e='gedit'; fi
+if [ -x /usr/bin/io.elementary.code ]; then alias e='io.elementary.code'; fi
+if [ -x /usr/bin/geany ]; then alias e='geany'; fi
+
+alias dog='grep -v -E "(^$|^#|^!)"'
+alias ps='\ps -u `id -un` -o pid,command'
+alias pg='pgrep -af'
 alias k='pkill -9 -f'
+alias g='grep --color=always -Pi 2>/dev/null'
 
 ##			-------- LS --------
 alias l='\ls --color=auto'
@@ -27,11 +34,13 @@ alias ls='lt -S'		# size
 	setbold=`tput bold;`
 	setnone=`tput sgr0`
 if [ "$(whoami)" == "root" ]; then
-	psch="🔴"; psc1=$gray_red; psc2=$allred; 
+	psch="🔴"; psc1=$gray_red; psc2=$allred;
 else
 	psch="⭕"; psc1=$gray_green; psc2=$allgreen;
 fi
-	PS1="$setbold$psc1 \D{%F %A %T}$psc2🡺$green_gray  \H $allgray🡺$psc1 \w$psc2🡺$setnone \n$psch "
+	psarrow=🡺
+	psarrow=▶
+	PS1="$setbold$psc1 \D{%F %A %T}$psc2$psarrow$green_gray  \H $allgray$psarrow$psc1 \w$psc2$psarrow$setnone \n$psch "
 
 #-------HISTORY------------------------------------
 shopt -s histappend
