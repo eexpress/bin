@@ -26,7 +26,12 @@ alias ls='lt -S'		# size
 	allred=`tput setaf $red; tput setab $red;`
 	setbold=`tput bold;`
 	setnone=`tput sgr0`
-	PS1="$setbold$gray_green \D{%F %A %T}$allgreen🡺$green_gray  \H $allgray🡺$gray_red  \w$allred🡺$setnone \n🔴 "
+if [ "$(whoami)" == "root" ]; then
+	psch="🔴"; psc1=$gray_red; psc2=$allred; 
+else
+	psch="⭕"; psc1=$gray_green; psc2=$allgreen;
+fi
+	PS1="$setbold$psc1 \D{%F %A %T}$psc2🡺$green_gray  \H $allgray🡺$psc1 \w$psc2🡺$setnone \n$psch "
 
 #-------HISTORY------------------------------------
 shopt -s histappend

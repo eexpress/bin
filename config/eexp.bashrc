@@ -97,17 +97,23 @@ export PATH=$HOME/bin:$PATH
 export CDPATH=:~:~/bin:~/文档:~/github.com:
 
 #-------PS1 COLOR----------------------------------
-if [ "$(whoami)" == "root" ]; then psch="🔴"; else psch="⭕"; fi
 	darkgreen="0x16"	#dark green
 	gray="0xee"	#light gray
+	red="0xa0"
 	green_gray=`tput setaf 2; tput setab $gray;`
 	allgray=`tput setaf $gray; tput setab $gray;`
 	gray_green=`tput setaf 0xfa; tput setab $darkgreen;`
+	gray_red=`tput setaf 0xfa; tput setab $red;`
 	allgreen=`tput setaf $darkgreen; tput setab $darkgreen;`
+	allred=`tput setaf $red; tput setab $red;`
 	setbold=`tput bold;`
 	setnone=`tput sgr0`
-	PS1="$setbold$gray_green \D{%F %A %T}$allgreen🡺$green_gray  \H $allgray🡺$gray_green  \w$allgreen🡺$setnone \n$psch "
-#⚠️
+if [ "$(whoami)" == "root" ]; then
+	psch="🔴"; psc1=$gray_red; psc2=$allred; 
+else
+	psch="⭕"; psc1=$gray_green; psc2=$allgreen;
+fi
+	PS1="$setbold$psc1 \D{%F %A %T}$psc2🡺$green_gray  \H $allgray🡺$psc1 \w$psc2🡺$setnone \n$psch "
 
 #-------HISTORY------------------------------------
 shopt -s histappend
