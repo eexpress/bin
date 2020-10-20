@@ -13,7 +13,7 @@ TERM=xterm-256color	# 放在所有tput之前。
 if [ -x /usr/bin/apt ]; then
 	alias pi="$sudostr apt install"
 	alias pr="$sudostr apt remove"
-	alias pu="$sudostr apt update && $sudostr apt upgrade"
+	alias pu="$sudostr apt update && $sudostr apt upgrade"	# /usr/bin/update-manager
 	alias pf='apt list'			# 搜索包名
 	alias pfi='apt list --installed'	# 搜索已安装的包。
 	alias pf0='apt search'			# 搜索描述，参数是AND关系。
