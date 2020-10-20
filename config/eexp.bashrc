@@ -8,25 +8,23 @@ TERM=xterm
 TERM=xterm-256color	# 放在所有tput之前。
 
 #-------ALIAS------------------------------------
+[ "$(whoami)" == "root" ] && sudostr="" || sudostr="sudo"
 ##			-------- 软件包管理 --------
 if [ -x /usr/bin/apt ]; then
-	alias pi='sudo apt install'
-	alias pr='sudo apt remove'
-	alias pu='sudo apt update && sudo apt upgrade'
+	alias pi="$sudostr apt install"
+	alias pr="$sudostr apt remove"
+	alias pu="$sudostr apt update && $sudostr apt upgrade"
 	alias pf='apt list'			# 搜索包名
 	alias pfi='apt list --installed'	# 搜索已安装的包。
 	alias pf0='apt search'			# 搜索描述，参数是AND关系。
-#	alias pfile='dpkg -S '			# 文件所属的包
-	pfile(){ dpkg -S $@ || apt-file search $@; }	# 查找文件所属的包(已安装/未安装)
 	alias pinfo='apt show'
-#	alias plist='dpkg -L'
+	pfile(){ dpkg -S $@ || apt-file search $@; }	# 查找文件所属的包(已安装/未安装)
 	plist(){ dpkg -L $@ || apt-file list $@; }	# 列出包的文件(已安装/未安装)
 	#as(){ aptitude search "!~nlib!~ri386!~v $*";}
 else
-	alias pi='sudo dnf install'
-	alias pr='sudo dnf remove'
-	alias pu='sudo dnf update'
-	#alias pu='sudo dnf update --exclude="botan2"'
+	alias pi="$sudostr dnf install"
+	alias pr="$sudostr dnf remove"
+	alias pu="$sudostr dnf update"
 	##			-------- 未安装的包 --------
 	# -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
 	pf(){ dnf search -Cy $@|gc $@; }	# 无安装状态。搜索参数是AND关系。
@@ -62,7 +60,6 @@ if [ -x /usr/bin/io.elementary.code ]; then alias e='io.elementary.code'; fi
 if [ -x /usr/bin/geany ]; then alias e='geany'; fi
 
 alias dog='grep -v -E "(^$|^#|^!)"'
-alias du='\du -hs 2>/dev/null'
 alias ps='\ps -u `id -un` -o pid,command'
 alias pg='pgrep -af'
 alias k='pkill -9 -f'
@@ -76,10 +73,10 @@ alias ls='lt -S'		# size
 
 #-------FUNC------------------------------------
 c(){ echo $1|bc -l; }
+p(){ ping -c 5 ${1:-www.163.com}; }
+u(){ \du -sch "$@" 2>/dev/null|sort -rh; }
 # 鼠标选择路径或文件，快速进入目录。
 d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
-p(){ ping -c 5 ${1:-www.163.com}; }
-u(){ \du -sch "$@"|sort -rh; }
 
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
@@ -97,9 +94,10 @@ export MANPAGER="/usr/bin/less"
 export GROFF_NO_SGR=1	#fix no color in Fedora 25
 
 #-------ENVIROMENT SET-----------------------------
-export PATH=$HOME/bin:$PATH
-export CDPATH=:~:~/bin:~/文档:~/github.com:
-
+if [ "$(whoami)" != "root" ]; then
+	export PATH=$HOME/bin:$PATH
+	export CDPATH=:~:~/bin:~/文档:~/github项目仓库:
+fi
 #-------PS1 COLOR----------------------------------
 	darkgreen="0x16"	#dark green
 	gray="0xee"	#light gray
