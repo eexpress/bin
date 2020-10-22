@@ -3,10 +3,11 @@
 # zenity版本。切换json代理和pac设置。
 # 使用v2ray来统管shadowsocks+v2ray的json
 
-configpath="$HOME/v2ray.json"
+configpath="$HOME/v2ray的配置"
 configfile="*.pac *.json"
 v2raycmd="/home/eexpss/app/v2ray-linux-64/v2ray"
-running=`pgrep -af 'v2ray -config'|awk '{print $NF}'`
+#~ running=`pgrep -af 'v2ray -config'|awk '{print $NF}'`
+running=`pgrep -af 'v2ray -config'|sed 's/.*config\ //'`
 
 off(){
 	gsettings set org.gnome.system.proxy mode 'none'
@@ -26,17 +27,16 @@ on(){
 	}
 
 cd $configpath
-list=""
-list+="关闭全局代理／停止后台 "
-list+="全部数据走代理 "
+list=( "关闭全局代理／停止后台" "全部数据走代理" )
 
 for file in $configfile; do
-	list+="$file "
+	list+=( "$file" )
+#~ 数组带空格，需要加“”
 done
 
 [ -n "$running" ] && m="已运行-$running" || m="v2ray没有运行"
-key=`zenity --window-icon=web --width=400 --height=500 --list --column=$m --text=选择代理设置 $list`
-
+key=`zenity --window-icon=web --width=400 --height=500 --list --column="$m" --text=选择代理设置 "${list[@]}"`
+#~ 数组带空格，需要加“”
 #-----------------------------
 case $key in
 	关闭*)
@@ -58,7 +58,7 @@ case $key in
 		pkill -9 -x ${v2raycmd##*/}
 		if [ -x $v2raycmd ]; then
 			on
-			$v2raycmd -config $key &
+			$v2raycmd -config "$key" &
 		else
 			echo "没安装命令行的v2ray软件。"; exit
 		fi

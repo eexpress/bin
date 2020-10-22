@@ -3,10 +3,6 @@
 set -o vi
 export VGL_LOGO=1	# Bumbleebee显示右下角VGL标记
 
-TERM=dumb
-TERM=xterm
-TERM=xterm-256color	# 放在所有tput之前。
-
 #-------ALIAS------------------------------------
 [ "$(whoami)" == "root" ] && sudostr="" || sudostr="sudo"
 ##			-------- 软件包管理 --------
@@ -41,6 +37,7 @@ fi
 ##------- ---------
 
 alias cn='export LC_ALL=zh_CN.UTF-8'
+cn
 alias en='export LC_ALL=C'
 alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
 
@@ -78,6 +75,7 @@ u(){ \du -sch "$@" 2>/dev/null|sort -rh; }
 # 鼠标选择路径或文件，快速进入目录。
 d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
 
+export TERM=xterm-256color	# 放在所有tput之前。
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
 #man terminfo: set_a_foreground -> setaf; set_a_background -> setab;
@@ -91,7 +89,7 @@ export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)		# exit_underline_mode
 export LESS_TERMCAP_mr=$(tput rev)		# enter_reverse_mode
 export LESS_TERMCAP_mh=$(tput dim)		# enter_dim_mode (half-bright)
 export MANPAGER="/usr/bin/less"
-export GROFF_NO_SGR=1	#fix no color in Fedora 25
+#~ export GROFF_NO_SGR=1	#fix no color in Fedora 25
 
 #-------ENVIROMENT SET-----------------------------
 if [ "$(whoami)" != "root" ]; then

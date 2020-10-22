@@ -7,8 +7,10 @@ use 5.010;
 no warnings 'experimental::smartmatch';
 use MIME::Base64;
 use JSON;
+use utf8::all;
+#~ ⭕ pi libutf8-all-perl
 
-$savepath="$ENV{HOME}/v2ray.json/";
+$savepath="$ENV{HOME}/v2ray的配置/";
 
 #暂时禁止剪贴板操作。
 #$_=$ARGV[0]//`xclip -o`;
