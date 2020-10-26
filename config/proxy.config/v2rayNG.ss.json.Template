@@ -1,0 +1,98 @@
+{
+  "dns": {
+    "hosts": {
+      "domain:googleapis.cn": "googleapis.com"
+    },
+    "servers": [
+      "1.1.1.1"
+    ]
+  },
+  "inbounds": [
+    {
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "userLevel": 8
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls"
+        ],
+        "enabled": false
+      },
+      "tag": "socks"
+    },
+    {
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "userLevel": 8
+      },
+      "tag": "http"
+    }
+  ],
+  "log": {
+    "loglevel": "warning"
+  },
+  "outbounds": [
+    {
+      "mux": {
+        "concurrency": -1,
+        "enabled": false
+      },
+      "protocol": "shadowsocks",
+      "settings": {
+        "servers": [
+          {
+            "address": "xxxadd",
+            "level": 8,
+            "method": "xxxmethod",
+            "ota": false,
+            "password": "xxxpassword",
+            "port": xxxport
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp"
+      },
+      "tag": "proxy"
+    },
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      },
+      "tag": "block"
+    }
+  ],
+  "policy": {
+    "levels": {
+      "8": {
+        "connIdle": 300,
+        "downlinkOnly": 1,
+        "handshake": 4,
+        "uplinkOnly": 1
+      }
+    },
+    "system": {
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": []
+  },
+  "stats": {}
+}

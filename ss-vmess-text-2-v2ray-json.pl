@@ -99,7 +99,7 @@ sub savess(){
 
 	# v2ray不认ss格式的json文件
 	# 输出成v2ray格式的json文件
-	$if='/home/eexpss/bin/config/proxy.config/Simple.ss.json.Template';
+	$if='/home/eexpss/bin/config/proxy.config/v2rayNG.ss.json.Template';
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 	s/xxxadd/$add/; s/xxxport/$port/;
 	s/xxxmethod/$method/; s/xxxpassword/$password/;
@@ -118,7 +118,7 @@ sub vmess(){
 	if($rh->{"add"} eq ""){say "格式无效"; exit;}
 
 	# 输出成v2ray格式的json文件
-	$if='/home/eexpss/bin/config/proxy.config/Simple.vmess.json.Template';
+	$if='/home/eexpss/bin/config/proxy.config/v2rayNG.vmess.json.Template';
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 	s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
 	s/xxxid/$rh->{id}/; s/xxxaid/$rh->{aid}/;
