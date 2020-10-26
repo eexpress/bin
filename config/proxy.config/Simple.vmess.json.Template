@@ -1,35 +1,113 @@
 {
-	"log": { "loglevel": "info" },
-//手机BifrostV导出的V2ray配置，缺少inbounds段。需要复制过去，否则本地没端口。
-//---------------------------
-	"dns": { "servers": [ "8.8.4.4", "1.1.1.1" ] },
-//---------------------------
-	"inbounds": [
-	{ "listen": "127.0.0.1", "port": 8888, "protocol": "http" },
-	// 本机 SOCKS 代理端口
-	{ "listen": "127.0.0.1", "port": 1088,
-	"protocol": "socks", "settings": { "udp": true } }
-	],
-//---------------------------
-	"outbounds": [
-		{"protocol": "vmess",	//协议
-		"settings": {
-			"vnext": [{
-				"address": "xxxadd",	// 服务器地址
-				"port": xxxport,	// 服务器端口
-				// ID 和 AlterID
-				"users": [{ "id": "xxxid", "alterId": xxxaid }]
-				 }]},
-		"streamSettings": { "network": "xxxnet", "security": "xxxtls",
-        "tlsSettings": { "serverName": "", "allowInsecure": false },
-        "wsSettings": { "path": "xxxhost", "headers": {} }
-		}},
-		{ "protocol": "freedom", "settings": {}, "tag": "direct" },
-		{ "protocol": "blackhole", "settings": {}, "tag": "block" }
-	],
-//---------------------------
-	"routing": {
-		"domainStrategy": "IPIfNonMatch",
-		"rules": [{ "type": "field", "ip": [ "geoip:private", "geoip:cn" ],
-		"outboundTag": "direct" }]}
+  "dns": {
+    "hosts": {
+      "domain:googleapis.cn": "googleapis.com"
+    },
+    "servers": [
+      "1.1.1.1"
+    ]
+  },
+  "inbounds": [
+    {
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "userLevel": 8
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls"
+        ],
+        "enabled": false
+      },
+      "tag": "socks"
+    },
+    {
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "userLevel": 8
+      },
+      "tag": "http"
+    }
+  ],
+  "log": {
+    "loglevel": "warning"
+  },
+  "outbounds": [
+    {
+      "mux": {
+        "concurrency": -1,
+        "enabled": false
+      },
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "xxxadd",
+            "port": xxxport,
+            "users": [
+              {
+                "alterId": xxxaid,
+                "id": "xxxid",
+                "level": 8,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xxxnet",
+        "security": "xxxtls",
+        "tlsSettings": {
+          "allowInsecure": false,
+          "serverName": "xxxhost"
+        },
+        "wsSettings": {
+          "headers": {
+            "Host": "xxxhost"
+          },
+          "path": "xxxpath"
+        }
+      },
+      "tag": "proxy"
+    },
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      },
+      "tag": "block"
+    }
+  ],
+  "policy": {
+    "levels": {
+      "8": {
+        "connIdle": 300,
+        "downlinkOnly": 1,
+        "handshake": 4,
+        "uplinkOnly": 1
+      }
+    },
+    "system": {
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": []
+  },
+  "stats": {}
 }

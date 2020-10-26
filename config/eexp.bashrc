@@ -35,9 +35,8 @@ else
 	plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 fi
 ##------- ---------
-
+export LC_ALL=zh_CN.UTF-8
 alias cn='export LC_ALL=zh_CN.UTF-8'
-cn
 alias en='export LC_ALL=C'
 alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
 

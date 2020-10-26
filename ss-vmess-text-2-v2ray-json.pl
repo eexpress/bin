@@ -123,10 +123,9 @@ sub vmess(){
 	s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
 	s/xxxid/$rh->{id}/; s/xxxaid/$rh->{aid}/;
 	s/xxxnet/$rh->{net}/; s/xxxtls/$rh->{tls}/;
-	#~ $tmp=$rh->{host}; $tmp=~s'/'\/'g; s/xxxhost/$tmp/;
-	$tmp=$rh->{host}; s/xxxhost/$tmp/;
+	s/xxxpath/$rh->{path}/;
+	s/xxxhost/$rh->{host}/g;
 	$tmp=$rh->{ps}; $tmp=~s/\[.*\]//;
-#	$f="$ENV{HOME}/vv-$tmp.json";
 	$f=$savepath."vv-$tmp.json";
 	open OUT,">$f"; say $f;
 	print OUT $_; close OUT;

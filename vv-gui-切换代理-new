@@ -8,6 +8,8 @@ configfile="*.pac *.json"
 v2raycmd="/home/eexpss/app/v2ray-linux-64/v2ray"
 #~ running=`pgrep -af 'v2ray -config'|awk '{print $NF}'`
 running=`pgrep -af 'v2ray -config'|sed 's/.*config\ //'`
+socksport=1088
+httpport=8888
 
 off(){
 	gsettings set org.gnome.system.proxy mode 'none'
@@ -16,14 +18,15 @@ off(){
 
 on(){
 	gsettings set org.gnome.system.proxy mode 'manual'
-	gsettings set org.gnome.system.proxy.http port 8888
-	gsettings set org.gnome.system.proxy.https port 8888
-	gsettings set org.gnome.system.proxy.ftp port 8888
-	gsettings set org.gnome.system.proxy.socks port 1088
+	gsettings set org.gnome.system.proxy.http port $httpport
+	gsettings set org.gnome.system.proxy.https port $httpport
+	gsettings set org.gnome.system.proxy.ftp port $httpport
+	gsettings set org.gnome.system.proxy.socks port $socksport
 	gsettings set org.gnome.system.proxy.http host '127.0.0.1'
 	gsettings set org.gnome.system.proxy.https host '127.0.0.1'
 	gsettings set org.gnome.system.proxy.ftp host '127.0.0.1'
 	gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
+	#~ ⭕ gsettings list-recursively org.gnome.system.proxy
 	}
 
 cd $configpath
@@ -54,8 +57,21 @@ case $key in
 		gsettings set org.gnome.system.proxy mode 'auto'
 		;;
 	*.json)
-		echo "切换到v2ray代理 $key"
+		echo "--------------------------------"
+		echo "切换到代理: $key"
 		pkill -9 -x ${v2raycmd##*/}
+		echo "--------------------------------"
+		#~ JSON模块不认注释
+		parse=`cat "$key"|perl -e 'use JSON; local $/=undef; $_=<>; s"//.*""g; $json=decode_json $_; \
+		print $json->{inbounds}[0]->{protocol}.":\t".$json->{inbounds}[0]->{port}."\t|\t"; \
+		print $json->{inbounds}[1]->{protocol}.":\t".$json->{inbounds}[1]->{port}."\n";'`
+		echo $parse
+		echo "--------------------------------"
+		tmpp=`echo $parse|sed 's/|/\n/'|grep 'http'|sed 's/.*:\s//'`
+		[ $tmpp -ge 1000 ] && httpport=$tmpp
+		tmpp=`echo $parse|sed 's/|/\n/'|grep 'socks'|sed 's/.*:\s//'`
+		[ $tmpp -ge 1000 ] && socksport=$tmpp
+
 		if [ -x $v2raycmd ]; then
 			on
 			$v2raycmd -config "$key" &
