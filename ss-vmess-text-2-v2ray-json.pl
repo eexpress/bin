@@ -18,6 +18,7 @@ $_=shift;
 given($_){
 	when (m'^--?h(elp)?$')		{help()}
 	when (m'^--?s(creen)?$')	{screen()}
+	when (m'^--?c(lip)?$')		{clip()}
 	when (undef)				{help()}
 	when (-f && /\.(png|jpg)$/)	{img()}
 	when (m'^ss://')			{ss()}
@@ -26,6 +27,17 @@ given($_){
 #	default						{text()}
 }
 
+#-------------------
+sub clip(){
+	$clip=`xclip -o`;
+	while($clip=~m'^.{2,5}://.*$'mg){
+		$_=$&;
+		given($_){
+			when (m'^ss://')			{ss()}
+			when (m'^vmess://')			{vmess()}
+		}
+	}
+}
 #-------------------
 sub screen(){
 	die "需要安装ImageMagick才能自动截屏，识别二维码。" if ! -x "/usr/bin/import";
@@ -40,7 +52,8 @@ sub help(){
 	say "---------------------------------------";
 	say "支持ss原版的二维码识别。(需要安装zbarimg)";
 	say "为了统一使用v2ray，不支持ssr字符串。";
-	say "-s --screen 可以截屏识别二维码。暂时使用import截图，需要安装ImagMagick。没添加scrot支持。"
+	say "-s --screen 可以截屏识别二维码。暂时使用import截图，需要安装ImagMagick。没添加scrot支持。";
+	say "-c --clip 可以读取剪贴板的多行数据。";
 }
 #-------------------
 sub img(){
@@ -104,6 +117,7 @@ sub savess(){
 	s/xxxadd/$add/; s/xxxport/$port/;
 	s/xxxmethod/$method/; s/xxxpassword/$password/;
 #    $f="$ENV{HOME}/vss-$remark.json";
+	$remark=~s'.*/''g;
 	$f=$savepath."vss-$remark.json";
 	open OUT,">$f"; say $f;
 	print OUT $_; close OUT;
@@ -126,6 +140,7 @@ sub vmess(){
 	s/xxxpath/$rh->{path}/;
 	s/xxxhost/$rh->{host}/g;
 	$tmp=$rh->{ps}; $tmp=~s/\[.*\]//;
+	$tmp=~s'.*/''g;
 	$f=$savepath."vv-$tmp.json";
 	open OUT,">$f"; say $f;
 	print OUT $_; close OUT;
