@@ -18,7 +18,8 @@ $_=shift;
 given($_){
 	when (m'^--?h(elp)?$')		{help()}
 	when (m'^--?s(creen)?$')	{screen()}
-	when (m'^--?c(lip)?$')		{clip()}
+	when (m'^--?c(lip)?$')		{$multilines=`xclip -o`;deal_multilines();}
+	when (m'^--?p(ipe)?$')		{local $/=undef;$multilines=<>;deal_multilines();}
 	when (undef)				{help()}
 	when (-f && /\.(png|jpg)$/)	{img()}
 	when (m'^ss://')			{ss()}
@@ -28,9 +29,8 @@ given($_){
 }
 
 #-------------------
-sub clip(){
-	$clip=`xclip -o`;
-	while($clip=~m'^.{2,5}://.*$'mg){
+sub deal_multilines(){
+	while($multilines=~m'^.{2,5}://.*$'mg){
 		$_=$&;
 		given($_){
 			when (m'^ss://')			{ss()}
@@ -50,10 +50,11 @@ sub help(){
 	say "参数: ss/vmess字符串/网页明文表格文本，转换成v2ray格式的json文件。";
 	say "参数: json文件，转换成对应的ss/vmess字符串。并在tty显示二维码。";
 	say "---------------------------------------";
-	say "支持ss原版的二维码识别。(需要安装zbarimg)";
+	say "支持二维码jpg/png文件识别。(需要安装zbarimg)";
 	say "为了统一使用v2ray，不支持ssr字符串。";
-	say "-s --screen 可以截屏识别二维码。暂时使用import截图，需要安装ImagMagick。没添加scrot支持。";
+	say "-s --screen 可以识别屏幕二维码。暂时使用import截图，需要安装ImagMagick。没添加scrot支持。";
 	say "-c --clip 可以读取剪贴板的多行数据。";
+	say "-p --pipe 可以读取管道的多行数据。";
 }
 #-------------------
 sub img(){
