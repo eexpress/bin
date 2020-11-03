@@ -182,9 +182,11 @@ sub json(){
 sub qrcode(){
 	# 让外部命令的显示，输出到父进程。
 	if (! -x "/usr/bin/qrencode"){say "可以安装qrencode显示二维码。";return;}
-	open(PROCS,"qrencode -t ANSI256 \'$_\'|");
-	@_=<PROCS>; pop; pop; pop; shift; shift; shift;		#去掉上下三行
-	for(@_){s"^([^ ]+)\ {4}"\1"; s"\ {4}([^ ]+)$"\1";}	#左右去掉四列
+	#~ open(PROCS,"qrencode -t ANSI256 \'$_\'|");
+	open(PROCS,"qrencode -t UTF8 \'$_\'|");
+	@_=<PROCS>;
+	#~ pop; pop; pop; shift; shift; shift;		#去掉上下三行
+	#~ for(@_){s"^([^ ]+)\ {4}"\1"; s"\ {4}([^ ]+)$"\1";}	#左右去掉四列
 	print @_;
 	close(PROCS);
 }
