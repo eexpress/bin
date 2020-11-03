@@ -9,6 +9,7 @@ use MIME::Base64;
 use JSON;
 use utf8::all;
 #~ ⭕ pi libutf8-all-perl
+use Encode;
 
 $savepath="$ENV{HOME}/v2ray的配置/";
 
@@ -150,6 +151,7 @@ sub vmess(){
 sub json(){
 	say "----\t\Ujson\t----";
 	open IN,"<$_" or die "打开文件失败。";
+	$ps=$_;
 	$_=join "\n",<IN>; close IN;
 	s'//.+$''mg; $json=decode_json $_;
 #    use Data::Dumper; printf Dumper($json)."\n"; say "============";
@@ -169,11 +171,21 @@ sub json(){
 			$port=$json->{outbounds}[0]->{settings}->{vnext}[0]->{port};
 			$id=$json->{outbounds}[0]->{settings}->{vnext}[0]->{users}[0]->{id};
 			$aid=$json->{outbounds}[0]->{settings}->{vnext}[0]->{users}[0]->{alterId};
-			$_="{\"add\":\"$add\",\"aid\":\"$aid\",\"id\":\"$id\",\"port\":\"$port\",\"ps\":\"$add\"}";
+			$net=$json->{outbounds}[0]->{streamSettings}->{network};
+			$tls=$json->{outbounds}[0]->{streamSettings}->{security};
+			$host=$json->{outbounds}[0]->{streamSettings}->{wsSettings}->{headers}->{Host};
+			$path=$json->{outbounds}[0]->{streamSettings}->{wsSettings}->{path};
+			$_="{
+\"add\":\"$add\",\"aid\":\"$aid\",\"host\":\"$host\",\"id\":\"$id\",
+\"net\":\"$net\",\"path\":\"$path\",\"port\":\"$port\",
+\"ps\":\"$ps\",\"tls\":\"$tls\",\"type\":\"none\",\"v\":\"2\"
+			}";
 			say; say "============";
-			$_="vmess://".encode_base64($_);
+			$_="vmess://".encode_base64(encode('utf8',$_));	#ps里面经常有emoji字符。这个base64模块居然不认。
 			s/\n//sg;
 			chomp; qrcode(); say;
+# 手机上的v2rayNG，扫描vmess二维码，或者读入剪贴板，会把 host 和 path 搞乱。奇怪的bug。????????
+# 必须加上 type 和 v 字段，才正确。
 		}
 		default		{say "无效的协议格式。"}
 	}
@@ -183,7 +195,7 @@ sub qrcode(){
 	# 让外部命令的显示，输出到父进程。
 	if (! -x "/usr/bin/qrencode"){say "可以安装qrencode显示二维码。";return;}
 	#~ open(PROCS,"qrencode -t ANSI256 \'$_\'|");
-	open(PROCS,"qrencode -t UTF8 \'$_\'|");
+	open(PROCS,"qrencode -t ANSIUTF8 \'$_\'|");
 	@_=<PROCS>;
 	#~ pop; pop; pop; shift; shift; shift;		#去掉上下三行
 	#~ for(@_){s"^([^ ]+)\ {4}"\1"; s"\ {4}([^ ]+)$"\1";}	#左右去掉四列
