@@ -19,8 +19,8 @@ $_=shift;
 given($_){
 	when (m'^--?h(elp)?$')		{help()}
 	when (m'^--?s(creen)?$')	{screen()}
-	when (m'^--?c(lip)?$')		{$multilines=`xclip -o`;deal_multilines();}
-	when (m'^--?p(ipe)?$')		{local $/=undef;$multilines=<>;deal_multilines();}
+	when (m'^--?c(lip)?$')		{$mline=`xclip -o`;处理多行输入();}
+	when (m'^--?p(ipe)?$')		{local $/=undef;$mline=<>;处理多行输入();}
 	when (undef)				{help()}
 	when (-f && /\.(png|jpg)$/)	{img()}
 	when (m'^ss://')			{ss()}
@@ -30,8 +30,8 @@ given($_){
 }
 
 #-------------------
-sub deal_multilines(){
-	while($multilines=~m'^.{2,5}://.*$'mg){
+sub 处理多行输入(){
+	while($mline=~m'^.{2,5}://.*$'mg){
 		$_=$&;
 		given($_){
 			when (m'^ss://')			{ss()}
