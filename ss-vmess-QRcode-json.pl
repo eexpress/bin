@@ -16,17 +16,16 @@ $template_path="$ENV{HOME}/bin/config/proxy.config/";
 
 $_=shift;
 given($_){
-	when (m'^--?h(elp)?$')		{help()}
 	when (m'^--?s(creen)?$')	{screen()}
 	when (m'^--?c(lip)?$')		{$mline=`xclip -o -selection clip`;处理多行输入();}		#剪贴板，从手机v2rayNG"导出全部配置至剪贴板"
 	when (m'^-x$')		{$mline=`xclip -o -selection primary`;处理多行输入();}	#鼠标选择
 	when (m'^--?p(ipe)?$')		{local $/=undef;$mline=<>;处理多行输入();}
-	when (undef)				{help()}
+
 	when (-f && /\.(png|jpg)$/)	{img()}
 	when (m'^ss://')			{ss()}
 	when (m'^vmess://')			{vmess()}
 	when (-f && /\.json$/)		{json()}
-#	default						{text()}
+	default						{help()}
 }
 
 #-------------------
@@ -48,15 +47,12 @@ sub screen(){
 }
 #-------------------
 sub help(){
-	say "参数: ss/vmess字符串/网页明文表格文本，转换成v2ray格式的json文件。";
-	say "参数: json文件，转换成对应的ss/vmess字符串。并在tty显示二维码。";
+	say "参数: ss/vmess字符串/二维码图片(需要安装zbarimg)，转换成v2ray格式的json文件。";
+	say "参数: json文件，转换成对应的ss/vmess字符串，并在tty显示二维码。";
 	say "---------------------------------------";
-	say "支持二维码jpg/png文件识别。(需要安装zbarimg)";
-	say "为了统一使用v2ray，不支持ssr字符串。";
-	say "-s --screen 可以识别屏幕二维码。暂时使用import截图，需要安装ImagMagick。没添加scrot支持。";
-	say "-c --clip 可以读取剪贴板的多行数据。适合于从手机v2rayNG\"导出全部配置至剪贴板\"。";
-	say "-x 可以读取鼠标选择的多行数据。";
-	say "-p --pipe 可以读取管道的多行数据。";
+	say "-s --screen 识别屏幕二维码。使用import截图(需要安装ImagMagick)。";
+	say "-c --clip 读取剪贴板的多行数据。适合于从手机v2rayNG\"导出全部配置至剪贴板\"，通过gsconnect共享。";
+	say "-x 读取鼠标选中的多行数据。-p --pipe 读取管道的多行数据。";
 }
 #-------------------
 sub img(){
