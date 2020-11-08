@@ -11,15 +11,15 @@ use utf8::all;
 #~ ⭕ pi libutf8-all-perl
 use Encode;
 
-$savepath="$ENV{HOME}/v2ray的配置/";
+$save_path="$ENV{HOME}/v2ray的配置/";
+$template_path="$ENV{HOME}/bin/config/proxy.config/";
 
-#暂时禁止剪贴板操作。
-#$_=$ARGV[0]//`xclip -o`;
 $_=shift;
 given($_){
 	when (m'^--?h(elp)?$')		{help()}
 	when (m'^--?s(creen)?$')	{screen()}
-	when (m'^--?c(lip)?$')		{$mline=`xclip -o`;处理多行输入();}
+	when (m'^--?c(lip)?$')		{$mline=`xclip -o -selection clip`;处理多行输入();}		#剪贴板，从手机v2rayNG"导出全部配置至剪贴板"
+	when (m'^-x$')		{$mline=`xclip -o -selection primary`;处理多行输入();}	#鼠标选择
 	when (m'^--?p(ipe)?$')		{local $/=undef;$mline=<>;处理多行输入();}
 	when (undef)				{help()}
 	when (-f && /\.(png|jpg)$/)	{img()}
@@ -54,15 +54,13 @@ sub help(){
 	say "支持二维码jpg/png文件识别。(需要安装zbarimg)";
 	say "为了统一使用v2ray，不支持ssr字符串。";
 	say "-s --screen 可以识别屏幕二维码。暂时使用import截图，需要安装ImagMagick。没添加scrot支持。";
-	say "-c --clip 可以读取剪贴板的多行数据。";
+	say "-c --clip 可以读取剪贴板的多行数据。适合于从手机v2rayNG\"导出全部配置至剪贴板\"。";
+	say "-x 可以读取鼠标选择的多行数据。";
 	say "-p --pipe 可以读取管道的多行数据。";
 }
 #-------------------
 sub img(){
 # BifrostV 居然用(半截)明文二维码。。。算了。。
-#QR-Code:ss://YWVzLTI1Ni1jZmI6VWowTW9vSVpYRWF4@139.16.19.233:54230#139.16.19.233
-#QR-Code:bfv://139.16.19.233:54230/shadowsocks/1?rtype=lanina&dns=8.8.8.8&method=aes-256-cfb&pass=Uj0MooEax&ota=0&tcp=header%3Dnone%26req%3D#139.162.194.233
-
 # 只支持ss原版的二维码
 #ss://YWVzLTI1Ni1jZmI6VWowTW9vSVpYRWF4QDEzOS4xNjIuMTk0LjIzMzo1NDIzMAo=
 	say "----\t\Uimg\t----";
@@ -86,55 +84,35 @@ sub ss(){
 	$_=decode_base64($_);
 	s/\@/:/; ($method,$password,$add,$port)=split ':';
 	$remark||=$add;
-	savess();
-}
-#-------------------
-#sub text(){
-##157.245.48.12 	17975 	isx-30216959 	aes-256-cfb
-#	say "----\t\Utext\t----";
-#	@_=split /\s+/;
-#	if($#_ ne 3){say "数据必须4个，格式无效"; exit;}
-#	for(@_){
-#		when(/^$/) {}	#网页表格鼠标选择后，夹杂空格和制表符。split导致空字符串，影响default的赋值。所以需要跳过。
-#		when(/\d{1,3}(\.\d{1,3}){3}/)	{$add=$_}
-#		when(/[\w-]+(\.[\w-]+){2}/)		{$add=$_}
-#		when(/^\d{3,5}$/)				{$port=$_}
-#		when(/^[ac]\w+(-\w+){0,2}/)		{$method=$_}
-#		default		{$password=$_}
-#	}
-#	$remark=$add;
-#	if(! $port || ! $password || ! $method){say "缺少必要数据，格式无效"; exit;}
-#	savess();
-#}
-#-------------------
-sub savess(){
+	$remark=`URI-Escape-转码.pl $remark`;
+
 	say "$method \t$password \t$add \t$port\t$remark";
 	say "==================";
 	if($add eq ""){say "无地址，格式无效"; exit;}
 
 	# v2ray不认ss格式的json文件
 	# 输出成v2ray格式的json文件
-	$if='/home/eexpss/bin/config/proxy.config/v2rayNG.ss.json.Template';
+	$if="$template_path/v2rayNG.ss.json.Template";
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 	s/xxxadd/$add/; s/xxxport/$port/;
 	s/xxxmethod/$method/; s/xxxpassword/$password/;
 #    $f="$ENV{HOME}/vss-$remark.json";
 	$remark=~s'.*/''g;
-	$f=$savepath."vss-$remark.json";
-	open OUT,">$f"; say $f;
-	print OUT $_; close OUT;
+	$f=$save_path."vss-$remark.json";
+	open OUT,">$f"; say $f; say ""; print OUT $_; close OUT;
 }
 #-------------------
 sub vmess(){
 	say "----\t\Uvmess\t----";
 	s'^vmess://'';
-	$_=decode_base64($_);
-	say; say "==================";
-	$rh=decode_json($_);
+	$_=decode_base64($_);	#decode_base64解码后的中文，无utf8标识，会乱码输出。
+	$tmp=$_; Encode::_utf8_on($tmp);
+	say $tmp; say "==================";
+	$rh=decode_json($_);	#decode_json可以正常识别utf8。
 	if($rh->{"add"} eq ""){say "格式无效"; exit;}
 
 	# 输出成v2ray格式的json文件
-	$if='/home/eexpss/bin/config/proxy.config/v2rayNG.vmess.json.Template';
+	$if="$template_path/v2rayNG.vmess.json.Template";
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 	s/xxxadd/$rh->{add}/; s/xxxport/$rh->{port}/;
 	s/xxxid/$rh->{id}/; s/xxxaid/$rh->{aid}/;
@@ -142,10 +120,9 @@ sub vmess(){
 	s/xxxpath/$rh->{path}/;
 	s/xxxhost/$rh->{host}/g;
 	$tmp=$rh->{ps}; $tmp=~s/\[.*\]//;
-	$tmp=~s'.*/''g;
-	$f=$savepath."vv-$tmp.json";
-	open OUT,">$f"; say $f;
-	print OUT $_; close OUT;
+	$tmp=~s'.*/''g;	#ps里面可能带有斜杆。
+	$f=$save_path."vv-$tmp.json";
+	open OUT,">$f"; say $f; say ""; print OUT $_; close OUT;
 }
 #-------------------
 sub json(){
