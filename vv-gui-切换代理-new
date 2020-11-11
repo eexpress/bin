@@ -1,13 +1,14 @@
 #!/bin/bash
 
-# zenity版本。切换json代理和pac设置。
+# yad版本。切换json代理和pac设置。
 # 使用v2ray来统管shadowsocks+v2ray的json
 
 configpath="$HOME/v2ray的配置"
-configfile="*.pac *.json"
+#~ configfile="*.pac *.json"
 v2raycmd="/home/eexpss/app/v2ray-linux-64/v2ray"
 #~ running=`pgrep -af 'v2ray -config'|awk '{print $NF}'`
-running=`pgrep -af 'v2ray -config'|sed 's/.*config\ //'`
+#~ running=`pgrep -af 'v2ray -config'|sed 's/.*config\ //'`
+running=`pgrep -af "$v2raycmd -config"|cut -d' ' -f 4`
 socksport=1088
 httpport=8888
 
@@ -30,16 +31,23 @@ on(){
 	}
 
 cd $configpath
-list=( "关闭全局代理／停止后台" "全部数据走代理" )
+list=( "<span background='#DB4C44' foreground='#fff'><b> shutdown </b></span>" "关闭全局代理／停止后台" )
 
-for file in $configfile; do
+for file in *.json; do
+	protocol=""; color="#fff"
+	grep 'vmess' "$file" 1>/dev/null && protocol="vmess" && color="#3465a4"
+	grep 'shadowsocks' "$file" 1>/dev/null && protocol="shadowsocks" && color="#288722"
+	list+=( "<span background='$color' foreground='#fff'><b> $protocol </b></span>" )
+	[ "$running" == "$file" ] && file="<span background='#4DDB44' foreground='#fff'><b> $file </b></span>"
+	#~ [ "$running" == "$file" ] && file="+$file"
 	list+=( "$file" )
 #~ 数组带空格，需要加“”
 done
 
-[ -n "$running" ] && m="已运行-$running" || m="v2ray没有运行"
-key=`zenity --window-icon=web --width=400 --height=500 --list --column="$m" --text=选择代理设置 "${list[@]}"`
-#~ 数组带空格，需要加“”
+#~ [ -n "$running" ] && m="已运行-$running" || m="v2ray没有运行"
+#~ key=`zenity --window-icon=web --width=400 --height=500 --list --column="$m" --text=选择代理设置 "${list[@]}"`
+key=`yad --geometry=600x800+20+40 --list --title=选择代理设置 --column="protocol" --column="file" "${list[@]}"`
+key=`echo $key|cut -d\| -f 2`	#如果文件已经在运行，切割后仍会附带pango代码，正好直接不处理。
 #-----------------------------
 case $key in
 	关闭*)
@@ -74,6 +82,7 @@ case $key in
 
 		if [ -x $v2raycmd ]; then
 			on
+			echo "$key" > "$configpath/lastjson"
 			$v2raycmd -config "$key" &
 		else
 			echo "没安装命令行的v2ray软件。"; exit
