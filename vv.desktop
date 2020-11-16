@@ -2,6 +2,6 @@
 Type=Application
 Terminal=false
 Name=vv-gui-切换代理
-Icon=preferences-system-network-proxy.png
+Icon=network-vpn
 Exec=/home/eexpss/bin/vv-gui-切换代理-new
 
