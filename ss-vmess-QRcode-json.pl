@@ -17,15 +17,18 @@ $template_path="$ENV{HOME}/bin/config/proxy.config/";
 $_=shift;
 given($_){
 	when (m'^--?s(creen)?$')	{screen()}
-	when (m'^--?c(lip)?$')		{$mline=`xclip -o -selection clip`;处理多行输入();}		#剪贴板，从手机v2rayNG"导出全部配置至剪贴板"
-	when (m'^-x$')		{$mline=`xclip -o -selection primary`;处理多行输入();}	#鼠标选择
+#剪贴板，从手机v2rayNG"导出全部配置至剪贴板"
+	when (m'^--?c(lip)?$')		{$mline=`xclip -o -selection clip`;处理多行输入();}
+#鼠标选择
+	when (m'^-x$')			{$mline=`xclip -o -selection primary`;处理多行输入();}
 	when (m'^--?p(ipe)?$')		{local $/=undef;$mline=<>;处理多行输入();}
-
+#图片文件或者json配置文件
 	when (-f && /\.(png|jpg)$/)	{img()}
-	when (m'^ss://')			{ss()}
-	when (m'^vmess://')			{vmess()}
 	when (-f && /\.json$/)		{json()}
-	default						{help()}
+#字符串
+	when (m'^ss://')			{ss()}
+	when (m'^vmess://')		{vmess()}
+	default					{help()}
 }
 
 #-------------------
@@ -34,7 +37,7 @@ sub 处理多行输入(){
 		$_=$&;
 		given($_){
 			when (m'^ss://')			{ss()}
-			when (m'^vmess://')			{vmess()}
+			when (m'^vmess://')		{vmess()}
 		}
 	}
 }

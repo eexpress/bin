@@ -2,6 +2,8 @@
 
 KEY=$RANDOM
 
+#~ GtkPlug only works under X11
+
 free|grep '[0-9]'|awk '{printf "%s\n%s\n%s\n",$1,$2*1000,($3/$2*100)}'|\
     yad --plug=$KEY --tabnum=1 --image=gnome-dev-memory  --list --no-selection \
         --column=$"名称" --column=$"容量:sz" --column=$"已用:bar" &
