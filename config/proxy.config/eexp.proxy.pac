@@ -1,5 +1,5 @@
 var darr = [
-'google*', 'gstatic', 'gmail', 'sstatic.net', 'recaptcha.net', 
+'google*', 'gstatic', 'gmail', 'sstatic.net', 'recaptcha.net',
 'youtube', 'chrome.com',
 'pinterest.com', 'pinimg.com',
 'twitter', 'twimg', 'imgur.com',
@@ -12,19 +12,21 @@ var darr = [
 ];
 //'fedoraproject.org', 'youneed.win',
 //'github', 'githubusercontent.com', 'githubassets.com'
-//▶ curl --socks5 127.0.0.1:1080 'http://www.viewdns.info/chinesefirewall/?domain=opensuse.org'|g -o accessible
 
-// https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
+//~ ⭕ curl --proxy 127.0.0.1:10809 https://www.dnsleaktest.com/|g -A1 Hello
+//~ ⭕ curl --socks5 127.0.0.1:10808 https://www.dnsleaktest.com/|g -A1 Hello
+
+var socksport="10808";
+var httpport="10809";
 
 function FindProxyForURL(url, host){
-	var autosocks = 'SOCKS5 localhost:1080';
 	for(var i=0;i<darr.length;i++){
 		var append = '.*';
 		if(darr[i].indexOf('.') != -1){ append = '/*'; }
 		var str0 = '*.' + darr[i] + append;
 		var str1 = '*://' + darr[i] + append;
 		if(shExpMatch(url,str0) || shExpMatch(url,str1))
-			return autosocks;
+			return "PROXY localhost:"+httpport+"; SOCKS5 localhost:"+socksport+"; DIRECT";
 	}
 	return "DIRECT";
 }

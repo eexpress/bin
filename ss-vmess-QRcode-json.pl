@@ -11,7 +11,7 @@ use utf8::all;
 #~ ⭕ pi libutf8-all-perl
 use Encode;
 
-$save_path="$ENV{HOME}/v2ray的配置/";
+$save_path="$ENV{HOME}/app/v2ray的配置/";
 $template_path="$ENV{HOME}/bin/config/proxy.config/";
 
 $_=shift;
