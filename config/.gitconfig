@@ -2,7 +2,7 @@
 	ci = commit
 	st = status
 	co = checkout
-
+; difftool  直接调用 meld
 	d = difftool
 	df = diff
 	df1= diff HEAD^
@@ -42,7 +42,7 @@
 ;     如果取消设置，中文文件名变成\350\256这种
 	quotepath = false
 ;     pager = cat
-	pager = less -r
+;	pager = less -r
 [diff]
 	tool = meld
 [difftool]
