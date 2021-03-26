@@ -7,7 +7,7 @@
 
 #~ $orderurl = "https://iwxf.netlify.app"
 orderurl="https://raw.githubusercontent.com/freefq/free/master/v2"
-file="ss-vmess.order.html"
+file="/tmp/ss-vmess.order.html"
 wget $orderurl -O $file
 #~ -----------------------------------------------
 #~ 保存 json 文件到 “~/app/v2ray的配置” 目录
