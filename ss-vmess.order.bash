@@ -2,13 +2,13 @@
 
 #~ -----------------------------------------------
 #~ 当前目录是仓库就直接 pull，否则直接下载
-#~ [ -d .git ] && git pull || wget https://iwxf.netlify.app -O - index.html
+#~ [ -d .git ] && git pull || wget https://iwxf.netlify.app -O index.html
 #~ git pull 被封了？
 
 #~ $orderurl = "https://iwxf.netlify.app"
-$orderurl = "https://raw.githubusercontent.com/freefq/free/master/v2"
-$file = "/tmp/ss-vmess.order.html"
-wget $orderurl -O - $file
+orderurl="https://raw.githubusercontent.com/freefq/free/master/v2"
+file="ss-vmess.order.html"
+wget $orderurl -O $file
 #~ -----------------------------------------------
 #~ 保存 json 文件到 “~/app/v2ray的配置” 目录
 cat $file | base64 -d | ss-vmess-QRcode-json.pl -p
