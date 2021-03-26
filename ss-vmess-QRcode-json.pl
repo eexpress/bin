@@ -76,12 +76,20 @@ sub img(){
 #-------------------
 sub ss(){
 #ss://base64(method:password@server:port)#remarks
+#ss://base64(method:password)@server:port#remarks 最近又搞成这样？
 	say "----\t\Uss\t----";
 	s'^ss://'';			#去头
 	s/#(?<mark>.*)//;	#去尾。缺省贪婪匹配
 	$remark=$+{mark};
-	$_=decode_base64($_);
-	s/\@/:/; ($method,$password,$add,$port)=split ':';
+	if(/\@/){
+		($code,$ip)=split '\@';
+		($add,$port)=split ':', $ip;
+		($method,$password)=split ':', decode_base64($code);
+	}
+	else{
+		$_=decode_base64($_);
+		s/\@/:/; ($method,$password,$add,$port)=split ':';
+	}
 	$remark||=$add;
 	$remark=`URI-Escape-转码.pl $remark`;
 

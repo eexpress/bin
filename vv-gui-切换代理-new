@@ -36,6 +36,7 @@ list=( "<span background='#DB4C44' foreground='#fff'><b> shutdown </b></span>" "
 
 	#~ echo $lastjson
 for file in *.json; do
+	echo $file
 	protocol=""; color="#fff"
 	grep 'vmess' "$file" 1>/dev/null && protocol="vmess" && color="#3465a4"
 	grep 'shadowsocks' "$file" 1>/dev/null && protocol="shadowsocks" && color="#288722"

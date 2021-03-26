@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#~ stty -ixon
 set -o vi
 export VGL_LOGO=1	# Bumbleebee显示右下角VGL标记
 

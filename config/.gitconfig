@@ -47,7 +47,7 @@
 	tool = meld
 [difftool]
 	prompt = false
-;[http]
-;	proxy = socks5://127.0.0.1:10808
-;[https]
-;	proxy = socks5://127.0.0.1:10808
+[http]
+	proxy = 
+[https]
+	proxy = 
