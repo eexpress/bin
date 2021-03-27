@@ -106,6 +106,7 @@ sub ss(){
 #    $f="$ENV{HOME}/vss-$remark.json";
 	$remark=~s'.*/''g;
 	$f=$save_path."vss-$remark.json";
+	$f=~s/\ //g;
 	open OUT,">$f"; say $f; say ""; print OUT $_; close OUT;
 }
 #-------------------
@@ -129,6 +130,7 @@ sub vmess(){
 	$tmp=$rh->{ps}; $tmp=~s/\[.*\]//;
 	$tmp=~s'.*/''g;	#ps里面可能带有斜杆。
 	$f=$save_path."vv-$tmp.json";
+	$f=~s/\ //g;
 	open OUT,">$f"; say $f; say ""; print OUT $_; close OUT;
 }
 #-------------------
