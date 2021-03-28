@@ -3,20 +3,20 @@
 	st = status
 	co = checkout
 ; difftool  直接调用 meld
-	d = difftool
-	df = diff
+	d= difftool
+	df= diff
 	df1= diff HEAD^
 	df2= diff HEAD^^
 	df3= diff master~3
 	df4= diff master~4
-	d1d	= diff master@{'yesterday'}
-	d2d	= diff master@{'2 days ago'}
-	d3d	= diff master@{'3 days ago'}
+	d1d= diff master@{'yesterday'}
+	d2d= diff master@{'2 days ago'}
+	d3d= diff master@{'3 days ago'}
 
 	dflog = log -p
 	ls = ls-files
-	lg = log --graph -20 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr)%Creset %s'
-	ll = reflog
+	lg = log --graph -10 --pretty=format:'%Cred%h%Creset %Cgreen(%cr)%Creset %s'
+	ll = reflog -20
 	web = instaweb
 ; ----------------------------------------------
 [color]
@@ -48,6 +48,6 @@
 [difftool]
 	prompt = false
 [http]
-	proxy = 
+	proxy =
 [https]
-	proxy = 
+	proxy =
