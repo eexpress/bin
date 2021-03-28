@@ -52,20 +52,20 @@ done
 
 #~ [ -n "$running" ] && m="已运行-$running" || m="v2ray没有运行"
 #~ key=`zenity --window-icon=web --width=400 --height=500 --list --column="$m" --text=选择代理设置 "${list[@]}"`
-key=`yad --geometry=500x500+100+100 --close-on-unfocus \
+key=`yad --geometry=600x800+100+100 --close-on-unfocus \
 --list --column="protocol" --column="file" --search-column=2 --regex-search \
 --title=选择代理设置 --window-icon=network-vpn "${list[@]}"`
-#~ echo $key
-key=`echo $key|cut -d\| -f 2|perl -pe 's/<.*?>//g; s/^\s+|\s+$//g;'`
+#~ echo "$key"
+key=`echo "$key"|cut -d\| -f 2|perl -pe 's/<.*?>//g; s/^\s+|\s+$//g;'`
 # $running 和 $lastjson 条目，会附带pango代码和空格。
 #-----------------------------
-case $key in
+case "$key" in
 	关闭*)
-		echo $key
+		echo "$key"
 		off
 		;;
 	全部*)
-		echo $key
+		echo "$key"
 		on
 		;;
 	*.pac)
