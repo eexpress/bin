@@ -3,5 +3,5 @@ Type=Application
 Terminal=false
 Name=vv-gui-切换代理
 Icon=network-vpn
-Exec=/home/eexpss/bin/v2ray/vv-gui-切换代理-new
+Exec=/home/eexpss/bin/v2ray/3.vv-gui-切换代理-new.bash
 
