@@ -93,15 +93,8 @@ export MANPAGER="/usr/bin/less"
 
 #-------ENVIROMENT SET-----------------------------
 if [ "$(whoami)" != "root" ]; then
-	#~ export PUB_HOSTED_URL=https://pub.flutter-io.cn
-	#~ export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
-	#~ export ANDROID_HOME=$HOME/app/android-sdk-linux
-	#~ export ANDROID_SDK_ROOT=$HOME/app/android-sdk-linux
-
-	#~ PATH=$HOME/app/flutter/bin:$HOME/app/android-studio/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:$PATH
-	#~ 以上为 flutter+android studio+android SDK 所需的设置
 	export PATH=$HOME/bin:$PATH
-	export CDPATH=:~:~/bin:~/app:~/github🈵仓库:
+	export CDPATH=:~:~/bin:~/project:
 fi
 #-------PS1 COLOR----------------------------------
 	darkgreen="0x16"	#dark green
