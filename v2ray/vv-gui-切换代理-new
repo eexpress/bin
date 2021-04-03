@@ -4,7 +4,7 @@
 # 使用v2ray来统管shadowsocks+v2ray的json
 
 cd $(dirname $0)
-configpath="./Json"
+configpath="$(pwd)/Json"
 #~ configfile="*.pac *.json"
 v2raycmd="$(pwd)/v2ray"
 #~ running=`pgrep -af 'v2ray -config'|awk '{print $NF}'`
