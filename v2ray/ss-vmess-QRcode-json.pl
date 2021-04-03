@@ -11,8 +11,11 @@ use utf8::all;
 #~ ⭕ pi libutf8-all-perl
 use Encode;
 
-$save_path="$ENV{HOME}/app/v2ray.config/";
-$template_path="$ENV{HOME}/bin/config/proxy.config/";
+use File::Basename;
+use Cwd "abs_path";
+chdir dirname(abs_path($0));
+$save_path="./Json/";
+$template_path="./Template/";
 
 $_=shift;
 given($_){
@@ -91,7 +94,7 @@ sub ss(){
 		s/\@/:/; ($method,$password,$add,$port)=split ':';
 	}
 	$remark||=$add;
-	$remark=`URI-Escape-转码.pl $remark`;
+	$remark=`./URI-Escape-转码.pl $remark`;
 
 	say "$method \t$password \t$add \t$port\t$remark";
 	say "==================";

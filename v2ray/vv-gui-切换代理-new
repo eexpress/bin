@@ -3,9 +3,10 @@
 # yad版本。切换json代理和pac设置。
 # 使用v2ray来统管shadowsocks+v2ray的json
 
-configpath="$HOME/app/v2ray.config"
+cd $(dirname $0)
+configpath="./Json"
 #~ configfile="*.pac *.json"
-v2raycmd="/home/eexpss/app/v2ray-linux-64/v2ray"
+v2raycmd="$(pwd)/v2ray"
 #~ running=`pgrep -af 'v2ray -config'|awk '{print $NF}'`
 #~ running=`pgrep -af 'v2ray -config'|sed 's/.*config\ //'`
 running=`pgrep -af "$v2raycmd -config"|cut -d' ' -f 4`
