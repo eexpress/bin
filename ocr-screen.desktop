@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=ocr-screen
+Icon=edit-find-replace
+Exec=/home/eexpss/bin/ocr-screen.bash
+
