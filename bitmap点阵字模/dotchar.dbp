@@ -1,0 +1,58 @@
+[DEBREATE-0.7.13]
+<<CTRL>>
+Package: dotchar
+Version: 1.0
+Maintainer: eexpss <eexpss@gmail.com>
+Section: perl
+Architecture: all
+Priority: standard
+Depends: perl  (>=5.0)
+Description: run dotchar.pl in terminal, display chinese dot array graphic.
+ Display chinese character draw by black and white circle characters. Support 12x12 and 16x16 dots array. It's run in terminal.
+
+<</CTRL>>
+<<FILES>>
+1
+/home/eexpss/bin/bitmap点阵字模/dotchar.pl* -> dotchar.pl -> /usr/bin
+/home/eexpss/bin/bitmap点阵字模/HZK16 -> HZK16 -> /usr/bin
+/home/eexpss/bin/bitmap点阵字模/HZK12 -> HZK12 -> /usr/bin
+<</FILES>>
+<<SCRIPTS>>
+<<PREINST>>
+0
+<</PREINST>>
+<<POSTINST>>
+0
+<</POSTINST>>
+<<PRERM>>
+0
+<</PRERM>>
+<<POSTRM>>
+0
+<</POSTRM>>
+<</SCRIPTS>>
+<<CHANGELOG>>
+<<DEST>>DEFAULT<</DEST>>
+
+<</CHANGELOG>>
+<<COPYRIGHT>>
+
+<</COPYRIGHT>>
+<<MENU>>
+1
+Name=dotchar
+Version=1.0
+Exec=/usr/bin/dotchar.pl
+Comment=Show dot character in terminal
+Type=Application
+Terminal=true
+StartupNotify=false
+Encoding=UTF-8
+Categories=Development;
+<</MENU>>
+<<BUILD>>
+1
+1
+1
+strip
+<</BUILD>>
