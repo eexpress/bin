@@ -4,3 +4,5 @@ github.*
 blog.*
 config/*
 findbook
+*.deb
+*.lintian
