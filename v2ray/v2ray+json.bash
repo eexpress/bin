@@ -1,6 +1,14 @@
 #!/bin/bash
 
-file=`echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS"|head -n 1`
+#~ ⭕ g application/json ~/.config/mimeapps.list
+#~ [Default Applications]
+#~ application/json=v2ray+json.desktop
+#~ [Added Associations]
+#~ application/json=geany.desktop;
+
+#~ file=`echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS"|head -n 1`
+#~ [[ -z $file ]] && file=$1
+file=`realpath $1`
 type=`mimetype -b "$file"`
 if [[ "$type" == "application/json" ]]; then
 	notify-send "🌏 $file"

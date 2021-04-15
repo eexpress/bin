@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=v2ray加载此json
+Icon=network-vpn
+Exec=/home/eexpss/bin/v2ray/v2ray+json.bash
+MimeType=application/json
