@@ -11,7 +11,7 @@ file="/tmp/ss-vmess.order.html"
 wget $orderurl -O - | base64 -d >$file
 #~ -----------------------------------------------
 #~ 保存 json 文件到 “~/app/v2ray.config” 目录
-cat $file | ss-vmess-QRcode-json.pl -p
+cat $file | ./ss-vmess-QRcode-json.pl -p
 
 #~ -----------------------------------------------
 # 执行前，手机打开 kde connect

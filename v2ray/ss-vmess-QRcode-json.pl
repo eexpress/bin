@@ -106,9 +106,9 @@ sub ss(){
 	open IN,"<$if" or die $!; $eof=$/; undef $/; $_=<IN>; $/=$eof; close IN;
 	s/xxxadd/$add/; s/xxxport/$port/;
 	s/xxxmethod/$method/; s/xxxpassword/$password/;
-#    $f="$ENV{HOME}/vss-$remark.json";
+#    $f="$ENV{HOME}/ss-$remark.json";
 	$remark=~s'.*/''g;
-	$f=$save_path."vss-$remark.json";
+	$f=$save_path."ss-$remark.json";
 	$f=~s/\ //g;
 	open OUT,">$f"; say $f; say ""; print OUT $_; close OUT;
 }

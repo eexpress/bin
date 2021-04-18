@@ -8,6 +8,6 @@ for f in vv*.json; do
 	../vmessping_amd64_linux -c 3 "$str"
 	r=$?
 	echo "===> $r"
-	[[ $r -eq 1 ]] && mv "$f" ./tmp/ && echo "===> mv 🐞$f🐞 to tmp"
+	[[ $r -eq 1 ]] && mv "$f" ./tmp/ && echo -e "❌❌❌❌❌\n===> mv 🐞$f🐞 to tmp"
 	echo "--------------------"
 done
