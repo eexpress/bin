@@ -13,9 +13,9 @@ use Encode;
 
 use File::Basename;
 use Cwd "abs_path";
-chdir dirname(abs_path($0));
-$save_path="./Json/";
-$template_path="./Template/";
+$scriptpath=dirname(abs_path($0));
+$save_path="$scriptpath/Json/";
+$template_path="$scriptpath/Template/";
 
 $_=shift;
 given($_){
