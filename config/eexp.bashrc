@@ -40,6 +40,7 @@ export LC_ALL=zh_CN.UTF-8
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'
 alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
+alias dms='/usr/bin/dms -path "`pwd`"'	# : Path must be absolute:
 
 alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'

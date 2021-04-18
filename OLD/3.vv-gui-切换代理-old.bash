@@ -65,27 +65,36 @@ case "$key" in
 		echo "$key"
 		off
 		;;
+	全部*)
+		echo "$key"
+		on
+		;;
+	*.pac)
+		echo "自定义代理 $key"
+		fullpath="file://$configpath/$key"
+		gsettings set org.gnome.system.proxy autoconfig-url "$fullpath"
+		gsettings set org.gnome.system.proxy mode 'auto'
+		;;
 	*.json)
 		echo "--------------------------------"
 		echo "切换到代理: $key"
 		pkill -9 -x ${v2raycmd##*/}
 		echo "--------------------------------"
+		#~ JSON模块不认注释
+		parse=`cat "$key"|perl -e 'use JSON; local $/=undef; $_=<>; s"//.*""g; $json=decode_json $_; \
+		print $json->{inbounds}[0]->{protocol}.":\t".$json->{inbounds}[0]->{port}."\t|\t"; \
+		print $json->{inbounds}[1]->{protocol}.":\t".$json->{inbounds}[1]->{port}."\n";'`
+		echo $parse
+		echo "--------------------------------"
+		tmpp=`echo $parse|sed 's/|/\n/'|grep 'http'|sed 's/.*:\s//'`
+		[ $tmpp -ge 1000 ] && httpport=$tmpp
+		tmpp=`echo $parse|sed 's/|/\n/'|grep 'socks'|sed 's/.*:\s//'`
+		[ $tmpp -ge 1000 ] && socksport=$tmpp
+
 		if [ -x $v2raycmd ]; then
+			on
 			echo "$key" > "$configpath/lastjson"
 			$v2raycmd -config "$key" &
-			port=(`netstat -tpan 2>/dev/null|awk '/tcp.*LISTEN.*v2ray/{gsub(/:/,"",$4);print $4}'`);
-			if [ -n ${p[1]} ]; then
-				httpport=${port[1]}; socksport=${port[0]}
-			elif [ -n ${p[0]} ]; then
-				httpport=${port[0]}; socksport="0"
-			else
-				echo "没有打开的端口。"; exit
-			fi
-			echo "--------------------------------"
-			echo $httpport"<->"$socksport
-			gsettings list-recursively org.gnome.system.proxy
-			echo "--------------------------------"
-			on
 		else
 			echo "没安装命令行的v2ray软件。"; exit
 		fi
