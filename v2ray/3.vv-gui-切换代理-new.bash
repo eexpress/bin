@@ -63,6 +63,7 @@ case "$key" in
 	*.json)
 		echo "--------------------------------"
 		echo "切换到代理: $key"
+		notify-send "🌏 $key"
 		pkill -9 -x ${v2raycmd##*/}
 		echo "--------------------------------"
 		if [ -x $v2raycmd ]; then

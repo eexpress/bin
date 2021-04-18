@@ -19,9 +19,9 @@ fi
 
 path=`dirname "$file"`
 cd $path
-#~ last="$path/last.json"
-v2raycmd="/home/eexpss/app/v2ray-linux-64-v2fly-v4.36.2/v2ray"
+file=`basename "$file"`
+v2raycmd="/home/eexpss/bin/v2ray/v2ray"
 
 ln -sf "$file" last.json
 pkill -9 -x "v2ray"
-$v2raycmd -config last.json &
+$v2raycmd -config "$file" &
