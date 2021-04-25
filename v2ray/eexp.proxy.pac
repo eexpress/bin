@@ -8,7 +8,8 @@ var darr = [
 'reddit.com', 'valadoc.org', 'greasyfork.org',
 'thepiratebay',	'wikipedia.org', 'alternativeto.net',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
-'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org'
+'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',
+'askubuntu', 'stackexchange', 'stackoverflow'
 ];
 //'fedoraproject.org', 'youneed.win',
 //'github', 'githubusercontent.com', 'githubassets.com'
