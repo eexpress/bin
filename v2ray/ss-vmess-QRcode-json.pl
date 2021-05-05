@@ -12,7 +12,7 @@ use utf8::all;
 use Encode;
 
 use File::Basename;
-use Cwd "abs_path";
+use Cwd qw(abs_path getcwd);
 $scriptpath=dirname(abs_path($0));
 $save_path="$scriptpath/Json/";
 $template_path="$scriptpath/Template/";
@@ -29,18 +29,22 @@ given($_){
 	when (-f && /\.(png|jpg)$/)	{img()}
 	when (-f && /\.json$/)		{json()}
 #字符串
-	when (m'^ss://')			{ss()}
+	when (m'^ss://')		{ss()}
 	when (m'^vmess://')		{vmess()}
-	default					{help()}
+	default				{help()}
 }
 
 #-------------------
 sub 处理多行输入(){
-	while($mline=~m'^.{2,5}://.*$'mg){
-		$_=$&;
+	#~ while($mline=~m'^.{2,5}://.*$'mg){
+		#~ $_=$&;
+	for (split /^/m, $mline){
 		given($_){
-			when (m'^ss://')			{ss()}
+			when (m'^ss://')		{ss()}
 			when (m'^vmess://')		{vmess()}
+			#~ when (-f && /\.json$/)		{json()}	# 奇怪，不能使用 -f。
+		#~ ⭕ l Json/*.json | ./ss-vmess-QRcode-json.pl -p
+			when (/\.json$/)		{json(-1)}
 		}
 	}
 }
@@ -58,7 +62,8 @@ sub help(){
 	say "---------------------------------------";
 	say "-s --screen 识别屏幕二维码。使用import截图(需要安装ImagMagick)。";
 	say "-c --clip 读取剪贴板的多行数据。适合于从手机v2rayNG\"导出全部配置至剪贴板\"，通过gsconnect共享。";
-	say "-x 读取鼠标选中的多行数据。-p --pipe 读取管道的多行数据。";
+	say "-x 读取鼠标选中的多行数据。-p --pipe 读取管道的多行数据。可用于多行字符串或者多行文件导出到手机，过gsconnect共享。";
+#~ ⭕ l Json/*.json | ./ss-vmess-QRcode-json.pl -p
 }
 #-------------------
 sub img(){
@@ -71,9 +76,9 @@ sub img(){
 	s'QR-Code:''; chomp;
 	say; say "==================";
 	given($_){
-		when (m'^ss://')			{ss()}
-		when (m'^vmess://')			{vmess()}
-		default						{say "不可转换的二维码。"; exit;}
+		when (m'^ss://')	{ss()}
+		when (m'^vmess://')	{vmess()}
+		default			{say "不可转换的二维码。"; exit;}
 	}
 }
 #-------------------
@@ -138,9 +143,10 @@ sub vmess(){
 }
 #-------------------
 sub json(){
-	say "----\t\Ujson\t----";
+	$silent=shift;
 	open IN,"<$_" or die "打开文件失败。";
-	$ps=$_;
+	$ps=$_; $ps=~s".*/""; $ps=~s/.{2,5}-//; $ps=~s/\.json$//;
+	#~ say $ps;
 	$_=join "\n",<IN>; close IN;
 	s'//.+$''mg; $json=decode_json $_;
 #    use Data::Dumper; printf Dumper($json)."\n"; say "============";
@@ -151,9 +157,10 @@ sub json(){
 			$method=$json->{outbounds}[0]->{settings}->{servers}[0]->{method};
 			$password=$json->{outbounds}[0]->{settings}->{servers}[0]->{password};
 			$_="$method:$password\@$add:$port";
-			say; say "============";
-			$_="ss://".encode_base64($_);
-			chomp; qrcode(); say;
+			outputstr("ss");
+			#~ if(! $silent){say; say "============";}
+			#~ $_="ss://".encode_base64($_);
+			#~ chomp; qrcode() if ! $silent; say;
 			}
 		when ("vmess"){
 			$add=$json->{outbounds}[0]->{settings}->{vnext}[0]->{address};
@@ -169,16 +176,27 @@ sub json(){
 \"net\":\"$net\",\"path\":\"$path\",\"port\":\"$port\",
 \"ps\":\"$ps\",\"tls\":\"$tls\",\"type\":\"none\",\"v\":\"2\"
 			}";
-			say; say "============";
-			$_="vmess://".encode_base64(encode('utf8',$_));	#ps里面经常有emoji字符。这个base64模块居然不认。
-			s/\n//sg;
-			chomp; qrcode(); say;
 # 手机上的v2rayNG，扫描vmess二维码，或者读入剪贴板，会把 host 和 path 搞乱。奇怪的bug。????????
 # 必须加上 type 和 v 字段，才正确。
+			outputstr("vmess");
+			#~ if(! $silent){say; say "============";}
+			#~ $_="vmess://".encode_base64(encode('utf8',$_));	#ps里面经常有emoji字符。这个base64模块居然不认。
+			#~ s/\n//sg;
+			#~ chomp; qrcode() if ! $silent; say;
 		}
 		default		{say "无效的协议格式。"}
 	}
 }
+#-------------------
+sub outputstr(){	# 函数放在调用之前，居然显示 Too many arguments
+	$prefix=shift;
+	if(! $silent){say "----\t\Ujson\t----"; say; say "============";}
+	$_=$prefix."://".encode_base64(encode('utf8',$_));	#ps里面经常有emoji字符。这个base64模块居然不认。
+	s/\n//sg;
+	chomp;
+	if($prefix == "ss"){$ps=`./URI-Escape-转码.pl $ps`; $_=$_."#$ps";}
+	qrcode() if ! $silent; say;
+	}
 #-------------------
 sub qrcode(){
 	# 让外部命令的显示，输出到父进程。

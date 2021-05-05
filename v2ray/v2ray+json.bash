@@ -20,8 +20,9 @@ fi
 path=`dirname "$file"`
 cd $path
 file=`basename "$file"`
-v2raycmd="/home/eexpss/bin/v2ray/v2ray"
+cmd="/home/eexpss/bin/v2ray/v2ray"
 
 ln -sf "$file" last.json
 pkill -9 -x "v2ray"
-$v2raycmd -config "$file" &
+pkill -9 -x "xray"
+$cmd -config "$file" &
