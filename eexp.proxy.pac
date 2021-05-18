@@ -17,8 +17,14 @@ var darr = [
 //~ ⭕ curl --proxy 127.0.0.1:10809 https://www.dnsleaktest.com/|g -A1 Hello
 //~ ⭕ curl --socks5 127.0.0.1:10808 https://www.dnsleaktest.com/|g -A1 Hello
 
-var socksport="10808";
-var httpport="10809";
+//V2ray Xray
+//var socksport="10808";
+//var httpport="10809";
+
+//v2rayA
+var socksport="20170";
+var httpport="20171";
+var httpsport="20172";
 
 function FindProxyForURL(url, host){
 	for(var i=0;i<darr.length;i++){
