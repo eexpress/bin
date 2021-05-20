@@ -24,7 +24,7 @@ var darr = [
 //v2rayA
 var socksport="20170";
 var httpport="20171";
-var httpsport="20172";
+var httpPACport="20172";
 
 function FindProxyForURL(url, host){
 	for(var i=0;i<darr.length;i++){
