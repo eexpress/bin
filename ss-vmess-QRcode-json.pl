@@ -14,6 +14,7 @@ use Encode;
 use File::Basename;
 use Cwd qw(abs_path getcwd);
 $scriptpath=dirname(abs_path($0));
+#~ $scriptpath="/home/eexpss/app/v2ray/";
 $save_path="$scriptpath/Json/";
 $template_path="$scriptpath/Template/";
 
