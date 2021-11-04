@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
 Terminal=false
-Name=ocr-screen
+Name=截屏识别文字
+GenericName=ocr-screen
 Icon=edit-find-replace
 Exec=/home/eexpss/bin/ocr-screen.bash
 
