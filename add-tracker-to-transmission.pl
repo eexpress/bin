@@ -4,11 +4,16 @@ use v5.10;
 #~ use feature qw(say);
 #~ ---------------------------------------------
 sub center_align_title{	#输出定长的居中对齐的标题
-	$len=60;	#定长
 	$in=shift;
-	$str="="x(int(($len-length($in))/2));
+	$ch=shift//"=";
+	$len=shift//60;	#定长
+	$str=$ch x (int(($len-length($in))/2));
 	say "$str$in$str";
 }
+#~ center_align_title("OK");
+#~ center_align_title("test CMD","-");
+#~ center_align_title("again OK","+",20);
+#~ exit;
 #~ ---------------------------------------------
 $Tracker_File="/tmp/trackers_best_ip.txt";
 use File::stat;
@@ -31,14 +36,19 @@ if(! $stat){
 #~ ---------------------------------------------
 center_align_title(" Transmission ");
 $~="LIST";
-printf "____ID__Status______%sName%s\n","_"x18,"_"x18;
-for (`transmission-remote -l`){
+#~ printf "____ID__Status______%sName%s\n","_"x18,"_"x18;
+print "____ID__Status______"; center_align_title("Name","_",40);
+
+$info=`transmission-remote -l`; $? && die "Transmission Remote Fail. \e[1;31mProgram not started? Remote port not open?\e[0m";
+$cnt=0;
+for ($info){
 	/ID|Sum:|Finished/ && next;	#跳过
 	s/(^\s*|\s*$)//g;		#去头尾空白
 	@l=split /\s+/;
 	$n=@l;
 	$id=$l[0]; $statu=$l[$n-2]; $name=$l[$n-1];
 	write;
+	$cnt++;
 	#~ printf "%6s  %-10s  %18s",$id, $statu, $name;	#没有居中对齐
 	}
 
@@ -48,6 +58,7 @@ $id, $statu, $name
 .
 
 center_align_title("");
+if (! $cnt){say "No active download. Exit."; exit;}
 say "select ID number to add external trackers.\nallow format: \e[1;32mall\e[0m / \e[1;32mactive\e[0m / \e[1;32m2,3,5-9\e[0m etc.\nINPUT: ";
 $input=<STDIN>; chomp $input;
 #~ ---------------------------------------------
