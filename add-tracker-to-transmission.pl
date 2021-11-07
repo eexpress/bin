@@ -4,9 +4,9 @@ use v5.10;
 #~ use feature qw(say);
 #~ ---------------------------------------------
 sub center_align_title{	#输出定长的居中对齐的标题
-	$in=shift;
-	$ch=shift//"=";
-	$len=shift//60;	#定长
+	$in=shift;	#参数1，标题文字
+	$ch=shift//"=";	#参数2，填充字符，可选
+	$len=shift//60;	#参数3，显示长度，可选
 	$str=$ch x (int(($len-length($in))/2));
 	say "$str$in$str";
 }
@@ -49,7 +49,7 @@ for ($info){
 	$id=$l[0]; $statu=$l[$n-2]; $name=$l[$n-1];
 	write;
 	$cnt++;
-	#~ printf "%6s  %-10s  %18s",$id, $statu, $name;	#没有居中对齐
+	#~ printf "%6s  %-10s  %18s",$id, $statu, $name;	#printf没有居中对齐
 	}
 
 format LIST =
