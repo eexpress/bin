@@ -44,8 +44,8 @@ alias dms='/usr/bin/dms -path "`pwd`"'	# : Path must be absolute:
 
 alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
-alias pl='perl -pe'
-alias pln='perl -ne'
+alias pl='perl -pE'	#-E like -e, BUT enables all features; -p EXCUTE while (<>) THEN print.
+alias pln='perl -nE'
 
 ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
 
