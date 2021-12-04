@@ -1,14 +1,19 @@
 html {
-/*    font-size: 90%;*/
+	font-size: 120%;
 }
 body {
 	--ThemeColor:#8DC53E;
 	--BackColor0:#ddd;
 	--BackColor1:#eee;
 	background-color: var(--BackColor1);
-	font-family: 'Fira Mono', 'Vera Sans YuanTi', Sans-serif;
-	/*'URW Bookman L',*/
+/*	某些Mono字体没有粗体	*/
+/*
+	font-family: 'URW Bookman L','Vera Sans YuanTi', Sans-serif;
+*/
+	font-family: 'Fira Mono','Vera Sans YuanTi', Sans-serif;
+/*
 	color: #444;
+*/
 	line-height:150%;
 	margin:10px 50px 10px 30px;
 }
@@ -32,47 +37,19 @@ input {
 	margin-left: 10px;
 	margin-right: 10px;
 }
-em,strong {
-	margin: 0px 0.2em 0px 0.2em;
-	padding: 0px 0.4em 0px 0.4em;
-	font-weight:bold;
-	font-style: normal;
+strong {
+	font-weight: bolder;
 }
-em {
-/*    text-decoration:underline;*/
+em {	/*斜体，加粗，加下划线*/
 	border-bottom: 1px solid;
+	font-weight: bold;
 	font-style: italic;
 }
-ol {
-	list-style-image:url("c.png");
-}
-ul {
-	list-style-image:url("r.png");
-}
-li {
-	padding: 2px 2px 2px 8px;
-	border-left: 3px solid #080;
-}
-li:nth-child(2n) {
-	background: var(--BackColor1);
-	text-shadow: 1px 1px 1px #bbb;
-}
-li:nth-child(2n-1) {
-	background: var(--BackColor0);
-	text-shadow: 1px 1px 1px white;
-}
+/*------------------------------------------------*/
 pre {
-/*        display:block;*/
-/*    overflow:auto;*/
-/*        width: 90%;*/
-/*        width: auto;*/
-/*        margin-left: 2em;*/
 	background-color:#5C5C5C;
-/*        padding: 0.1em 0.5em 0.1em 0.5em;*/
 	word-wrap: break-word;
-/*    border-color: #080;*/
-/*    border-style:dotted none;*/
-	border-left: 1em solid var(--ThemeColor);
+	border-left: 0.5em solid var(--ThemeColor);
 	border-radius: 0.8em;	/*对code有效*/
 }
 code {
@@ -81,10 +58,9 @@ code {
 	color: #eee;
 	border-radius: 0.5em;	/*对inline有效*/
 	padding: 0.1em 0.4em 0.1em 0.5em;	/*border内部*/
-	margin: 0.5em 1em 0.5em 1em;		/*border外部*/
+	margin: 0.5em 0.5em 0.5em 0.5em;		/*border外部*/
 	font-family: 'Fira Mono',"Courier Prime",Monospace;
 	text-shadow: none;
-/*        font-weight:bold;*/
 	font-style: normal;
 	display: inline-block;	/*解决大段代码首字对齐*/
 }
@@ -94,13 +70,10 @@ blockquote {
 	text-shadow: none;
 	font-style: normal;
 }
-
-div{
-/*    text-align: center;*/
-}
+/*------------------------------------------------*/
 table {
 	margin: auto;
-	width: 80%;
+	width: 90%;
 }
 table,th,td {
 	padding: 5px 10px 5px 10px;
@@ -111,14 +84,18 @@ table th {	/*表头*/
 	font-weight:bold;
 	text-shadow: none;
 }
-table td:nth-child(2n-1) {
+table td:nth-child(2n-1) {	/*单列加粗*/
 	font-weight:bold;
 }
-table tr:nth-child(2n) {
+table tr:nth-child(2n), li:nth-child(2n) {
 	background: var(--BackColor1);
 	text-shadow: 1px 1px 0px var(--BackColor0);
 }
-table tr:nth-child(2n-1) {
+table tr:nth-child(2n-1), li:nth-child(2n-1) {
 	background: var(--BackColor0);
 	text-shadow: 1px 1px 0px white;
+}
+li {
+	padding: 2px 2px 2px 8px;
+	border-left: 3px solid var(--ThemeColor);
 }
