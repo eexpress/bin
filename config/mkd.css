@@ -7,22 +7,17 @@ body {
 	--BackColor1:#eee;
 	background-color: var(--BackColor1);
 /*	某些Mono字体没有粗体	*/
-/*
 	font-family: 'URW Bookman L','Vera Sans YuanTi', Sans-serif;
-*/
-	font-family: 'Fira Mono','Vera Sans YuanTi', Sans-serif;
 /*
-	color: #444;
+	font-family: 'Fira Mono','Vera Sans YuanTi', Sans-serif;
 */
 	line-height:150%;
 	margin:10px 50px 10px 30px;
 }
-a {
-	color: green;
-	text-shadow: 1px 1px 1px #aaa;
-}
+a	{	color: var(--ThemeColor);	}
 a:hover {
-	text-shadow: 1px 1px 2px #0b0;
+	font-weight: bold;
+	text-shadow: 2px 2px 2px LightGray;
 }
 h1	{	text-align: center;	}
 h2,h3	{	display: inline;	}
