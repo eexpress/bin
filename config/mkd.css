@@ -5,6 +5,7 @@ body {
 	--ThemeColor:#8DC53E;
 	--BackColor0:#ddd;
 	--BackColor1:#eee;
+	--BackColor2:#5C5C5C;
 	background-color: var(--BackColor1);
 /*	某些Mono字体没有粗体	*/
 	font-family: 'URW Bookman L','Vera Sans YuanTi', Sans-serif;
@@ -40,14 +41,14 @@ em {	/*斜体，加粗，加下划线*/
 }
 /*------------------------------------------------*/
 pre {
-	background-color:#5C5C5C;
+	background-color:var(--BackColor2);
 	word-wrap: break-word;
 	border-left: 0.5em solid var(--ThemeColor);
 	border-radius: 0.8em;	/*对code有效*/
+	overflow-x:auto;
 }
 code {
-/*    inline code必须要背景*/
-	background-color:#5C5C5C;
+	background-color:var(--BackColor2);	/*inline code必须要背景*/
 	color: #eee;
 	border-radius: 0.5em;	/*对inline有效*/
 	padding: 0.1em 0.4em 0.1em 0.5em;	/*border内部*/
