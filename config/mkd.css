@@ -1,5 +1,5 @@
 html {
-	font-size: 150%;
+	font-size: 120%;
 }
 body {
 	--ThemeColor:#8DC53E;
@@ -53,6 +53,12 @@ code {
 	border-radius: 0.5em;	/*对inline有效*/
 	padding: 0.1em 0.4em 0.1em 0.5em;	/*border内部*/
 	margin: 0.5em 0.5em 0.5em 0.5em;		/*border外部*/
+/*
+	font-family: "Fira Mono";
+	font-family: "Courier Prime";
+	font-family: Monospace;
+	font-family: "Motiva Sans Thin";
+*/
 	font-family: 'Fira Mono',"Courier Prime",Monospace;
 	text-shadow: none;
 	font-style: normal;
