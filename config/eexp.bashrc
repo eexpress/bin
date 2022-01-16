@@ -95,7 +95,7 @@ export MANPAGER="/usr/bin/less"
 #-------ENVIROMENT SET-----------------------------
 if [ "$(whoami)" != "root" ]; then
 	export PATH=$HOME/bin:$PATH
-	export CDPATH=:~:~/bin:~/project:
+	export CDPATH=:~:~/bin:~/project:~/.local/share/gnome-shell/extensions/:
 fi
 #-------PS1 COLOR----------------------------------
 	darkgreen="0x16"	#dark green
