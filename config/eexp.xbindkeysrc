@@ -26,14 +26,11 @@
 # m:xxx + c:xxx
 # Shift+...
 
-
-
-
 #keystate_numlock = enable
 #keystate_scrolllock = enable
 #keystate_capslock = enable
 
-
+#~ ⭕ killall -HUP xbindkeys; xbindkeys
 
 # 移动窗口
 "xdotool key Alt+F7"
@@ -43,17 +40,41 @@
 "xdotool key Alt+F8"
    Alt + b:2
 
-# 降低窗口
-"xdotool key Alt+F9"
+# 鼠标下的窗口，一直无效。ID获取是正确的。
+#~ "xdotool key Alt+F9"
+#~ "xdotool search --onlyvisible . behave %@ mouse-enter key Alt+F9"
+#~ "xdotool windowactivate --sync $(xdotool getmouselocation|sed 's/.*://') key Alt+F9"
+#~ "xdotool keydown --window $(xdotool getmouselocation|sed 's/.*://') --delay 800 --clearmodifiers Alt+F9"
+#~ xdotool key --window 39845895 Alt+F9 无效？？？？
+
+# 降低窗口，除开点标题栏，不自动提升
+"xdotool windowfocus --sync $(xdotool getmouselocation|sed 's/.*://') key Alt+F9"
    Alt + b:3
 
 # 真全屏，无标题栏
 "wmctrl -r :ACTIVE: -b toggle,fullscreen"
    Alt + b:4
 
-# 切换最后两个活动窗口
+# 切换最后两个活动窗口，需要释放，不能连续切换
 "xdotool key Alt+Tab"
    Alt + b:5
+
+# 左对齐
+#~ "xdotool getactivewindow windowmove 0 0 windowsize 50% 100%"
+   #~ Ctrl + left
+
+# 右对齐
+#~ "xdotool getactivewindow windowmove 50% 0 windowsize 50% 100%"
+   #~ Control + right
+
+# 上对齐
+#~ "xdotool getactivewindow windowmove 0 0 windowsize 100% 50%"
+   #~ Alt + up
+
+# 下对齐
+#~ "xdotool getactivewindow windowmove 0 50% windowsize 100% 50%"
+   #~ Alt + down
+
 
 #
 # End of xbindkeys configuration
