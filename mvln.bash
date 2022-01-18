@@ -1,8 +1,11 @@
 #!/bin/bash
 
+# 移动文件到某处，并在原地建立一个软链接到新文件。
 #~ mvln ~/.bashrc ~/bin/config/eexp.bashrc
 if [[ ! -f $1 ]]; then echo "$1 not a file."; exit; fi
-if [[ -d $2 ]] || [[ -d $(dirname $2) && ! -f $2 && $2 != */ ]]; then
+#~ if [[ -d $2 ]] || [[ -d $(dirname $2) && ! -f $2 && $2 != */ ]]; then
+# 蛮多时候，需要覆盖目标文件。
+if [[ -d $2 ]] || [[ -d $(dirname $2) && $2 != */ ]]; then
 	dn0=$(dirname $1)
 	fn0=$(basename $1)
 	dn1=$(readlink -f $2)
