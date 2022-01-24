@@ -7,28 +7,20 @@
 	df= diff
 	df1= diff HEAD^
 	df2= diff HEAD^^
-	df3= diff master~3
-	df4= diff master~4
-	d1d= diff master@{'yesterday'}
-	d2d= diff master@{'2 days ago'}
-	d3d= diff master@{'3 days ago'}
 
-	dflog = log -p
 	ls = ls-files
-	lg = log --graph -10 --pretty=format:'%Cred%h%Creset %Cgreen(%cr)%Creset %s'
-	ll = reflog -20
-	web = instaweb
+	lg = log -8 --pretty=format:'%Cred%h%Creset %Cgreen(%cr)%Creset %s'
 ; ----------------------------------------------
 [color]
 	diff = always 	; 为了git.pl里面过滤代码
 ; 颜色配置参数说明在这里 https://gist.github.com/rab/4067067
 [color "diff"]
-	new = blue bold
+	new = green bold
 	old = red bold
 	frag = magenta bold
 	meta = green reverse
 [color "status"]
-	changed = blue normal bold
+	changed = green normal
 	added = green bold
 	deleted = red bold
 	untracked = magenta bold
@@ -36,18 +28,11 @@
 [user]
 	name = eexpress
 	email = eexpress@163.com
-; [push]
-;     default = simple
 [core]
 ;     如果取消设置，中文文件名变成\350\256这种
 	quotepath = false
-;     pager = cat
-;	pager = less -r
 [diff]
 	tool = meld
 [difftool]
 	prompt = false
-[http]
-	proxy =
-[https]
-	proxy =
+; ----------------------------------------------
