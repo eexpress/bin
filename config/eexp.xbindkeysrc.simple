@@ -1,16 +1,17 @@
 ###########################
 # xbindkeys configuration #
 ###########################
+# Alt + Mouse Button
 
 # Move Window
 "xdotool key Alt+F7"
    Alt + b:1
 
-# Resize Window
+# Resize Window		Issue: easy to choose the wrong border
 "xdotool key Alt+F8"
    Alt + b:2
 
-# Lower Window
+# Lower Window Under Pointer		Issue: Not Auto focus on the top window
 "xdotool windowfocus --sync $(xdotool getmouselocation|sed 's/.*://') key Alt+F9"
    Alt + b:3
 
@@ -18,7 +19,7 @@
 "wmctrl -r :ACTIVE: -b toggle,fullscreen"
    Alt + b:4
 
-# Switch Last Two Window
+# Switch Last Two Window	Issue: Need release `Alt` after each action.
 "xdotool key Alt+Tab"
    Alt + b:5
 
