@@ -1,0 +1,24 @@
+###########################
+# xbindkeys configuration #
+###########################
+
+# Move Window
+"xdotool key Alt+F7"
+   Alt + b:1
+
+# Resize Window
+"xdotool key Alt+F8"
+   Alt + b:2
+
+# Lower Window
+"xdotool windowfocus --sync $(xdotool getmouselocation|sed 's/.*://') key Alt+F9"
+   Alt + b:3
+
+# Full Max Window
+"wmctrl -r :ACTIVE: -b toggle,fullscreen"
+   Alt + b:4
+
+# Switch Last Two Window
+"xdotool key Alt+Tab"
+   Alt + b:5
+
