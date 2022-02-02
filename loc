@@ -4,4 +4,4 @@
 r=`echo $*|sed 's/\ /|/g'`
 # -A "AND"关系定位。-b 仅文件名。-e 存在的文件。-L 跟随链接。-i 大小写随意。
 # 获取当前目录下的文件。
-locate -AbeLi $*|grep "^`pwd`"|grep --color=always -iE "$r"
+locate -AeLi $*|grep "^`pwd`"|grep --color=always -iE "$r"
