@@ -7,6 +7,7 @@
 	df= diff
 	df1= diff HEAD^
 	df2= diff HEAD^^
+	df3= diff HEAD^^^
 
 	ls = ls-files
 	lg = log -8 --pretty=format:'%Cred%h%Creset %Cgreen(%cr)%Creset %s'

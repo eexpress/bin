@@ -16,11 +16,11 @@ direct=$out
 
 #输出文件自动增加序号
 if [ -f "montage-$out.png" ]; then
-n=0
-while [[ -f "montage-$out$n.png" ]]; do
-((n++))
-done
-out=$out$n
+	n=0
+	while [[ -f "montage-$out$n.png" ]]; do
+		((n++))
+	done
+	out=$out$n
 fi
 
 min=`identify -format "%$direct\n" "$@"|sort -n|sed '/^$/d'|head -n 1`
@@ -32,5 +32,5 @@ convert -scale $p$min "$i" /tmp/$out$n
 done
 
 [[ "$delete" == true ]] && echo rm "$@" && rm "$@"
-montage -tile ${p}1 -geometry +0+0 -background none /tmp/$out* ./montage-$out.jpg
+montage -tile ${p}1 -geometry +0+0 -background none /tmp/$out* ./montage-$out.png
 [ -f "montage-$out.png" ] && echo "montage-$out.png created!"
