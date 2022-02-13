@@ -12,49 +12,50 @@ sub end{
 @_ = split '\n', $ENV{'NAUTILUS_SCRIPT_SELECTED_FILE_PATHS'};
 #~ @_ //= @ARGV;	# 可惜 Defined-or 操作不能用于数组。
 if (scalar @_ > 1){
-		$f = join(' ',map {qq/"$_"/} @_);
+		$fl = join(' ',map {qq/"$_"/} @_);
 } elsif (scalar @ARGV > 1){
-	$f = join(' ',map {qq/"$_"/} @ARGV);
+	$fl = join(' ',map {qq/"$_"/} @ARGV);
 }else{ end; }
 
-#~ `notify-send "debug: $f"`;
-@r = `identify -format "%w %h %d/%f\n" $f`;
-map {s/(\d{2,})\ /sprintf("%05d\ ", $1)/eg} @r;
-@r = sort @r;
-say @r;
-$filenum = scalar @r;
+#~ `notify-send "debug: $fl"`;
+@filelist = `identify -format "%w %h %d/%f\n" $fl`;
+map {s/(\d{2,})\ /sprintf("%05d\ ", $1)/eg} @filelist;
+@filelist = sort @filelist;
+say @filelist;
+$filenum = scalar @filelist;
 end if $filenum < 2;
 
-my $x = int(sqrt($filenum));
-my $y = $x+1;
+my $X0 = int(sqrt($filenum));
+my $X1 = $X0+1;
 #~ 列数 = 文件数开平方，取整；+0的平方，+1的平方，看离哪个平方最近。
-if($y**2-$filenum > $filenum-$x**2){$column = $x;}else{$column = $y;}
+if($X1**2-$filenum > $filenum-$X0**2){$column = $X0;}
+else{$column = $X1;}
 #~ 最宽不参与排序的个数 = $#取模列数
 $dropout = $filenum % $column;
 say "文件数 = $filenum，列数 = $column，最宽不参与排序的个数 = $dropout";
 
 while (glob("/tmp/w-*.png")) {
-	next if -d; unlink $_ or ++$errors, warn("Can't remove $_: $!");
+	next if -d; unlink $_ or ++$errors, warn("Can't delete $_: $!");
 }
 
 if($dropout){
-	@h = ();
-	while ($dropout>0){push @h, pop @r; $dropout--;}
+	@currentlist = ();
+	while ($dropout>0){push @currentlist, pop @filelist; $dropout--;}
 	horizon_join(1);
 }
 
-$suffix_w = 0;
-$pop = 1;
-while (@r){
-	@h = ();
+$suffix = 0;
+$ispop = 1;
+while (@filelist){
+	@currentlist = ();
 	#~ for($i=0; $i<$column; $i++){
 	for(1 .. $column){
-		if($pop){
-			push @h, pop @r;
-			$pop = 0;
+		if($ispop){
+			push @currentlist, pop @filelist;
+			$ispop = 0;
 		}else{
-			push @h, shift @r;
-			$pop = 1;
+			push @currentlist, shift @filelist;
+			$ispop = 1;
 		}
 	}
 	horizon_join(1);
@@ -63,52 +64,52 @@ while (@r){
 horizon_join(0);
 
 sub horizon_join(){
-	$is_horizon = $_[0];
+	my $is_horizon = $_[0];
 	say "-------";
 	if($is_horizon){
-		$f = "/tmp/h-";
+		$convert_prefix = "/tmp/h-";
+		$sign = "x";
+		$montage_prefix = "/tmp/w-";
 	}else{
-		$f = "/tmp/w-";
-		@h = `identify -format "---- %w %d/%f\n" $f*.png`;
-		$f = "/tmp/v-";
+		$convert_prefix = "/tmp/w-";
+		@currentlist = `identify -format "---- %w %d/%f\n" $convert_prefix*.png`;
+		$convert_prefix = "/tmp/v-";
+		$sign = "";
+		$montage_prefix = "/tmp/montage-";
 	}
-	while (glob("$f*")) {
+	while (glob("$convert_prefix*")) {
 		next if -d; unlink $_ or ++$errors, warn("Can't remove $_: $!");
 	}
-	say @h;
+	say @currentlist;
 	$min = 10000;
-	for my $i (0 .. $#h){	# $#h 是最大标量，比数组长度少1。
-		@r0 = split ' ', @h[$i];
-		$h1 = @r0[1];
-		@h[$i] = @r0[2];
-		$min = $h1 > $min? $min : $h1;
+	for my $i (0 .. $#currentlist){	# $#array 是最大标量，比数组长度少1。
+		my @r0 = split ' ', @currentlist[$i];
+		my $h0 = @r0[1];
+		@currentlist[$i] = @r0[2];
+		$min = $h0 > $min? $min : $h0;
 	}
 	if($is_horizon){
 		say "本组最小高度：$min，按最小高度水平拼接。";
-		$p = "x";
-		$o = "w";
 	}
 	else{
 		say "全部最小宽度：$min，按最小宽度垂直拼接。";
-		$p = "";
-		$o = "montage";
-		$suffix_m = 0;
-		while(-e "/tmp/$o-$suffix_m.png"){$suffix_m++;}
-		$suffix_w = $suffix_m;
+		my $increment = 0;
+		while(-e "$montage_prefix$increment.png"){$increment++;}
+		$suffix = $increment;
 	}
-	$suffix = 0;
-	while(@h){
-		$_ = shift @h;
-		$cmd = "convert -scale $p$min \"$_\" $f$suffix.png";
+	my $increment = 0;
+	while(@currentlist){
+		$_ = shift @currentlist;
+		$cmd = "convert -scale $sign$min \"$_\" $convert_prefix$increment.png";
 		say $cmd;
 		`$cmd`;
-		$suffix++;
+		$increment++;
 	}
-	$cmd = "montage -tile ${p}1 -geometry +0+0 -background none $f*.png /tmp/$o-$suffix_w.png";
+	$cmd = "montage -tile ${sign}1 -geometry +0+0 -background none $convert_prefix*.png $montage_prefix$suffix.png";
 	say $cmd;
 	`$cmd`;
-	if($is_horizon){$suffix_w++;}
-	else{`eog /tmp/$o-$suffix_w.png`;}
+	if($is_horizon){$suffix++;}
+	else{`eog $montage_prefix$suffix.png`;}
 
 }
 
