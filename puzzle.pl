@@ -109,7 +109,8 @@ sub horizon_join(){
 	say $cmd;
 	`$cmd`;
 	if($is_horizon){$suffix++;}
-	else{`eog $montage_prefix$suffix.png`;}
+	else{ `cp $montage_prefix$suffix.png $ENV{'HOME'}`;
+		`eog $ENV{'HOME'}/montage-$suffix.png`;}
 
 }
 
