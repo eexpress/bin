@@ -72,7 +72,7 @@ while (@filelist){
 	horizon_join(1,0);
 }
 
-horizon_join(0,1);
+horizon_join(0,0);
 
 sub horizon_join(){
 	my $is_horizon = $_[0];
@@ -85,6 +85,7 @@ sub horizon_join(){
 		$montage_prefix = $finish_all? "/tmp/montage-" : "/tmp/w-";
 	}else{
 		if(!$finish_all){
+			say "============";
 			$convert_prefix = "/tmp/w-";
 			@currentlist = `identify -format "%w %h %d/%f\n" $convert_prefix*.png`;
 		}
@@ -123,7 +124,7 @@ sub horizon_join(){
 	$cmd = "montage -tile ${sign}1 -geometry +0+0 -background none $convert_prefix*.png $montage_prefix$suffix.png";
 	say $cmd;
 	`$cmd`;
-	if($finish_all){
+	if($finish_all || !$is_horizon){
 		my $increment = 0;
 		while(-e "$ENV{'HOME'}/montage-$increment.png"){$increment++;}
 		`cp $montage_prefix$suffix.png "$ENV{'HOME'}/montage-$increment.png"`;
