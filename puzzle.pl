@@ -4,9 +4,17 @@ use 5.10.0;
 #~ 可放入nautilus脚本目录，`~/.local/share/nautilus/scripts`。
 #~ nautilus会直接给此脚本加参数，但是参数无路径。只能解析 `$ENV{}`。
 
+use Getopt::Long;
+GetOptions('horizontal_only'=>\$horizontal_only,'vertical_only'=>\$vertical_only);
+
 sub end{
 	`notify-send "要2个及以上图片，才能拼接。"`;
-	die "需要2个及以上图片，才能拼接。" ;
+	die "需要2个及以上图片，才能拼接。
+
+使用说明：
+参数 -h 指定纯水平拼接；-v 指定纯垂直拼接。
+无参数，自动判断拼接成最大尺寸的组合图。
+" ;
 }
 
 @_ = split '\n', $ENV{'NAUTILUS_SCRIPT_SELECTED_FILE_PATHS'};
@@ -25,6 +33,10 @@ say @filelist;
 $filenum = scalar @filelist;
 end if $filenum < 2;
 
+$suffix = 0;
+if($horizontal_only){ horizon_join(1,1); exit; }
+if($vertical_only){ horizon_join(0,1); exit; }
+
 my $X0 = int(sqrt($filenum));
 my $X1 = $X0+1;
 #~ 列数 = 文件数开平方，取整；+0的平方，+1的平方，看离哪个平方最近。
@@ -41,10 +53,9 @@ while (glob("/tmp/w-*.png")) {
 if($dropout){
 	@currentlist = ();
 	while ($dropout>0){push @currentlist, pop @filelist; $dropout--;}
-	horizon_join(1);
+	horizon_join(1,0);
 }
 
-$suffix = 0;
 $ispop = 1;
 while (@filelist){
 	@currentlist = ();
@@ -58,21 +69,25 @@ while (@filelist){
 			$ispop = 1;
 		}
 	}
-	horizon_join(1);
+	horizon_join(1,0);
 }
 
-horizon_join(0);
+horizon_join(0,1);
 
 sub horizon_join(){
 	my $is_horizon = $_[0];
+	my $finish_all = $_[1];
+	@currentlist = @filelist if $finish_all;
 	say "-------";
 	if($is_horizon){
 		$convert_prefix = "/tmp/h-";
 		$sign = "x";
-		$montage_prefix = "/tmp/w-";
+		$montage_prefix = $finish_all? "/tmp/montage-" : "/tmp/w-";
 	}else{
-		$convert_prefix = "/tmp/w-";
-		@currentlist = `identify -format "---- %w %d/%f\n" $convert_prefix*.png`;
+		if(!$finish_all){
+			$convert_prefix = "/tmp/w-";
+			@currentlist = `identify -format "%w %h %d/%f\n" $convert_prefix*.png`;
+		}
 		$convert_prefix = "/tmp/v-";
 		$sign = "";
 		$montage_prefix = "/tmp/montage-";
@@ -84,7 +99,7 @@ sub horizon_join(){
 	$min = 10000;
 	for my $i (0 .. $#currentlist){	# $#array 是最大标量，比数组长度少1。
 		my @r0 = split ' ', @currentlist[$i];
-		my $h0 = @r0[1];
+		my $h0 = @r0[$is_horizon ? 1 : 0];
 		@currentlist[$i] = @r0[2];
 		$min = $h0 > $min? $min : $h0;
 	}
@@ -108,9 +123,13 @@ sub horizon_join(){
 	$cmd = "montage -tile ${sign}1 -geometry +0+0 -background none $convert_prefix*.png $montage_prefix$suffix.png";
 	say $cmd;
 	`$cmd`;
+	if($finish_all){
+		my $increment = 0;
+		while(-e "$ENV{'HOME'}/montage-$increment.png"){$increment++;}
+		`cp $montage_prefix$suffix.png "$ENV{'HOME'}/montage-$increment.png"`;
+		`eog "$ENV{'HOME'}/montage-$increment.png"`;
+		return;
+	}
 	if($is_horizon){$suffix++;}
-	else{ `cp $montage_prefix$suffix.png $ENV{'HOME'}`;
-		`eog $ENV{'HOME'}/montage-$suffix.png`;}
-
 }
 
