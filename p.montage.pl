@@ -93,7 +93,7 @@ sub horizon_join(){
 		$sign = "";
 		$montage_prefix = "/tmp/montage-";
 	}
-	while (glob("$convert_prefix*")) {
+	while (glob("$convert_prefix*.png")) {
 		next if -d; unlink $_ or ++$errors, warn("Can't remove $_: $!");
 	}
 	say @currentlist;
