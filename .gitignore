@@ -3,7 +3,6 @@ OLD
 Json
 github.*
 blog.*
-config/*
 findbook
 *.deb
 *.lintian

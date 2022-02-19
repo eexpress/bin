@@ -1,0 +1,4 @@
+BasedOnStyle:  WebKit
+Language:        JavaScript
+AllowShortIfStatementsOnASingleLine: WithoutElse
+BreakBeforeBraces: Attach
