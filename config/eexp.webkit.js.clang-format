@@ -2,3 +2,5 @@ BasedOnStyle:  WebKit
 Language:        JavaScript
 AllowShortIfStatementsOnASingleLine: WithoutElse
 BreakBeforeBraces: Attach
+TabWidth:        4
+UseTab:          Always
