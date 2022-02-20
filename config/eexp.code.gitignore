@@ -9,6 +9,7 @@ sample.*
 *.log
 *.pot
 *.png
+*.svg
 *.new
 *.old
 
