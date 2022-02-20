@@ -36,6 +36,7 @@ else
 	plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 fi
 ##------- ---------
+#~ https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 alias format='clang-format -style=file -i'
 alias glog='journalctl -f -o cat /usr/bin/gnome-shell'
 export LC_ALL=zh_CN.UTF-8
