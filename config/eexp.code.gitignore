@@ -8,6 +8,9 @@ _*
 sample.*
 *.log
 *.pot
+*.png
+*.new
+*.old
 
 # 不能忽略的。
 !src/
