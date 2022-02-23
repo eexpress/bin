@@ -5,11 +5,8 @@ _*
 
 # 其他。
 *.backup
-sample.*
 *.log
 *.pot
-*.png
-*.svg
 *.new
 *.old
 
