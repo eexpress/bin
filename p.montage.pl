@@ -26,8 +26,8 @@ if (scalar @_ > 1){
 }else{ end; }
 
 #~ `notify-send "debug: $fl"`;
-@filelist = `identify -format "%w %h %d/%f\n" $fl`;
-map {s/(\d{2,})\ /sprintf("%05d\ ", $1)/eg} @filelist;
+@filelist = `identify -format "%w,%h,%d,%f\n" $fl`;
+#~ map {s/(\d{2,})\ /sprintf("%05d\ ", $1)/eg} @filelist;
 @filelist = sort @filelist;
 say @filelist;
 $filenum = scalar @filelist;
@@ -87,7 +87,7 @@ sub horizon_join(){
 		if(!$finish_all){
 			say "============";
 			$convert_prefix = "/tmp/w-";
-			@currentlist = `identify -format "%w %h %d/%f\n" $convert_prefix*.png`;
+			@currentlist = `identify -format "%w,%h,%d,%f\n" $convert_prefix*.png`;
 		}
 		$convert_prefix = "/tmp/v-";
 		$sign = "";
@@ -96,12 +96,18 @@ sub horizon_join(){
 	while (glob("$convert_prefix*.png")) {
 		next if -d; unlink $_ or ++$errors, warn("Can't remove $_: $!");
 	}
+#~ identify的%d为当前目录时，输出''，导致附加了一个'/'，导致路径判断出错。
 	say @currentlist;
 	$min = 10000;
 	for my $i (0 .. $#currentlist){	# $#array 是最大标量，比数组长度少1。
-		my @r0 = split ' ', @currentlist[$i];
+		my @r0 = split ',', @currentlist[$i];
 		my $h0 = @r0[$is_horizon ? 1 : 0];
-		@currentlist[$i] = @r0[2];
+		if(@r0[2] == ''){
+			@currentlist[$i] = @r0[3];
+		} else {
+			@currentlist[$i] = @r0[2]+"/"+@r0[3];
+		}
+		chomp @currentlist[$i];
 		$min = $h0 > $min? $min : $h0;
 	}
 	if($is_horizon){
