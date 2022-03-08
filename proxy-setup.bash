@@ -9,7 +9,7 @@ if [[ -f "$1" && "$1" =~ .*\.pac ]]; then
 	exit
 fi
 
-if [[ "$1" =~  ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{3,4}$ ]]; then
+if [[ "$1" =~  ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{3,5}$ ]]; then
 	readarray -d : -t strarr <<<"$1"
 
 	gsettings set org.gnome.system.proxy.http host ${strarr[0]}
