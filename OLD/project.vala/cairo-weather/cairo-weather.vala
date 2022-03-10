@@ -1,7 +1,9 @@
 using Gtk;
 using Cairo;
 /*using Rsvg;*/
-	
+//~ ⭕ valac --pkg gtk+-3.0 --pkg librsvg-2.0 cairo-weather.vala
+//~ 2010
+
 string city;
 string weather;
 string appname;
@@ -67,6 +69,8 @@ public class DrawWeather : Gtk.Window {
 
 		add_events (Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.ENTER_NOTIFY_MASK);
         draw.connect ((da,ctx)=>{
+			ctx.set_operator(Cairo.Operator.CLEAR);
+			ctx.paint();
 			ctx.set_operator (Cairo.Operator.SOURCE);
 			ctx.scale(scale/2,scale/2);
 			ctx.set_source_surface(bgpng,0,0);

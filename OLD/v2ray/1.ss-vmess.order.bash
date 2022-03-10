@@ -9,11 +9,17 @@
 orderurl="https://raw.githubusercontent.com/freefq/free/master/v2"
 file="/tmp/ss-vmess.order.html"
 wget $orderurl -O - | base64 -d >$file
+echo "Save to: $file"
 #~ -----------------------------------------------
 #~ 保存 json 文件到 “~/app/v2ray.config” 目录
+if [ -d "./ss-vmess-QRcode-json.pl" ]; then
 cat $file | ./ss-vmess-QRcode-json.pl -p
 
 #~ -----------------------------------------------
 # 执行前，手机打开 kde connect
 cat $file | xclip -i -selection clipboard
 # 执行后，v2rayNG 中“从剪贴板导入”
+else
+cat $file
+fi
+

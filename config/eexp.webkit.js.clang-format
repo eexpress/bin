@@ -1,5 +1,4 @@
 BasedOnStyle:  WebKit
-Language:        JavaScript
 AllowShortBlocksOnASingleLine: Always
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 BreakBeforeBraces: Attach
