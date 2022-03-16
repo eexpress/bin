@@ -18,6 +18,8 @@ if [ -x /usr/bin/apt ]; then
 	pfile(){ dpkg -S $@ || apt-file search $@; }	# 查找文件所属的包(已安装/未安装)
 	plist(){ dpkg -L $@ || apt-file list $@; }	# 列出包的文件(已安装/未安装)
 	#as(){ aptitude search "!~nlib!~ri386!~v $*";}
+	alias pwhoneed='apt-cache rdepends'	# 查看谁依赖这个包
+	alias pneed='apt-cache depends'		# 查看依赖的包
 else
 	alias pi="$sudostr dnf install"
 	alias pr="$sudostr dnf remove"
