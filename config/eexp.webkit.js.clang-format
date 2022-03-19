@@ -2,7 +2,7 @@ BasedOnStyle:  WebKit
 AllowShortBlocksOnASingleLine: Always
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 BreakBeforeBraces: Attach
-TabWidth:        4
+TabWidth:        8
 UseTab:          Always
 AlignConsecutiveAssignments: true
 SpacesBeforeTrailingComments: 2

@@ -1,11 +1,14 @@
 #!/bin/bash
 
+cd ${HOME}/eexpss.hugo
+
 if [ ! -f config.toml ]; then
 	echo "Not in Hugo directory"
 	exit
 fi
 hugo
 cd public
+pwd
 
 msg=${*:-`date '+%F %T'`}
 git ci -a -m "$msg"; git push
