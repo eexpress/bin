@@ -41,6 +41,7 @@ fi
 #~ https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 alias format='clang-format -style=file -i'
 alias glog='journalctl -f -o cat /usr/bin/gnome-shell'
+alias jlog='journalctl -f -o cat /usr/bin/gjs'
 export LC_ALL=zh_CN.UTF-8
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'

@@ -4,5 +4,4 @@ AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 BreakBeforeBraces: Attach
 TabWidth:        8
 UseTab:          Always
-AlignConsecutiveAssignments: true
 SpacesBeforeTrailingComments: 2
