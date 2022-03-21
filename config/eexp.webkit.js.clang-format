@@ -1,7 +1,31 @@
 BasedOnStyle:  WebKit
-AllowShortBlocksOnASingleLine: Always
-AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+# 花括号反正不断行。一直跟在行尾。
 BreakBeforeBraces: Attach
-TabWidth:        8
+TabWidth:        4
 UseTab:          Always
+# 尾随注释前的空格数，只适用//，不适用/*
 SpacesBeforeTrailingComments: 2
+
+# Align Group
+# 对齐连续的=号。
+# 还有结构，位定义的:号，跨空行，跨注释，组合的=号，定义后的变量等对齐。
+# AlignConsecutiveAssignments: true
+
+# SingleLine Group
+# AllowShortEnumsOnASingleLine: true
+# AllowShortBlocksOnASingleLine: Empty
+# 始终将短块合并为一行。
+# 可是 finally { } 被拆。for (let i of obj) gitDirs.push(i); 也被拆。
+AllowShortBlocksOnASingleLine: Always
+
+# AllowShortCaseLabelsOnASingleLine: false
+# case可单行。
+AllowShortCaseLabelsOnASingleLine: true
+# AllowShortFunctionsOnASingleLine: All
+# AllowShortLambdasOnASingleLine: All
+# AllowShortIfStatementsOnASingleLine: Never
+#if else单行。
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+# AllowShortLoopsOnASingleLine: false
+# while 可单行。
+AllowShortLoopsOnASingleLine: true
