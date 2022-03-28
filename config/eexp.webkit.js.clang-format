@@ -24,7 +24,7 @@ AllowShortCaseLabelsOnASingleLine: true
 # AllowShortFunctionsOnASingleLine: All
 # AllowShortLambdasOnASingleLine: All
 # AllowShortIfStatementsOnASingleLine: Never
-#if else单行。
+# if else单行。
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 # AllowShortLoopsOnASingleLine: false
 # while 可单行。

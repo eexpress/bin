@@ -2,9 +2,11 @@
 .*
 _*
 *[0-9]
+*/tmp/*
 
 # 其他。
 *.backup
+*backup
 *.log
 *.pot
 *.new
@@ -14,6 +16,7 @@ _*
 x.*
 *.png
 *.svg
+*.gif
 
 
 # 不能忽略的。
