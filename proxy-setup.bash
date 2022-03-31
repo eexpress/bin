@@ -1,5 +1,17 @@
 #!/bin/bash
 
+if [[ "$1" == 1 ]]; then
+	gsettings set org.gnome.system.proxy mode 'manual'
+	gsettings get org.gnome.system.proxy mode
+	exit
+fi
+
+if [[ "$1" == 2 ]]; then
+	gsettings set org.gnome.system.proxy mode 'auto'
+	gsettings get org.gnome.system.proxy mode
+	exit
+fi
+
 if [[ -f "$1" && "$1" =~ .*\.pac ]]; then
 	gsettings set org.gnome.system.proxy autoconfig-url "file://$1"
 	gsettings set org.gnome.system.proxy mode 'auto'
@@ -38,7 +50,9 @@ gsettings set org.gnome.system.proxy mode 'none'
 gsettings get org.gnome.system.proxy mode
 
 echo "
+#~ 输入2，切換自动。
 #~ 输入格式如果是pac文件，设置自动。
+#~ 输入1，切換手動。
 #~ 输入格式如果是 IP:PORT 格式。设置手动。
 #~ 其他情况，设置禁止。
 "
