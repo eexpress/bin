@@ -9,7 +9,8 @@ var darr = [
 'thepiratebay',	'wikipedia.org', 'alternativeto.net',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
 'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',
-'askubuntu', 'stackexchange', 'stackoverflow'
+'askubuntu', 'stackexchange', 'stackoverflow',
+'element.io'
 ];
 //'fedoraproject.org', 'youneed.win',
 //'github', 'githubusercontent.com', 'githubassets.com'
