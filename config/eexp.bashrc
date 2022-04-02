@@ -42,6 +42,7 @@ fi
 alias format='clang-format -style=file -i'
 alias glog='journalctl -f -o cat /usr/bin/gnome-shell'
 alias jlog='journalctl -f -o cat /usr/bin/gjs'
+alias wl='env MUTTER_DEBUG_DUMMY_MODE_SPECS=1600x1000 dbus-run-session -- gnome-shell --nested --wayland'
 export LC_ALL=zh_CN.UTF-8
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'
