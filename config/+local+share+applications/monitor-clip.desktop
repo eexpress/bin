@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Terminal=false
-Name[zh_CN]=监视剪贴板
-Name=Monitor-Clip
-Icon=/home/eexpss/图片/图标/clip0.png
-Exec=/home/eexpss/bin/monitor-clip.pl
-GenericName[zh_CN.UTF-8]=监视剪贴板并执行操作
-

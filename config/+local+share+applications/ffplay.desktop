@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=FFPlay
+Exec=ffplay %U
+Terminal=false
+Icon=video-single-display-symbolic
+Categories=Video;
+MimeType=video/3gp;video/3gpp;video/3gpp2;video/flv;video/mp4;video/mpeg;video/mpeg-system;video/msvideo;video/ogg;video/quicktime;video/webm;video/x-avi;video/x-flc;video/x-flv;video/x-m4v;video/x-matroska;video/x-mpeg;video/x-mpeg2;video/x-msvideo;video/x-ms-wm;video/x-ms-wmv;video/x-ogm+ogg;video/x-theora;video/x-theora+ogg;video/x-totem-stream;
+
