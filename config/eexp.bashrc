@@ -3,6 +3,7 @@
 #~ stty -ixon
 set -o vi
 export VGL_LOGO=1	# Bumbleebee显示右下角VGL标记
+export GSK_RENDERER=cairo	# Wayland下, nvidia驱动下，gnome-extensions需要
 
 #-------ALIAS------------------------------------
 [ "$(whoami)" == "root" ] && sudostr="" || sudostr="sudo"
@@ -26,16 +27,16 @@ else
 	alias pu="$sudostr dnf update"
 	##			-------- 未安装的包 --------
 	# -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
-	pf(){ dnf search -Cy $@|gc $@; }	# 无安装状态。搜索参数是AND关系。
-	pfi(){ dnf list installed "*$1*$2*$3*"|gc $@; }	# 搜索已安装的包。
+	#~ pf(){ dnf search -Cy $@|gc $@; }	# 无安装状态。搜索参数是AND关系。
+	#~ pfi(){ dnf list installed "*$1*$2*$3*"|gc $@; }	# 搜索已安装的包。
 	#alias pinf0='dnf info -Cy'			# 可通配符查未安装的包说明
 	##			-------- 已安装的包 --------
 	alias pfile='rpm -q --file'				# 文件所属的包
 	alias pneed='rpm -q --whatrequires'		# 被哪个包需要
 	# 包信息。rpm需要已安装的确切包名；dnf可通配符查未安装的包。
-	pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
+	#~ pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
 	# 包的文件列表。
-	plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
+	#~ plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 fi
 ##------- ---------
 #~ https://clang.llvm.org/docs/ClangFormatStyleOptions.html
