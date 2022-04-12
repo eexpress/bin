@@ -1,6 +1,16 @@
 #!/bin/perl
 
 #~ parameter: dir
+#~ ⭕ dir-xml-gresource.pl img/
+#~ =====> img.xml
+#~ =====> img.gresource
+#~ /img/ara.svg
+#~ /img/auto.svg
+#~ /img/de.svg
+#~ /img/en.svg
+#~ /img/fra.svg
+#~ /img/jp.svg
+#~ /img/kor.svg
 
 use 5.10.0;
 
