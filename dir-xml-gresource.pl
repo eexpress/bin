@@ -23,6 +23,7 @@ $out='<?xml version="1.0" encoding="UTF-8"?>
 $d = $ARGV[0];
 if (-d "$d"){
 	use File::Find;
+	# 支持数组 @directories_to_search，甚至可以使用 @ARGV
 	find({ wanted => \&wanted, no_chdir => 1 }, $d);
 	sub wanted {
 		$out.="\t<file>".$_."</file>\n" if -f;
