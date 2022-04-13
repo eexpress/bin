@@ -28,7 +28,7 @@ if (-d $d){
 	find(\&wanted, $d);
 	sub wanted {
 		$fn=$File::Find::name;
-		if(-d $fn) {next;}
+		if($fn eq $d) {next;}
 		$out.="\t<file>".$fn."</file>\n";
 	}
 } else {
