@@ -21,14 +21,11 @@ $out='<?xml version="1.0" encoding="UTF-8"?>
 ';
 
 $d = $ARGV[0];
-$path = $ENV{'PWD'};
 if (-d "$d"){
 	use File::Find;
-	find(\&wanted, $d);
+	find({ wanted => \&wanted, no_chdir => 1 }, $d);
 	sub wanted {
-		$f=$File::Find::name;
-		if (-d "$path/$f") {next;}
-		$out.="\t<file>".$f."</file>\n";
+		$out.="\t<file>".$_."</file>\n" if -f;
 	}
 } else {
 	die 'Need a relative directory as parameter.';
