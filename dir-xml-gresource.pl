@@ -23,7 +23,7 @@ $out='<?xml version="1.0" encoding="UTF-8"?>
 ';
 
 use File::Find;
-# 支持数组 @directories_to_search。
+# 支持数组 @directories_to_search 。
 find({ wanted => \&wanted, no_chdir => 1 }, @ARGV);
 sub wanted {
 	$out.="\t<file>".$_."</file>\n" if -f;
