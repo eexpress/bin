@@ -6,10 +6,16 @@ UseTab:          Always
 # 尾随注释前的空格数，只适用//，不适用/*
 SpacesBeforeTrailingComments: 2
 
+# 访问说明符(public、private等)的偏移
+# AccessModifierOffset: -2
+# AccessModifierOffset: -3
+
+# Language: JavaScript
+# Language: CSharp
 # Align Group
 # 对齐连续的=号。
 # 还有结构，位定义的:号，跨空行，跨注释，组合的=号，定义后的变量等对齐。
-# AlignConsecutiveAssignments: true
+AlignConsecutiveAssignments: true
 
 # SingleLine Group
 # AllowShortEnumsOnASingleLine: true
@@ -21,7 +27,7 @@ AllowShortBlocksOnASingleLine: Always
 # AllowShortCaseLabelsOnASingleLine: false
 # case可单行。
 AllowShortCaseLabelsOnASingleLine: true
-# AllowShortFunctionsOnASingleLine: All
+AllowShortFunctionsOnASingleLine: All
 # AllowShortLambdasOnASingleLine: All
 # AllowShortIfStatementsOnASingleLine: Never
 # if else单行。

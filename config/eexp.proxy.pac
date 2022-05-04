@@ -1,40 +1,32 @@
-var darr = [
-'google*', 'gstatic', 'gmail', 'sstatic.net', 'recaptcha.net',
-'youtube', 'chrome.com',
+var keyword_array = [
+'google*', 'gstatic', 'gmail', 'sstatic.net', 'recaptcha.net', 'youtube',
 'pinterest.com', 'pinimg.com',
 'twitter', 'twimg', 'imgur.com',
 'telegram.org', 'wire.com', 'tdesktop.com',
 'disqus.com',  'wordpress', 'blogspot', 'feedburner.com', 'blogblog', 'blogger',
-'reddit.com', 'valadoc.org', 'greasyfork.org',
-'thepiratebay',	'wikipedia.org', 'alternativeto.net',
+'reddit.com', 'thepiratebay',	'wikipedia.org',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
 'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',
-'askubuntu', 'stackexchange', 'stackoverflow',
-'element.io'
+'stackexchange', 'element.io',
+'githubusercontent.com', 'githubassets.com',
 ];
-//'fedoraproject.org', 'youneed.win',
-//'github', 'githubusercontent.com', 'githubassets.com'
-
-//~ ⭕ curl --proxy 127.0.0.1:10809 https://www.dnsleaktest.com/|g -A1 Hello
-//~ ⭕ curl --socks5 127.0.0.1:10808 https://www.dnsleaktest.com/|g -A1 Hello
 
 //V2ray Xray
-//var socksport="10808";
-//var httpport="10809";
+//var port = ["10809", "10809", "10808"];
 
-//v2rayA
-var socksport="20170";
-var httpport="20171";
-var httpPACport="20172";
+//v2rayA [HTTP_Port, SOCK_Port, PAC_Port]
+var port = ["20171", "20170", "20172"];
 
-function FindProxyForURL(url, host){
-	for(var i=0;i<darr.length;i++){
+function FindProxyForURL (url, host) {		// host 是 :// 之后到第一个 : 或 / 之前的字符串
+	for (var item of keyword_array) {
 		var append = '.*';
-		if(darr[i].indexOf('.') != -1){ append = '/*'; }
-		var str0 = '*.' + darr[i] + append;
-		var str1 = '*://' + darr[i] + append;
-		if(shExpMatch(url,str0) || shExpMatch(url,str1))
-			return "PROXY localhost:"+httpport+"; SOCKS5 localhost:"+socksport+"; DIRECT";
+		if (item.indexOf('.') != -1) {		//带点的视为完整域名
+			append = '';	//不需要添加后缀
+		}
+		var str0 = '*.' + item + append;
+		var str1 = item + append;
+		if (shExpMatch(host, str0) || shExpMatch(host, str1))
+			return `HTTP localhost:${port[0]}; HTTPS localhost:${port[0]}; SOCKS5 localhost:${port[1]}; DIRECT`;
 	}
 	return "DIRECT";
 }
