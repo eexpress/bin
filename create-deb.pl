@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use 5.10.0;
-use File::Type;	# libfile-type-perl
+use File::MimeInfo;
 use File::Copy qw(copy cp);
 use File::Path qw(make_path remove_tree);
 no warnings 'experimental';
@@ -32,6 +32,7 @@ if($repo){
 	$deb{'Homepage'} = $_;
 }
 #~ ---------------------------------------------
+say "==============================================";
 for (@ARGV){
 	if(/^v(\d[\.\d]{0,})/){	#接受一个版本参数，v0.2 或者 v1 这样的。
 		$deb{'Version'} = $1;
@@ -41,16 +42,23 @@ for (@ARGV){
 	my @info = stat($_);
 	$deb{'Installed-Size'} += $info[7];
 	my $file = $_;
-	given (File::Type->mime_type($file)) {
-		when ("application/x-executable-file") {
+	given (mimetype($file)) {
+		when ("application/octet-stream") {
+			if(! -x $file){say "$file no excutable."; next;}
 			push @bin, $file;
 			if($deb{'Package'} eq "xxx") {$deb{'Package'} = $file;} #第一个可执行文件当作包名
 		}
 		when (m'^image/') {
 			push @img, $file;
 		}
-		when ("application/octet-stream") {
+		when ("application/x-desktop") {
 			push @desktop, $file;
+		}
+		when ("inode/symlink") {
+			say "$file symlink not allow.";
+		}
+		default {
+			say "$file mimetype ($_) not use.";
 		}
 	}
 }
@@ -79,14 +87,12 @@ my $desktop_msg = "";
 if(scalar @desktop == 0){
 	my $dpath = "usr/share/applications/$bin[0].desktop";
 	$desktop_msg = " and $dpath.";
-	my $desktoptxt = "
-[Desktop Entry]
+	my $desktoptxt = "[Desktop Entry]
 Type=Application
 Terminal=false
 Name=$bin[0]
 Icon=$img[0]
-Exec=$bin[0]
-	";
+Exec=$bin[0]";
 	open FC, ">", "$path/$dpath";
 	say FC $desktoptxt;
 	close FC;
