@@ -3,11 +3,15 @@
 use 5.10.0;
 use File::Type;	# libfile-type-perl
 use File::Copy qw(copy cp);
+use File::Path qw(make_path remove_tree);
+no warnings 'experimental';
 
 if(scalar @ARGV == 0){
-	die "Input binary file, picture, desktop file as parameter, to Create deb structrue directory for build deb pacake.";
+	die "Input binary file, picture, desktop file as parameter, to Create deb structrue directory for build deb pacake.
+One none file version parameter can be v0.2 or v1.
+	";
 }
-
+#~ ---------------------------------------------
 my %deb = ('Package' =>'xxx', 'Version'=>'0.1', 'Priority'=> 'optional|extra',
 'Section'=> 'utils|web|net|misc|x11',
 'Maintainer'=> 'eexpss <eexpss@gmail.com>', 'Homepage'=>'',
@@ -27,8 +31,12 @@ if($repo){
 	s':'/'; s'^git@'https://';
 	$deb{'Homepage'} = $_;
 }
-
+#~ ---------------------------------------------
 for (@ARGV){
+	if(/^v(\d[\.\d]{0,})/){	#接受一个版本参数，v0.2 或者 v1 这样的。
+		$deb{'Version'} = $1;
+		next;
+	}
 	if(! -f) {next;}
 	my @info = stat($_);
 	$deb{'Installed-Size'} += $info[7];
@@ -46,30 +54,31 @@ for (@ARGV){
 		}
 	}
 }
-say "----------------------------";
-my $control = '';
 $deb{'Installed-Size'} = int($deb{'Installed-Size'}/1024)." KB";
-foreach $key (keys %deb){
-	say $key.": ".$deb{$key};
-	$control .= $key.": ".$deb{$key}."\n";
-}
-say "----------------------------";
-my $path = "/tmp/$deb{'Package'}";
-mkdir $path;
-mkdir "$path/DEBIAN";
-mkdir "$path/usr";
-mkdir "$path/usr/bin";
+#~ ---------------------------------------------
+my $path = "/tmp/$deb{'Package'}-$deb{'Version'}";
+remove_tree($path);
+make_path("$path/DEBIAN", "$path/usr/bin", "$path/usr/share/applications", "$path/usr/share/pixmaps");
 for(@bin){cp $_, "$path/usr/bin/";}
-mkdir "$path/usr/share";
-mkdir "$path/usr/share/applications";
 for(@desktop){cp $_, "$path/usr/share/applications/";}
-mkdir "$path/usr/share/pixmaps";
 for(@img){cp $_, "$path/usr/share/pixmaps/";}
+#~ ---------------------------------------------
+my $control = '';
+my @order = ('Package', 'Version', 'Priority', 'Section', 'Maintainer', 'Installed-Size',
+'Download-Size', 'Homepage', 'Architecture', 'Depends', 'Description');
+for(@order){
+	$control .= "$_ : $deb{$_}\n";
+}
+chomp $control;
 open FC, ">", "$path/DEBIAN/control";
 say FC $control;
 close FC;
 system("xdg-open $path/DEBIAN/control");
+#~ ---------------------------------------------
+my $desktop_msg = "";
 if(scalar @desktop == 0){
+	my $dpath = "usr/share/applications/$bin[0].desktop";
+	$desktop_msg = " and $dpath.";
 	my $desktoptxt = "
 [Desktop Entry]
 Type=Application
@@ -78,14 +87,16 @@ Name=$bin[0]
 Icon=$img[0]
 Exec=$bin[0]
 	";
-	open FC, ">", "$path/usr/share/applications/$bin[0].desktop";
+	open FC, ">", "$path/$dpath";
 	say FC $desktoptxt;
 	close FC;
-	system("xdg-open $path/usr/share/applications/$bin[0].desktop");
+	system("xdg-open $path/$dpath");
 }
-
+#~ ---------------------------------------------
+say "==============================================";
 my $tree = `tree $path`;
+chomp $tree;
 say $tree;
-say "==============================";
-say "Confirm DEBIAN/control and usr/share/applications/$bin[0].desktop.";
+say "==============================================";
+say "Confirm DEBIAN/control$desktop_msg.";
 say "Excute `sudo dpkg -b $path`.";
