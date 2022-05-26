@@ -25,6 +25,8 @@ else
 	alias pi="$sudostr dnf install"
 	alias pr="$sudostr dnf remove"
 	alias pu="$sudostr dnf update"
+	alias pf="dnf search"
+	alias pfi="dnf list installed"
 	##			-------- 未安装的包 --------
 	# -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
 	#~ pf(){ dnf search -Cy $@|gc $@; }	# 无安装状态。搜索参数是AND关系。
