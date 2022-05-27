@@ -86,7 +86,7 @@ u(){ \du -sch "$@" 2>/dev/null|sort -rh; }
 # 鼠标选择路径或文件，快速进入目录。
 d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
 
-export TERM=xterm-256color	# 放在所有tput之前。
+# export TERM=xterm-256color	# 放在所有tput之前。
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
 #man terminfo: set_a_foreground -> setaf; set_a_background -> setab;
@@ -99,8 +99,8 @@ export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 2)	# enter_underline_m
 export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)		# exit_underline_mode
 export LESS_TERMCAP_mr=$(tput rev)		# enter_reverse_mode
 export LESS_TERMCAP_mh=$(tput dim)		# enter_dim_mode (half-bright)
-export MANPAGER="/usr/bin/less"
-#~ export GROFF_NO_SGR=1	#fix no color in Fedora 25
+#export MANPAGER="/usr/bin/less"
+export GROFF_NO_SGR=1	#fix manpage no color in Fedora 25/36
 
 #-------ENVIROMENT SET-----------------------------
 if [ "$(whoami)" != "root" ]; then
