@@ -16,7 +16,7 @@ if [ -x /usr/bin/apt ]; then
 	alias pfi='apt list --installed'	# 搜索已安装的包。
 	alias pf0='apt search'			# 搜索描述，参数是AND关系。
 	alias pinfo='apt show'
-	pfile(){ dpkg -S $@ || apt-file search $@; }	# 查找文件所属的包(已安装/未安装)
+	pfile(){ dpkg -S $@ || apt-file search $@; }	# 查找文件所或命令属的包(已安装/未安装)
 	plist(){ dpkg -L $@ || apt-file list $@; }	# 列出包的文件(已安装/未安装)
 	#as(){ aptitude search "!~nlib!~ri386!~v $*";}
 	alias pwhoneed='apt-cache rdepends'	# 查看谁依赖这个包
@@ -31,14 +31,14 @@ else
 	# -C 完全从系统缓存运行。长期bug: 1247644。每次都提示导入 GPG 公钥。
 	#~ pf(){ dnf search -Cy $@|gc $@; }	# 无安装状态。搜索参数是AND关系。
 	#~ pfi(){ dnf list installed "*$1*$2*$3*"|gc $@; }	# 搜索已安装的包。
-	#alias pinf0='dnf info -Cy'			# 可通配符查未安装的包说明
+	# alias pinfo='dnf info -Cy'			# 可通配符查未安装的包说明
 	##			-------- 已安装的包 --------
-	alias pfile='rpm -q --file'				# 文件所属的包
-	alias pneed='rpm -q --whatrequires'		# 被哪个包需要
 	# 包信息。rpm需要已安装的确切包名；dnf可通配符查未安装的包。
-	#~ pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
+	pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
+	alias pfile='dnf provides'				# 查找文件或命令所属的包(已安装/未安装)
+	alias pneed='rpm -q --whatrequires'		# 被哪个包需要
 	# 包的文件列表。
-	#~ plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
+	plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 fi
 ##------- ---------
 #~ https://clang.llvm.org/docs/ClangFormatStyleOptions.html
