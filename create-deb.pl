@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# fedora 下需要 `sudo dnf install dpkg perl-File-MimeInfo`
+# ubuntu 下需要 `sudo apt install libfile-mimeinfo-perl`
 use 5.10.0;
 use File::MimeInfo;	#需要安装 perl-File-MimeInfo(fedora) / libfile-mimeinfo-perl(ubuntu)
 use File::Copy qw(copy cp);
@@ -12,11 +14,12 @@ Input binary / picture / desktop file as parameter,
 Version parameter can be "v0.2" or "v1".
 Create deb structrue directory for build deb pacake.
 Auto create "control" file, auto fill some fields.
+If no desktop file, auto create and fill one.
 ----------------------------';
 }
 #~ ---------------------------------------------
 my %deb = ('Priority'=> 'optional|extra (<===== select only one)', 'Section'=> 'utils|web|net|misc|x11 (<===== select only one)',
- 'Depends'=>'<===== xxxx,xxxx','Description'=>"<===== xxxx\n  <====xxxxxxxxxxxxxxx", 'Version'=>"<====0.2?");
+ 'Depends'=>'<===== xxxx,xxxx','Description'=>"<===== xxxx\n  <====xxxxxxxxxxxxxxx", 'Version'=>"1.0");
 #~ Priority	软件对于系统的重要程度	required, standard, optional, extra等；
 #~ Section	软件类别	utils, net, mail, text, x11
 my @bin, @img, @desktop;
@@ -35,7 +38,7 @@ if($repo){
 	$deb{'Homepage'} = $_;
 }
 #~ ---------------------------------------------
-my $version = "";
+my $version = "-1.0";
 for (@ARGV){
 	if(/^v(\d[\.\d]{0,})/){	# 接受一个版本参数，v0.2 或者 v1 这样的。
 		$deb{'Version'} = $1;
@@ -43,7 +46,7 @@ for (@ARGV){
 		next;
 	}
 	if(! -f) {next;}	# 其他参数只能是文件。
-	my @info = stat($_);	# 获取文件大小。
+	#~ my @info = stat($_);	# 获取文件大小。
 	#~ $deb{'Installed-Size'} += $info[7];	# 累加到安装尺寸。
 	my $file = $_;
 	given (mimetype($file)) {	# 按文件类型放到对应目录
