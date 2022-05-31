@@ -114,6 +114,7 @@ say "==============================================";
 say "Please confirm DEBIAN/control$desktop_msg. ";
 say "==============================================";
 say "After comfirm, you can excute `sudo dpkg -b $path` will create deb file:\n==>\t$path.deb";
+`chmod +x $path/usr/bin/*`;	# 奇怪，cp过去，没执行属性了。
 
 sub save_control{
 	my $control = '';	# 新建 control 文件。

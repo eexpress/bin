@@ -71,10 +71,10 @@ for (@ARGV){
 #~ ---------------------------------------------
 if ($#bin < 0) {die "Need at last one binary excute file.";}
 if ($#img < 0) {die "Need at last one image file.";}
-my $path0 = "$ENV{HOME}/rpmbuild";
-remove_tree($path0);
+my $workpath = "$ENV{HOME}/rpmbuild";
+remove_tree($workpath);
 `rpmdev-setuptree`;	# 遵照 ~/.rpmmacros 设置，产生 rpmbuild 目录。
-$path = "$path0/SOURCES";
+$path = "$workpath/SOURCES";
 make_path("$path/usr/bin", "$path/usr/share/applications", "$path/usr/share/pixmaps");
 my $filelist = '';
 for(@bin){cp $_, "$path/usr/bin/"; $filelist .= "%{_bindir}/$_\n";}
@@ -98,18 +98,19 @@ Exec=$bin[0]";
 	system("xdg-open $path/$dpath");
 }
 #~ ---------------------------------------------
-my $specfile = "$path0/SPECS/$rpm{'Name'}.spec";
+my $specfile = "$workpath/SPECS/$rpm{'Name'}.spec";
 save_spec();
 system("xdg-open $specfile");
 #~ ---------------------------------------------
 say "==============================================";
-my $tree = `tree $path0`;
+my $tree = `tree $workpath`;
 chomp $tree;
 say $tree;
 say "==============================================";
 say "Please confirm SPECS/$rpm{'Name'}.spec$desktop_msg. ";
 say "==============================================";
 say "After comfirm, you can excute `rpmbuild -bb ~/rpmbuild/SPECS/$rpm{'Name'}.spec ` will create rpm file:\n==>\t~/rpmbuild/RPMS/$arch/$rpm{'Name'}-$rpm{'Version'}-$rpm{'Release'}.rpm";
+`chmod +x $path/usr/bin/*`;	# 奇怪，cp过去，没执行属性了。
 
 sub save_spec{
 	my $control = '';	# 新建 control 文件。
