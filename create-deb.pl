@@ -71,6 +71,8 @@ for (@ARGV){
 }
 #~ $deb{'Installed-Size'} = int($deb{'Installed-Size'}/1024)." KB";	# 计算安装尺寸。
 #~ ---------------------------------------------
+if ($#bin < 0) {die "Need at last one binary excute file.";}
+if ($#img < 0) {die "Need at last one image file.";}
 my $path = "/tmp/$deb{'Package'}$version";
 remove_tree($path);
 make_path("$path/DEBIAN", "$path/usr/bin", "$path/usr/share/applications", "$path/usr/share/pixmaps");
