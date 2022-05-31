@@ -1,18 +1,22 @@
 #!/usr/bin/perl
 
 use 5.10.0;
-use File::MimeInfo;
+use File::MimeInfo;	#需要安装 perl-File-MimeInfo(fedora) / libfile-mimeinfo-perl(ubuntu)
 use File::Copy qw(copy cp);
 use File::Path qw(make_path remove_tree);
 no warnings 'experimental';
 
 if(scalar @ARGV == 0){
-	die "Input binary file, picture, desktop file as parameter, to Create deb structrue directory for build deb pacake.
-One none file version parameter can be v0.2 or v1.
-	";
+	die '----------------------------
+Input binary / picture / desktop file as parameter,
+Version parameter can be "v0.2" or "v1".
+Create deb structrue directory for build deb pacake.
+Auto create "control" file, auto fill some fields.
+----------------------------';
 }
 #~ ---------------------------------------------
-my %deb = ('Priority'=> 'optional|extra', 'Section'=> 'utils|web|net|misc|x11');
+my %deb = ('Priority'=> 'optional|extra (<===== select only one)', 'Section'=> 'utils|web|net|misc|x11 (<===== select only one)',
+ 'Depends'=>'<===== xxxx,xxxx','Description'=>"<===== xxxx\n  <====xxxxxxxxxxxxxxx", 'Version'=>"<====0.2?");
 #~ Priority	软件对于系统的重要程度	required, standard, optional, extra等；
 #~ Section	软件类别	utils, net, mail, text, x11
 my @bin, @img, @desktop;
@@ -31,7 +35,6 @@ if($repo){
 	$deb{'Homepage'} = $_;
 }
 #~ ---------------------------------------------
-say "==============================================";
 my $version = "";
 for (@ARGV){
 	if(/^v(\d[\.\d]{0,})/){	# 接受一个版本参数，v0.2 或者 v1 这样的。
@@ -41,7 +44,7 @@ for (@ARGV){
 	}
 	if(! -f) {next;}	# 其他参数只能是文件。
 	my @info = stat($_);	# 获取文件大小。
-	$deb{'Installed-Size'} += $info[7];	# 累加到安装尺寸。
+	#~ $deb{'Installed-Size'} += $info[7];	# 累加到安装尺寸。
 	my $file = $_;
 	given (mimetype($file)) {	# 按文件类型放到对应目录
 		when ("application/octet-stream") {	# 二进制文件。
@@ -63,7 +66,7 @@ for (@ARGV){
 		}
 	}
 }
-$deb{'Installed-Size'} = int($deb{'Installed-Size'}/1024)." KB";	# 计算安装尺寸。
+#~ $deb{'Installed-Size'} = int($deb{'Installed-Size'}/1024)." KB";	# 计算安装尺寸。
 #~ ---------------------------------------------
 my $path = "/tmp/$deb{'Package'}$version";
 remove_tree($path);
@@ -72,16 +75,14 @@ for(@bin){cp $_, "$path/usr/bin/";}
 for(@desktop){cp $_, "$path/usr/share/applications/";}
 for(@img){cp $_, "$path/usr/share/pixmaps/";}
 #~ ---------------------------------------------
-my $control = '';	# 新建 control 文件。
-my @order = ('Package', 'Version', 'Priority', 'Section', 'Maintainer', 'Installed-Size',
-'Download-Size', 'Homepage', 'Architecture', 'Depends', 'Description');
-for(@order){
-	$control .= "$_ : $deb{$_}\n";
-}
-chomp $control;
-open FC, ">", "$path/DEBIAN/control";
-say FC $control;
-close FC;
+save_control();
+$_ = `du -sh $path`; s/\s+.*$//; chomp;	# du的第一个结果数据。
+$deb{'Installed-Size'} = $_;
+`tar -Jcf tmp.xz $path 2>/dev/null`;
+$_ = `du -sh tmp.xz`; s/\s+.*$//; chomp;	# du的第一个结果数据。
+$deb{'Download-Size'} = $_;
+save_control();
+#~ ---------------------------------------------
 system("xdg-open $path/DEBIAN/control");
 #~ ---------------------------------------------
 my $desktop_msg = "";
@@ -105,5 +106,20 @@ my $tree = `tree $path`;
 chomp $tree;
 say $tree;
 say "==============================================";
-say "Confirm DEBIAN/control$desktop_msg.";
-say "Excute `sudo dpkg -b $path` will create deb file:\n==>\t$path.deb";
+say "Please confirm DEBIAN/control$desktop_msg. ";
+say "==============================================";
+say "After comfirm, you can excute `sudo dpkg -b $path` will create deb file:\n==>\t$path.deb";
+
+sub save_control{
+	my $control = '';	# 新建 control 文件。
+	my @order = ('Package', 'Version', 'Priority', 'Section', 'Maintainer', 'Installed-Size',
+	'Download-Size', 'Homepage', 'Architecture', 'Depends', 'Description');
+	for(@order){
+		$field = sprintf("%-14s", $_);
+		$control .= "$field : $deb{$_}\n";
+	}
+	chomp $control;
+	open FC, ">", "$path/DEBIAN/control";
+	say FC $control;
+	close FC;
+}
