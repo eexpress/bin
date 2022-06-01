@@ -1,37 +1,29 @@
-BasedOnStyle:  WebKit
-# 花括号反正不断行。一直跟在行尾。
+# ⭕ declare -a arr=("webkit" "llvm" "google" "chromium" "mozilla" "microsoft" "gnu"); for i in  "${arr[@]}"; do clang-format clip-qrcode-share.vala -style=$i > tmp.$i; done
+# LLVM / Google / Chromium 一样
+#=====================================================
+BasedOnStyle: LLVM
+
+# 花括号反正不断行。一直跟在行尾。7种风格在此。
 BreakBeforeBraces: Attach
 TabWidth:        4
 UseTab:          Always
+IndentWidth:		4
+
 # 尾随注释前的空格数，只适用//，不适用/*
-SpacesBeforeTrailingComments: 2
+SpacesBeforeTrailingComments: 8
 
-# 访问说明符(public、private等)的偏移
-# AccessModifierOffset: -2
-# AccessModifierOffset: -3
+# 在圆括号的(后和)前添加空格
+SpacesInParentheses: true
 
-# Language: JavaScript
-# Language: CSharp
-# Align Group
-# 对齐连续的=号。
-# 还有结构，位定义的:号，跨空行，跨注释，组合的=号，定义后的变量等对齐。
+# 对齐连续的=号。还有结构，位定义的:号，跨空行，跨注释，组合的=号，定义后的变量等对齐。
 AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
 
-# SingleLine Group
-# AllowShortEnumsOnASingleLine: true
-# AllowShortBlocksOnASingleLine: Empty
-# 始终将短块合并为一行。
-# 可是 finally { } 被拆。for (let i of obj) gitDirs.push(i); 也被拆。
+# Allow Short
 AllowShortBlocksOnASingleLine: Always
-
-# AllowShortCaseLabelsOnASingleLine: false
-# case可单行。
 AllowShortCaseLabelsOnASingleLine: true
+AllowShortEnumsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: All
-# AllowShortLambdasOnASingleLine: All
-# AllowShortIfStatementsOnASingleLine: Never
-# if else单行。
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
-# AllowShortLoopsOnASingleLine: false
-# while 可单行。
+AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: true
