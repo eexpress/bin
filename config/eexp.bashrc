@@ -140,3 +140,5 @@ bind '"\e[B": history-search-forward'
 #bash_completion
 . /etc/profile.d/bash_completion.sh
 #unset command_not_found_handle
+#~ cd	# gnome-termianl 调用此配置前，扩展 note 就乱进了某目录。
+
