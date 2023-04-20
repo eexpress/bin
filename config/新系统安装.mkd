@@ -1,57 +1,95 @@
-# new install
+# 新系统安装后的设置
 
 ## 修改主机名
 
-> 设置 -> 详细信息 -> About ：设备名称
+> 设置 ⇨ 关于 ⇨ 设备名称
+
+## 恢复`~/.ssh`目录
 
 ## 安装软件
 
+[fedora | 清华镜像使用帮助 Tsinghua](https://mirrors.tuna.tsinghua.edu.cn/help/fedora/)
+
+```bash
+sudo dnf upgrade    # 更新仓库，之前先设置国内的镜像源
+sudo dnf install git gitg gnome-tweaks peek shutter meld xclip
+sudo dnf install geany geany-plugins-automark geany-plugins-geanyvc geany-plugins-git-changebar geany-plugins-autoclose
 ```
-# dnf upgrade
-# dnf install retext gnome-tweaks autojump keepassx vim-X11
-```
+
 ## 同步配置
 
-```
-xps14 $ sudo service sshd start
-> 生成前，修改主机名。设置 -> 详细信息 -> About ：设备名称
-$ ssh-keygen
-$ ssh-copy-id eexpss@192.168.5.47
-> 把 ~/.ssh/id_rsa.pub 贴到 github.com 去。
+```bash
+git clone git@github.com:eexpress/bin.git    # 恢复bin目录，配置
+~/bin/config/ln-全部+号文件到家目录.bash
 
-cd
-cp xxxx(u-disk)xxxx/.ssh/* .ssh/
-> or
-scp eexpss@192.168.5.47:/home/eexpss/.ssh/* .ssh/
-git clone git@github.com:eexpress/bin.git
-> 不要克隆https的格式，否则push时，又要手动修改 .git/config 里面的url格式。
-~/bin/config/ln-全部隐藏文件到家目录.bash
-~/bin/config/gsettings.bash
-> `Ctrl+Shift+T`
-ln -sf /home/eexpss/Home/eexpss/.mozilla/ .
+# 安装 grub 主题
+mkdir ~/app; cd !$
+git clone https://github.com/vinceliuice/grub2-themes.git
+cd grub2-themes
+sudo ./install.sh -t vimix -s 4k
 
-> 如果需要ss
-cd ~/bin/config/
-cp /run/media/eexpss/Home/eexpss/bin/config/ss-v2ray-config/ . -r
+# 安装 FiraMono-Regular.ttf 和 Museo500-Regular.otf 字体
+gsettings set org.gnome.desktop.interface monospace-font-name 'Fira Mono 12'
+gsettings set org.gnome.desktop.interface document-font-name 'Museo Medium 12'
+gsettings set org.gnome.desktop.interface font-name 'Museo Medium 11'
+gsettings set org.gnome.desktop.interface titlebar-font 'Museo Bold 11'
 
-> 可省略
-gpg --gen-key
-gpg --gen-revoke FA3A000A
+# 设置窗口标题栏鼠标动作
+gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'lower'
+gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'minimize'
 
-
+# 设置鼠标光标主题
+gsettings set org.gnome.desktop.interface cursor-theme 'Qetzal'
 ```
 
-##磁盘分配
+## 恢复 project 工程
+
+```bash
+#!/bin/bash
+
+mkdir ~/project; cd !$
+
+readarray array <<EOM
+    git@github.com:eexpress/at-gui.git
+    git@github.com:eexpress/cairo-timer.git
+    git@github.com:eexpress/clip-qrcode-share
+    git@github.com:eexpress/dotchar.git
+    git@github.com:eexpress/gnome-shell-cairo.git
+    git@github.com:eexpress/gnome-shell-clip-note.git
+    git@github.com:eexpress/gnome-shell-compare.git
+    git@github.com:eexpress/gnome-shell-countdown-timer.git
+    git@github.com:eexpress/gs-alt-mouse.git
+    git@github.com:eexpress/gs-animate.git
+    git@github.com:eexpress/gs-clip-translator.git
+    git@github.com:eexpress/gs-git.git
+    git@github.com:eexpress/gs-m3u8-play.git
+    git@github.com:eexpress/gs-note.git
+    git@github.com:eexpress/gs-open.git
+    git@github.com:eexpress/gs-qrcode.git
+    git@github.com:eexpress/gs-speed.git
+    git@github.com:eexpress/gs-weather.git
+    git@github.com:eexpress/irda-timer.git
+    git@github.com:eexpress/list-exec.git
+    git@github.com:eexpress/nmn.git
+    git@github.com:eexpress/script-diagram.git
+    git@github.com:eexpress/showit.git
+EOM
+
+for i in "${array[@]}"; do git clone $i; done
 ```
-▶ lsblk
-NAME            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-sda               8:0    0 465.8G  0 disk 
-├─sda1            8:1    0 250.6G  0 part /home/eexpss/Home
-└─sda2            8:2    0 215.2G  0 part /home/eexpss/Game
-sdb               8:16   0  29.8G  0 disk 
-├─sdb1            8:17   0   200M  0 part /boot/efi
-├─sdb2            8:18   0     1G  0 part /boot
-└─sdb3            8:19   0  28.6G  0 part 
-  ├─fedora-root 253:0    0  25.6G  0 lvm  /
-  └─fedora-swap 253:1    0     3G  0 lvm  [SWAP]
+
+## 安装 gnome 扩展
+
+|                                                                                 |                                                                                                               |                                                                                             |                                                                                   |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [Alt Mouse](https://extensions.gnome.org/extension/4786/alt-mouse/)             | [Cairo Clock](https://extensions.gnome.org/extension/4809/cairo-clock/)                                       | [Git Monitor](https://extensions.gnome.org/extension/4925/git/)                             | [Screen Net Speed](https://extensions.gnome.org/extension/4901/screen-net-speed/) |
+| [Burn My Windows](https://extensions.gnome.org/extension/4679/burn-my-windows/) | [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) | [Compiz windows effect](https://extensions.gnome.org/extension/3210/compiz-windows-effect/) | [Extension List](https://extensions.gnome.org/extension/3088/extension-list/)     |
+
+## 安装 V2rayA
+
+```bash
+sudo dnf copr enable zhullyb/v2rayA
+sudo dnf install v2ray-core v2raya
+sudo systemctl start v2raya.service
+sudo systemctl enable v2raya.service    # 设置开机自动启动
 ```
