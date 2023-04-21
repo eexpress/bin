@@ -54,7 +54,7 @@ readarray array <<EOM
     git@github.com:eexpress/cairo-timer.git
     git@github.com:eexpress/clip-qrcode-share
     git@github.com:eexpress/dotchar.git
-    git@github.com:eexpress/gnome-shell-cairo.git
+    git@github.com:eexpress/gs-clock.git
     git@github.com:eexpress/gnome-shell-clip-note.git
     git@github.com:eexpress/gnome-shell-compare.git
     git@github.com:eexpress/gnome-shell-countdown-timer.git
