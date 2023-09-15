@@ -8,7 +8,7 @@
 
 ## 安装软件
 
-[fedora | 清华镜像使用帮助 Tsinghua](https://mirrors.tuna.tsinghua.edu.cn/help/fedora/)
+[fedora | 清华镜像使用帮助 Tsinghua](https://mirrors.tuna.tsinghua.edu.cn/help/fedora/) 非必要
 
 ```bash
 sudo dnf upgrade    # 更新仓库，之前先设置国内的镜像源
@@ -22,7 +22,7 @@ sudo dnf install geany geany-plugins-automark geany-plugins-geanyvc geany-plugin
 git clone git@github.com:eexpress/bin.git    # 恢复bin目录，配置
 ~/bin/config/ln-全部+号文件到家目录.bash
 
-# 安装 grub 主题
+# 安装 grub 主题。有可能影响到自动升级后，不能刷新出grub新的菜单。
 mkdir ~/app; cd !$
 git clone https://github.com/vinceliuice/grub2-themes.git
 cd grub2-themes
@@ -92,4 +92,33 @@ sudo dnf copr enable zhullyb/v2rayA
 sudo dnf install v2ray-core v2raya
 sudo systemctl start v2raya.service
 sudo systemctl enable v2raya.service    # 设置开机自动启动
+```
+
+## 安装 nvidia 驱动
+
+```
+⭕ sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+⭕ sudo dnf install akmod-nvidia nvidia-driver
+⭕ nvidia-smi
+Fri Sep 15 14:40:01 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.104.05             Driver Version: 535.104.05   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce RTX 3060 Ti     Off | 00000000:01:00.0  On |                  N/A |
+|  0%   49C    P8               9W / 200W |    672MiB /  8192MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|    0   N/A  N/A     14481      G   /usr/bin/gnome-shell                        420MiB |
+|    0   N/A  N/A     15433      G   /usr/lib64/firefox/firefox                  239MiB |
++---------------------------------------------------------------------------------------+
 ```
