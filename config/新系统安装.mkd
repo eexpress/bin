@@ -47,7 +47,7 @@ gsettings set org.gnome.desktop.interface cursor-theme 'Qetzal'
 ```bash
 #!/bin/bash
 
-mkdir ~/project; cd !$
+mkdir ~/project; cd ~/project
 
 readarray array <<EOM
     git@github.com:eexpress/at-gui.git
