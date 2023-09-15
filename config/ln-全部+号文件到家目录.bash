@@ -7,6 +7,9 @@ printf "%70s\n" | tr ' ' '='
 for target in `\ls|grep '^+'`; do
 	# 路径中，+表示斜杠，=表示空格。第一个+表示'~/.'。
 	link=`echo $target|sed 's|+|/|g; s|=|\\\\ |g; s|^/|~/.|'`
+	path=`dirname $link | sed "s|^~|$HOME|"`
+	[ -d $path ] || mkdir -p $path
+	#~ if [ ! -d "$path" ]; then mkdir -p "$path"; fi
 	cmd="rm -r $link; ln -sf $d/$target $link"
 	#~ echo $cmd
 	eval $cmd
