@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=nekoray
+Exec=/home/eexpss/app/nekoray-3.21-2023-09-12-linux-x64.AppImage
+Terminal=false
+Type=Application
+Icon=/home/eexpss/bin/config/+local+share+applications/nekoray.png
+Categories=Web;
+Keywords=nekoray;
