@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=LosslessCut
+Exec=/home/eexpss/app/LosslessCut-linux.AppImage
+Terminal=false
+Type=Application
+Icon=losslesscut
+StartupWMClass=LosslessCut
+Comment=The swiss army knife of lossless video/audio editing
+Categories=Utility;

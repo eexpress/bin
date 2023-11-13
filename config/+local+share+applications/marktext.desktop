@@ -1,17 +1,11 @@
 [Desktop Entry]
 Name=MarkText
-Comment=Next generation markdown editor
-Exec=/home/eexpss/app/marktext-x86_64.AppImage %F
+Exec=/home/eexpss/app/marktext-x86_64.AppImage
 Terminal=false
 Type=Application
-Icon=/home/eexpss/bin/config/+local+share+applications/marktext.png
-Categories=Office;TextEditor;Utility;
-MimeType=text/markdown;
-Keywords=marktext;
-StartupWMClass=marktext
-Actions=NewWindow;
-
-[Desktop Action NewWindow]
-Name=New Window
-Exec=marktext --new-window %F
 Icon=marktext
+StartupWMClass=marktext
+Keywords=marktext;
+Comment=A simple and elegant open-source markdown editor that focused on speed and usability.
+MimeType=text/markdown;
+Categories=Office;TextEditor;Utility;

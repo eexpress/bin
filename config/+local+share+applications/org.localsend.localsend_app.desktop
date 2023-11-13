@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=LocalSend
+Exec=/home/eexpss/app/LocalSend-1.8.0.AppImage
+Icon=application-vnd.appimage
+Type=Application
+Terminal=false
+Categories=Utility;
+Comment=
