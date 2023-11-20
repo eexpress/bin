@@ -73,7 +73,7 @@ string formatFilename(string str, bool change2plus){
 //~ 	change2plus 方向，true 为变+号格式，false 为恢复正常路径格式。
 	Regex e;
 	string r = str;	// 不要直接修改传入参数
-	if(change2plus){	// "s|${HOME}/.|+|; s|/|+|g; s|\ |=|g"
+	if(change2plus){	// "s|^${HOME}/.|+|; s|/|+|g; s|\ |=|g"
 		try{
 			e = new Regex("^"+Environment.get_variable("HOME")+"/.");
 			r = e.replace(r, r.length, 0, "+");
@@ -81,7 +81,7 @@ string formatFilename(string str, bool change2plus){
 			e = new Regex("/"); r = e.replace(r, r.length, 0, "+");
 			e = new Regex("\\ "); r = e.replace(r, r.length, 0, "=");
 		}catch (GLib.Error err) {error ("%s", err.message);}
-	} else {			// 's|+|/|g; s|=|\\\\ |g; s|^/|~/.|'
+	} else {			// 's|^+|~/.|; s|+|/|g; s|=| |g'
 		try{
 			e = new Regex("^\\+"); r = e.replace(r, r.length, 0, "~/.");
 			e = new Regex("\\+"); r = e.replace(r, r.length, 0, "/");
