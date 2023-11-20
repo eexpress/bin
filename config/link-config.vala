@@ -2,73 +2,88 @@
 //~ ⭕ ./link-config 
 
 using Gtk;
-//~ using Cairo;
-//~ using Rsvg;
 
 const string appID = "io.github.eexpress.link.config";
 const string appTitle = "Link Config";
-//~ static int count = 0;
-//~ static int x = 10;
-Gtk.ApplicationWindow window;
-//~ Resource res;
-
+string git_ls;
+//~ --------------------------------------------------------------------
 int main(string[] args) {
 	var app = new Gtk.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
 	app.activate.connect(onAppActivate);
 	return app.run(args);
 }
-
+//~ --------------------------------------------------------------------
 void onAppActivate(GLib.Application self) {
-//~   Resource res = null;res.load("./res.gresource");
-//~   if (res.load("res.gresource")) {
-//~ 	  resources_register(res);
-//~ 	} else {
-//~ 		print("no gresource.\n");
-//~ 	}
-//~   var file = File.new_for_uri("resource:///img/r1.svg");
-//~ var path=GLib.Environment.get_current_dir();
-//~ print("当前目录："+path+"\n");
-//~   var file = File.new_for_path(path+"/img/r1.svg");
-//~   if(file.query_exists()){
-//~ 	  print ("resouce exist.\n");
-//~   }else{ print("resouce no found.\n");}
+	var window = new Gtk.ApplicationWindow(self as Gtk.Application);
+	window.title = appTitle;
+	window.set_default_size(400, 420);
+	window.resizable = true;
+	//~ ---------------------
+	var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+	box.set_margin_start(10);
+//~ 	box.set_margin_top(20);	// 无效？
+	var lb = new Gtk.ListBox();
+	var bt0 = new Gtk.Button.with_label("✖️ 取消备份：删除链接，移动文件到源位置");
+	var bt1 = new Gtk.Button.with_label("➕ 添加备份：移动源文件过来，在源位置建立链接");
+	var bt2 = new Gtk.Button.with_label("♻️ 全部恢复：在源位置强行建立全部链接");
+	window.child = box;box.append(lb);
+	box.append(bt0); box.append(bt1); box.append(bt2);
+	bt0.halign = Gtk.Align.START;
+	bt1.halign = Gtk.Align.START;
+	bt2.halign = Gtk.Align.START;
+	//~ ---------------------
+	try{
+		Process.spawn_sync (null,{"git", "ls"},null,SpawnFlags.SEARCH_PATH,null,out git_ls,null,null);
+//~ 		print("git ls 的输出\n"+git_ls);
+	} catch (Error err) {error ("%s", err.message);}
+	//~ ---------------------
+  	List<string> list = new List<string> ();
+	list = listfile();
+	list.foreach ((i) => {		// 警告：不兼容的指针类型间转换
+		var prefix = "";
+		var lbl = new Gtk.Label("");
+			lbl.xalign = (float)0;	// 左对齐。默认居中？
+			prefix += FileUtils.test(i, FileTest.IS_DIR)?"🅳":"🇫";	// 是目录
+			prefix += checklink(i) ?"🔗":"💔️";	// 正确的链接
+			prefix += git_ls.contains(i) ?"☂️️️":"✖️️️️";	// 是否在 git 仓库
+			
+//~ 			lbl.set_markup(fill+"<span background=\""+color[hash.get(flag)]+
+//~ 			"\"	foreground=\"#ffffff\"><b> "+flag+" </b></span>  "+name+"");
+			lbl.set_markup(prefix+"    "+formatFilename(i, false));
+			lb.insert(lbl, -1);
+	});
 
-  window = new Gtk.ApplicationWindow(self as Gtk.Application);
-//~   var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);
-//~   var label = new Gtk.Label("Click the button");
-//~   var button = new Gtk.Button.with_label("🤔");
-
-//~   window.child = box;
-  window.title = appTitle;
-  window.set_default_size(400, 400);
-  window.resizable = true;
-//~   window.move(10,10); 	//	not exist
-//~   window.decorated = false;
-//~   window.set_keep_above (true); 	//	not exist
-//~   window.app_paintable = true;	//	not exist
-
-//~   box.halign = Gtk.Align.CENTER; box.valign = Gtk.Align.CENTER;
-//~   box.append(label); box.append(button);
-
-//~   button.halign = Gtk.Align.CENTER; button.valign = Gtk.Align.CENTER;
-//~   button.clicked.connect(onButtonClicked);
-  window.present ();
-  print("==> %s / Version 0.1\n", appTitle);
- 
-  string r = formatFilename("~/.config/neo vim/init.rc", true);
-	print("========----->"+r+"\n");
-  r = formatFilename("/home/eexpss/.config/neo vim/init.rc", true);
-	print("========----->"+r+"\n");
-  r = formatFilename("+config+neo=vim+init.rc", false);
-	print("========----->"+r+"\n");
+	window.present ();
+	print("==> %s / Version 0.1\n", appTitle);
 }
-
-//~ void onButtonClicked(Gtk.Button self) {
-//~   print("You clicked %d times!\n", ++count);
-//~   x+=10;
-//~   window.move(x,10);	// not exist
-//~ }
-
+//~ --------------------------------------------------------------------
+bool checklink(string localfile){	// 带+号的本地文件
+//~ 	本地文件转化成源文件
+	var r = formatFilename(localfile, false);
+	try {
+	//~ 	获取源配置文件的绝对路径
+		var e = new Regex("^~"); r = e.replace(r, r.length, 0, Environment.get_variable("HOME"));
+	//~ 	----------------
+		if(FileUtils.test(localfile, FileTest.IS_SYMLINK)) return false;	// 本地文件不能是链接
+		if(!FileUtils.test(r, FileTest.IS_SYMLINK)) return false;	//源配置文件必须是链接
+		if(FileUtils.read_link(r) != Environment.get_current_dir()+"/"+localfile) return false;	// 源文件链接 == 本地文件
+	} catch (Error err) {error ("%s", err.message);}
+	return true;
+}
+//~ --------------------------------------------------------------------
+List<string> listfile(){
+	List<string> list = new List<string> ();
+	try {
+		string dir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
+		var d  = GLib.Dir.open(dir, 0);
+		string ? fn = null;	// 可空字符串
+		while ((fn = d.read_name()) != null) {
+			if(fn[0] == '+') { list.append (fn); }
+		}
+	} catch (Error err) {error ("%s", err.message);}
+	return list;
+}
+//~ --------------------------------------------------------------------
 string formatFilename(string str, bool change2plus){
 //~ 	change2plus 方向，true 为变+号格式，false 为恢复正常路径格式。
 	Regex e;
@@ -80,13 +95,14 @@ string formatFilename(string str, bool change2plus){
 			e = new Regex("^~/."); r = e.replace(r, r.length, 0, "+");
 			e = new Regex("/"); r = e.replace(r, r.length, 0, "+");
 			e = new Regex("\\ "); r = e.replace(r, r.length, 0, "=");
-		}catch (GLib.Error err) {error ("%s", err.message);}
+		}catch (Error err) {error ("%s", err.message);}
 	} else {			// 's|^+|~/.|; s|+|/|g; s|=| |g'
 		try{
 			e = new Regex("^\\+"); r = e.replace(r, r.length, 0, "~/.");
+//~ 			e = new Regex("^\\+"); r = e.replace(r, r.length, 0, Environment.get_variable("HOME")+"/.");
 			e = new Regex("\\+"); r = e.replace(r, r.length, 0, "/");
 			e = new Regex("="); r = e.replace(r, r.length, 0, " ");
-		}catch (GLib.Error err) {error ("%s", err.message);}
+		}catch (Error err) {error ("%s", err.message);}
 	}
 	return r;
 }
