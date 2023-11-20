@@ -1,36 +1,42 @@
-//~ ⭕ valac --pkg gtk4 link-config.vala 
+//~ ⭕ valac --pkg gtk4 --pkg posix link-config.vala 
 //~ ⭕ ./link-config 
+//~ 警告：传递‘g_list_foreach’的第 2 个参数时在不兼容的指针类型间转换 [-Wincompatible-pointer-types]
 
 using Gtk;
 
 const string appID = "io.github.eexpress.link.config";
 const string appTitle = "Link Config";
 string git_ls;
+string dir;
 //~ --------------------------------------------------------------------
 int main(string[] args) {
 	var app = new Gtk.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
+	try{	// 获取执行文件路径，并切换工作目录。
+		dir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
+		Posix.chdir(dir);
+	} catch (Error err) {error ("%s", err.message);}
 	app.activate.connect(onAppActivate);
 	return app.run(args);
 }
 //~ --------------------------------------------------------------------
-void onAppActivate(GLib.Application self) {
-	var window = new Gtk.ApplicationWindow(self as Gtk.Application);
+void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的 Application
+	var window = new ApplicationWindow(self as Gtk.Application);
 	window.title = appTitle;
 	window.set_default_size(400, 420);
 	window.resizable = true;
 	//~ ---------------------
-	var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+	var box = new Box(Orientation.VERTICAL, 5);
 	box.set_margin_start(10);
 //~ 	box.set_margin_top(20);	// 无效？
-	var lb = new Gtk.ListBox();
-	var bt0 = new Gtk.Button.with_label("✖️ 取消备份：删除链接，移动文件到源位置");
-	var bt1 = new Gtk.Button.with_label("➕ 添加备份：移动源文件过来，在源位置建立链接");
-	var bt2 = new Gtk.Button.with_label("♻️ 全部恢复：在源位置强行建立全部链接");
+	var lb = new ListBox();
+	var bt0 = new Button.with_label("✖️ 取消备份：删除链接，移动文件到源位置");
+	var bt1 = new Button.with_label("➕ 添加备份：移动源文件过来，在源位置建立链接");
+	var bt2 = new Button.with_label("♻️ 全部恢复：在源位置强行建立全部链接");
 	window.child = box;box.append(lb);
 	box.append(bt0); box.append(bt1); box.append(bt2);
-	bt0.halign = Gtk.Align.START;
-	bt1.halign = Gtk.Align.START;
-	bt2.halign = Gtk.Align.START;
+	bt0.halign = Align.START;
+	bt1.halign = Align.START;
+	bt2.halign = Align.START;
 	//~ ---------------------
 	try{
 		Process.spawn_sync (null,{"git", "ls"},null,SpawnFlags.SEARCH_PATH,null,out git_ls,null,null);
@@ -41,7 +47,7 @@ void onAppActivate(GLib.Application self) {
 	list = listfile();
 	list.foreach ((i) => {		// 警告：不兼容的指针类型间转换
 		var prefix = "";
-		var lbl = new Gtk.Label("");
+		var lbl = new Label("");
 			lbl.xalign = (float)0;	// 左对齐。默认居中？
 			prefix += FileUtils.test(i, FileTest.IS_DIR)?"🅳":"🇫";	// 是目录
 			prefix += checklink(i) ?"🔗":"💔️";	// 正确的链接
@@ -54,7 +60,7 @@ void onAppActivate(GLib.Application self) {
 	});
 
 	window.present ();
-	print("==> %s / Version 0.1\n", appTitle);
+	print("==> %s. Version 0.1. Dir is \"%s\".\n", appID, dir);
 }
 //~ --------------------------------------------------------------------
 bool checklink(string localfile){	// 带+号的本地文件
@@ -74,7 +80,6 @@ bool checklink(string localfile){	// 带+号的本地文件
 List<string> listfile(){
 	List<string> list = new List<string> ();
 	try {
-		string dir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
 		var d  = GLib.Dir.open(dir, 0);
 		string ? fn = null;	// 可空字符串
 		while ((fn = d.read_name()) != null) {
