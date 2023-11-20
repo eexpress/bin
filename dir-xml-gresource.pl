@@ -59,3 +59,21 @@ say $list;
 #~ /img/r8.svg
 #~ /img/r9.svg
 #~ ⭕ gresource list res.gresource | while read i; do gresource extract res.gresource $i>./$i; done
+
+/*
+GLib.Resource
+1. load是直接加载gresource文件，
+resource = Resource.load(Me.path + '/res.gresource'); resource._register();
+注册后，就可以随便调用了。
+ff = Gio.File.new_for_uri("resource:///img/r" + this.svgindex + ".svg");
+
+2. glib-compile-resources --generate-source res.xml 会生成一个res.c文件。图片等资源转成 res_resource_data 字符数组。
+glib-compile-resources --generate-header res.xml 生成一个res.h文件。extern GResource *res_get_resource (void);
+编译时，直接连接进执行文件。
+valac --pkg gtk4 --pkg gresources main.vala res.c -o myapp
+再调用lookup_data获取指向数据的直接指针。
+还可以 使用"resource:///org/gtk/Example/data/splashscreen.png"等 URI 和 文件 访问 资源数据。
+using GResources;  
+var resource = new Resource();  
+resource.add(load("resources"));  
+*/
