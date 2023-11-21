@@ -1,5 +1,5 @@
-//~ ⭕ valac --pkg gtk4 --pkg posix link-config.vala 
-//~ ⭕ ./link-config 
+//~ ⭕ valac --pkg gtk4 --pkg posix link-config.vala
+//~ ⭕ ./link-config
 //~ 警告：传递‘g_list_foreach’的第 2 个参数时在不兼容的指针类型间转换 [-Wincompatible-pointer-types]
 
 using Gtk;
@@ -37,14 +37,38 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	bt0.halign = Align.START;
 	bt1.halign = Align.START;
 	bt2.halign = Align.START;
+//~ 	bt1.clicked.connect (on_open_clicked);
 	//~ ---------------------
 	try{
 		Process.spawn_sync (null,{"git", "ls"},null,SpawnFlags.SEARCH_PATH,null,out git_ls,null,null);
 //~ 		print("git ls 的输出\n"+git_ls);
 	} catch (Error err) {error ("%s", err.message);}
 	//~ ---------------------
+	refreshlist(lb);
+	window.present ();
+	print("==> %s. Version 0.1. Dir is \"%s\".\n", appID, dir);
+}
+//~ --------------------------------------------------------------------
+//~ --------------------------------------------------------------------
+//~ --------------------------------------------------------------------
+//~ void on_open_clicked () {
+//~ 	File ? f = null;
+//~ 	var dialog = new Gtk.FileDialog ();
+//~ 	dialog.title = _("选择需要收集备份的配置文件");
+//~ 	try {
+//~ 		f = yield dialog.open(null, null);	// error: yield expression not available outside async method
+//~ 		f =  dialog.open(null, null);	// error: invocation of void method not allowed as expression
+//~ 	} catch (Error e) {error ("%s", e.message);}
+//~ 	if (f != null) {
+//~ 		print (f.get_basename () );
+//~ 		print (f.get_uri () );
+//~ 	}
+//~ }
+//~ --------------------------------------------------------------------
+void refreshlist(ListBox lb){
   	List<string> list = new List<string> ();
 	list = listfile();
+	list.sort(strcmp);	// strcmp 什么鬼？
 	list.foreach ((i) => {		// 警告：不兼容的指针类型间转换
 		var prefix = "";
 		var lbl = new Label("");
@@ -52,15 +76,12 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 			prefix += FileUtils.test(i, FileTest.IS_DIR)?"🅳":"🇫";	// 是目录
 			prefix += checklink(i) ?"🔗":"💔️";	// 正确的链接
 			prefix += git_ls.contains(i) ?"☂️️️":"✖️️️️";	// 是否在 git 仓库
-			
+
 //~ 			lbl.set_markup(fill+"<span background=\""+color[hash.get(flag)]+
 //~ 			"\"	foreground=\"#ffffff\"><b> "+flag+" </b></span>  "+name+"");
 			lbl.set_markup(prefix+"    "+formatFilename(i, false));
 			lb.insert(lbl, -1);
 	});
-
-	window.present ();
-	print("==> %s. Version 0.1. Dir is \"%s\".\n", appID, dir);
 }
 //~ --------------------------------------------------------------------
 bool checklink(string localfile){	// 带+号的本地文件
