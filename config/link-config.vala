@@ -41,56 +41,65 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	bt1.halign = Align.START;
 	bt2.halign = Align.START;
 	bt0.clicked.connect (()=>{
-		int i = listbox.get_selected_row().get_index();
-		unowned List<string> e = list.nth (i);
-		rmfile(e.data);
+		unowned ListBoxRow? row = listbox.get_selected_row();
+		if(row == null) return;
+		unowned List<string> lst = list.nth (row.get_index());
+		if (rmfile(lst.data)){	// 正确删除备份
+			listbox.remove(row);
+			list.remove_link (lst);
+//~ 			list.foreach ((i) => { print(i+"\n");});
+		};
 	});
-	bt1.clicked.connect (on_open_clicked);
+	bt1.clicked.connect (on_add_clicked);
 	//~ ---------------------
 	git_ls = exec({"git","ls"});
 	//~ ---------------------
-	refreshListBo();
+	refreshListBox();
 	window.present ();
 	print("==> %s. Version 0.1. Dir is \"%s\".\n", appID, dir);
 }
 //~ --------------------------------------------------------------------
 //~ --------------------------------------------------------------------
 //~ --------------------------------------------------------------------
-async void on_open_clicked () {
+async void on_add_clicked () {
 	File ? f = null;
-	var dialog = new Gtk.FileDialog ();
+	var dialog = new Gtk.FileDialog ();	// 需要能选择目录和显示隐藏文件 ！！！！！
 	dialog.title = "选择需要收集备份的配置文件";
 	try {
 		f = yield dialog.open(null, null);
 	} catch (Error e) {error ("%s", e.message);}
 	if (f == null) return;	// 直接退出异步函数，会Dismissed by user 追踪与中断点陷阱（核心已转储）??
-	if(f.query_file_type(FileQueryInfoFlags.NOFOLLOW_SYMLINKS)==FileType.SYMBOLIC_LINK)
-	{print("不能备份链接文件。"); return;}
-//~ 	string s = f.get_parse_name();
-//~ 	if(FileUtils.test(s, FileTest.IS_SYMLINK)) {print("不能备份链接文件。"); return;}
-//~ 	if (s.contains(Environment.get_variable("HOME")+"/.")) {
-//~ 		print("add: ->"+s+"<-\n");
-//~ 		addfile(f);
-//~ 	} else print("只能备份家目录下的隐藏目录或文件。");
+//~ 	if(f.query_file_type(FileQueryInfoFlags.NOFOLLOW_SYMLINKS)==FileType.SYMBOLIC_LINK)
+//~ 	{print("不能备份链接文件。"); return;}
+	string s = f.get_parse_name();
+	if(FileUtils.test(s, FileTest.IS_SYMLINK)) {print("不能备份链接文件。"); return;}
+	if (! s.contains(Environment.get_variable("HOME")+"/."))
+		{ print("只能备份家目录下的隐藏目录或文件。"); return; }
+	print("add: ->"+s+"<-\n");
 	addfile(f);
 }
 //~ --------------------------------------------------------------------
-void addfile(File from){	// 从文件选择器传出的绝对文件名句柄
+bool addfile(File from){	// 从文件选择器传出的绝对文件名句柄
 	string src = from.get_parse_name();
-	string dst = Environment.get_current_dir()+"/"+formatFilename(src, true);
+	string localfile = formatFilename(src, true);
+	string dst = Environment.get_current_dir()+"/"+localfile;
 	print("----\nmv %s %s; ln -sf %s %s\n", src, dst, dst, src);
 	File to = File.parse_name(dst);
 	try {
 		if (from.move(to,FileCopyFlags.NONE, null, null)){
 			if(from.make_symbolic_link(dst,null)){	// 注意方向：File是链接，string才是源文件。
 				exec({"ls","-l",src});
+				list.append(localfile);
+				appendListBox(localfile);
+//~ 				list.foreach ((i) => { print(i+"\n");});
+				return true;
 			}
 		};
 	} catch (Error e) {error ("%s", e.message);}
-	refreshListBo();
+	return false;
 }
 //~ --------------------------------------------------------------------
-void rmfile(string fn){	// 从List列表中传出的短本地文件名
+bool rmfile(string fn){	// 从List列表中传出的短本地文件名
 	string src = Environment.get_current_dir()+"/"+fn;
 	string dst = formatFilename(fn, false);
 	print("----\nrm %s; mv %s %s\n", dst, src, dst);
@@ -100,10 +109,11 @@ void rmfile(string fn){	// 从List列表中传出的短本地文件名
 		if(to.delete()){
 			if(from.move(to,FileCopyFlags.NONE, null, null)){
 				exec({"ls","-l",dst});
+				return true;
 			}
 		}
 	} catch (Error e) {error ("%s", e.message);}
-	refreshListBo();
+	return false;
 }
 //~ --------------------------------------------------------------------
 string exec(string[] str){
@@ -122,24 +132,28 @@ string exec(string[] str){
 //~ 			else{ check = ls_stdout.chomp(); }
 //~ 		} catch(Error e){ print ("catch => %s\n", e.message); }
 //~ --------------------------------------------------------------------
-void refreshListBo(){
+void refreshListBox(){
 //~ 	listbox.remove_all();	// not available in gtk4 4.10.5. Use gtk4 >= 4.12
 	listfile();
 	list.foreach ((i) => {		// 警告：不兼容的指针类型间转换
-		var prefix = "";
-		var lbl = new Label("");
-			lbl.xalign = (float)0;	// 左对齐。默认居中？
-			prefix += checklink(i) ?"🔗":"💔️";	// 正确的链接
-			prefix += git_ls.contains(i) ?"☂️️️":"✖️️️️";	// 是否在 git 仓库
-//~ 仅仅在显示时，使用~的缩写。
-			string s = formatFilename(i, false);
-			try {
-				Regex ex = new Regex("^"+Environment.get_variable("HOME"));
-				s = ex.replace(s, s.length, 0, "~");
-			} catch (Error e) {error ("%s", e.message);}
-			lbl.set_markup(prefix+"\t"+s+(FileUtils.test(i, FileTest.IS_DIR)?"📂":""));
-			listbox.insert(lbl, -1);
+		appendListBox(i);
 	});
+}
+//~ --------------------------------------------------------------------
+void appendListBox(string i){
+	var prefix = "";
+	var lbl = new Label("");
+	lbl.xalign = (float)0;	// 左对齐。默认居中？
+	prefix += checklink(i) ?"🔗":"💔️";	// 正确的链接
+	prefix += git_ls.contains(i) ?"☂️️️":"✖️️️️";	// 是否在 git 仓库
+	string s = formatFilename(i, false);
+//~ 仅仅在显示时，使用~的缩写。
+	try {
+		Regex ex = new Regex("^"+Environment.get_variable("HOME"));
+		s = ex.replace(s, s.length, 0, "~");
+	} catch (Error e) {error ("%s", e.message);}
+	lbl.set_markup(prefix+"\t"+s+(FileUtils.test(i, FileTest.IS_DIR)?"📂":""));
+	listbox.insert(lbl, -1);
 }
 //~ --------------------------------------------------------------------
 bool checklink(string localfile){	// 带+号的本地文件
