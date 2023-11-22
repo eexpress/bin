@@ -31,7 +31,17 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	var box = new Box(Orientation.VERTICAL, 5);
 	box.set_margin_start(10);
 //~ 	box.set_margin_top(20);	// 无效？
+//~ =======
 	listbox = new ListBox();
+	var str_drop_target = new DropTarget(GLib.Type.STRING, Gdk.DragAction.COPY);
+	listbox.add_controller(str_drop_target);
+	str_drop_target.drop.connect((self, value, x, y) => {
+//~ 		print("%s\n", value.type_name () );
+		string s = value.get_string();
+		if(checkfile(s)) {File f = File.parse_name(s); addfile(f);}
+		return true;
+	  });
+//~ --------
 	var bt0 = new Button.with_label("✖️ 取消备份：删除链接，移动文件到源位置");
 	var bt1 = new Button.with_label("➕ 添加备份：移动源文件过来，在源位置建立链接");
 	var bt2 = new Button.with_label("♻️ 全部恢复：在源位置强行建立全部链接");
@@ -41,6 +51,8 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	bt1.halign = Align.START;
 	bt2.halign = Align.START;
 	bt0.clicked.connect (()=>{
+//~ 		listbox_remove_all(box);
+//~ 		return;
 		unowned ListBoxRow? row = listbox.get_selected_row();
 		if(row == null) return;
 		unowned List<string> lst = list.nth (row.get_index());
@@ -59,6 +71,27 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	print("==> %s. Version 0.1. Dir is \"%s\".\n", appID, dir);
 }
 //~ --------------------------------------------------------------------
+void listbox_remove_all(ListBox box){
+//~ 		box.selection_mode=SelectionMode.MULTIPLE;
+//~     int count = 0;
+//~ 		box.select_all();
+//~ 		box.selected_foreach((box,row)=>{count++;});
+//~ 		box.selected_foreach((box,row)=>{box.remove(row);});	//crash
+//~ 		box.selected_foreach((box,row)=>{print("%d\n",row.get_index());});
+//~ 		print("box len: %d", count);
+//~ 		for (i = count; i > 0; i--){
+//~ 				box.remove(box.get_row_at_index(i));
+//~ 		}
+//~ 		box.selection_mode=SelectionMode.SINGLE;
+//~ ---------------------
+//~ 		for(var w in box){box.remove(widget);}
+//~ 		box.@foreach((widget)=>{box.remove(widget);});
+//~ 		return;
+//~
+//~         listbox.@foreach (() => {
+//~             count++;
+//~         });
+}
 //~ --------------------------------------------------------------------
 //~ --------------------------------------------------------------------
 async void on_add_clicked () {
@@ -71,12 +104,16 @@ async void on_add_clicked () {
 	if (f == null) return;	// 直接退出异步函数，会Dismissed by user 追踪与中断点陷阱（核心已转储）??
 //~ 	if(f.query_file_type(FileQueryInfoFlags.NOFOLLOW_SYMLINKS)==FileType.SYMBOLIC_LINK)
 //~ 	{print("不能备份链接文件。"); return;}
-	string s = f.get_parse_name();
-	if(FileUtils.test(s, FileTest.IS_SYMLINK)) {print("不能备份链接文件。"); return;}
-	if (! s.contains(Environment.get_variable("HOME")+"/."))
-		{ print("只能备份家目录下的隐藏目录或文件。"); return; }
-	print("add: ->"+s+"<-\n");
-	addfile(f);
+
+	if(checkfile(f.get_parse_name())) addfile(f);
+}
+//~ --------------------------------------------------------------------
+bool checkfile(string fn){
+	if(!FileUtils.test(fn, FileTest.EXISTS)){print("文件不存在。"); return false;}
+	if(FileUtils.test(fn, FileTest.IS_SYMLINK)){print("不能备份链接文件。"); return false;}
+	if (! fn.contains(Environment.get_variable("HOME")+"/."))
+		{ print("只能备份家目录下的隐藏目录或文件。"); return false; }
+	return true;
 }
 //~ --------------------------------------------------------------------
 bool addfile(File from){	// 从文件选择器传出的绝对文件名句柄
