@@ -55,12 +55,13 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 		unowned ListBoxRow? row = listbox.get_selected_row();
 		if(row == null) return;
 		unowned List<string> lst = pluslist.nth (row.get_index());
-		if (rmfile(lst.data)){	// 正确删除备份
+		if (rmfile(lst.data, true)){	// 正确删除备份
 			listbox.remove(row);
 			pluslist.remove_link (lst);
 		};
 	});
 	bt1.clicked.connect (on_add_clicked);
+	bt2.clicked.connect (on_restore_clicked);
 //~ 信息条
 	msg = new Label("XXX"); msg.halign = Align.START;
 	string s = WorkDir.replace(HomeDir,"~");
@@ -70,6 +71,13 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	window.child = box; box.append(listbox);
 	box.append(bt0); box.append(bt1); box.append(bt2); box.append(msg);
 	window.present ();
+}
+//~ --------------------------------------------------------------------
+void on_restore_clicked(){
+	pluslist.foreach ((plusfile) => {
+		rmfile(plusfile, false);
+	});
+	msg.set_markup("已经全部恢复配置的链接。");
 }
 //~ --------------------------------------------------------------------
 async void on_add_clicked () {
@@ -109,16 +117,24 @@ bool addfile(File Fconfig){	// 配置文件句柄
 	return false;
 }
 //~ --------------------------------------------------------------------
-bool rmfile(string plusfile){	// 带+号文件名
-	string src = WorkDir+"/"+plusfile;	// 备份文件
-	string dst = formatFilename(plusfile, false);	// 配置文件
-//~ 	print("----\nrm %s; mv %s %s\n", dst, src, dst);
-	File Fbackup = File.parse_name(src);	// 备份文件句柄
-	File Fconfig = File.parse_name(dst);		// 配置文件句柄
+bool rmfile(string plusfile, bool moveORrestroe){	// 带+号文件名
+	string dst = WorkDir+"/"+plusfile;	// 备份文件
+	string src = formatFilename(plusfile, false);	// 配置文件
+	File Fbackup = File.parse_name(dst);	// 备份文件句柄
+	File Fconfig = File.parse_name(src);		// 配置文件句柄
 	try {
-		if(Fconfig.delete()){
+		if(Fconfig.query_exists()) Fconfig.delete();
+	} catch (Error e) {error ("%s", e.message);}
+	try {
+		if(moveORrestroe){
+//~ 	print("----\nrm %s; mv %s %s\n", src, dst, src);
 			if(Fbackup.move(Fconfig,FileCopyFlags.NONE, null, null)){
-				ex("ls -l "+dst); return true;
+				ex("ls -l "+src); return true;
+			}
+		}else{
+//~ 	print("----\nrm %s; ln -sf %s %s\n", src, src, dst);
+			if(Fconfig.make_symbolic_link(dst,null)){
+				ex("ls -l "+src); return true;
 			}
 		}
 	} catch (Error e) {error ("%s", e.message);}
@@ -146,7 +162,7 @@ void appendListBox(string fn){
 	var prefix = "";
 	var lbl = new Label("");
 	lbl.xalign = (float)0;	// 左对齐。默认居中？
-	prefix += checklink(fn) ?"🔗":"💔️";	// 正确的链接
+	prefix += checklink(fn);	// 正确的链接
 	prefix += Git_Ls.contains(fn) ?"☂️️️":"✖️️️️";	// 是否在 git 仓库
 	string s = formatFilename(fn, false);
 	try {
@@ -168,14 +184,15 @@ void appendListBox(string fn){
 	listbox.insert(lbl, -1);
 }
 //~ --------------------------------------------------------------------
-bool checklink(string plusfile){	// 带+号的本地文件
+string checklink(string plusfile){	// 带+号的本地文件
 //~ 	本地文件转化成源文件
-	var r = formatFilename(plusfile, false);
+	string r = formatFilename(plusfile, false);
 	try {
-		if(!FileUtils.test(r, FileTest.IS_SYMLINK)) return false;	//源配置文件必须是链接
-		if(FileUtils.read_link(r) != WorkDir+"/"+plusfile) return false;	// 源文件链接 == 本地文件
+		if(!FileUtils.test(r, FileTest.EXISTS)) return "␀";	//源配置文件不存在
+		if(!FileUtils.test(r, FileTest.IS_SYMLINK)) return "🅕";	//源配置文件必须是链接
+		if(FileUtils.read_link(r) != WorkDir+"/"+plusfile) return "💔";	// 源文件链接 == 本地文件
 	} catch (Error e) {error ("%s", e.message);}
-	return true;
+	return "🔗";
 }
 //~ --------------------------------------------------------------------
 void listplusfile(){
