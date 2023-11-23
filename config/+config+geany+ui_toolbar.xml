@@ -15,8 +15,9 @@ A list of available actions can be found in the documentation included with Gean
 at https://www.geany.org/manual/current/index.html#customizing-the-toolbar.
 -->
 	<toolbar name='GeanyToolbar'>
-		<toolitem action='Replace' />
+		<toolitem action='SearchEntry' />
 		<toolitem action='Search' />
+		<toolitem action='Replace' />
 		<toolitem action='Undo' />
 		<toolitem action='Redo' />
 		<toolitem action='Save' />
