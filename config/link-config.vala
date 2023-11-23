@@ -10,10 +10,13 @@ string git_ls;
 string dir;
 List<string> list;
 ListBox listbox;
+Label msg;
+string homedir;
 //~ ApplicationWindow window;
 //~ --------------------------------------------------------------------
 int main(string[] args) {
 	var app = new Gtk.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
+	homedir = Environment.get_variable("HOME");
 	try{	// 获取执行文件路径，并切换工作目录。
 		dir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
 		Posix.chdir(dir);
@@ -35,8 +38,7 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	listbox = new ListBox();
 	var str_drop_target = new DropTarget(GLib.Type.STRING, Gdk.DragAction.COPY);
 	listbox.add_controller(str_drop_target);
-	str_drop_target.drop.connect((self, value, x, y) => {
-//~ 		print("%s\n", value.type_name () );
+	str_drop_target.drop.connect((self, value, x, y) => {	// value.type_name()
 		string s = value.get_string();
 		if(checkfile(s)) {File f = File.parse_name(s); addfile(f);}
 		return true;
@@ -64,11 +66,14 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	});
 	bt1.clicked.connect (on_add_clicked);
 	//~ ---------------------
-	git_ls = exec({"git","ls"});
+	git_ls = ex("git ls");
 	//~ ---------------------
 	refreshListBox();
+	msg = new Label("XXX"); msg.halign = Align.START; box.append(msg);
 	window.present ();
-	print("==> %s. Version 0.1. Dir is \"%s\".\n", appID, dir);
+	string s = dir.replace(homedir,"~");
+	s = "<b>%s</b>. Ver 0.1. <i>\"%s\"</i>\n".printf(appID, s);
+	msg.set_markup(s);
 }
 //~ --------------------------------------------------------------------
 void listbox_remove_all(ListBox box){
@@ -102,17 +107,15 @@ async void on_add_clicked () {
 		f = yield dialog.open(null, null);
 	} catch (Error e) {error ("%s", e.message);}
 	if (f == null) return;	// 直接退出异步函数，会Dismissed by user 追踪与中断点陷阱（核心已转储）??
-//~ 	if(f.query_file_type(FileQueryInfoFlags.NOFOLLOW_SYMLINKS)==FileType.SYMBOLIC_LINK)
-//~ 	{print("不能备份链接文件。"); return;}
 
 	if(checkfile(f.get_parse_name())) addfile(f);
 }
 //~ --------------------------------------------------------------------
 bool checkfile(string fn){
-	if(!FileUtils.test(fn, FileTest.EXISTS)){print("文件不存在。"); return false;}
-	if(FileUtils.test(fn, FileTest.IS_SYMLINK)){print("不能备份链接文件。"); return false;}
-	if (! fn.contains(Environment.get_variable("HOME")+"/."))
-		{ print("只能备份家目录下的隐藏目录或文件。"); return false; }
+	if(!FileUtils.test(fn, FileTest.EXISTS)){msg.set_markup("⚠️ 文件不存在。"); return false;}
+	if(FileUtils.test(fn, FileTest.IS_SYMLINK)){msg.set_markup("⚠️ 不能备份链接文件。"); return false;}
+	if (! fn.contains(homedir+"/."))
+		{ msg.set_markup("⚠️ 只能备份家目录下的隐藏目录或文件。"); return false; }
 	return true;
 }
 //~ --------------------------------------------------------------------
@@ -120,12 +123,12 @@ bool addfile(File from){	// 从文件选择器传出的绝对文件名句柄
 	string src = from.get_parse_name();
 	string localfile = formatFilename(src, true);
 	string dst = Environment.get_current_dir()+"/"+localfile;
-	print("----\nmv %s %s; ln -sf %s %s\n", src, dst, dst, src);
+//~ 	print("----\nmv %s %s; ln -sf %s %s\n", src, dst, dst, src);
 	File to = File.parse_name(dst);
 	try {
 		if (from.move(to,FileCopyFlags.NONE, null, null)){
 			if(from.make_symbolic_link(dst,null)){	// 注意方向：File是链接，string才是源文件。
-				exec({"ls","-l",src});
+				ex("ls -l "+src);
 				list.append(localfile);
 				appendListBox(localfile);
 //~ 				list.foreach ((i) => { print(i+"\n");});
@@ -139,13 +142,13 @@ bool addfile(File from){	// 从文件选择器传出的绝对文件名句柄
 bool rmfile(string fn){	// 从List列表中传出的短本地文件名
 	string src = Environment.get_current_dir()+"/"+fn;
 	string dst = formatFilename(fn, false);
-	print("----\nrm %s; mv %s %s\n", dst, src, dst);
+//~ 	print("----\nrm %s; mv %s %s\n", dst, src, dst);
 	File from = File.parse_name(src);
 	File to = File.parse_name(dst);
 	try {
 		if(to.delete()){
 			if(from.move(to,FileCopyFlags.NONE, null, null)){
-				exec({"ls","-l",dst});
+				ex("ls -l "+dst);
 				return true;
 			}
 		}
@@ -153,21 +156,14 @@ bool rmfile(string fn){	// 从List列表中传出的短本地文件名
 	return false;
 }
 //~ --------------------------------------------------------------------
-string exec(string[] str){
-	string r;
-	try{
-		Process.spawn_sync (null,str,null,SpawnFlags.SEARCH_PATH,null,out r,null,null);
-		print("外部命令输出\n"+r+"\n");
-	} catch (Error e) {error ("%s", e.message);}
-	return r;
+string ex(string cmd){
+	string stdout, stderr; int status;
+	try{	//~ 简化版本的 spawn_sync。
+		Process.spawn_command_line_sync (cmd, out stdout, out stderr, out status);
+	} catch (Error e) { error ("%s", e.message);}
+	if(status!=0){ print(stderr); }
+	return stdout;
 }
-//~ 		try{
-//~ 			shellcmd = "bash -c \""+file.get_string(title,"Check").replace("\"","\\\"")+"\"";
-//~ 			Process.spawn_command_line_sync (shellcmd,
-//~ 			out ls_stdout, out ls_stderr, out ls_status);
-//~ 			if(ls_status!=0){ print(ls_stderr); }
-//~ 			else{ check = ls_stdout.chomp(); }
-//~ 		} catch(Error e){ print ("catch => %s\n", e.message); }
 //~ --------------------------------------------------------------------
 void refreshListBox(){
 //~ 	listbox.remove_all();	// not available in gtk4 4.10.5. Use gtk4 >= 4.12
@@ -177,19 +173,29 @@ void refreshListBox(){
 	});
 }
 //~ --------------------------------------------------------------------
-void appendListBox(string i){
+void appendListBox(string fn){
 	var prefix = "";
 	var lbl = new Label("");
 	lbl.xalign = (float)0;	// 左对齐。默认居中？
-	prefix += checklink(i) ?"🔗":"💔️";	// 正确的链接
-	prefix += git_ls.contains(i) ?"☂️️️":"✖️️️️";	// 是否在 git 仓库
-	string s = formatFilename(i, false);
-//~ 仅仅在显示时，使用~的缩写。
+	prefix += checklink(fn) ?"🔗":"💔️";	// 正确的链接
+	prefix += git_ls.contains(fn) ?"☂️️️":"✖️️️️";	// 是否在 git 仓库
+	string s = formatFilename(fn, false);
 	try {
-		Regex ex = new Regex("^"+Environment.get_variable("HOME"));
+//~ 家目录路径，转化成~的缩写，缩短显示。
+		Regex ex = new Regex("^"+homedir);
 		s = ex.replace(s, s.length, 0, "~");
+//~ 		s = s.replace(homedir, "~");	// max_tokens 失效，不安全了。
+//~ 目录的最后一段，文件的倒数第二段目录，加粗标记
+		string[] a = s.split("/",0);
+		if(FileUtils.test(fn, FileTest.IS_DIR)){
+			a[a.length-1] = "<b>"+a[a.length-1]+"</b> 📂";
+		}else{
+			if(a.length>2) a[a.length-2] = "<b>"+a[a.length-2]+"</b>";
+			else a[a.length-1] = "<b>"+a[a.length-1]+"</b>";
+		}
+		s = string.joinv("/", a);		//join 乱码！！
 	} catch (Error e) {error ("%s", e.message);}
-	lbl.set_markup(prefix+"\t"+s+(FileUtils.test(i, FileTest.IS_DIR)?"📂":""));
+	lbl.set_markup(prefix+"\t"+s);
 	listbox.insert(lbl, -1);
 }
 //~ --------------------------------------------------------------------
@@ -222,7 +228,7 @@ string formatFilename(string str, bool change2plus){
 	string r = str;	// 不要直接修改传入参数
 	if(change2plus){	// "s|^${HOME}/.|+|; s|/|+|g; s|\ |=|g"
 		try{
-			ex = new Regex("^"+Environment.get_variable("HOME")+"/.");
+			ex = new Regex("^"+homedir+"/.");
 			r = ex.replace(r, r.length, 0, "+");
 			ex = new Regex("^~/."); r = ex.replace(r, r.length, 0, "+");
 			ex = new Regex("/"); r = ex.replace(r, r.length, 0, "+");
@@ -230,7 +236,7 @@ string formatFilename(string str, bool change2plus){
 		}catch (Error e) {error ("%s", e.message);}
 	} else {			// 's|^+|~/.|; s|+|/|g; s|=| |g'
 		try{
-			ex = new Regex("^\\+"); r = ex.replace(r, r.length, 0, Environment.get_variable("HOME")+"/.");
+			ex = new Regex("^\\+"); r = ex.replace(r, r.length, 0, homedir+"/.");
 			ex = new Regex("\\+"); r = ex.replace(r, r.length, 0, "/");
 			ex = new Regex("="); r = ex.replace(r, r.length, 0, " ");
 		}catch (Error e) {error ("%s", e.message);}
