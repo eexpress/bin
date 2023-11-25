@@ -7,7 +7,7 @@ var keyword_array = [
 'reddit.com', 'thepiratebay',	'wikipedia.org',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
 'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',
-'stackexchange', 'element.io',
+'stackexchange', 'element.io', 'v2raya.org',
 'githubusercontent.com', 'githubassets.com',
 ];
 

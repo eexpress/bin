@@ -15,7 +15,8 @@ string HomeDir;
 string WorkDir;
 //~ --------------------------------------------------------------------
 int main(string[] args) {
-	var app = new Gtk.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
+//~ 	var app = new Gtk.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
+	var app = new Adw.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
 	HomeDir = Environment.get_variable("HOME");
 	try{	// 获取执行文件路径，并切换工作目录。
 		WorkDir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
@@ -35,6 +36,22 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	window.resizable = true;
 //~ 底盒
 	var box = new Box(Orientation.VERTICAL, 5); box.set_margin_start(10);
+
+//~ 	pg = new Adw.PreferencesGroup();
+//~ 	pg.title = "备份的配置文件"; pg.description="configure files list.";
+//~ 	box.append(pg);
+//~ 	var row0 = new Adw.ActionRow();
+//~ 	row0.use_markup=true;
+//~ 	row0.set_subtitle_selectable(true);
+//~ 	row0.subtitle="wlke<b>welkkj</b>wlek";
+//~ 	pg.add(row0);
+
+//~ 	var row1 = new Adw.ActionRow();
+//~ 	row1.use_markup=true;
+//~ 	row1.set_subtitle_selectable(true);
+//~ 	row1.subtitle="wlke<b>welkkj</b>wlek";
+//~ 	pg.add(row1);
+
 //~ 列表
 	listbox = new ListBox();
 	refreshListBox();
@@ -47,7 +64,7 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 		return true;
 	  });
 //~ 3个按键
-	var bt0 = new Button.with_label("✖️ 取消备份：删除链接，移动文件到源位置");
+	var bt0 = new Button.with_label("✖️ 取消备份：删除源链接，移动备份文件到源位置");
 	var bt1 = new Button.with_label("➕ 添加备份：移动源文件过来，在源位置建立链接");
 	var bt2 = new Button.with_label("♻️ 全部恢复：在源位置强行建立全部链接");
 	bt0.halign = Align.START; bt1.halign = Align.START; bt2.halign = Align.START;
@@ -230,7 +247,7 @@ string formatFilename(string str, bool change2plus){
 	return r;
 }
 //~ --------------------------------------------------------------------
-void listbox_remove_all(ListBox box){
+//~ void listbox_remove_all(ListBox box){
 //~ 		box.selection_mode=SelectionMode.MULTIPLE;
 //~     int count = 0;
 //~ 		box.select_all();
@@ -250,5 +267,5 @@ void listbox_remove_all(ListBox box){
 //~         listbox.@foreach (() => {
 //~             count++;
 //~         });
-}
+//~ }
 //~ --------------------------------------------------------------------
