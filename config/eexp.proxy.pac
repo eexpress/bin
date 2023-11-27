@@ -1,15 +1,16 @@
 var keyword_array = [
 'google*', 'gstatic', 'gmail', 'sstatic.net', 'recaptcha.net', 'youtube',
 'pinterest.com', 'pinimg.com',
-'twitter', 'twimg', 'imgur.com',
+'*twitter', 'twimg', 'imgur.com',
 'telegram.org', 'wire.com', 'tdesktop.com',
 'disqus.com',  'wordpress', 'blogspot', 'feedburner.com', 'blogblog', 'blogger',
 'reddit.com', 'thepiratebay',	'wikipedia.org',
 'bit.ly', 'ift.tt', 't.co', 'ow.ly', 'goo.gl', 'j.mp',
 'apkpure.com', 'evozi.com', 'apkmirror.com', 'f-droid.org',
-'stackexchange', 'element.io', 'v2raya.org',
-'githubusercontent.com', 'githubassets.com',
+'stackexchange', 'element.io', 'matrix.org', 'v2raya.org',
+'github*.com', 'valadoc.org',
 ];
+//'github.com', 'raw.githubusercontent.com', 'githubassets.com',
 
 //V2ray Xray
 //var port = ["10809", "10809", "10808"];

@@ -9,6 +9,7 @@ const string appTitle = "Link Config";
 List<string> pluslist;
 ListBox listbox;
 Label msg;
+Button btdir;
 
 string Git_Ls;
 string HomeDir;
@@ -18,11 +19,6 @@ int main(string[] args) {
 //~ 	var app = new Gtk.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
 	var app = new Adw.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
 	HomeDir = Environment.get_variable("HOME");
-	try{	// 获取执行文件路径，并切换工作目录。
-		WorkDir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
-		Posix.chdir(WorkDir);
-//~ 		WorkDir = Environment.get_current_dir();
-	} catch (Error e) {error ("%s", e.message);}
 	Git_Ls = ex("git ls");
 	app.activate.connect(onAppActivate);
 	return app.run(args);
@@ -54,7 +50,6 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 
 //~ 列表
 	listbox = new ListBox();
-	refreshListBox();
 //~ 拖放
 	var string_drop = new DropTarget(GLib.Type.STRING, Gdk.DragAction.COPY);
 	listbox.add_controller(string_drop);
@@ -67,7 +62,10 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	var bt0 = new Button.with_label("✖️ 取消备份：删除源链接，移动备份文件到源位置");
 	var bt1 = new Button.with_label("➕ 添加备份：移动源文件过来，在源位置建立链接");
 	var bt2 = new Button.with_label("♻️ 全部恢复：在源位置强行建立全部链接");
-	bt0.halign = Align.START; bt1.halign = Align.START; bt2.halign = Align.START;
+	btdir = new Button.with_label("⚙");
+	bt0.halign = Align.START; bt1.halign = Align.START;
+	bt2.halign = Align.START; btdir.halign = Align.START;
+
 	bt0.clicked.connect (()=>{
 		unowned ListBoxRow? row = listbox.get_selected_row();
 		if(row == null) return;
@@ -77,17 +75,36 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 			pluslist.remove_link (lst);
 		};
 	});
+//~ 	bt1.clicked.connect (async ()=>{	// lambda 里面写 async 不支持
+//~ 		File ? f = yield filedialog("选择需要收集备份的配置文件", true);
+//~ 		if (f == null) return;
+//~ 		if(checkfile(f.get_parse_name())) addfile(f);
+//~ 	});
+
 	bt1.clicked.connect (on_add_clicked);
 	bt2.clicked.connect (on_restore_clicked);
+	btdir.clicked.connect (on_chdir_clicked);
 //~ 信息条
-	msg = new Label("XXX"); msg.halign = Align.START;
-	string s = WorkDir.replace(HomeDir,"~");
-	s = "<b>%s</b>. Ver 0.1. <i>\"%s\"</i>\n".printf(appID, s);
-	msg.set_markup(s);
+	msg = new Label("");
+	msg.halign = Align.START;
+	msg.set_markup("<b>%s</b>. Ver 0.1.".printf(appID));
 //~ 窗口布局和呈现
 	window.child = box; box.append(listbox);
-	box.append(bt0); box.append(bt1); box.append(bt2); box.append(msg);
+	box.append(bt0); box.append(bt1);
+	box.append(bt2); box.append(btdir);
+	box.append(msg);
+
+	try{	// 获取执行文件路径，并切换工作目录。
+		WorkDir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
+	} catch (Error e) {error ("%s", e.message);}
+	refreshall(WorkDir);
+
 	window.present ();
+}
+//~ --------------------------------------------------------------------
+void showbtn(){
+	string s = WorkDir.replace(HomeDir,"~");
+	btdir.label = "⚙️️ 切换目录：当前工作目录是 %s".printf(s);
 }
 //~ --------------------------------------------------------------------
 void on_restore_clicked(){
@@ -97,16 +114,41 @@ void on_restore_clicked(){
 	msg.set_markup("已经全部恢复配置的链接。");
 }
 //~ --------------------------------------------------------------------
+async void on_chdir_clicked () {
+	File ? f = yield filedialog("选择需要切换的目录", false);
+	if (f == null) return;
+	refreshall(f.get_parse_name());
+}
+//~ --------------------------------------------------------------------
+void refreshall(string s){
+	WorkDir = s;
+	Posix.chdir(WorkDir);	//切换工作目录
+	refreshListBox();		//刷新
+	showbtn();
+}
+//~ --------------------------------------------------------------------
 async void on_add_clicked () {
-	File ? f = null;
-	var dialog = new Gtk.FileDialog ();	// 需要能选择目录和显示隐藏文件 ！！！！！
-	dialog.title = "选择需要收集备份的配置文件";
-	try {
-		f = yield dialog.open(null, null);	// yield 必须在 async 内部
-	} catch (Error e) {error ("%s", e.message);}
-	if (f == null) return;	// 直接退出异步函数，会Dismissed by user 追踪与中断点陷阱（核心已转储）??
-
+	File ? f = yield filedialog("选择需要收集备份的配置文件", true);
+	if (f == null) return;
 	if(checkfile(f.get_parse_name())) addfile(f);
+}
+//~ --------------------------------------------------------------------
+async File filedialog(string Title, bool Select_file){
+	File ? f = null;
+	var dialog = new Gtk.FileDialog ();	// 显示隐藏文件，只能按 Ctrl-h
+	dialog.title = Title;
+	try {
+		if(Select_file){
+			f = yield dialog.open(null, null);	// yield 必须在 async 内部
+		} else {
+			f = yield dialog.select_folder(null, null);
+		}
+// 必须catch一堆，如果直接退出异步函数，会Dismissed by user 追踪与中断点陷阱（核心已转储）
+	} catch (IOError.CANCELLED e) {
+	} catch (Gtk.DialogError.CANCELLED e) {
+	} catch (Gtk.DialogError.DISMISSED e) {
+	} catch (Error e) {error ("%s", e.message);}
+	return f;
 }
 //~ --------------------------------------------------------------------
 bool checkfile(string fn){
@@ -169,6 +211,7 @@ string ex(string cmd){
 //~ --------------------------------------------------------------------
 void refreshListBox(){	// remove_all 能工作后，可能需要多次调用。
 //~ 	listbox.remove_all();	// not available in gtk4 4.10.5. Use gtk4 >= 4.12
+	listbox_remove_all();
 	listplusfile();
 	pluslist.foreach ((i) => {		// 警告：不兼容的指针类型间转换
 		appendListBox(i);
@@ -247,25 +290,11 @@ string formatFilename(string str, bool change2plus){
 	return r;
 }
 //~ --------------------------------------------------------------------
-//~ void listbox_remove_all(ListBox box){
-//~ 		box.selection_mode=SelectionMode.MULTIPLE;
-//~     int count = 0;
-//~ 		box.select_all();
-//~ 		box.selected_foreach((box,row)=>{count++;});
-//~ 		box.selected_foreach((box,row)=>{box.remove(row);});	//crash
-//~ 		box.selected_foreach((box,row)=>{print("%d\n",row.get_index());});
-//~ 		print("box len: %d", count);
-//~ 		for (i = count; i > 0; i--){
-//~ 				box.remove(box.get_row_at_index(i));
-//~ 		}
-//~ 		box.selection_mode=SelectionMode.SINGLE;
-//~ ---------------------
-//~ 		for(var w in box){box.remove(widget);}
-//~ 		box.@foreach((widget)=>{box.remove(widget);});
-//~ 		return;
-//~
-//~         listbox.@foreach (() => {
-//~             count++;
-//~         });
-//~ }
+void listbox_remove_all(){
+	unowned ListBoxRow? row = listbox.get_row_at_index(0);
+	while(row != null){
+		listbox.remove(row);
+		row = listbox.get_row_at_index(0);
+	}
+}
 //~ --------------------------------------------------------------------
