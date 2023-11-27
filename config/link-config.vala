@@ -7,19 +7,25 @@ const string appID = "io.github.eexpress.link.config";
 const string appTitle = "Link Config";
 
 List<string> pluslist;
+Adw.ActionRow row;
 ListBox listbox;
 Label msg;
-Button btdir;
 
 string Git_Ls;
 string HomeDir;
 string WorkDir;
+
+const string[] btarr = {	// vala的二维数组是废品
+// 图标，标签，提示
+	"document-new-symbolic|添加备份|移动源文件过来，在源位置建立链接",
+	"edit-delete-symbolic|取消备份|删除源链接，移动备份文件到源位置",
+	"insert-link|全部恢复|在源位置强行建立全部链接",
+	"go-home-symbolic|切换目录|切换当前工作目录"
+};
+
 //~ --------------------------------------------------------------------
 int main(string[] args) {
-//~ 	var app = new Gtk.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
 	var app = new Adw.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
-	HomeDir = Environment.get_variable("HOME");
-	Git_Ls = ex("git ls");
 	app.activate.connect(onAppActivate);
 	return app.run(args);
 }
@@ -28,29 +34,18 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 //~ 窗口
 	var window = new ApplicationWindow(self as Gtk.Application);
 	window.title = appTitle;
-	window.set_default_size(400, 420);
+	window.set_default_size(440, 420);
 	window.resizable = true;
 //~ 底盒
 	var box = new Box(Orientation.VERTICAL, 5); box.set_margin_start(10);
-
-//~ 	pg = new Adw.PreferencesGroup();
-//~ 	pg.title = "备份的配置文件"; pg.description="configure files list.";
-//~ 	box.append(pg);
-//~ 	var row0 = new Adw.ActionRow();
-//~ 	row0.use_markup=true;
-//~ 	row0.set_subtitle_selectable(true);
-//~ 	row0.subtitle="wlke<b>welkkj</b>wlek";
-//~ 	pg.add(row0);
-
-//~ 	var row1 = new Adw.ActionRow();
-//~ 	row1.use_markup=true;
-//~ 	row1.set_subtitle_selectable(true);
-//~ 	row1.subtitle="wlke<b>welkkj</b>wlek";
-//~ 	pg.add(row1);
-
 //~ 列表
 	listbox = new ListBox();
-//~ 拖放
+	listbox.hexpand = true;
+//~ 	listbox = new ListBox({hexpand = true});
+	var x = new Label("");
+	x.set_markup("<span foreground=\"grey\" size=\"1000%\">空</span>");
+	listbox.set_placeholder(x);
+//~ 列表的拖放
 	var string_drop = new DropTarget(GLib.Type.STRING, Gdk.DragAction.COPY);
 	listbox.add_controller(string_drop);
 	string_drop.drop.connect((self, value, x, y) => {	// value.type_name()
@@ -58,53 +53,65 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 		if(checkfile(s)) addfile(File.parse_name(s));
 		return true;
 	  });
-//~ 3个按键
-	var bt0 = new Button.with_label("✖️ 取消备份：删除源链接，移动备份文件到源位置");
-	var bt1 = new Button.with_label("➕ 添加备份：移动源文件过来，在源位置建立链接");
-	var bt2 = new Button.with_label("♻️ 全部恢复：在源位置强行建立全部链接");
-	btdir = new Button.with_label("⚙");
-	bt0.halign = Align.START; bt1.halign = Align.START;
-	bt2.halign = Align.START; btdir.halign = Align.START;
-
-	bt0.clicked.connect (()=>{
-		unowned ListBoxRow? row = listbox.get_selected_row();
-		if(row == null) return;
-		unowned List<string> lst = pluslist.nth (row.get_index());
-		if (rmfile(lst.data, true)){	// 正确删除备份
-			listbox.remove(row);
-			pluslist.remove_link (lst);
-		};
-	});
-//~ 	bt1.clicked.connect (async ()=>{	// lambda 里面写 async 不支持
-//~ 		File ? f = yield filedialog("选择需要收集备份的配置文件", true);
-//~ 		if (f == null) return;
-//~ 		if(checkfile(f.get_parse_name())) addfile(f);
-//~ 	});
-
-	bt1.clicked.connect (on_add_clicked);
-	bt2.clicked.connect (on_restore_clicked);
-	btdir.clicked.connect (on_chdir_clicked);
+//~ 标题
+	row = new Adw.ActionRow();
+	row.title="Config Files";
 //~ 信息条
 	msg = new Label("");
 	msg.halign = Align.START;
-	msg.set_markup("<b>%s</b>. Ver 0.1.".printf(appID));
-//~ 窗口布局和呈现
-	window.child = box; box.append(listbox);
-	box.append(bt0); box.append(bt1);
-	box.append(bt2); box.append(btdir);
-	box.append(msg);
-
-	try{	// 获取执行文件路径，并切换工作目录。
+	msg.margin_bottom=10;
+	msg.set_markup("<b>%s</b>. Ver 0.2.".printf(appID));
+//~ 按键组
+	var butbox = new Box(Orientation.HORIZONTAL, 5); box.set_margin_start(10);
+	for (var i = 0; i < btarr.length; i++){
+		string[] s = btarr[i].split("|");
+		var b = new Adw.ButtonContent();
+		b.icon_name = s[0];
+		b.label = s[1];
+		b.set_tooltip_text(s[2]);
+		var bt = new Button();
+		bt.set_child(b);
+		var index = i;	// 不保存， lambda 输入就固定是4了。
+		bt.clicked.connect (()=>{click(index);});
+		butbox.append(bt);
+	}
+// 获取执行文件路径，并切换工作目录。
+	HomeDir = Environment.get_variable("HOME");
+	Git_Ls = ex("git ls");
+	try{
 		WorkDir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
 	} catch (Error e) {error ("%s", e.message);}
 	refreshall(WorkDir);
-
+//~ 窗口布局和呈现
+	window.child = box;
+	box.append(row);
+	box.append(listbox);
+	box.append(butbox);
+	box.append(msg);
 	window.present ();
 }
 //~ --------------------------------------------------------------------
-void showbtn(){
-	string s = WorkDir.replace(HomeDir,"~");
-	btdir.label = "⚙️️ 切换目录：当前工作目录是 %s".printf(s);
+void click(int i){
+	switch(i){
+		case 0:
+			on_add_clicked(); break;
+		case 1:
+			on_rm_clicked(); break;
+		case 2:
+			on_restore_clicked(); break;
+		case 3:
+			on_chdir_clicked(); break;
+	}
+}
+//~ --------------------------------------------------------------------
+void on_rm_clicked(){
+	unowned ListBoxRow? row = listbox.get_selected_row();
+	if(row == null) return;
+	unowned List<string> lst = pluslist.nth (row.get_index());
+	if (rmfile(lst.data, true)){	// 正确删除备份
+		listbox.remove(row);
+		pluslist.remove_link (lst);
+	};
 }
 //~ --------------------------------------------------------------------
 void on_restore_clicked(){
@@ -124,7 +131,8 @@ void refreshall(string s){
 	WorkDir = s;
 	Posix.chdir(WorkDir);	//切换工作目录
 	refreshListBox();		//刷新
-	showbtn();
+	string p = WorkDir.replace(HomeDir,"~");
+	row.subtitle="current working directory is: <span foreground=\"blue\"><b>%s</b></span>".printf(p);
 }
 //~ --------------------------------------------------------------------
 async void on_add_clicked () {
