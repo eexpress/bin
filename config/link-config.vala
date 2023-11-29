@@ -1,7 +1,14 @@
 //~ ⭕ valac --pkg gtk4 --pkg posix link-config.vala
 //~ ⭕ ./link-config
 
+//~ TODO 使用meson
+
 using Gtk;
+
+//~ TODO 搞定 gettext，编译通不过
+//~ const string GETTEXT_PACKAGE = "...";
+//~ extern const string GETTEXT_PACKAGE;
+//~ [CCode(cname="GETTEXT_PACKAGE")] extern const string GETTEXT_PACKAGE;
 
 const string appID = "io.github.eexpress.link.config";
 const string appTitle = "Link Config";
@@ -43,7 +50,9 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	listbox.hexpand = true;
 //~ 	listbox = new ListBox({hexpand = true});
 	var x = new Label("");
-	x.set_markup("<span foreground=\"grey\" size=\"1000%\">空</span>");
+//~ 	x.set_markup("<span foreground=\"grey\" size=\"1000%\">空</span>");
+	x.set_markup("<span foreground=\"grey\" size=\"300%\">拖放文件目录到此</span>");
+//~ 	x.set_markup(_("<span foreground=\"grey\" size=\"300%\">拖放文件目录到此</span>"));
 	listbox.set_placeholder(x);
 //~ 列表的拖放
 	var string_drop = new DropTarget(GLib.Type.STRING, Gdk.DragAction.COPY);
@@ -55,6 +64,7 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 	  });
 //~ 标题
 	row = new Adw.ActionRow();
+//~ 	row.title=_("Config Files");
 	row.title="Config Files";
 //~ 信息条
 	msg = new Label("");
@@ -78,6 +88,7 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 // 获取执行文件路径，并切换工作目录。
 	HomeDir = Environment.get_variable("HOME");
 	Git_Ls = ex("git ls");
+//~ 	TODO gsetting 设置上一次工作目录
 	try{
 		WorkDir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
 	} catch (Error e) {error ("%s", e.message);}
@@ -119,10 +130,12 @@ void on_restore_clicked(){
 		rmfile(plusfile, false);
 	});
 	msg.set_markup("已经全部恢复配置的链接。");
+//~ 	msg.set_markup(_("已经全部恢复配置的链接。"));
 }
 //~ --------------------------------------------------------------------
 async void on_chdir_clicked () {
 	File ? f = yield filedialog("选择需要切换的目录", false);
+//~ 	File ? f = yield filedialog(_("选择需要切换的目录"), false);
 	if (f == null) return;
 	refreshall(f.get_parse_name());
 }
@@ -133,10 +146,12 @@ void refreshall(string s){
 	refreshListBox();		//刷新
 	string p = WorkDir.replace(HomeDir,"~");
 	row.subtitle="current working directory is: <span foreground=\"blue\"><b>%s</b></span>".printf(p);
+//~ 	row.subtitle=_("current working directory is: ")+"<span foreground=\"blue\"><b>%s</b></span>".printf(p);
 }
 //~ --------------------------------------------------------------------
 async void on_add_clicked () {
 	File ? f = yield filedialog("选择需要收集备份的配置文件", true);
+//~ 	File ? f = yield filedialog(_("选择需要收集备份的配置文件"), true);
 	if (f == null) return;
 	if(checkfile(f.get_parse_name())) addfile(f);
 }
@@ -161,9 +176,12 @@ async File filedialog(string Title, bool Select_file){
 //~ --------------------------------------------------------------------
 bool checkfile(string fn){
 	if(!FileUtils.test(fn, FileTest.EXISTS)){msg.set_markup("⚠️ 文件不存在。"); return false;}
+//~ 	if(!FileUtils.test(fn, FileTest.EXISTS)){msg.set_markup(_("⚠️ 文件不存在。")); return false;}
 	if(FileUtils.test(fn, FileTest.IS_SYMLINK)){msg.set_markup("⚠️ 不能备份链接文件。"); return false;}
+//~ 	if(FileUtils.test(fn, FileTest.IS_SYMLINK)){msg.set_markup(_("⚠️ 不能备份链接文件。")); return false;}
 	if (! fn.contains(HomeDir+"/."))
 		{ msg.set_markup("⚠️ 只能备份家目录下的隐藏目录或文件。"); return false; }
+//~ 		{ msg.set_markup(_("⚠️ 只能备份家目录下的隐藏目录或文件。")); return false; }
 	return true;
 }
 //~ --------------------------------------------------------------------
