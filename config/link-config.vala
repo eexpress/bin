@@ -2,6 +2,7 @@
 //~ ⭕ ./link-config
 
 //~ TODO 使用meson
+//~ TODO Gresource使用
 
 using Gtk;
 
@@ -21,6 +22,7 @@ Label msg;
 string Git_Ls;
 string HomeDir;
 string WorkDir;
+string Flastpath;
 
 const string[] btarr = {	// vala的二维数组是废品
 // 图标，标签，提示
@@ -33,6 +35,10 @@ const string[] btarr = {	// vala的二维数组是废品
 //~ --------------------------------------------------------------------
 int main(string[] args) {
 	var app = new Adw.Application(appID, ApplicationFlags.DEFAULT_FLAGS);
+//~ 	Gsettings 需要xml文件，需要注册，并且在系统目录留下文件。比如 /usr/share/glib-2.0/schemas/。不如直接rc文件了。
+//~ 	gsetting 设置上一次工作目录
+//~ 	var ss = new GLib.Settings(appID);	// GLib-GIO-ERROR **: 23:07:43.191: Settings schema 'io.github.eexpress.link.config' is not installed
+//~ 	print("lastpath = %s\n", ss.get_string("lastpath"));
 	app.activate.connect(onAppActivate);
 	return app.run(args);
 }
@@ -65,7 +71,14 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 //~ 标题
 	row = new Adw.ActionRow();
 //~ 	row.title=_("Config Files");
-	row.title="Config Files";
+//~ 	row.title="Config Files";
+	row.title="<b>配置备份列表</b>";
+	string tip = """图例说明
+	源配置：🔗 正常 💔 坏链接 🅕 非链接 ␀ 无文件
+	git管理：☂️ 是 ✖️ 否
+
+拖放目录或者文件到下面的列表，均可建立备份""";
+	row.set_tooltip_text(tip);
 //~ 信息条
 	msg = new Label("");
 	msg.halign = Align.START;
@@ -86,12 +99,28 @@ void onAppActivate(GLib.Application self) {	// 为什么这里必须是 GLib 的
 		butbox.append(bt);
 	}
 // 获取执行文件路径，并切换工作目录。
-	HomeDir = Environment.get_variable("HOME");
+//~ 	HomeDir = Environment.get_variable("HOME");
+	HomeDir = Environment.get_home_dir();
 	Git_Ls = ex("git ls");
-//~ 	TODO gsetting 设置上一次工作目录
 	try{
 		WorkDir = Path.get_dirname(FileUtils.read_link("/proc/self/exe"));
 	} catch (Error e) {error ("%s", e.message);}
+//~ 	读取最后的目录
+	Flastpath = HomeDir+"/.config/"+appID+"/lastpath";
+	string contents;
+	try {
+		if(FileUtils.test(Flastpath, FileTest.EXISTS)){
+			if (FileUtils.get_contents (Flastpath, out contents)){
+				if(FileUtils.test(contents, FileTest.IS_DIR)){
+					WorkDir=contents;
+				}
+			}
+		} else {
+//~ 			Posix.mkdir(HomeDir+"/.config/"+appID+"/", 0755);
+			DirUtils.create_with_parents (HomeDir+"/.config/"+appID+"/", 0775);
+		}
+	} catch (Error e) {error ("%s", e.message);}
+
 	refreshall(WorkDir);
 //~ 窗口布局和呈现
 	window.child = box;
@@ -138,6 +167,10 @@ async void on_chdir_clicked () {
 //~ 	File ? f = yield filedialog(_("选择需要切换的目录"), false);
 	if (f == null) return;
 	refreshall(f.get_parse_name());
+//~ 	保存最后的目录
+	try {
+		FileUtils.set_contents(Flastpath, f.get_parse_name(), -1);
+	} catch (Error e) {error ("%s", e.message);}
 }
 //~ --------------------------------------------------------------------
 void refreshall(string s){
@@ -145,7 +178,8 @@ void refreshall(string s){
 	Posix.chdir(WorkDir);	//切换工作目录
 	refreshListBox();		//刷新
 	string p = WorkDir.replace(HomeDir,"~");
-	row.subtitle="current working directory is: <span foreground=\"blue\"><b>%s</b></span>".printf(p);
+//~ 	row.subtitle="current working directory is: <span foreground=\"blue\"><b>%s</b></span>".printf(p);
+	row.subtitle="当前工作目录：<span foreground=\"blue\"><b>%s</b></span>".printf(p);
 //~ 	row.subtitle=_("current working directory is: ")+"<span foreground=\"blue\"><b>%s</b></span>".printf(p);
 }
 //~ --------------------------------------------------------------------
