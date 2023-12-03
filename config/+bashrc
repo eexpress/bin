@@ -75,7 +75,7 @@ alias k='pkill -9 -f'
 alias g='grep --color=always -Pi 2>/dev/null'
 
 ##			-------- LS --------
-alias l='\ls --color=auto'
+alias l='\ls --color=always'
 alias la='l -A'
 alias lt='l -oAh  --time-style=iso -t'		# mtime
 alias ls='lt -S'		# size
