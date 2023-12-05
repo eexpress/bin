@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#~ 兼容root，需要软链接到 /root/.bashrc 下面。
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc	# CommandNotFound 时，自动安装的功能，在这文件里。
+fi
+
 #~ stty -ixon
 set -o vi
 export VGL_LOGO=1	# Bumbleebee显示右下角VGL标记
@@ -143,3 +148,4 @@ bind '"\e[B": history-search-forward'
 #unset command_not_found_handle
 #~ cd	# gnome-termianl 调用此配置前，扩展 note 就乱进了某目录。
 
+#~ eval "$(starship init bash)"
