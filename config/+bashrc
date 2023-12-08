@@ -44,6 +44,14 @@ else
 	alias pneed='rpm -q --whatrequires'		# 被哪个包需要
 	# 包的文件列表。
 	plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
+
+	alias fk="flatpak"
+	alias fki="$sudostr flatpak install"
+	alias fkr="$sudostr flatpak uninstall"
+	alias fku="$sudostr flatpak update"
+	alias fkf="flatpak search"
+	alias fkl="flatpak list --app"
+#~ 🔴 flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub  //替换为上海交大源
 fi
 ##------- ---------
 #~ https://clang.llvm.org/docs/ClangFormatStyleOptions.html
