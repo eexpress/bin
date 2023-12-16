@@ -45,7 +45,7 @@ else
 	# 包的文件列表。
 	plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 
-	alias fk="flatpak"
+	alias fk="$sudostr flatpak"
 	alias fki="$sudostr flatpak install"
 	alias fkr="$sudostr flatpak uninstall"
 	alias fku="$sudostr flatpak update"
