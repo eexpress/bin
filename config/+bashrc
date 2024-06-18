@@ -100,7 +100,7 @@ u(){ \du -sch "$@" 2>/dev/null|sort -rh; }
 # 鼠标选择路径或文件，快速进入目录。
 d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
 
-# export TERM=xterm-256color	# 放在所有tput之前。
+export TERM=xterm-256color	# 放在所有tput之前。
 #-------LESS TERMCAP for color manpage------------
 #0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
 #man terminfo: set_a_foreground -> setaf; set_a_background -> setab;
@@ -122,13 +122,14 @@ if [ "$(whoami)" != "root" ]; then
 	export CDPATH=:~:~/bin:~/project:~/.local/share/gnome-shell/extensions/:
 fi
 #-------PS1 COLOR----------------------------------
-	darkgreen="0x16"	#dark green
-	gray="0xee"	#light gray
-	red="0xa0"
+	#~ darkgreen="0x16"	#dark green
+	darkgreen="22"	#dark green
+	gray="238"	#light gray
+	red="160"
 	green_gray=`tput setaf 2; tput setab $gray;`
 	allgray=`tput setaf $gray; tput setab $gray;`
-	gray_green=`tput setaf 0xfa; tput setab $darkgreen;`
-	gray_red=`tput setaf 0xfa; tput setab $red;`
+	gray_green=`tput setaf 250; tput setab $darkgreen;`
+	gray_red=`tput setaf 250; tput setab $red;`
 	allgreen=`tput setaf $darkgreen; tput setab $darkgreen;`
 	allred=`tput setaf $red; tput setab $red;`
 	setbold=`tput bold;`

@@ -11,6 +11,7 @@ find(\&wanted, '.');
 sub wanted {
 	$fn=$File::Find::name;
 	$c=0;
+	if(-d $fn && $fn=~/\/\./){print "Skip Hidden Fold <<<$fn>>>\n"; $File::Find::prune = 1; return;}	#隐藏目录
 	for $arg (@ARGV){
 		if($arg=~/^-/){ if($fn=~/$'/i){return;} }	#要排除的关键词
 		else{
@@ -20,4 +21,5 @@ sub wanted {
 	}
 	push @out,"$fn\n";
 }
+print "--------------------------------------\n";
 print @out;
