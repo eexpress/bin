@@ -77,9 +77,10 @@ alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|c
 [ -x /usr/bin/gvim ] && alias v='gvim --remote-tab-silent' && alias sv='sudo gvim'
 #alias k='pkill -u `id -un` -9 -f'
 
-if [ -x /usr/bin/gedit ]; then alias e='gedit'; fi
-if [ -x /usr/bin/io.elementary.code ]; then alias e='io.elementary.code'; fi
-if [ -x /usr/bin/geany ]; then alias e='geany'; fi
+edit=("/usr/bin/gedit" "/usr/bin/io.elementary.code" "/usr/bin/geany" "/usr/bin/gnome-text-editor")
+for ed in "${edit[@]}"; do
+	if [ -x $ed ]; then alias e=$ed; break; fi
+done
 
 alias dog='grep -v -E "(^$|^#|^!)"'
 alias ps='\ps -u `id -un` -o pid,command'
