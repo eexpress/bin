@@ -77,16 +77,18 @@ alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|c
 [ -x /usr/bin/gvim ] && alias v='gvim --remote-tab-silent' && alias sv='sudo gvim'
 #alias k='pkill -u `id -un` -9 -f'
 
-edit=("/usr/bin/gedit" "/usr/bin/io.elementary.code" "/usr/bin/geany" "/usr/bin/gnome-text-editor")
-for ed in "${edit[@]}"; do
-	if [ -x $ed ]; then alias e=$ed; break; fi
-done
+#edit=("/usr/bin/gedit" "/usr/bin/io.elementary.code" "/usr/bin/geany" "/usr/bin/gnome-text-editor")
+#for ed in "${edit[@]}"; do
+#	if [ -x $ed ]; then alias e=$ed; break; fi
+#done
+alias e='/usr/bin/gnome-text-editor'
 
 alias dog='grep -v -E "(^$|^#|^!)"'
 alias ps='\ps -u `id -un` -o pid,command'
 alias pg='pgrep -af'
 alias k='pkill -9 -f'
 alias g='grep --color=always -Pi 2>/dev/null'
+alias say='~/.local/bin/edge-playback -v zh-CN-XiaoyiNeural -t'
 
 ##			-------- LS --------
 alias l='\ls --color=always'
@@ -119,7 +121,7 @@ export GROFF_NO_SGR=1	#fix manpage no color in Fedora 25/36
 
 #-------ENVIROMENT SET-----------------------------
 if [ "$(whoami)" != "root" ]; then
-	export PATH=$HOME/bin:$PATH
+	export PATH=$HOME/bin:$HOME/.local/bin:$PATH
 	export CDPATH=:~:~/bin:~/project:~/.local/share/gnome-shell/extensions/:
 fi
 #-------PS1 COLOR----------------------------------
