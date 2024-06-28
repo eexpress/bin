@@ -128,47 +128,36 @@ fi
 # 用于构建彩色目录部分的函数
 colorize_dir_path() {
     #local path=$(echo "$PWD" | perl -pe "s|$HOME|~|")
-    #local path="~/project/at-gui/src"
     local path=$1
     local colored_path=""
     local color_array=(27 130 28 133)
     local index=0
+    local fgray='\e[38;5;238m'
+    local s="$fgray◤\e[37m"
     IFS='/' read -ra ADDR <<< $path
     for i in "${ADDR[@]}"; do
         if [ "$i" != "" ]; then
         	local color=${color_array[$index]}
         	((index=(index+1)%${#color_array[@]}))
-            colored_path+="\e[48;5;${color}m $i "
+            colored_path+="\e[48;5;${color}m$s$i "
+            s=" "
         fi
     done
-    echo -e "\e[37m${colored_path}➽\e[0m"	#白色前景
+    echo -e "${colored_path}${fgray}◢\e[0m"	#白色前景
 }
 #--------------------------------------------------
-#~ darkgreen="0x16"	#dark green
-	darkgreen="22"	#dark green
-	gray="238"	#light gray
-	red="160"
-	green_gray=`tput setaf 2; tput setab $gray;`
-	allgray=`tput setaf $gray; tput setab $gray;`
-	gray_green=`tput setaf 250; tput setab $darkgreen;`
-	gray_red=`tput setaf 250; tput setab $red;`
-	allgreen=`tput setaf $darkgreen; tput setab $darkgreen;`
-	allred=`tput setaf $red; tput setab $red;`
+	darkgreen="22"
+	darkred="124"
 	setbold=`tput bold;`
-	setnone=`tput sgr0`
 if [ "$(whoami)" == "root" ]; then
-	psch="🔴"; psc1=$gray_red; psc2=$allred;
+	psch="🔴"; psc1="\e[48;5;${darkred}m";
 else
-	psch="⭕"; psc1=$gray_green; psc2=$allgreen;
+	psch="⭕"; psc1="\e[48;5;${darkgreen}m";
 fi
-	psarrow=🡺
-	psarrow=▶
-	pgap="$setnone "
-	#PS1="$setbold$psc1 \D{%F %A %T}$psc2$psarrow$green_gray  \H $allgray$psarrow$psc1 \w$psc2$psarrow$setnone \n$psch "
-	PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "\w")\n$psch "
-	#PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "$PWD")\n$psch "
-	#PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "$(pwd)")\n$psch "
-	#PS1="$psc1 \D{%F %A %T} $pgap$(bash ~/bin/ps1.bash "\w")\n$psch "
+	pgap="$(tput sgr0) "
+	#PS1每次改变时，才把函数和\w当作字符串，传递给PS1的执行进程，让进程每次去解析。
+	PS1="$psc1 \D{%A %T} $pgap"'$(colorize_dir_path "\w")'"\n$psch "
+	#PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "\w")\n$psch "
 
 #-------HISTORY------------------------------------
 shopt -s histappend
