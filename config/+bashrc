@@ -137,8 +137,8 @@ colorize_dir_path() {
     IFS='/' read -ra ADDR <<< $path
     for i in "${ADDR[@]}"; do
         if [ "$i" != "" ]; then
-        	local color=${color_array[$index]}
-        	((index=(index+1)%${#color_array[@]}))
+        		local color=${color_array[$index]}
+        		((index=(index+1)%${#color_array[@]}))
             colored_path+="\e[48;5;${color}m$s$i "
             s=" "
         fi
