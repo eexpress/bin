@@ -4,7 +4,7 @@
 colorize_dir_path() {
     local path=$(echo "$1" | perl -pe "s|$HOME|~|")
     local colored_path=""
-    local color_array=(18 242 22 202)
+    local color_array=(27 130 28 133)
     local index=0
     IFS='/' read -ra ADDR <<< "$path"
     for i in "${ADDR[@]}"; do
@@ -14,8 +14,8 @@ colorize_dir_path() {
             colored_path+="\e[48;5;${color}m $i "
         fi
     done
-    echo -e "\e[37m${colored_path}\e[0m"	#白色前景
+    echo -e "\e[37m${colored_path}➽\e[0m"	#白色前景
 }
 
-colorize_dir_path "$PWD"
+colorize_dir_path "$1"
 

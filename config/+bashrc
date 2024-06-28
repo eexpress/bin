@@ -125,7 +125,26 @@ if [ "$(whoami)" != "root" ]; then
 	export CDPATH=:~:~/bin:~/project:~/.local/share/gnome-shell/extensions/:
 fi
 #-------PS1 COLOR----------------------------------
-	#~ darkgreen="0x16"	#dark green
+# 用于构建彩色目录部分的函数
+colorize_dir_path() {
+    #local path=$(echo "$PWD" | perl -pe "s|$HOME|~|")
+    #local path="~/project/at-gui/src"
+    local path=$1
+    local colored_path=""
+    local color_array=(27 130 28 133)
+    local index=0
+    IFS='/' read -ra ADDR <<< $path
+    for i in "${ADDR[@]}"; do
+        if [ "$i" != "" ]; then
+        	local color=${color_array[$index]}
+        	((index=(index+1)%${#color_array[@]}))
+            colored_path+="\e[48;5;${color}m $i "
+        fi
+    done
+    echo -e "\e[37m${colored_path}➽\e[0m"	#白色前景
+}
+#--------------------------------------------------
+#~ darkgreen="0x16"	#dark green
 	darkgreen="22"	#dark green
 	gray="238"	#light gray
 	red="160"
@@ -144,7 +163,12 @@ else
 fi
 	psarrow=🡺
 	psarrow=▶
-	PS1="$setbold$psc1 \D{%F %A %T}$psc2$psarrow$green_gray  \H $allgray$psarrow$psc1 \w$psc2$psarrow$setnone \n$psch "
+	pgap="$setnone "
+	#PS1="$setbold$psc1 \D{%F %A %T}$psc2$psarrow$green_gray  \H $allgray$psarrow$psc1 \w$psc2$psarrow$setnone \n$psch "
+	PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "\w")\n$psch "
+	#PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "$PWD")\n$psch "
+	#PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "$(pwd)")\n$psch "
+	#PS1="$psc1 \D{%F %A %T} $pgap$(bash ~/bin/ps1.bash "\w")\n$psch "
 
 #-------HISTORY------------------------------------
 shopt -s histappend
