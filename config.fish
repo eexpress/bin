@@ -14,8 +14,9 @@ if status is-interactive		#交互式
 	##-------- ALIAS --------
 	alias cn='set -x LC_ALL zh_CN.UTF-8'
 	alias en='set -x LC_ALL C'
-	alias pl='perl -pE' #-E like -e, BUT enables all features; -p EXCUTE while (<>) THEN print.
-	alias ps='\ps -u `id -un` -o pid,command'
+	alias pl='perl -pE'
+	#-E like -e, BUT enables all features; -p EXCUTE while (<>) THEN print.
+	alias ps='/usr/bin/ps -u $(id -un) -o pid,command'
 	alias pg='pgrep -af'
 
 	alias k='pkill -9 -f'
@@ -26,27 +27,31 @@ if status is-interactive		#交互式
 	alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
 	
 	##-------- 包管理 --------
-	if test $USER = "root"
-		set sudostr ""
-	else
-		set sudostr "sudo"
+	test $USER = "root" && set sudostr "" || set sudostr "sudo"
+
+	if test -x "/usr/bin/dnf"
+		alias pi="$sudostr dnf install"
+		alias pr="$sudostr dnf remove"
+		alias pu="$sudostr dnf update"
+		alias pf='dnf search -C'
+		alias pfi='dnf list installed -C'	# 搜索已安装的包。
+		alias pfile='dnf provides -C'		# 查找文件或命令所属的包(已安装/未安装)
+		alias pinfo='rpm -q --info'	# 包信息
+		alias plist='rpm -q --list'	# 包的文件列表。
+		alias pneed='rpm -q --whatrequires'	# 被哪个包需要
+	else								# apt
+		alias pi="$sudostr apt install"
+		alias pr="$sudostr apt remove"
+		alias pu="$sudostr apt update && $sudostr apt upgrade"
+		alias pf='apt list'			# 搜索包名
+		alias pf0='apt search'		# 搜索描述，参数是AND关系。
+		alias pfi='apt list --installed'		# 搜索已安装的包。
+		alias pfile='dpkg -S'		# 查找文件所属的包
+		alias pinfo='apt show'
+		alias plist='dpkg -L'		# 列出包的文件
+		alias pneed='apt-cache depends'		# 查看依赖的包
 	end
-	alias pi="$sudostr dnf install"
-	alias pr="$sudostr dnf remove"
-	alias pu="$sudostr dnf update"
-	alias pf="dnf search -C"
-	alias pfi="dnf list installed -C"
-	alias pfile='dnf provides -C'			# 查找文件或命令所属的包(已安装/未安装)
-	alias pneed='rpm -q --whatrequires'		# 被哪个包需要
-	function pinfo	# 包信息。rpm需要已安装的确切包名；dnf可通配符查未安装的包。
-		#rpm -q --info $argv[1] or dnf info -Cy $argv[1]
-		rpm -q --info $argv[1]
-		test $status -ne 0 && dnf info $argv[1]
-	end
-	function plist	# 包的文件列表。
-		rpm -q --list $argv[1]
-		test $status -ne 0 && dnf repoquery --list $argv[1]	#dnf出两次结果。。。。
-	end
+	
 	alias fk="$sudostr flatpak"		# 没有补全了。。。。。
 
 end
