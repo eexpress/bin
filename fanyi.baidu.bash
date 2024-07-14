@@ -19,6 +19,9 @@ baidu_translate() {
 result=$(baidu_translate "$(xclip -o)")
 notify-send -i edit-find "选中文本的翻译结果" "$result"
 
+# 系统热键设置为 Ctrl-Alt-K，执行此脚本。
+# http://api.fanyi.baidu.com/manage/developer
+
 exit
 #------------------------------------
 
