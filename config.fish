@@ -3,7 +3,8 @@ if status is-interactive		#交互式
     set -x PATH $HOME/bin $HOME/.local/bin $PATH
     set -x CDPATH ~ ~/bin ~/project ~/.config ~/.local/share/gnome-shell/extensions/
 	source /home/eexpss/.config/fish/functions/theme-agnoster/functions/fish_prompt.fish
-	set -Ux MANPAGER "sh -c 'col -bx | bat -l man -p'"	# bat --list-themes
+	#set -Ux MANPAGER "sh -c 'col -bx | bat -l man -p'"	# bat --list-themes
+	set -Ux MANPAGER "less"
 
 	##-------- LS假名 --------
 	# alias 命令，实际上是 function 的语法糖
