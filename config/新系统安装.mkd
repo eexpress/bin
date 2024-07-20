@@ -97,7 +97,7 @@ eexpss@139.com i8t+00
 [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)
 [Compiz windows effect](https://extensions.gnome.org/extension/3210/compiz-windows-effect/) [Extension List](https://extensions.gnome.org/extension/3088/extension-list/)
 [Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)
-
+[Clipboard History](https://extensions.gnome.org/extension/4839/clipboard-history/)
 ## 安装 V2rayA
 
 ```bash
