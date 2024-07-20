@@ -6,6 +6,9 @@
 
 ## 恢复`~/.ssh`目录（必要）
 
+## 安装hiddify
+直连DNS 223.5.5.5
+
 ## 安装软件
 
 [fedora | 清华镜像使用帮助 Tsinghua](https://mirrors.tuna.tsinghua.edu.cn/help/fedora/) 非必要
