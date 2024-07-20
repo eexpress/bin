@@ -1,8 +1,14 @@
+# cd ~/.config/fish/
+# ln -sf ~/bin/config/config.fish .
+# cd functions/
+# git clone https://github.com/oh-my-fish/theme-agnoster
+# chsh -s /bin/fish
+
 if status is-interactive		#交互式
     # Commands to run in interactive sessions can go here
     set -x PATH $HOME/bin $HOME/.local/bin $PATH
     set -x CDPATH ~ ~/bin ~/project ~/.config ~/.local/share/gnome-shell/extensions/
-	source /home/eexpss/.config/fish/functions/theme-agnoster/functions/fish_prompt.fish
+	source $HOME/.config/fish/functions/theme-agnoster/functions/fish_prompt.fish
 	#set -Ux MANPAGER "sh -c 'col -bx | bat -l man -p'"	# bat --list-themes
 	set -Ux MANPAGER "less"
 

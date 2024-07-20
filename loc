@@ -1,7 +1,12 @@
 #!/bin/bash
 
+# 定位当前目录下的文件，只判断文件名，多参数匹配
+# 刷新 locate 缓冲
+# sudo updatedb
 # 参数合并成｜号分隔，"OR"关系。用于高亮每个参数。
 r=`echo $*|sed 's/\ /|/g'`
 # -A "AND"关系定位。-b 仅文件名。-e 存在的文件。-L 跟随链接。-i 大小写随意。
 # 获取当前目录下的文件。
-locate -AeLi $*|grep "^`pwd`"|grep --color=always -iE "$r"
+locate -Abei $*|grep "^`pwd`"|grep --color=always -iE "$r"
+# locate: 无效的选项 -- L ???
+

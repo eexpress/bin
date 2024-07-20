@@ -1,0 +1,20 @@
+[/]
+animate-appicon-hover-animation-extent={'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}
+appicon-margin=4
+appicon-padding=4
+available-monitors=[0]
+dot-position='BOTTOM'
+hotkeys-overlay-combo='TEMPORARILY'
+leftbox-padding=-1
+panel-anchors='{"0":"MIDDLE"}'
+panel-lengths='{"0":80}'
+panel-positions='{"0":"TOP"}'
+panel-sizes='{"0":32}'
+primary-monitor=0
+scroll-panel-action='CYCLE_WINDOWS'
+status-icon-padding=-1
+trans-bg-color='#62a0ea'
+trans-use-custom-bg=true
+trans-use-custom-opacity=true
+tray-padding=-1
+window-preview-title-position='TOP'
