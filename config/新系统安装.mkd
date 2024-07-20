@@ -20,6 +20,10 @@ sudo dnf install geany geany-plugins-automark geany-plugins-geanyvc geany-plugin
 
 ```bash
 git clone git@github.com:eexpress/bin.git    # 恢复bin目录，配置
+# 最小化
+cd; ln -sf ~/bin/config/+gitconfig .gitconfig
+cd; ln -sf ~/bin/config/+bashrc .bashrc
+# 最大化
 ~/bin/config/ln-全部+号文件到家目录.bash
 
 # 安装 grub 主题。有可能影响到自动升级后，不能刷新出grub新的菜单。
