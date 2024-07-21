@@ -8,6 +8,7 @@
 
 ## 安装hiddify（必要）
 直连DNS 223.5.5.5
+系统设置DNS，使用 bin/alidns.bash
 
 ## 安装软件
 
