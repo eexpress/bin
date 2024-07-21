@@ -15,6 +15,7 @@ baidu_translate() {
 	echo "$TRANSLATED_TEXT"
 }
 
+# xclip 系统不自带，需要安装。
 #result=$(trans -b -e bing :zh-CN "$(xclip -o)")
 result=$(baidu_translate "$(xclip -o)")
 notify-send -i edit-find "选中文本的翻译结果" "$result"

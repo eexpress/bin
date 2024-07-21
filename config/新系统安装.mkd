@@ -6,7 +6,7 @@
 
 ## 恢复`~/.ssh`目录（必要）
 
-## 安装hiddify
+## 安装hiddify（必要）
 直连DNS 223.5.5.5
 
 ## 安装软件
@@ -17,6 +17,8 @@
 sudo dnf upgrade    # 更新仓库，之前先设置国内的镜像源
 sudo dnf install git gitg gnome-tweaks peek shutter meld xclip
 sudo dnf install geany geany-plugins-automark geany-plugins-geanyvc geany-plugins-git-changebar geany-plugins-autoclose
+
+sudo dnf install bat xclip  #（必要）
 ```
 
 ## 同步配置
