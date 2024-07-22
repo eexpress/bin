@@ -42,7 +42,7 @@ if status is-interactive		#交互式
 		alias pr="$sudostr dnf remove"
 		alias pu="$sudostr dnf update"
 		alias pf='dnf search -C'
-		alias pfi='dnf list installed -C'	# 搜索已安装的包。
+		alias pfi='dnf list installed -C | grep -P'	# 搜索已安装的包。
 		alias pfile='dnf provides -C'		# 查找文件或命令所属的包(已安装/未安装)
 		alias pinfo='rpm -q --info'	# 包信息
 		alias plist='rpm -q --list'	# 包的文件列表。
