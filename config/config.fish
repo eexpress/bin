@@ -29,12 +29,7 @@ if status is-interactive		#交互式
 
 	alias k='pkill -9 -f'
 	alias g='grep --color=always -Pi 2>/dev/null'
-	# alias e='if test -e "/usr/bin/micro"; /usr/bin/micro $argv; else /usr/bin/gnome-text-editor $argv; end'
-	function e
-		if test -e "/usr/bin/micro"; /usr/bin/micro $argv
-		else; /usr/bin/gnome-text-editor $argv
-		end
-	end
+	alias e='/usr/bin/micro $argv; or /usr/bin/gnome-text-editor'
 	alias s='/usr/bin/bat'
 	alias say='~/.local/bin/edge-playback -v zh-CN-XiaoyiNeural -t'
 	alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
@@ -47,11 +42,11 @@ if status is-interactive		#交互式
 		alias pr="$sudostr dnf remove"
 		alias pu="$sudostr dnf update"
 		alias pf='dnf search -C'
-		alias pfi='dnf list installed -C | grep -P'	# 搜索已安装的包。
-		alias pfile='dnf provides -C'		# 查找文件或命令所属的包(已安装/未安装)
-		alias pinfo='rpm -q --info'	# 包信息
-		alias plist='rpm -q --list'	# 包的文件列表。
-		alias pneed='rpm -q --whatrequires'	# 被哪个包需要
+		alias pfi='rpm -q --all | grep -P'	# 搜索已安装的包。
+		alias pfile='rpm -q --file $argv; or dnf provides'		# 查找文件所属的包
+		alias pinfo='rpm -q --info $argv; or dnf info'	# 包信息
+		alias plist='rpm -q --list $argv; or dnf repoquery --list'	# 包的文件列表。
+		# alias pneed='rpm -q --whatrequires'	# 被哪个包需要
 	else								# apt
 		alias pi="$sudostr apt install"
 		alias pr="$sudostr apt remove"
