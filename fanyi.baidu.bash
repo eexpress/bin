@@ -10,7 +10,6 @@ baidu_translate() {
 
 	RESPONSE=$(curl -G "https://fanyi-api.baidu.com/api/trans/vip/translate" --data-urlencode "q=$QUERY" -d "appid=$APPID" -d "salt=$SALT" -d "from=auto" -d "to=$TARGET" -d "sign=$SIGN")  
 
-	echo $RESPONSE | jq >/tmp/fanyi
 	TRANSLATED_TEXT=$(echo $RESPONSE | jq -r '.trans_result[0].dst')  
 	echo "$TRANSLATED_TEXT"
 }
@@ -19,6 +18,9 @@ baidu_translate() {
 #result=$(trans -b -e bing :zh-CN "$(xclip -o)")
 result=$(baidu_translate "$(xclip -o)")
 notify-send -i edit-find "选中文本的翻译结果" "$result"
+
+echo $result | jq >/tmp/fanyi
+wl-copy $result
 
 # 系统热键设置为 Ctrl-Alt-K，执行此脚本。
 # http://api.fanyi.baidu.com/manage/developer

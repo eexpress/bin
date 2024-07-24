@@ -29,7 +29,12 @@ if status is-interactive		#交互式
 
 	alias k='pkill -9 -f'
 	alias g='grep --color=always -Pi 2>/dev/null'
-	alias e='/usr/bin/gnome-text-editor'
+	# alias e='if test -e "/usr/bin/micro"; /usr/bin/micro $argv; else /usr/bin/gnome-text-editor $argv; end'
+	function e
+		if test -e "/usr/bin/micro"; /usr/bin/micro $argv
+		else; /usr/bin/gnome-text-editor $argv
+		end
+	end
 	alias s='/usr/bin/bat'
 	alias say='~/.local/bin/edge-playback -v zh-CN-XiaoyiNeural -t'
 	alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
