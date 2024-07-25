@@ -17,7 +17,8 @@ sub colorize_dir_path {
         $color = $color_array[$index];
         $index = ($index + 1) % scalar(@color_array);
 # 前景循环色+ ◢+ 背景循环色+ 前景灰色+ 一段路径文字
-        $colored_path .= "\e[38;5;${color}m\x{25E2}\e[48;5;${color}m${fgtext} $i ";
+        $colored_path .= "\e[38;5;${color}m◢\e[48;5;${color}m${fgtext} $i ";
+        # $colored_path .= "\e[38;5;${color}m\x{25E2}\e[48;5;${color}m${fgtext} $i ";
     }
 # 无颜色+ 前景最后循环色+ 箭头+ 无色
     $colored_path .= "\e[0m\e[38;5;${color}m\x{E0B0}\e[0m";
@@ -26,12 +27,13 @@ sub colorize_dir_path {
 
 my $path = $ARGV[0];
 # git
-my ($stdout, $stderr, $exit_code) = system('git status --porcelain');
+my ($stdout, $stderr, $exit_code) = system('git status --porcelain 1>/dev/null');
+print "$stdout<----->$stderr<----->$exit_code\n";
 if ($exit_code == 0) {
 	if ($stdout eq '') {
 	    $path .= "/✔";
 	} else {
-	    $path .= "/✗";
+	    $path .= "/✘";
 	}
 }
 

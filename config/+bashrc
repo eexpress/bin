@@ -159,7 +159,7 @@ fi
 	pgap="$(tput sgr0) "
 	#PS1每次改变时，才把函数和\w当作字符串，传递给PS1的执行进程，让进程每次去解析。
 	# PS1="$psc1 \D{%A %T} $pgap"'$(colorize_dir_path "\w")'"\n$psch "
-	PS1="$psc1 \D{%A %T} $pgap"'$(~/bin/ps1.pl "\w")'"\n$psch "
+	PS1="$psc1 \D{%A %T} $pgap"'$(~/bin/ps1.pl "\w")'
 	#PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "\w")\n$psch "
 
 #-------HISTORY------------------------------------
