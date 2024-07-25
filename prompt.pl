@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Encode;					# @ARGV
+use Encode qw/decode/;		# @ARGV
 use utf8;					# unicode in script
 binmode STDOUT, ":utf8";	# Wide character in print
 
@@ -29,7 +29,7 @@ sub colorize_dir_path {
 
 my $date = `date '+%a %T'`;
 chomp $date;
-my $path = "${date}/".decode('UTF-8', $ARGV[0], Encode::FB_DEFAULT);
+my $path = "${date}/".decode('UTF-8', $ARGV[0]);
 $path =~ s/$ENV{HOME}/~/;
 # git
 my $stdout = `git status --porcelain 2>/dev/null`;
