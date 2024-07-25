@@ -27,9 +27,10 @@ sub colorize_dir_path {
 
 my $path = $ARGV[0];
 # git
-my ($stdout, $stderr, $exit_code) = system('git status --porcelain 1>/dev/null');
-print "$stdout<----->$stderr<----->$exit_code\n";
-if ($exit_code == 0) {
+# my ($stdout, $stderr, $exit_code) = system('git status --porcelain 1>/dev/null');
+my $stdout  = `git status --porcelain 2>/dev/null`;
+# print "$stdout<----->$stderr<----->$exit_code\n";
+if ($? >> 8 == 0) {
 	if ($stdout eq '') {
 	    $path .= "/✔";
 	} else {
