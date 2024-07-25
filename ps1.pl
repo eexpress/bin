@@ -15,6 +15,8 @@ sub colorize_dir_path {
         next if $i eq '';
 
         $color = $color_array[$index];
+        $color = 22 if ($i eq "✔");
+        $color = 88 if ($i eq "✘");
         $index = ($index + 1) % scalar(@color_array);
 # 前景循环色+ ◢+ 背景循环色+ 前景灰色+ 一段路径文字
         $colored_path .= "\e[38;5;${color}m◢\e[48;5;${color}m${fgtext} $i ";
@@ -27,17 +29,8 @@ sub colorize_dir_path {
 
 my $path = $ARGV[0];
 # git
-# my ($stdout, $stderr, $exit_code) = system('git status --porcelain 1>/dev/null');
 my $stdout  = `git status --porcelain 2>/dev/null`;
-# print "$stdout<----->$stderr<----->$exit_code\n";
-# if ($? >> 8 == 0) {
-	# if ($stdout eq '') {
-	    # $path .= "/✔";
-	# } else {
-	    # $path .= "/✘";
-	# }
-# }
-$path .= $stdout ? "/✔" : "/✘" if ($? >> 8 == 0);
+$path .= $stdout ? "/✘" : "/✔" if ($? >> 8 == 0);
 
 my $colored_path = colorize_dir_path($path);
 my $psch = "⭕";
