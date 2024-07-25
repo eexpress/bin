@@ -37,7 +37,7 @@ my $stdout  = `git status --porcelain 2>/dev/null`;
 	    # $path .= "/✘";
 	# }
 # }
-$path .= $stdout ? "/✔" : "/✘";
+$path .= $stdout ? "/✔" : "/✘" if ($? >> 8 == 0);
 
 my $colored_path = colorize_dir_path($path);
 my $psch = "⭕";
