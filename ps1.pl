@@ -30,13 +30,14 @@ my $path = $ARGV[0];
 # my ($stdout, $stderr, $exit_code) = system('git status --porcelain 1>/dev/null');
 my $stdout  = `git status --porcelain 2>/dev/null`;
 # print "$stdout<----->$stderr<----->$exit_code\n";
-if ($? >> 8 == 0) {
-	if ($stdout eq '') {
-	    $path .= "/✔";
-	} else {
-	    $path .= "/✘";
-	}
-}
+# if ($? >> 8 == 0) {
+	# if ($stdout eq '') {
+	    # $path .= "/✔";
+	# } else {
+	    # $path .= "/✘";
+	# }
+# }
+$path .= $stdout ? "/✔" : "/✘";
 
 my $colored_path = colorize_dir_path($path);
 my $psch = "⭕";
