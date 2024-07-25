@@ -8,10 +8,13 @@ if status is-interactive		#交互式
     # Commands to run in interactive sessions can go here
     set -x PATH $HOME/bin $HOME/.local/bin $PATH
     set -x CDPATH ~ ~/bin ~/project ~/.config ~/.local/share/gnome-shell/extensions/
-	source $HOME/.config/fish/functions/theme-agnoster/functions/fish_prompt.fish
+	# source $HOME/.config/fish/functions/theme-agnoster/functions/fish_prompt.fish
 	#set -Ux MANPAGER "sh -c 'col -bx | bat -l man -p'"	# bat --list-themes
 	#set -Ux MANPAGER "less"
 	set -x MANPAGER "bat -l man"
+	function fish_prompt
+	    ~/bin/prompt.pl (pwd)
+	end
 
 	##-------- LS假名 --------
 	# alias 命令，实际上是 function 的语法糖
