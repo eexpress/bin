@@ -1,8 +1,9 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Encode qw/_utf8_on/;		# @ARGV
+use Encode;					# @ARGV
 use utf8;					# unicode in script
+binmode STDOUT, ":utf8";	# Wide character in print
 
 sub colorize_dir_path {
 	my ($path) = @_;
@@ -28,10 +29,8 @@ sub colorize_dir_path {
 
 my $date = `date '+%a %T'`;
 chomp $date;
-my $path = "${date}/".$ARGV[0];
+my $path = "${date}/".decode('UTF-8', $ARGV[0], Encode::FB_DEFAULT);
 $path =~ s/$ENV{HOME}/~/;
-_utf8_on($path);	# 输入参数强制指定为UTF8
-
 # git
 my $stdout = `git status --porcelain 2>/dev/null`;
 $path .= $stdout ? "/✘" : "/✔" if ($? >> 8 == 0);
@@ -39,4 +38,4 @@ $path .= $stdout ? "/✘" : "/✔" if ($? >> 8 == 0);
 my $colored_path = colorize_dir_path($path);
 my $psch = ($ENV{'USER'} eq "root") ? "🔴" : "⭕";
 $colored_path .= "\n${psch} ";
-_utf8_on($colored_path); print $colored_path;
+print $colored_path;
