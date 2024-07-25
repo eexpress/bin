@@ -47,6 +47,8 @@ gsettings set org.gnome.desktop.interface titlebar-font 'Museo Bold 11'
 # 设置窗口标题栏鼠标动作（必要）
 gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'lower'
 gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'minimize'
+gsettings set org.gnome.desktop.wm.keybindings lower "['F11']"
+gsettings set org.gnome.desktop.wm.keybindings minimize "['F12']"
 
 # 设置鼠标光标主题
 gsettings set org.gnome.desktop.interface cursor-theme 'Qetzal'

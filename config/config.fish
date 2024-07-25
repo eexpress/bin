@@ -12,6 +12,7 @@ if status is-interactive		#交互式
 	#set -Ux MANPAGER "sh -c 'col -bx | bat -l man -p'"	# bat --list-themes
 	#set -Ux MANPAGER "less"
 	set -x MANPAGER "bat -l man"
+	# set -x PERL_UNICODE AS
 	function fish_prompt
 	    ~/bin/prompt.pl (pwd)
 	end

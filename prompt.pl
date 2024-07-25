@@ -31,7 +31,7 @@ sub colorize_dir_path {
 
 my $date = `date '+%a %T'`;
 chomp $date;
-my $path = "${date}/".$ARGV[0];
+my $path = "周${date}/".$ARGV[0];
 _utf8_on($path);	# 输入参数强制指定为UTF8
 $path =~ s/$ENV{HOME}/~/;
 
