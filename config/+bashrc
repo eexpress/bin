@@ -129,21 +129,23 @@ fi
 colorize_dir_path() {
     #local path=$(echo "$PWD" | perl -pe "s|$HOME|~|")
     local path=$1
-    local colored_path=""
+    local colored_path="\e[0m"
     local color_array=(27 130 28 133)
     local index=0
-    local fgray='\e[38;5;238m'
-    local s="$fgray◤\e[37m"
+    local fgtext='\e[38;5;255m'
+    local color=""
     IFS='/' read -ra ADDR <<< $path
     for i in "${ADDR[@]}"; do
         if [ "$i" != "" ]; then
-        		local color=${color_array[$index]}
+        		color=${color_array[$index]}
         		((index=(index+1)%${#color_array[@]}))
-            colored_path+="\e[48;5;${color}m$s$i "
-            s=" "
+            colored_path+="\e[38;5;${color}m◢\e[48;5;${color}m${fgtext} $i "
+            # 前景循环色+ ◢+ 背景循环色+ 前景灰色+ 一段路径文字
         fi
     done
-    echo -e "${colored_path}${fgray}◢\e[0m"	#白色前景
+    # echo -e "${colored_path}${fgray}◢\uE0B0\e[0m"	#白色前景
+    echo -e "${colored_path}\e[0m\e[38;5;${color}m\uE0B0\e[0m"
+    # 无颜色+ 前景最后循环色+ 箭头+ 无色
 }
 #--------------------------------------------------
 	darkgreen="22"
@@ -156,7 +158,8 @@ else
 fi
 	pgap="$(tput sgr0) "
 	#PS1每次改变时，才把函数和\w当作字符串，传递给PS1的执行进程，让进程每次去解析。
-	PS1="$psc1 \D{%A %T} $pgap"'$(colorize_dir_path "\w")'"\n$psch "
+	# PS1="$psc1 \D{%A %T} $pgap"'$(colorize_dir_path "\w")'"\n$psch "
+	PS1="$psc1 \D{%A %T} $pgap"'$(~/bin/ps1.pl "\w")'"\n$psch "
 	#PS1="$psc1 \D{%F %A %T} $pgap$(colorize_dir_path "\w")\n$psch "
 
 #-------HISTORY------------------------------------
