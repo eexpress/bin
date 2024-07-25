@@ -25,6 +25,16 @@ sub colorize_dir_path {
 }
 
 my $path = $ARGV[0];
+# git
+my ($stdout, $stderr, $exit_code) = system('git status --porcelain');
+if ($exit_code == 0) {
+	if ($stdout eq '') {
+	    $path .= "/✔";
+	} else {
+	    $path .= "/✗";
+	}
+}
+
 my $colored_path = colorize_dir_path($path);
 my $psch = "⭕";
 if ($ENV{'USER'} eq "root") {$psch = "🔴";}
