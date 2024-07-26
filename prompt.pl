@@ -28,8 +28,7 @@ sub colorize_dir_path {
 	return $colored_path;
 }
 
-my $date = `date '+%a %T'`;
-chomp $date;
+my $date = `date '+%a %T'`; chomp $date;
 my $path = "${date}/".decode('UTF-8', $ARGV[0]);
 #my $path = "${date}/".$ARGV[0];
 $path =~ s/$ENV{HOME}/~/;

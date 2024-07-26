@@ -37,7 +37,7 @@ Ctrl-s 保存
 ### Text operations
 Ctrl-k 剪切行
 Ctrl-d 复制行
-Alt-Up/Down 上下移动行
+Alt-Up/Down 上下移动（多）行
 Alt-Backspace 删除前单词
 
 ### Macros
