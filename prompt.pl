@@ -9,7 +9,7 @@ use v5.30;	# unicode_strings say
 sub colorize_dir_path {
 	my ($path) = @_;
 	my $colored_path = "\e[0m";
-	my @color_array = (22, 94, 18, 238, 52); # 绿 橙 蓝 灰 红
+	my @color_array = (22, 238, 94, 18, 52); # 绿 灰 黄 蓝 红
 	my $index = 0;
 	my $fgtext = "\e[38;5;255m";
 	my $color = "";
@@ -32,6 +32,7 @@ my $date = `date '+%a %T'`; chomp $date;
 my $path = "${date}/".decode('UTF-8', $ARGV[0]);
 #my $path = "${date}/".$ARGV[0];
 $path =~ s/$ENV{HOME}/~/;
+$path =~ s/~/🏠/;
 # git
 my $stdout = `git status --porcelain 2>/dev/null`;
 $path .= $stdout ? "/✘" : "/✔" if ($? >> 8 == 0);
