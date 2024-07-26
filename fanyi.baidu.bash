@@ -14,13 +14,16 @@ baidu_translate() {
 	echo "$TRANSLATED_TEXT"
 }
 
-# xclip 系统不自带，需要安装。
 #result=$(trans -b -e bing :zh-CN "$(xclip -o)")
-result=$(baidu_translate "$(xclip -o)")
+# xclip 系统不自带，需要安装。
+# wl-paste 属于 wl-clipboard 包。
+# input=$(xclip -o | tr '\n' ' ')
+input=$(wl-paste -p | tr '\n' ' ')	# 鼠标选择原文，多行合并成单行。
+result=$(baidu_translate "$input")
 notify-send -i edit-find "选中文本的翻译结果" "$result"
 
 echo $result | jq >/tmp/fanyi
-wl-copy $result
+wl-copy $result		# 翻译结果放入剪贴板。
 
 # 系统热键设置为 Ctrl-Alt-K，执行此脚本。
 # http://api.fanyi.baidu.com/manage/developer
