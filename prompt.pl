@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use Encode qw/decode/;		# @ARGV
 use utf8;					# unicode in script
-binmode STDOUT, ":utf8";	# Wide character in print
+#binmode STDOUT, ":utf8";	# Wide character in print
+use v5.30;	# unicode_strings say
 
 sub colorize_dir_path {
 	my ($path) = @_;
@@ -30,6 +31,7 @@ sub colorize_dir_path {
 my $date = `date '+%a %T'`;
 chomp $date;
 my $path = "${date}/".decode('UTF-8', $ARGV[0]);
+#my $path = "${date}/".$ARGV[0];
 $path =~ s/$ENV{HOME}/~/;
 # git
 my $stdout = `git status --porcelain 2>/dev/null`;
