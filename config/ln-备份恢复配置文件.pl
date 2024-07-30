@@ -8,6 +8,7 @@ use Cwd qw/getcwd/;
 # 获取当前脚本所在的目录
 chdir(dirname($0)) or die "chdir error";
 if (@ARGV == 0) {
+	say ('='x80);
 	opendir(my $dh, ".") or die "opendir error";
 	my @files_with_plus;
 
@@ -16,16 +17,15 @@ if (@ARGV == 0) {
 		my $file = $_;
 	    s|^\+|~/.|, s|\+|/|g, s|=|\\ |g;
 	    push @files_with_plus, $_." -> ".$file;
+	    say $_." -> ".$file;
 	}
 	closedir($dh);
+	say ('-'x80);
 
-	say ('='x70);
-	foreach (@files_with_plus) { say; }
-	say ('-'x70);
-	say "将家目录的这些文件强制链接到备份文件？按y确认。";
+	say "将家目录的这些配置文件，强制链接到当前目录的这些备份文件？按 y 确认。";
 	my $key = <STDIN>; chomp($key);
 	if (lc($key) eq 'y'){
-		say ('-'x70);
+		say ('-'x80);
 		foreach (@files_with_plus) {
 			my @s = split / -> /, $_;
 			$s[0] =~ s/^~/$ENV{'HOME'}/;
@@ -35,7 +35,7 @@ if (@ARGV == 0) {
 			s/.*:...//,s|$ENV{'HOME'}|~|g;
 			print;
 		}
-		say ('='x70);
+		say ('='x80);
 		exit;
 	}
 }
