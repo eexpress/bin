@@ -1,10 +1,12 @@
-#!/usr/bin/perl -C1
+#!/usr/bin/perl -C0
+# `perldoc perlrun` #237行。-C是位标志格式。(LSB)(1)IOEioAL(64)。a=256。S=IOE(STD)，D=io(stream)。A=ARGV, L=LC_ALL，a=UTF8CACHE，0=PERL_UNICODE
+# 实测，I=1，a，L, 0都能全正常。
 use strict;
 use warnings;
 # use Encode qw/decode/;		# @ARGV
 # use utf8;					# unicode in script
 #binmode STDOUT, ":utf8";	# Wide character in print
-# use v5.30;	# unicode_strings say
+use v5.30;	# unicode_strings say
 
 sub colorize_dir_path {
 	my ($path) = @_;
