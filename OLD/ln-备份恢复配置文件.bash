@@ -17,7 +17,7 @@ if [ $# -eq 0 ]; then	# 。
 	read input
 	if [ "$input" != "y" ]; then exit; fi
 	
-	for target in `\ls|grep '^+'`; do
+	for target in `\ls -1|grep '^+'`; do
 		# 路径中，+表示斜杠，=表示空格。第一个+表示'~/.'。
 		link=`eval "echo $target|sed ${rule0}"`	# 只能用eval扩展出正确的rule0，因为~号。
 		path=`dirname $link | sed "s|^~|$HOME|"`
