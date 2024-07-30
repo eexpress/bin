@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -C0
 use strict;
 use warnings;
 use v5.30;
