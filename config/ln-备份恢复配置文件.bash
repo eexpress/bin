@@ -9,6 +9,14 @@ rule0="'s|^+|~/.|; s|+|/|g; s|=| |g'"
 
 #~ ---------没有参数，把+号开头的文件目录恢复到家目录-------------------
 if [ $# -eq 0 ]; then	# 。
+	# 列出全部备份的文件
+	eval "\ls -F -1|grep '^+'|sed ${rule0}"
+	printf "%70s\n" | tr ' ' '-'
+	# 确认恢复
+	echo "将以上文件全部恢复成链接到本目录的备份配置文件？(y)"
+	read input
+	if [ "$input" != "y" ]; then exit; fi
+	
 	for target in `\ls|grep '^+'`; do
 		# 路径中，+表示斜杠，=表示空格。第一个+表示'~/.'。
 		link=`eval "echo $target|sed ${rule0}"`	# 只能用eval扩展出正确的rule0，因为~号。
@@ -22,12 +30,7 @@ if [ $# -eq 0 ]; then	# 。
 	done
 	exit
 fi
-#~ --------------参数只有list时，列出全部备份的文件--------------------
-if [ $# -eq 1 ] && [ $1 == "list" ]; then
-	eval "\ls -F -1|grep '^+'|sed ${rule0}"
-	printf "%70s\n" | tr ' ' '-'
-	exit
-fi
+
 #~ --------------读取全部参数，是文件目录就备份-------------------------
 for f in $@; do	# $@ 已经把参数解析成了绝对路径，不需要处理 '~/.'
 	if [ -e $f ]; then

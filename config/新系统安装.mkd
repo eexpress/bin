@@ -19,8 +19,9 @@ sudo dnf upgrade    # 更新仓库，之前先设置国内的镜像源
 sudo dnf install git gitg gnome-tweaks peek shutter meld xclip
 sudo dnf install geany geany-plugins-automark geany-plugins-geanyvc geany-plugins-git-changebar geany-plugins-autoclose
 
-sudo dnf install bat xclip  #（必要）
+sudo dnf install bat wl-clipboard  #（必要）
 ```
+额外的安装：localsend marktext
 
 ## 同步配置
 
