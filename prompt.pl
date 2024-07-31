@@ -11,9 +11,9 @@ use v5.30;	# unicode_strings say
 sub colorize_dir_path {
 	my ($path) = @_;
 	my $colored_path = "\e[0m";
-	my @color_array = (22, 238, 130, 18, 52); # 绿 灰 黄 蓝 红
+	my @color_array = (22, 237, 94, 17, 52); # 绿 灰 黄 蓝 红
 	my $index = 0;
-	my $fgtext = "\e[38;5;248m";
+	my $fgtext = "\e[38;5;246m";
 	my $color = "";
 	my @parts = split('/', $path);
 	foreach my $i (@parts) {
