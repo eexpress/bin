@@ -14,9 +14,13 @@ if status is-interactive		#交互式
 	set -x MANPAGER "bat -l man"
 	# set -x PERL_UNICODE AS
 	function fish_prompt
+	    # ~/bin/prompt.pl (prompt_pwd)  # 缩短的工作路径
 	    ~/bin/prompt.pl (pwd)
 	end
-
+    function fish_greeting
+        echo (set_color green; date +%F). fish. \
+        (echo $USER@$hostname; set_color normal)
+    end
 	##-------- LS假名 --------
 	# alias 命令，实际上是 function 的语法糖
 	alias l='/bin/ls --color=always'
@@ -26,6 +30,7 @@ if status is-interactive		#交互式
 	##-------- ALIAS --------
 	alias cn='set -x LC_ALL zh_CN.UTF-8'
 	alias en='set -x LC_ALL C'
+    alias poff='gsettings set org.gnome.system.proxy mode "none"'
 	alias pl='perl -pE'
 	#-E like -e, BUT enables all features; -p EXCUTE while (<>) THEN print.
 	alias ps='/usr/bin/ps -u $(id -un) -o pid,command'
