@@ -21,6 +21,8 @@ if status is-interactive		#交互式
         echo (set_color green; date +%F). fish. \
         (echo $USER@$hostname; set_color normal)
     end
+    abbr -a bb cd ~/bin/
+    
 	##-------- LS假名 --------
 	# alias 命令，实际上是 function 的语法糖
 	alias l='/bin/ls --color=always'
