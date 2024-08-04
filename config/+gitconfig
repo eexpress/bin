@@ -2,6 +2,7 @@
 	ci = commit
 	st = status
 	co = checkout
+
 ; difftool  直接调用 meld
 	d= difftool
 	df= diff
@@ -9,8 +10,7 @@
 	df2= diff HEAD^^
 	df3= diff HEAD^^^
 
-	ls = ls-files
-	lg = log -8 --pretty=format:'%Cred%h%Creset %Cgreen(%cr)%Creset %s'
+	lg = log -8 --follow --pretty=format:'%Cred%h%Creset %Cgreen(%cr)%Creset %s'
 ; ----------------------------------------------
 [color]
 	diff = always 	; 为了git.pl里面过滤代码
