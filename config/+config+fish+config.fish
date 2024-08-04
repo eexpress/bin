@@ -21,7 +21,7 @@ if status is-interactive		#交互式
         echo (set_color green; date +%F). fish. \
         (echo $USER@$hostname; set_color normal)
     end
-    abbr -a bb cd ~/bin/
+    abbr -a bb "cd ~/bin/; git st"
     abbr -a ff sudo flatpak
     
 	##-------- LS假名 --------
