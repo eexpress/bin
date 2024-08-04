@@ -22,6 +22,7 @@ if status is-interactive		#交互式
         (echo $USER@$hostname; set_color normal)
     end
     abbr -a bb cd ~/bin/
+    abbr -a ff sudo flatpak
     
 	##-------- LS假名 --------
 	# alias 命令，实际上是 function 的语法糖
@@ -71,7 +72,7 @@ if status is-interactive		#交互式
 		alias pneed='apt-cache depends'		# 查看依赖的包
 	end
 	
-	alias fk="$sudostr flatpak"		# 没有补全了。。。。。
+	# alias fk="$sudostr flatpak"		# 没有补全了。。。。。
 
 end
 

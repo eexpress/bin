@@ -1,39 +1,80 @@
 # 新系统安装后的设置
 
-## 修改主机名
+###### 修改主机名
 
-> 设置 ⇨ 关于 ⇨ 设备名称
+> 设置 ⇨ 系统 ⇨ 关于 ⇨ 设备名称
+> 
+> 或者，使用systemd的，可以cli设置主机名。
+> 
+> `⭕ hostnamectl set-hostname eexpss-fedora`
+> 
+> （此主机名与ssh的无关。如果新建ssh密钥，要手动上传到github。）
 
-## 恢复`~/.ssh`目录（必要）
+###### 恢复`~/.ssh`目录（必要）
 
-## 安装hiddify（必要）
-直连DNS 223.5.5.5
-系统设置DNS，使用 bin/alidns.bash
+[GitHub 密钥 ](https://github.com/settings/keys) 的 SSH Authentication keys 中，**主机名** 必须和 `~/.ssh/id_rsa.pub` 的对应。
 
-## 安装软件
+###### 安装hiddify（必要）
 
-[fedora | 清华镜像使用帮助 Tsinghua](https://mirrors.tuna.tsinghua.edu.cn/help/fedora/) 非必要
+> [hiddify-next](https://github.com/hiddify/hiddify-next)
+> 
+> 设置直连DNS(alidns) 223.5.5.5
+
+###### 设置国内软件源
+
+- [fedora | 清华镜像使用帮助 Tsinghua](https://mirrors.tuna.tsinghua.edu.cn/help/fedora/)
+
+- `⭕ flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub`
+
+###### 安装必要软件
 
 ```bash
 sudo dnf upgrade    # 更新仓库，之前先设置国内的镜像源
-sudo dnf install git gitg gnome-tweaks peek shutter meld xclip
-sudo dnf install geany geany-plugins-automark geany-plugins-geanyvc geany-plugins-git-changebar geany-plugins-autoclose
-
-sudo dnf install bat wl-clipboard  #（必要）
+sudo dnf install bat wl-clipboard fish
+sudo flatpak install localsend marktext
 ```
-额外的安装：localsend marktext
 
-## 同步配置
+###### 同步配置
 
 ```bash
-git clone git@github.com:eexpress/bin.git    # 恢复bin目录，配置（必要）
-# 最小化恢复配置（必要）
-cd; ln -sf ~/bin/config/+gitconfig .gitconfig
-cd; ln -sf ~/bin/config/+bashrc .bashrc
-# 最大化恢复配置
-~/bin/config/ln-全部+号文件到家目录.bash
+# 恢复bin目录，配置
+cd; git clone git@github.com:eexpress/bin.git
+# 恢复配置
+~/bin/config/ln-备份恢复配置文件.pl
+# 系统设置DNS
+~/bin/alidns.bash
+# 切换使用 fish
+chsh -s /usr/bin/fish
+# 设置窗口标题栏鼠标动作
+gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'lower'
+gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'minimize'
+gsettings set org.gnome.desktop.wm.keybindings lower "['F11']"
+gsettings set org.gnome.desktop.wm.keybindings minimize "['F12']"
 
-# 安装 grub 主题。有可能影响到自动升级后，不能刷新出grub新的菜单。
+```
+
+###### 同步 firefox 账号
+
+[eexpss@139.com](mailto:eexpss@139.com) i8t+00
+
+###### 安装 gnome 扩展
+
+- [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)  神灯
+
+- [Compiz windows effect](https://extensions.gnome.org/extension/3210/compiz-windows-effect/)  果冻
+
+- [Extension List](https://extensions.gnome.org/extension/3088/extension-list/) 
+
+- [Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)  导入配置： `~/bin/config/Dash-to-Panel配置`
+
+- [Clipboard History](https://extensions.gnome.org/extension/4839/clipboard-history/)
+
+---
+
+###### 废弃，非必要
+
+```
+~~# 安装 grub 主题。有可能影响到自动升级后，不能刷新出grub新的菜单。~~
 mkdir ~/app; cd !$
 git clone https://github.com/vinceliuice/grub2-themes.git
 cd grub2-themes
@@ -45,17 +86,11 @@ gsettings set org.gnome.desktop.interface document-font-name 'Museo Medium 12'
 gsettings set org.gnome.desktop.interface font-name 'Museo Medium 11'
 gsettings set org.gnome.desktop.interface titlebar-font 'Museo Bold 11'
 
-# 设置窗口标题栏鼠标动作（必要）
-gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'lower'
-gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'minimize'
-gsettings set org.gnome.desktop.wm.keybindings lower "['F11']"
-gsettings set org.gnome.desktop.wm.keybindings minimize "['F12']"
-
 # 设置鼠标光标主题
 gsettings set org.gnome.desktop.interface cursor-theme 'Qetzal'
 ```
 
-## 恢复 project 工程
+###### 恢复 project 工程
 
 ```bash
 #!/bin/bash
@@ -91,23 +126,9 @@ EOM
 for i in "${array[@]}"; do git clone $i; done
 ```
 
-## 同步 firefox 账号（必要）
-eexpss@139.com i8t+00
 
-## 安装 gnome 扩展
 
-[Alt Mouse](https://extensions.gnome.org/extension/4786/alt-mouse/)
-[Cairo Clock](https://extensions.gnome.org/extension/4809/cairo-clock/) 
-[Git Monitor](https://extensions.gnome.org/extension/4925/git/)
-[Screen Net Speed](https://extensions.gnome.org/extension/4901/screen-net-speed/)
-[Burn My Windows](https://extensions.gnome.org/extension/4679/burn-my-windows/)
-
-（必要）
-[Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)
-[Compiz windows effect](https://extensions.gnome.org/extension/3210/compiz-windows-effect/) [Extension List](https://extensions.gnome.org/extension/3088/extension-list/)
-[Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)
-[Clipboard History](https://extensions.gnome.org/extension/4839/clipboard-history/)
-## 安装 V2rayA
+###### 安装 V2rayA
 
 ```bash
 sudo dnf copr enable zhullyb/v2rayA
@@ -116,7 +137,7 @@ sudo systemctl start v2raya.service
 sudo systemctl enable v2raya.service    # 设置开机自动启动
 ```
 
-## 安装 nvidia 驱动
+###### 安装 nvidia 驱动
 
 ```
 ⭕ sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -134,7 +155,7 @@ Fri Sep 15 14:40:01 2023
 |  0%   49C    P8               9W / 200W |    672MiB /  8192MiB |      0%      Default |
 |                                         |                      |                  N/A |
 +-----------------------------------------+----------------------+----------------------+
-                                                                                         
+
 +---------------------------------------------------------------------------------------+
 | Processes:                                                                            |
 |  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
