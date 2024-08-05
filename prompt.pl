@@ -3,7 +3,6 @@
 # S=IOE(STD)，D=io(stream)。A=ARGV, L=LC_ALL，a=UTF8CACHE，0=PERL_UNICODE
 # 实测，I=1，a，L, 0都能全正常。
 use v5.30;	# unicode_strings say which implies "use strict;"
-use POSIX qw(strftime);
 
 sub colorize_dir_path {
 	my ($path) = @_;
@@ -28,11 +27,10 @@ sub colorize_dir_path {
 }
 
 # my $date = `date '+%w %T'`; chomp $date;
-my @wchar = qw/⓿ ❶ ❷ ❸ ❹ ❺ ❻/;	# 0x24FF
-my $now = time();
-my $time = strftime("%H:%M:%S", localtime($now));
-my $week = strftime("%w", localtime($now));
-my $date = $wchar[int($week)]."  ".$time;
+my @week = qw/⓿ ❶ ❷ ❸ ❹ ❺ ❻/;	# 0x24FF
+my @info = localtime(time());
+my $time = sprintf("%02s:%02s:%02s", $info[2], $info[1], $info[0]);
+my $date = $week[$info[6]]."  ".$time;
 my $path = "${date}/".$ARGV[0];
 $path =~ s/$ENV{HOME}/~/;
 $path =~ s/~/🏠/;

@@ -30,7 +30,7 @@
 
 ```bash
 sudo dnf upgrade    # 更新仓库，之前先设置国内的镜像源
-sudo dnf install bat wl-clipboard fish
+sudo dnf install bat wl-clipboard fish perl-doc
 sudo flatpak install localsend marktext
 ```
 
