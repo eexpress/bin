@@ -1,12 +1,9 @@
 #!/usr/bin/perl -C0
-# `perldoc perlrun` #237行。-C是位标志格式。(LSB)(1)IOEioAL(64)。a=256。S=IOE(STD)，D=io(stream)。A=ARGV, L=LC_ALL，a=UTF8CACHE，0=PERL_UNICODE
+# `perldoc perlrun` #237行。-C是位标志格式。(LSB)(1)IOEioAL(64)。a=256。
+# S=IOE(STD)，D=io(stream)。A=ARGV, L=LC_ALL，a=UTF8CACHE，0=PERL_UNICODE
 # 实测，I=1，a，L, 0都能全正常。
-use strict;
-use warnings;
-# use Encode qw/decode/;		# @ARGV
-# use utf8;					# unicode in script
-#binmode STDOUT, ":utf8";	# Wide character in print
-use v5.30;	# unicode_strings say
+use v5.30;	# unicode_strings say which implies "use strict;"
+use POSIX qw(strftime);
 
 sub colorize_dir_path {
 	my ($path) = @_;
@@ -26,12 +23,16 @@ sub colorize_dir_path {
 		$colored_path .= "\e[38;5;${color}m◢\e[48;5;${color}m${fgtext} $i ";
 	}
 	# 无颜色+ 前景最后循环色+ 箭头+ 无色
-	$colored_path .= "\e[0m\e[38;5;${color}m\e[0m";
+	$colored_path .= "\e[0m\e[38;5;${color}m\e[0m";	# 0xE0B0 no unicode
 	return $colored_path;
 }
 
-my $date = `date '+%a %T'`; chomp $date;
-# my $path = "${date}/".decode('UTF-8', $ARGV[0]);
+# my $date = `date '+%w %T'`; chomp $date;
+my @wchar = qw/⓿ ❶ ❷ ❸ ❹ ❺ ❻/;	# 0x24FF
+my $now = time();
+my $time = strftime("%H:%M:%S", localtime($now));
+my $week = strftime("%w", localtime($now));
+my $date = $wchar[int($week)]."  ".$time;
 my $path = "${date}/".$ARGV[0];
 $path =~ s/$ENV{HOME}/~/;
 $path =~ s/~/🏠/;
