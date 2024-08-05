@@ -2,6 +2,7 @@
 # `perldoc perlrun` #237行。-C是位标志格式。(LSB)(1)IOEioAL(64)。a=256。
 # S=IOE(STD)，D=io(stream)。A=ARGV, L=LC_ALL，a=UTF8CACHE，0=PERL_UNICODE
 # 实测，I=1，a，L, 0都能全正常。
+# https://perldoc.perl.org/feature
 use v5.30;	# unicode_strings say which implies "use strict;"
 
 sub colorize_dir_path {
