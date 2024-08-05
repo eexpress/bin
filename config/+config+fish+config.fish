@@ -44,7 +44,9 @@ if status is-interactive		#交互式
 	alias e='/usr/bin/micro $argv; or /usr/bin/gnome-text-editor'
 	alias s='/usr/bin/bat'
 	alias say='~/.local/bin/edge-playback -v zh-CN-XiaoyiNeural -t'
-	alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
+	alias i='df -hT|grep -P \'(可用|/(|home|boot)$)\';
+	echo -e "\n内存---------------";free -h|cut -b -50;
+	echo -e "\n温度---------------";sensors|grep Core'
 	
 	##-------- 包管理 --------
 	test $USER = "root" && set sudostr "" || set sudostr "sudo"

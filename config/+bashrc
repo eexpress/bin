@@ -73,7 +73,11 @@ alias pln='perl -nE'
 
 ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
 
-alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
+# alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
+alias i='df -hT|grep -P "(可用|\/(|home|boot)$)";
+echo -e "\n内存---------------";free -h|cut -b -50;
+echo -e "\n温度---------------";sensors|grep Core'
+	
 [ -x /usr/bin/gvim ] && alias v='gvim --remote-tab-silent' && alias sv='sudo gvim'
 #alias k='pkill -u `id -un` -9 -f'
 
