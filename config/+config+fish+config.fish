@@ -15,7 +15,7 @@ if status is-interactive		#交互式
 	# set -x PERL_UNICODE AS
 	function fish_prompt
 	    # ~/bin/prompt.pl (prompt_pwd)  # 缩短的工作路径
-	    ~/bin/prompt.pl (pwd)
+	    /home/eexpss/bin/prompt.pl (pwd)    # for root
 	end
     function fish_greeting
         echo (set_color green; date +%F). fish. \
