@@ -89,6 +89,14 @@ gsettings set org.gnome.desktop.wm.keybindings minimize "['F12']"
 - [Extension List](https://extensions.gnome.org/extension/3088/extension-list/) 
 - [Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)  导入配置： `~/bin/config/Dash-to-Panel配置`
 
+##### GRUB保存最后选项
+> fedora 44 目前适用。
+```
+⭕ g GRUB_SAVEDEFAULT /etc/default/grub
+GRUB_SAVEDEFAULT=true
+⭕ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
 ---
 
 ###### 废弃，非必要
