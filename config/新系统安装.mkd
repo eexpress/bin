@@ -8,13 +8,20 @@
 > 
 > `⭕ hostnamectl set-hostname eexpss-fedora`
 > 
-> （此主机名与ssh的无关。如果新建ssh密钥，要手动上传到github。）
+> （此主机名与ssh的密钥无关，只和known_hosts警告有关。如果新建ssh密钥，要手动上传到github。）
 
-###### 恢复`~/.ssh`目录（必要）
+❶ ➊ 命令又修改了。。。。
+```
+⭕ hostnamectl hostname eexpss-fedora
+⭕ hostnamectl status 
+```
+
+###### ➋ 恢复`~/.ssh`目录（必要）
 
 [GitHub 密钥 ](https://github.com/settings/keys) 的 SSH Authentication keys 中，**主机名** 必须和 `~/.ssh/id_rsa.pub` 的对应。
+> 在bin目录的gitignore文件里面。
 
-###### 安装hiddify（必要）
+###### 安装hiddify
 
 > [hiddify-next](https://github.com/hiddify/hiddify-next)
 > 
@@ -26,6 +33,18 @@
 
 - `⭕ flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub`
 
+>  ➌ 避免“软件”卡死。只留一个flatpak源。
+```
+# 禁用（不删，只是不更新）
+sudo flatpak remote-modify --disable flathub
+# 直接修改 URL，改成中科大镜像。
+sudo flatpak remote-modify flathub --url=https://mirror.ustc.edu.cn/flathub
+
+⭕ flatpak remotes --show-details
+名称    标题    网址                                集合标识 子集 筛选器 优先级 选项   … … 主页                 图标
+flathub Flathub https://mirrors.ustc.edu.cn/flathub -        -    -      1      system … … https://flathub.org/ https://dl.flathub.org/repo/logo.svg
+```
+
 ###### 安装必要软件
 
 ```bash
@@ -33,9 +52,13 @@ sudo dnf upgrade    # 更新仓库，之前先设置国内的镜像源
 sudo dnf install bat wl-clipboard fish perl-doc
 sudo flatpak install localsend marktext
 ```
+> ➍ localsend drawing geany
+> 安装firefox的Markdown Viewer插件
+> karing有rpm包
 
 ###### 同步配置
 
+> ➎ 最低只恢复bashrc，同时修改root的bashrc。
 ```bash
 # 恢复bin目录，配置
 cd; git clone git@github.com:eexpress/bin.git
@@ -45,7 +68,7 @@ cd; git clone git@github.com:eexpress/bin.git
 ~/bin/alidns.bash
 # 切换使用 fish
 chsh -s /usr/bin/fish
-# 设置窗口标题栏鼠标动作
+# ➐ 设置窗口标题栏鼠标动作，就firefox默认没有标题栏。
 gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'lower'
 gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'minimize'
 gsettings set org.gnome.desktop.wm.keybindings lower "['F11']"
@@ -55,19 +78,16 @@ gsettings set org.gnome.desktop.wm.keybindings minimize "['F12']"
 
 ###### 同步 firefox 账号
 
-[eexpss@139.com](mailto:eexpss@139.com) i8t+00
+➏ [eexpss@139.com](mailto:eexpss@139.com) i8t+00
 
 ###### 安装 gnome 扩展
 
-- [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)  神灯
-
+- [Clipboard History](https://extensions.gnome.org/extension/4839/clipboard-history/)
 - [Compiz windows effect](https://extensions.gnome.org/extension/3210/compiz-windows-effect/)  果冻
 
+- [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)  神灯
 - [Extension List](https://extensions.gnome.org/extension/3088/extension-list/) 
-
 - [Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)  导入配置： `~/bin/config/Dash-to-Panel配置`
-
-- [Clipboard History](https://extensions.gnome.org/extension/4839/clipboard-history/)
 
 ---
 
