@@ -76,6 +76,11 @@ gsettings set org.gnome.desktop.wm.keybindings minimize "['F12']"
 
 ```
 
+###### ⓿ 打开 gtk4 对 XA_PRIMARY 主剪贴板的禁用
+```
+⭕ gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
+```
+
 ###### 同步 firefox 账号
 
 ➏ [eexpss@139.com](mailto:eexpss@139.com) i8t+00
