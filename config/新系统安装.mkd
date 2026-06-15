@@ -1,75 +1,54 @@
 # 新系统安装后的设置
 
-###### 修改主机名
+###### ➊修改主机名
 
 > 设置 ⇨ 系统 ⇨ 关于 ⇨ 设备名称
-> 
+>
 > 或者，使用systemd的，可以cli设置主机名。
-> 
-> `⭕ hostnamectl set-hostname eexpss-fedora`
-> 
+>
+> `⭕ hostnamectl hostname eexpss-fedora`
+>
 > （此主机名与ssh的密钥无关，只和known_hosts警告有关。如果新建ssh密钥，要手动上传到github。）
-
-❶ ➊ 命令又修改了。。。。
-```
-⭕ hostnamectl hostname eexpss-fedora
-⭕ hostnamectl status 
-```
 
 ###### ➋ 恢复`~/.ssh`目录（必要）
 
-[GitHub 密钥 ](https://github.com/settings/keys) 的 SSH Authentication keys 中，**主机名** 必须和 `~/.ssh/id_rsa.pub` 的对应。
-> 在bin目录的gitignore文件里面。
+[GitHub 密钥 ](https://github.com/settings/keys) 的 SSH Authentication keys。
+> ssh密钥在bin目录的gitignore文件里面。
 
-###### 安装hiddify
+###### ➌ 设置国内软件源，避免“软件”卡死。只留一个flatpak源。
 
-> [hiddify-next](https://github.com/hiddify/hiddify-next)
-> 
-> 设置直连DNS(alidns) 223.5.5.5
-
-###### 设置国内软件源
-
-- [fedora | 清华镜像使用帮助 Tsinghua](https://mirrors.tuna.tsinghua.edu.cn/help/fedora/)
-
-- `⭕ flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub`
-
->  ➌ 避免“软件”卡死。只留一个flatpak源。
 ```
+# 系统设置DNS，223.5.5.5。
+⭕ ~/bin/alidns.bash
 # 禁用（不删，只是不更新）
-sudo flatpak remote-modify --disable flathub
+⭕ sudo flatpak remote-modify --disable flathub
 # 直接修改 URL，改成中科大镜像。
-sudo flatpak remote-modify flathub --url=https://mirror.ustc.edu.cn/flathub
-
+⭕ sudo flatpak remote-modify flathub --url=https://mirror.ustc.edu.cn/flathub
 ⭕ flatpak remotes --show-details
 名称    标题    网址                                集合标识 子集 筛选器 优先级 选项   … … 主页                 图标
 flathub Flathub https://mirrors.ustc.edu.cn/flathub -        -    -      1      system … … https://flathub.org/ https://dl.flathub.org/repo/logo.svg
 ```
 
-###### 安装必要软件
+###### ➍ 安装必要软件
 
-```bash
-sudo dnf upgrade    # 更新仓库，之前先设置国内的镜像源
-sudo dnf install bat wl-clipboard fish perl-doc
-sudo flatpak install localsend marktext
-```
-> ➍ localsend drawing geany
+> localsend drawing geany
+>
 > 安装firefox的Markdown Viewer插件
-> karing有rpm包
+>
+> karing有rpm包，缺库。有Appimage，无法直接关闭。
 
-###### 同步配置
+###### ➎ 同步配置
 
-> ➎ 最低只恢复bashrc，同时修改root的bashrc。
+> 最低只恢复bashrc，同时修改root的bashrc。
 ```bash
 # 恢复bin目录，配置
 cd; git clone git@github.com:eexpress/bin.git
 # 恢复配置
 ~/bin/config/ln-备份恢复配置文件.pl
-# 系统设置DNS
-~/bin/alidns.bash
 # 切换使用 fish
 chsh -s /usr/bin/fish
 ```
-###### ➐ 设置窗口标题栏鼠标动作，就firefox默认没有标题栏，只能使用热键。
+###### ➏ 设置窗口标题栏鼠标动作，就firefox默认没有标题栏，只能使用热键。
 ```
 gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'lower'
 gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'minimize'
@@ -82,20 +61,20 @@ gsettings set org.gnome.desktop.wm.keybindings minimize "['F12']"
 ⭕ gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
 ```
 
-###### 同步 firefox 账号
+###### ➐ 同步 firefox 账号
 
-➏ [eexpss@139.com](mailto:eexpss@139.com) i8t+00
+> [eexpss@139.com](mailto:eexpss@139.com) i8t+00
 
-###### 安装 gnome 扩展
+###### ➑ 安装 gnome 扩展
 
-- [Clipboard History](https://extensions.gnome.org/extension/4839/clipboard-history/)
-- [Compiz windows effect](https://extensions.gnome.org/extension/3210/compiz-windows-effect/)  果冻
+- ✅[Clipboard History](https://extensions.gnome.org/extension/4839/clipboard-history/)
+- ✅[Compiz windows effect](https://extensions.gnome.org/extension/3210/compiz-windows-effect/)  果冻
 
 - [Compiz alike magic lamp effect](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)  神灯
 - [Extension List](https://extensions.gnome.org/extension/3088/extension-list/) 
 - [Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)  导入配置： `~/bin/config/Dash-to-Panel配置`
 
-##### GRUB保存最后选项
+##### ➒ GRUB保存最后选项
 > fedora 44 目前适用。
 ```
 ⭕ g GRUB_SAVEDEFAULT /etc/default/grub
@@ -158,17 +137,6 @@ readarray array <<EOM
 EOM
 
 for i in "${array[@]}"; do git clone $i; done
-```
-
-
-
-###### 安装 V2rayA
-
-```bash
-sudo dnf copr enable zhullyb/v2rayA
-sudo dnf install v2ray-core v2raya
-sudo systemctl start v2raya.service
-sudo systemctl enable v2raya.service    # 设置开机自动启动
 ```
 
 ###### 安装 nvidia 驱动
