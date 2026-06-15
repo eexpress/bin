@@ -68,12 +68,13 @@ cd; git clone git@github.com:eexpress/bin.git
 ~/bin/alidns.bash
 # 切换使用 fish
 chsh -s /usr/bin/fish
-# ➐ 设置窗口标题栏鼠标动作，就firefox默认没有标题栏。
+```
+###### ➐ 设置窗口标题栏鼠标动作，就firefox默认没有标题栏，只能使用热键。
+```
 gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'lower'
 gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'minimize'
 gsettings set org.gnome.desktop.wm.keybindings lower "['F11']"
 gsettings set org.gnome.desktop.wm.keybindings minimize "['F12']"
-
 ```
 
 ###### ⓿ 打开 gtk4 对 XA_PRIMARY 主剪贴板的禁用
