@@ -94,13 +94,32 @@ alias k='pkill -9 -f'
 alias g='grep --color=always -Pi 2>/dev/null'
 alias say='~/.local/bin/edge-playback -v zh-CN-XiaoyiNeural -t'
 
-##			-------- LS --------
+## -------- xclip写入文件 --------
+yy() {	#XA_CLIPBOARD
+    if [[ -z "$1" ]]; then
+        echo "剪贴板写入文件，需要指定新文件名。"
+    else
+        xclip -selection clipboard -o > "$1"
+    fi
+}
+
+y() {		#XA_PRIMARY
+	f=${*:-x.摘录.x}
+	echo $f
+	echo -ne "#\t--------▶  " >>"$f"
+	date '+%F %T' | tr -d '\n' >>"$f"
+	echo -e " ◀ --------" >>"$f"
+	xclip -o  | sed '/'$HOSTNAME'/c--------' >>"$f"
+	echo -e "\n" >>"$f"
+}
+
+## -------- LS --------
 alias l='\ls --color=always'
 alias la='l -A'
 alias lt='l -oAh  --time-style=iso -t'		# mtime
 alias ls='lt -S'		# size
 
-#-------FUNC------------------------------------
+# ------- FUNC ---------
 c(){ echo $1|bc -l; }
 p(){ ping -c 5 ${1:-www.163.com}; }
 u(){ \du -sch "$@" 2>/dev/null|sort -rh; }
