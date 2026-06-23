@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+# ⭕ curl https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/socks5/data.txt > ~/socks5.list
+
 # ========== 常量配置 ==========
 PAC_FILE="$HOME/.cache/temp_proxy.pac"
 MAX_ACTIVE=3
