@@ -1,18 +1,58 @@
-#!/bin/bash
+#!/usr/bin/perl
+use strict;
+use warnings;
 
-greenB='\x1b[1;32m'; end='\x1b[0m'; redB='\x1b[1;31m'; blueB='\x1b[1;34m'
-info=`ip route|grep -m 1 '0/24'`
-echo -e "本机IP是：$greenB`echo $info|awk '{print $9}'`$end"
-ip=`echo $info|awk '{print $1}'`
-echo "扫描 $ip 段"
-if [ $1 ]; then
-	# 端口，MAC地址
-	sudo /usr/bin/nmap -sS $ip|sed -e "/^Interest/ s/[1-9][0-9.]\{6,14\}/${greenB}&${end}/g" -e "/open/ s/[^\ ]*$/${redB}&${end}/g" -e "/^MAC/ s/[0-9:A-F]\{17\}/${blueB}&${end}/g"
-else
-	# 如果对方关闭了icmp，就探测不到
-#	/usr/bin/nmap -sP $ip|sed "s/[1-9][0-9.]\{6,14\}/${greenB}&${end}/g"
-	/usr/bin/nmap -sP $ip|grep report|cut -d ' ' -f 5|while read i; do echo -en ${greenB}$i${end}"\t";
-	sudo nmap -sS $i|grep MAC|cut -d ' ' -f 3-|tr '\n' ' '; echo ""; done
-fi
-#⭕ telnet cip.cc|enconv 外网IP
+# 颜色
+my $greenB = "\x1b[1;32m";
+my $redB   = "\x1b[1;31m";
+my $blueB  = "\x1b[1;34m";
+my $end    = "\x1b[0m";
 
+# 提前sudo唤醒鉴权，只执行一次，后面不再弹密码
+system("sudo -v 2>/dev/null");
+
+# 获取路由行
+my $info = `ip route | grep -m 1 '/24'`;
+$info = `ip route | awk '/^default/{print;exit}'` if !length $info;
+chomp $info;
+
+my $local_ip = (split /\s+/, $info)[8];
+my $seg      = (split /\s+/, $info)[0];
+print "本机IP是：${greenB}${local_ip}${end}\n";
+print "扫描 $seg 段\n";
+
+if (@ARGV) {
+    my $t = $ARGV[0];
+    # 屏蔽sudo所有stderr，不输出密码提示
+    my $out = `sudo /usr/bin/nmap -sS --host-timeout 2s "$t" 2>/dev/null`;
+    $out =~ s/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/${greenB}$1${end}/g;
+    $out =~ s/(\d+\/[a-zA-Z0-9]+)/${redB}$1${end}/g;
+    $out =~ s/(([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2})/${blueB}$1${end}/g;
+    print $out;
+} else {
+    my $live_raw = `/usr/bin/nmap -sn -T4 --host-timeout 1s "$seg" 2>/dev/null`;
+    my @hosts;
+    while ($live_raw =~ /Nmap scan report for (\S+)/g) {
+        push @hosts, $1;
+    }
+    foreach my $h (@hosts) {
+        print "${greenB}${h}${end}\t";
+        # 屏蔽sudo密码输出与错误
+        my $mac_line = `sudo nmap -sS --host-timeout 2s "$h" 2>/dev/null | grep "^MAC Address"`;
+        chomp $mac_line;
+        if ($mac_line) {
+            my @parts = split /\s+/, $mac_line, 4;
+            my $mac = $parts[2];
+            my $vendor = $parts[3] // "";
+            print "${blueB}${mac}${end} $vendor\n";
+        } else {
+            print "\x1b[90m无MAC地址\x1b[0m\n";
+        }
+    }
+}
+
+# 公网IP
+my $pub_ip = `curl -s --max-time 2 cip.cc 2>/dev/null`;
+if ($pub_ip =~ /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/) {
+    print "\n公网出口IP：${greenB}$1${end}\n";
+}
