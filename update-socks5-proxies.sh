@@ -114,32 +114,28 @@ done < "$TMP_TOP"
 
 echo -e "\n✅ 代理配置已生成：$PROXYCHAINS_CONF"
 
-# ===================== Bashrc 别名处理 =====================
+# ===================== Bashrc 别名处理（精简修复版） =====================
 rc_file="$HOME/.bashrc"
-target_ss5="alias ss5='proxychains4 -f $PROXYCHAINS_CONF'"
-target_update="alias ss5-update='$BIN_PATH/update-socks5-proxies.sh'"
+MARKER="AUTO_PROXY_SCRIPT_GENERATED"
+# 尾部附加标记，不注释alias
+target_ss5="alias ss5='proxychains4 -f $PROXYCHAINS_CONF'  # $MARKER"
+target_update="alias ss5-update='$BIN_PATH/update-socks5-proxies.sh'  # $MARKER"
 
 update_alias_line() {
-    local target_line="$1"
+    local full_line="$1"
+    # 提取别名名 ss5 / ss5-update
     local alias_name
-    alias_name=$(echo "$target_line" | awk '{print $2}' | cut -d'=' -f1)
-
-    if grep -Fxq "^alias $alias_name=" "$rc_file"; then
-        sed -i.bak "\|^alias $alias_name=|c\\$target_line" "$rc_file"
-        rm -f "${rc_file}.bak"
-    else
-        echo "$target_line" >> "$rc_file"
-    fi
+    alias_name=$(echo "$full_line" | awk '{print $2}' | cut -d'=' -f1)
+    # 先删除所有该行别名的旧记录，彻底清理重复
+    sed -i.bak "/^alias $alias_name=/d" "$rc_file"
+    rm -f "${rc_file}.bak"
+    # 写入全新单行，alias生效，尾部带识别标记
+    echo "$full_line" >> "$rc_file"
 }
 
+# 写入两条代理别名
 update_alias_line "$target_ss5"
 update_alias_line "$target_update"
-
-# 自动补全 ~/bin 到PATH
-if [[ ! "$PATH" =~ "$BIN_PATH" ]]; then
-    echo -e "\n📂 写入PATH：$BIN_PATH"
-    echo "export PATH=\"$BIN_PATH:\$PATH\"" >> "$rc_file"
-fi
 
 # 不清理/tmp临时文件
 echo -e "\n🎉 脚本执行完成！/tmp临时文件保留未清理"
