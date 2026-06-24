@@ -165,3 +165,17 @@ bind '"\e[B": history-search-forward'
 #~ cd	# gnome-termianl 调用此配置前，扩展 note 就乱进了某目录。
 
 #~ eval "$(starship init bash)"
+alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'
+alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'
+alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'
+alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'
+alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'
+alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'
+alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'
+alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'
+alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'
+alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'
+alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'
+alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'
+alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'
+alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'
