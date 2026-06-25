@@ -164,3 +164,5 @@ bind '"\e[B": history-search-forward'
 #unset command_not_found_handle
 #~ eval "$(starship init bash)"
 
+alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'  # AUTO_PROXY_SCRIPT_GENERATED
+alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'  # AUTO_PROXY_SCRIPT_GENERATED
