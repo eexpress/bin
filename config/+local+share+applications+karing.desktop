@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Karing
+Comment=网络代理工具
+Exec=/bin/bash -c "/home/eexpss/appimage/karing_1.2.19.2209_linux_amd64.AppImage 2>/dev/null"
+Icon=/home/eexpss/appimage/karing_1.2.19.2209_linux_amd64.AppImage
+Terminal=false
+StartupWMClass=karing
+Categories=Network;Proxy;System;
+X-GNOME-UsesNotifications=true

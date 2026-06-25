@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=LocalSend
+Comment=局域网文件互传
+Exec=/bin/bash -c "/home/eexpss/appimage/LocalSend-1.17.0-linux-x86-64.AppImage 2>/dev/null"
+Icon=/home/eexpss/appimage/LocalSend-1.17.0-linux-x86-64.AppImage
+Terminal=false
+StartupWMClass=localsend_app
+Categories=Network;FileTransfer;Utility;
+X-GNOME-UsesNotifications=true
