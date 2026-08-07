@@ -1,6 +1,7 @@
 #!/bin/bash
 
-#批量改名，参数1支持perlre写法，其余参数为扩展文件名。
+#批量改名，参数1支持perlre写法，可用一直连写，其余参数为扩展文件名。
+#⭕ rename.bash 's/\.bash$/\.bash\.txt/' *.bash
 regex=$1
 shift
 echo "----------Preview-------------"
