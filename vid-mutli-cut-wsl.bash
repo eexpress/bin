@@ -1,14 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 # 使用方式: bash cut_video.sh input.mp4 "2:30+5;12:00+15;45:12+2"
-IN_FILE="$1"
-SEG_STR="$2"
 if [ $# -ne 2 ];then
     echo "用法:"
     echo "  $0 源视频.mp4 \"2:30+5;12:00+15;45:12+2\""
     echo "格式规则：起始时间+持续秒数;起始时间+持续秒数"
     exit 1
 fi
+IN_FILE="$1"
+SEG_STR="$2"
 # 分割分段列表
 IFS=';' read -ra SEGMENTS <<< "$SEG_STR"
 idx=1
