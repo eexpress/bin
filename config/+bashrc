@@ -100,6 +100,7 @@ yy() {	#XA_CLIPBOARD
         echo "剪贴板写入文件，需要指定新文件名。"
     else
         xclip -selection clipboard -o > "$1"
+		sed -i 's/\r$//' $1
     fi
 }
 
