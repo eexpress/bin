@@ -27,4 +27,4 @@ curl -s -m 20 -X POST \
 -F "file=@${IMG}" \
 https://api.ocr.space/parse/image \
 | jq -r '.ParsedResults[0].ParsedText // "识别无结果"' \
-| sed '/^[[:space:]]*$/d'
+| sed '/^[[:space:]]*$/d' | head -n 10
