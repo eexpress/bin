@@ -31,8 +31,13 @@ while (( $# > 0 )); do
     case "$arg" in
     -w) mode="vert" ;;
     -h) mode="hori" ;;
-    [0-9]*) target_size="$arg" ;;
-    *) files+=("$arg") ;;
+    *)
+        if [[ "$arg" =~ ^[0-9]+$ ]]; then
+            target_size="$arg"
+        else
+            files+=("$arg")
+        fi
+        ;;
     esac
 done
 # 至少两张图
