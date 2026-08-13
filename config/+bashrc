@@ -5,10 +5,7 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc	# CommandNotFound 时，自动安装的功能，在这文件里。
 fi
 
-#~ stty -ixon
-set -o vi
-export VGL_LOGO=1	# Bumbleebee显示右下角VGL标记
-export GSK_RENDERER=cairo	# Wayland下, nvidia驱动下，gnome-extensions需要
+set -o vi	# 开启 Bash vi 编辑模式
 
 #-------ALIAS------------------------------------
 [ "$(whoami)" == "root" ] && sudostr="" || sudostr="sudo"
@@ -53,51 +50,63 @@ else
 	alias fkl="flatpak list --app"
 #~ 🔴 flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub  //替换为上海交大源
 fi
-##------- ---------
+##----------------
+if [ -x /usr/bin/gnome-shell ]; then
 #~ https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 alias format='clang-format -style=file -i'
 alias glog='journalctl -f -o cat /usr/bin/gnome-shell'
 alias jlog='journalctl -f -o cat /usr/bin/gjs'
 alias wl='env MUTTER_DEBUG_DUMMY_MODE_SPECS=1600x1000 dbus-run-session -- gnome-shell --nested --wayland'
 #~ alias wl='env MUTTER_DEBUG_DUMMY_MODE_SPECS=2560×1440 dbus-run-session -- gnome-shell --nested --wayland'
+fi
+##----------------
 export LC_ALL=zh_CN.UTF-8
 alias cn='export LC_ALL=zh_CN.UTF-8'
 alias en='export LC_ALL=C'
 alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
-alias dms='/usr/bin/dms -path "`pwd`"'	# : Path must be absolute:
+#alias dms='/usr/bin/dms -path "`pwd`"'	# : Path must be absolute: Go 语言写的 UPnP/DLNA 流媒体服务
 
 alias tail='/usr/bin/tail -n $(($LINES-4))'
 alias head='/usr/bin/head -n $(($LINES-4))'
 alias pl='perl -pE'	#-E like -e, BUT enables all features; -p EXCUTE while (<>) THEN print.
 alias pln='perl -nE'
 
-if command -v tesseract &>/dev/null; then
-ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
-fi
-
-# alias i='df -hT -x tmpfs -x devtmpfs;echo -e "\n内存---------------";free -h|cut -b -50;echo -e "\n温度---------------";sensors|grep Core'
 alias i='df -hT|grep -P "(可用|\/(|home|boot)$)";
 echo -e "\n内存---------------";free -h|cut -b -50;
 echo -e "\n温度---------------";sensors|grep Core'
 	
-[ -x /usr/bin/gvim ] && alias v='gvim --remote-tab-silent' && alias sv='sudo gvim'
-#alias k='pkill -u `id -un` -9 -f'
+## -------- LS --------
+alias l='\ls --color=always'
+alias la='l -A'
+alias lt='l -oAh  --time-style=iso -t'		# mtime 修改时间排序
+alias ls='lt -S'							# size 文件大小排序
 
-#edit=("/usr/bin/gedit" "/usr/bin/io.elementary.code" "/usr/bin/geany" "/usr/bin/gnome-text-editor")
+[ -x /usr/bin/micro ] && alias e='/usr/bin/micro'
+[ -x /usr/bin/batcat ] && alias v='/usr/bin/batcat' && alias less='/usr/bin/batcat'
+#edit=("gedit" "io.elementary.code" "geany" "gnome-text-editor")
 #for ed in "${edit[@]}"; do
-#	if [ -x $ed ]; then alias e=$ed; break; fi
+#	if [ -x /usr/bin/$ed ]; then alias e=$ed; break; fi
 #done
-alias e='/usr/bin/gnome-text-editor'
 
 alias dog='grep -v -E "(^$|^#|^!)"'
 alias ps='\ps -u `id -un` -o pid,command'
 alias pg='pgrep -af'
 alias k='pkill -9 -f'
 alias g='grep --color=always -Pi 2>/dev/null'
-alias say='~/.local/bin/edge-playback -v zh-CN-XiaoyiNeural -t'
+#alias say='~/.local/bin/edge-playback -v zh-CN-XiaoyiNeural -t'
 
-## -------- xclip写入文件 --------
-yy() {	#XA_CLIPBOARD
+# ------- 函数定义 ---------
+c(){ echo $1|bc -l; }
+#p(){ ping -c 5 ${1:-www.163.com}; }
+u(){ \du -sch "$@" 2>/dev/null|sort -rh; }	# 统计目录大小
+
+if command -v tesseract &>/dev/null; then
+ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
+fi
+
+
+# ------- xclip写入文件 -------
+yy() {		#XA_CLIPBOARD
     if [[ -z "$1" ]]; then
         echo "剪贴板写入文件，需要指定新文件名。"
     else
@@ -116,56 +125,27 @@ y() {		#XA_PRIMARY
 	echo -e "\n" >>"$f"
 }
 
-## -------- LS --------
-alias l='\ls --color=always'
-alias la='l -A'
-alias lt='l -oAh  --time-style=iso -t'		# mtime
-alias ls='lt -S'		# size
+# export TERM=xterm-256color	# 放在所有tput之前。
 
-# ------- FUNC ---------
-c(){ echo $1|bc -l; }
-p(){ ping -c 5 ${1:-www.163.com}; }
-u(){ \du -sch "$@" 2>/dev/null|sort -rh; }
-# 鼠标选择路径或文件，快速进入目录。
-d(){ c=`xclip -o|sed -e "s.^~.$HOME."`; if [ -f "$c" ]; then d=`dirname "$c"`; else d=$c; fi; echo $d; cd "$d";}
-
-export TERM=xterm-256color	# 放在所有tput之前。
-#-------LESS TERMCAP for color manpage------------
-#0=black 1=red 2=green 3=yellow 4=blue 5=magenta 6=cyan 7=white
-#man terminfo: set_a_foreground -> setaf; set_a_background -> setab;
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 1)	# enter_bold_mode
-export LESS_TERMCAP_md=$(tput bold; tput setaf 1)	# begin bold
-export LESS_TERMCAP_me=$(tput sgr0)					# exit_attribute_mode
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)		# exit_standout_mode
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 2)	# enter_underline_mode
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)		# exit_underline_mode
-export LESS_TERMCAP_mr=$(tput rev)		# enter_reverse_mode
-export LESS_TERMCAP_mh=$(tput dim)		# enter_dim_mode (half-bright)
-#export MANPAGER="/usr/bin/less"
-export GROFF_NO_SGR=1	#fix manpage no color in Fedora 25/36
-
-#-------ENVIROMENT SET-----------------------------
+# ------- 环境路径设置 -------
 if [ "$(whoami)" != "root" ]; then
 	export PATH=$HOME/bin:$HOME/.local/bin:$PATH
 	export CDPATH=:~:~/bin:~/project:~/.local/share/gnome-shell/extensions/:
 fi
-#-------PS1 COLOR----------------------------------
+
+# ------- 提示符颜色 -------
 	PS1='$(~/bin/prompt.pl "\w")'
 
-#-------HISTORY------------------------------------
+# ------- 命令历史记录 -------
 shopt -s histappend
 PROMPT_COMMAND='history -a'
 
-bind 'set completion-ignore-case on'
-bind 'set show-all-if-ambiguous on'
-bind '"\e[A": history-search-backward'
+bind 'set completion-ignore-case on'	#补全文件名忽略大小写
+bind 'set show-all-if-ambiguous on'		#输入一半按Tab补全
+bind '"\e[A": history-search-backward'	#增量历史搜索，上下方向键查找
 bind '"\e[B": history-search-forward'
 
-#bash_completion
-. /etc/profile.d/bash_completion.sh
-#unset command_not_found_handle
-#~ eval "$(starship init bash)"
-
-alias ss5='proxychains4 -f /home/eexpss/.proxychains/ss5-temp.conf'  # AUTO_PROXY_SCRIPT_GENERATED
-alias ss5-update='/home/eexpss/bin/update-socks5-proxies.sh'  # AUTO_PROXY_SCRIPT_GENERATED
+# ------- bash补全 -------
+if ! type -t _init_completion &>/dev/null && [[ -f /etc/profile.d/bash_completion.sh ]]; then
+    . /etc/profile.d/bash_completion.sh
+fi
