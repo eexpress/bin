@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"补给0"</Description>
+      <VariableType>Float</VariableType>
+      <Address>1F2D0FFBE20</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1</ID>
+      <Description>"补给1"</Description>
+      <VariableType>Float</VariableType>
+      <Address>1F2D0FFBE80</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>2</ID>
+      <Description>"侦察0"</Description>
+      <VariableType>Float</VariableType>
+      <Address>1F2D0FFBF70</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>3</ID>
+      <Description>"侦察1"</Description>
+      <VariableType>Float</VariableType>
+      <Address>1F2D0FFBFD0</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>4</ID>
+      <Description>"&lt;-点击这里，【一键补给+1000】"</Description>
+      <VariableType>Float</VariableType>
+      <Address>0x100</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>5</ID>
+      <Description>"&lt;-点击这里，【一键侦察+100】"</Description>
+      <VariableType>Float</VariableType>
+      <Address>0x100</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>6</ID>
+      <Description>"&lt;-点击这里，【一键补给+1000，侦察+100】"</Description>
+      <VariableType>Float</VariableType>
+      <Address>0x100</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>7</ID>
+      <Description>"&lt;-点击这里，【一键补给=9999，侦察=999】"</Description>
+      <VariableType>Float</VariableType>
+      <Address>0x100</Address>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>-- tower-dominion-CE
+print("-----------START----------")
+local exe = "tower-dominion.exe"
+--::BEGIN::
+local pid = getProcessIDFromProcessName(exe)
+if not pid then
+    print("游戏未启动")
+--    messageDialog("错误","未检测到游戏进程，脚本即将关闭CE！",mtInformation,mbOK)
+--    closeCE() --直接退出CE
+    return
+end
+-- 关联进程（没有关联就自动关联）
+if getOpenedProcessID()~=pid then openProcess(pid) end
+
+-- 偏移常量定义
+local baseOFFSET = 2 * 3 * 8      --CE的内存显示格式：3个8字节一行，数据间隔是2行
+local OFFSET_SUPPLY0 = 0 * baseOFFSET
+local OFFSET_SUPPLY1 = 2 * baseOFFSET
+local OFFSET_SCOUT0  = 7 * baseOFFSET
+local OFFSET_SCOUT1  = 9 * baseOFFSET
+-- 发现过一次，侦察向后移动了1个位置。
+
+local function AsciiToUtf16LE(s)
+-- 参数：普通英文ASCII，返回 "44 00 69 00 ..." 小头Utf16LE格式字符串
+    local out = {}
+    for i=1,#s do
+        table.insert(out,string.format("%02X 00",s:byte(i)))
+    end
+    return table.concat(out," ")
+end
+
+local function PrintBytes(t)
+--PrintBytes(bytes) -- 53 00 65 00 6C 00 65 00 63 00 74 00 65 00 64 00
+    local s=""
+    for _,v in ipairs(t) do s=s..("%02X "):format(v) end
+    print(s:sub(1,-2))
+end
+
+local function AddAddr(checkAdd)
+--1. 清空整张地址列表（一行清空所有条目，含分组、脚本）
+     local al = getAddressList()
+     while al.Count &gt; 0 do al[0]:destroy() end
+      --添加到CE地址列表，备注来源
+    local cfg={
+        {name="补给0",addr=OFFSET_SUPPLY0},
+        {name="补给1",addr=OFFSET_SUPPLY1},
+        {name="侦察0",addr=OFFSET_SCOUT0},
+        {name="侦察1",addr=OFFSET_SCOUT1},
+    }
+      for _,v in ipairs(cfg)do
+          local r=AddressList:createMemoryRecord()
+          r.Description=v.name
+          r.Address=v.addr + checkAdd
+          r.Type=4
+      end
+--============================一键补给按钮新增开始============================
+local function SetAllData(mode,base)
+    if mode==4 then
+        writeFloat(base + OFFSET_SUPPLY0,9999.0)
+        writeFloat(base + OFFSET_SUPPLY1,9999.0)
+    end
+    if mode==4 then
+        writeFloat(base + OFFSET_SCOUT0,999.0)
+        writeFloat(base + OFFSET_SCOUT1,999.0)
+    end
+    if mode==1 or mode==3 then
+        writeFloat(base + OFFSET_SUPPLY0,readFloat(base + OFFSET_SUPPLY0)+1000)
+        writeFloat(base + OFFSET_SUPPLY1,readFloat(base + OFFSET_SUPPLY1)+1000)
+    end
+    if mode==2 or mode==3 then
+        writeFloat(base + OFFSET_SCOUT0,readFloat(base + OFFSET_SCOUT0)+100)
+        writeFloat(base + OFFSET_SCOUT1,readFloat(base + OFFSET_SCOUT1)+100)
+    end
+end
+
+--按钮配置数组：{按钮备注,模式码}
+local btnCfg = {
+    {"补给+1000",1},
+    {"侦察+100",2},
+    {"补给+1000，侦察+100",3},
+    {"补给=9999，侦察=999",4}
+}
+
+--循环批量创建3个按钮
+for _,cfg in ipairs(btnCfg) do
+    local name,mode = cfg[1],cfg[2]
+    local btn = al:createMemoryRecord()
+    btn.Description = "&lt;-点击这里，【一键"..name.."】"
+    btn.Address = "0x100"
+    btn.Type = 4
+    btn.OnActivate = function(self,before)
+        if before then
+            SetAllData(mode,checkAdd)
+            print(name.." 写入成功")
+            self.Active=false
+        end
+    end
+end
+--============================一键补给按钮新增结束============================
+end
+
+local function HexSplit4(num)
+    local s = ("%X"):format(num)
+    local pad = (4 - #s % 4) % 4
+    s = string.rep("0", pad) .. s
+    return s:gsub("....","%1-"):sub(1,-2)
+end
+
+local function IsFloatInt(v)
+    return type(v)=="number" and v == math.floor(v)
+end
+
+local sigDisabled = AsciiToUtf16LE("Disabled")
+-- Disabled特征： 44 00 69 00 73 00 61 00 62 00 6C 00 65 00 64 00
+
+pause()           --暂停游戏？？
+local listDisabled = AOBScan(sigDisabled,"+W-X")
+unpause()
+
+if listDisabled == nil or listDisabled.Count == 0 then
+    print("未搜到任何Disabled特征标识字符")
+    goto EXIT
+end
+
+for i = 0, listDisabled.Count - 1 do
+    local disabledAddr = tonumber(listDisabled[i],16)
+    local baseAddr = disabledAddr -4
+    for j = -12, 25 do
+        local checkAdd = baseAddr + j * baseOFFSET          --Supply Address
+        local floatData0 = readFloat(checkAdd + OFFSET_SUPPLY0)
+        local floatData1 = readFloat(checkAdd + OFFSET_SUPPLY1)
+        local floatData2 = readFloat(checkAdd + OFFSET_SCOUT0)
+        local floatData3 = readFloat(checkAdd + OFFSET_SCOUT1)
+--[[
+if baseAddr == 0x1db65bc1040 then             --CE手动找到的地址，用于调试
+--print(string.format("Disabled地址: %s",HexSplit4(baseAddr)))
+print(string.format("数据: %f -- %f",floatData0,floatData2))
+end
+]]
+        if floatData0 and floatData1 and floatData2 and floatData3 then
+          if floatData0 == floatData1 and floatData2 == floatData3
+          and floatData0 &gt; 1 and floatData2 &gt; 1
+          and floatData0 &lt;10000 and floatData2 &lt; 1000
+          and IsFloatInt(floatData0) and IsFloatInt(floatData2)
+          and floatData0 ~= floatData2 then
+             print(string.format("地址: %s",HexSplit4(checkAdd + OFFSET_SUPPLY0)))
+             print(string.format("数据: %f %f",floatData0,floatData1))
+             print(string.format("地址: %s",HexSplit4(checkAdd + OFFSET_SCOUT0)))
+             print(string.format("数据: %f %f",floatData2,floatData3))
+             AddAddr(checkAdd)
+             print("=====找到数据，已添加地址。脚本停止。=====")
+             goto EXIT
+          end
+      end
+    end
+end
+print("-------NO-FOUND-------")
+::EXIT::
+listDisabled:destroy()
+
+--print("尚未进入游戏进程，等待5秒")
+--sleep(5000)
+--goto BEGIN
+
+--[[
+-----------START----------
+地址: 028C-D148-F2B0
+数据: 800.000000 800.000000
+地址: 028C-D148-F400
+数据: 25.000000 25.000000
+=====找到数据，已添加地址。脚本停止。=====
+]]
+
+</LuaScript>
+</CheatTable>
