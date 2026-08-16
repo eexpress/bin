@@ -8,7 +8,7 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 CHECK_SCRIPT="${SCRIPT_DIR}/check_screenshot.bash"
 OCR_SCRIPT="${SCRIPT_DIR}/ocr-online.bash"
 CONCAT_SCRIPT="${SCRIPT_DIR}/img-concat-wsl.bash"
-CONCAT_OUT="${SCRIPT_DIR}/z_concat_vert.png"
+CONCAT_OUT="z_concat_vert.png"
 WIN_PREVIEW="/mnt/d/z_concat_vert.png"
 MIN_WIDTH=2000
 # ================================================
@@ -110,7 +110,7 @@ echo -e "\n目标最终成品路径：$TARGET_PATH"
 
 # 执行垂直拼接【失败图在前（上方），战斗图在后（下方）】
 echo "开始执行图片垂直拼接..."
-"$CONCAT_SCRIPT" "$FILE_LAST" "$FILE_PREV"
+"$CONCAT_SCRIPT" "$FILE_LAST" "$FILE_PREV" -w 2000
 
 if [[ ! -f "$CONCAT_OUT" ]]; then
     echo "❌ 拼接输出文件不存在：${CONCAT_OUT}"

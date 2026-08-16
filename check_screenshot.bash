@@ -67,6 +67,8 @@ SSIM_RAW=$(ffmpeg -y -hide_banner -loglevel error \
 -filter_complex "[0:v][1:v]ssim=stats_file=-" \
 -f null -)
 
+mv "${CUT_IMG}" /tmp/
+
 SSIM_ALL=$(echo "${SSIM_RAW}" | grep -oP 'All:\K[\d.]+')
 if [[ -z "${SSIM_ALL}" ]]; then
     echo "ERROR：无法提取SSIM数值"
