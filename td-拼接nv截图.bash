@@ -129,6 +129,13 @@ if [[ "${confirm,,}" != "y" ]]; then
     exit 0
 fi
 
+if [[ -f "${TARGET_PATH}" ]]; then
+	base_noext="${TARGET_PATH%.png}"
+	n=1
+	while [[ -f "${base_noext}-${n}.png" ]]; do ((n++)); done
+	TARGET_PATH="${base_noext}-${n}.png"
+fi
+
 # 复制D盘预览文件到最终目录
 mv "${WIN_PREVIEW}" "${TARGET_PATH}"
 echo "✅ 文件已迁移至：${TARGET_PATH}"
