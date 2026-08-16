@@ -3,7 +3,7 @@ set -uo pipefail
 
 # 配置区
 CUT_IMG="cut.png"
-REF_FILENAME="ref-crop=530:70:700:1020.png"
+REF_FILENAME="ref-crop-530-70-700-1020.png"
 SCALE_W=2000
 SSIM_THRESHOLD=0.88
 
@@ -26,11 +26,13 @@ if [[ ! -f "${REF_IMG}" ]]; then
     exit 2
 fi
 
-# 从参考文件名提取 crop 参数 ref-crop=WWW:HH:XX:YY.png
-CROP_RAW="${REF_FILENAME#ref-crop=}"
-CROP_STR="${CROP_RAW%.png}"
+# 从 ref-crop-A-B-C-D.png 提取 A-B-C-D，再替换为 A:B:C:D
+CROP_RAW="${REF_FILENAME#ref-crop-}"
+CROP_RAW="${CROP_RAW%.png}"
+# 横杠替换为冒号
+CROP_STR="${CROP_RAW//-/:}"
 
-# 简单合法性校验格式
+# 简单合法性校验格式 W:H:X:Y
 if [[ ! "${CROP_STR}" =~ ^[0-9]+:[0-9]+:[0-9]+:[0-9]+$ ]]; then
     echo "ERROR：无法从 ${REF_FILENAME} 解析合法crop参数"
     exit 3
