@@ -130,8 +130,8 @@ if [[ "${confirm,,}" != "y" ]]; then
 fi
 
 # 复制D盘预览文件到最终目录
-cp -v "${WIN_PREVIEW}" "${TARGET_PATH}"
-echo "✅ 文件已保存至：${TARGET_PATH}"
+mv "${WIN_PREVIEW}" "${TARGET_PATH}"
+echo "✅ 文件已迁移至：${TARGET_PATH}"
 
 # 清理源目录截图
 read -rp "确认删除 ${SRC_DIR} 内所有png文件？(y/N)" del_ans
