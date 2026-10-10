@@ -23,7 +23,7 @@ sub colorize_dir_path {
 		$colored_path .= "\e[38;5;${color}m◢\e[48;5;${color}m${fgtext} $i ";
 	}
 	# 无颜色+ 前景最后循环色+ 箭头+ 无色
-	$colored_path .= "\e[0m\e[38;5;${color}m\e[0m";	# 0xE0B0 no unicode
+	$colored_path .= "\e[38;5;0m◢\e[0m";	# 0xE0B0 no unicode
 	return $colored_path;
 }
 
