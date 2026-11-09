@@ -2,3 +2,5 @@ config/i4p*
 x.*
 *.png
 *uuid
+ogcode
+pphub
