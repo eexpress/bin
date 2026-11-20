@@ -2,7 +2,7 @@
 
 #~ 兼容root，需要软链接到 /root/.bashrc 下面。
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc	# CommandNotFound 时，自动安装的功能，在这文件里。
+	. /etc/bashrc	# CommandNotFound 时，自动安装的功能，在这文件里。命令的参数补全也需要。
 fi
 
 set -o vi	# 开启 Bash vi 编辑模式
@@ -51,19 +51,6 @@ else
 #~ 🔴 flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub  //替换为上海交大源
 fi
 ##----------------
-if [ -x /usr/bin/gnome-shell ]; then
-#~ https://clang.llvm.org/docs/ClangFormatStyleOptions.html
-alias format='clang-format -style=file -i'
-alias glog='journalctl -f -o cat /usr/bin/gnome-shell'
-alias jlog='journalctl -f -o cat /usr/bin/gjs'
-alias wl='env MUTTER_DEBUG_DUMMY_MODE_SPECS=1600x1000 dbus-run-session -- gnome-shell --nested --wayland'
-#~ alias wl='env MUTTER_DEBUG_DUMMY_MODE_SPECS=2560×1440 dbus-run-session -- gnome-shell --nested --wayland'
-fi
-##----------------
-export LC_ALL=zh_CN.UTF-8
-alias cn='export LC_ALL=zh_CN.UTF-8'
-alias en='export LC_ALL=C'
-alias fc-zh='fc-list :lang=zh-cn family file|sed "s,/.*/,,"|sed "s/:\ \(.*\)/\x1b[0;32m\t\1\x1b[0m/"'
 #alias dms='/usr/bin/dms -path "`pwd`"'	# : Path must be absolute: Go 语言写的 UPnP/DLNA 流媒体服务
 
 alias tail='/usr/bin/tail -n $(($LINES-4))'
@@ -80,16 +67,13 @@ alias l='\ls --color=always'
 alias la='l -A'
 alias lt='l -oAh  --time-style=iso -t'		# mtime 修改时间排序
 alias ls='lt -S'							# size 文件大小排序
+alias lsblk='\lsblk -o NAME,SIZE,FSTYPE,LABEL,FSUSE%,MOUNTPOINTS'
 
-[ -x /usr/bin/micro ] && alias e='/usr/bin/micro'
-[ -x /usr/bin/batcat ] && alias v='/usr/bin/batcat' && alias less='/usr/bin/batcat'
-#edit=("gedit" "io.elementary.code" "geany" "gnome-text-editor")
-#for ed in "${edit[@]}"; do
-#	if [ -x /usr/bin/$ed ]; then alias e=$ed; break; fi
-#done
+[ -x /usr/bin/micro ] && alias e='/usr/bin/micro' || alias e='xdg-open'
 
-alias dog='grep -v -E "(^$|^#|^!)"'
-alias ps='\ps -u `id -un` -o pid,command'
+# alias dog='grep -v -E "(^$|^#|^!)"'
+alias dog='awk '\''/^[[:space:]]*#/ {next} /^[[:space:]]*$/ {next} 1'\'''
+# alias ps='\ps -u `id -un` -o pid,command'
 alias pg='pgrep -af'
 alias k='pkill -9 -f'
 alias g='grep --color=always -Pi 2>/dev/null'
@@ -101,23 +85,20 @@ c(){ echo $1|bc -l; }
 #p(){ ping -c 5 ${1:-www.163.com}; }
 u(){ \du -sch "$@" 2>/dev/null|sort -rh; }	# 统计目录大小
 
-if command -v tesseract &>/dev/null; then
-ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
-fi
-
+# if command -v tesseract &>/dev/null; then
+# ocr(){ tesseract "$1" /tmp/ocr -l chi_sim 2>/dev/null && cat /tmp/ocr.txt; }
+# fi
 
 # ------- xclip写入文件 -------
 yy() {		#XA_CLIPBOARD
-    if [[ -z "$1" ]]; then
-        echo "剪贴板写入文件，需要指定新文件名。"
-    else
-        xclip -selection clipboard -o > "$1"
-		sed -i 's/\r$//' $1
-    fi
+    f=${*:-y.剪贴板}
+	echo $f
+	xclip -selection clipboard -o > "$f"
+	sed -i 's/\r$//' $f
 }
 
 y() {		#XA_PRIMARY
-	f=${*:-x.摘录.x}
+	f=${*:-x.摘录}
 	echo $f
 	echo -ne "#\t--------▶  " >>"$f"
 	date '+%F %T' | tr -d '\n' >>"$f"
@@ -125,8 +106,6 @@ y() {		#XA_PRIMARY
 	xclip -o  | sed '/'$HOSTNAME'/c--------' >>"$f"
 	echo -e "\n" >>"$f"
 }
-
-# export TERM=xterm-256color	# 放在所有tput之前。
 
 # ------- 环境路径设置 -------
 if [ "$(whoami)" != "root" ]; then
@@ -138,7 +117,7 @@ fi
 	PS1='$(~/bin/prompt.pl "\w")'
 
 # ------- 命令历史记录 -------
-shopt -s histappend
+# shopt -s histappend
 PROMPT_COMMAND='history -a'
 
 bind 'set completion-ignore-case on'	#补全文件名忽略大小写
@@ -147,6 +126,6 @@ bind '"\e[A": history-search-backward'	#增量历史搜索，上下方向键查�
 bind '"\e[B": history-search-forward'
 
 # ------- bash补全 -------
-if ! type -t _init_completion &>/dev/null && [[ -f /etc/profile.d/bash_completion.sh ]]; then
-    . /etc/profile.d/bash_completion.sh
-fi
+# if ! type -t _init_completion &>/dev/null && [[ -f /etc/profile.d/bash_completion.sh ]]; then
+    # . /etc/profile.d/bash_completion.sh
+# fi
