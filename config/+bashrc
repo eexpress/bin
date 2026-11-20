@@ -63,9 +63,9 @@ echo -e "\n内存---------------";free -h|cut -b -50;
 command -v sensors &>/dev/null && echo -e "\n温度---------------" && sensors|grep Core'
 	
 ## -------- LS --------
-alias l='\ls --color=always'
+alias l='\ls --color=always --time-style=long-iso'
 alias la='l -A'
-alias lt='l -oAh  --time-style=iso -t'		# mtime 修改时间排序
+alias lt='l -oAh -t'		# mtime 修改时间排序
 alias ls='lt -S'							# size 文件大小排序
 alias lsblk='\lsblk -o NAME,SIZE,FSTYPE,LABEL,FSUSE%,MOUNTPOINTS'
 
