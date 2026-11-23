@@ -38,7 +38,14 @@ else
 	# 包信息。rpm需要已安装的确切包名；dnf可通配符查未安装的包。
 	pinfo(){ rpm -q --info $1 || dnf info -Cy $1; }
 	alias pfile='dnf provides -C'				# 查找文件或命令所属的包(已安装/未安装)
-	alias pneed='rpm -q --whatrequires'		# 被哪个包需要
+	alias pwhoneed='dnf repoquery --installed --whatrequires'		# 被哪个已安装的包需要
+	pneed() {				# 需要那些依赖的包。
+        local pkg="$1"
+        dnf repoquery --installed --requires "$pkg" | grep -v '^rpmlib(' | while read -r cap; do
+            rpm -q --whatprovides "$cap" 2>/dev/null
+        done | sort -u
+    }
+	
 	# 包的文件列表。
 	plist(){ rpm -q --list $1 || dnf repoquery -Cy --list $1; }
 
